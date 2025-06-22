@@ -1,103 +1,167 @@
-import Image from "next/image";
+import HeroSection from "./components/HeroSection";
+import AboutSection from "./components/AboutSection";
+import ImageTextSection from "./components/ImageTextSection";
+import VendorCarousel from "./components/VendorCarousel";
+import StatisticsSection from "./components/StatisticsSection";
+import InfoSection from "./components/InfoSection";
+import NewsSection from "./components/CardsSection";
+import Footer from "./components/Footer";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // Content data for each section
+  const hero = {
+    title: "Welcome to Netpoleon",
+    subtitle:
+      "Empowering businesses with innovative solutions and cutting-edge technology. We help companies transform their digital presence and achieve remarkable growth.",
+    primaryButtonText: "Get Started Today",
+    secondaryButtonText: "Learn More",
+    heroImage: "/images/hero/hero-main.jpg",
+    heroImageAlt: "Netpoleon - Innovative Technology Solutions",
+  };
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const about = {
+    title: "About Netpoleon",
+    description:
+      "We are a team of passionate innovators dedicated to helping businesses thrive in the digital age. Our mission is to deliver exceptional solutions that drive growth and create lasting impact.",
+  };
+
+  const imageTextSections = [
+    {
+      title: "Innovative Web Solutions",
+      description:
+        "We create cutting-edge web applications that help businesses scale and succeed in today's competitive market. Our team of experts delivers solutions that are both beautiful and functional.",
+      imageSrc: "/images/web-development.jpg",
+      imageAlt: "Web Development",
+      layout: "left" as const,
+      ctaText: "Explore Our Work",
+      ctaLink: "#",
+    },
+    {
+      title: "Mobile App Development",
+      description:
+        "Transform your business with custom mobile applications that engage users and drive results. We build apps for iOS and Android that deliver exceptional user experiences.",
+      imageSrc: "/images/mobile-development.jpg",
+      imageAlt: "Mobile Development",
+      layout: "right" as const,
+      ctaText: "View Portfolio",
+      ctaLink: "#",
+    },
+    {
+      title: "Cloud Infrastructure",
+      description:
+        "Leverage the power of cloud computing with our scalable infrastructure solutions. We help businesses optimize their operations and reduce costs with modern cloud technologies.",
+      imageSrc: "/images/cloud-solutions.jpg",
+      imageAlt: "Cloud Solutions",
+      layout: "left" as const,
+      ctaText: "Learn More",
+      ctaLink: "#",
+    },
+  ];
+
+  const vendors = [
+    { id: 1, name: "Microsoft", logo: "/images/logos/logo-1.png" },
+    { id: 2, name: "Google", logo: "/images/logos/logo-2.png" },
+    { id: 3, name: "Amazon", logo: "/images/logos/logo-3.png" },
+    { id: 4, name: "Apple", logo: "/images/logos/logo-4.png" },
+    { id: 5, name: "Meta", logo: "/images/logos/logo-5.png" },
+    { id: 6, name: "Netflix", logo: "/images/logos/logo-6.png" },
+  ];
+
+  const statistics = [
+    { 
+      id: 1, 
+      value: "500+", 
+      label: "Projects Completed",
+      excerpt: "Successfully delivered innovative solutions across various industries and technologies."
+    },
+    { 
+      id: 2, 
+      value: "99%", 
+      label: "Client Satisfaction",
+      excerpt: "Maintaining exceptional quality standards and exceeding client expectations consistently."
+    },
+    { 
+      id: 3, 
+      value: "24/7", 
+      label: "Support Available",
+      excerpt: "Round-the-clock technical support and maintenance for all our client projects."
+    },
+  ];
+
+  const info = {
+    title: "Why Choose Netpoleon?",
+    points: [
+      {
+        id: 1,
+        title: "Expert Team",
+        description: "Our experienced developers and designers deliver exceptional results.",
+      },
+      {
+        id: 2,
+        title: "Quality Assurance",
+        description: "Rigorous testing ensures your project meets the highest standards.",
+      },
+      {
+        id: 3,
+        title: "Ongoing Support",
+        description: "We provide continuous support and maintenance for all our projects.",
+      },
+    ],
+    image: "/images/why-choose-us.webp",
+    imageAlt: "Netpoleon team working on innovative solutions",
+  };
+
+  const news = {
+    title: "Latest News & Insights",
+    subtitle: "Stay updated with the latest trends and insights from our team",
+    posts: [
+      {
+        id: 1,
+        title: "Use Slack to make your SMB organisation more efficient and productive",
+        excerpt: "Learn how Slack can help make your organisation more efficient and increase the impact of your sales, service and marketing teams.",
+        type: "On-demand",
+        image: "/images/news/news-1.jpg"
+      },
+      {
+        id: 2,
+        title: "Slack for HR, Onboarding and People & Culture teams",
+        excerpt: "Join this interactive session to learn from Slack's Customer Success team how to create an exceptional onboarding experience for your new employees.",
+        type: "On-demand",
+        image: "/images/news/news-2.jpg"
+      },
+      {
+        id: 3,
+        title: "Workshop 101: Learn the basics",
+        excerpt: "Learn the Slack basics and participate in interactive activities at this on-demand training session led by our customer success experts.",
+        type: "On-demand",
+        image: "/images/news/news-3.webp"
+      },
+      {
+        id: 4,
+        title: "What is Slack?",
+        excerpt: "Discover the new ways of working that power business results with Slack.",
+        type: "On-demand",
+        image: "/images/news/news-4.png"
+      }
+    ],
+  };
+
+  return (
+    <div className="min-h-screen">
+      <HeroSection {...hero} />
+      <AboutSection {...about} />
+      {imageTextSections.map((section, idx) => (
+        <ImageTextSection key={idx} {...section} />
+      ))}
+      <VendorCarousel
+        title="Trusted by Industry Leaders"
+        subtitle="We work with companies of all sizes to deliver exceptional results"
+        vendors={vendors}
+      />
+      <StatisticsSection statistics={statistics} />
+      <InfoSection {...info} />
+      <NewsSection {...news} />
+      <Footer />
     </div>
   );
 }
