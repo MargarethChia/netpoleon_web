@@ -51,7 +51,7 @@ export default function HeroSection({
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-200/50 rounded-full text-sm font-medium text-orange-700 backdrop-blur-sm"
+              className="mt-6 lg:mt-0 inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-200/50 rounded-full text-sm font-medium text-orange-700 backdrop-blur-sm"
             >
               <span className="w-2 h-2 bg-orange-500 rounded-full mr-2 animate-pulse"></span>
               Leading Technology Solutions
