@@ -1,11 +1,11 @@
-import HeroSection from "./components/HeroSection";
-import AboutSection from "./components/AboutSection";
-import ImageTextSection from "./components/ImageTextSection";
-import VendorCarousel from "./components/VendorCarousel";
-import StatisticsSection from "./components/StatisticsSection";
-import InfoSection from "./components/InfoSection";
-import NewsSection from "./components/CardsSection";
-import Footer from "./components/Footer";
+import HeroSection from "../components/HeroSection";
+import AboutSection from "../components/AboutSection";
+import ImageTextSection from "../components/ImageTextSection";
+import VendorCarousel from "../components/VendorCarousel";
+import StatisticsSection from "../components/StatisticsSection";
+import InfoSection from "../components/InfoSection";
+import NewsSection from "../components/CardsSection";
+import Footer from "../components/Footer";
 
 export default function Home() {
   // Content data for each section
