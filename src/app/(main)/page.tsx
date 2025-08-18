@@ -8,7 +8,7 @@ import NewsSection from "../components/CardsSection";
 import Footer from "../components/Footer";
 
 export default function Home() {
-  // Content data for each section
+  // Home Page
   const hero = {
     title: "Welcome to Netpoleon",
     subtitle:
