@@ -38,10 +38,15 @@ export default function Header() {
             transition={{ duration: 0.6, delay: 0.4, ease: "easeInOut" }}
           >
             {[
-              { href: "#home", text: "Home" },
-              { href: "#about", text: "About" },
+              { href: "/", text: "Home" },
+              { href: "/about", text: "About" },
+              { href: "#security_partners", text: "Security Partners" },
               { href: "#services", text: "Services" },
-              { href: "#contact", text: "Contact" }
+              { href: "#events", text: "Events" },
+              { href: "#resources", text: "Resources" },
+              { href: "#contact_us", text: "Contact Us" }
+
+
             ].map((link, index) => (
               <motion.a 
                 key={link.href}
