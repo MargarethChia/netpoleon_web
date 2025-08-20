@@ -136,6 +136,32 @@ describe('Admin Login Page', () => {
     expect(await screen.findByText(/an unexpected error occurred/i)).toBeInTheDocument()
   })
 
+  it('ignores NEXT_REDIRECT thrown by action without showing error', async () => {
+    const redirectError: any = new Error('NEXT_REDIRECT')
+    redirectError.message = 'NEXT_REDIRECT'
+    mockLogin.mockRejectedValue(redirectError)
+    render(<LoginPage />)
+    fillForm()
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }))
+    // No generic error should appear
+    await waitFor(() => {
+      expect(screen.queryByText(/an unexpected error occurred/i)).not.toBeInTheDocument()
+    })
+  })
+
+  it('disables password toggle while loading', async () => {
+    mockLogin.mockImplementation(async () => {
+      // simulate delay
+      await new Promise(r => setTimeout(r, 50))
+      return { status: 401 }
+    })
+    render(<LoginPage />)
+    fillForm()
+    const toggleBtn = screen.getByRole('button', { name: '' })
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }))
+    expect(toggleBtn).toBeDisabled()
+  })
+
   it('clears a previous error when resubmitting', async () => {
     // First attempt fails with 401
     mockLogin.mockResolvedValueOnce({ status: 401 })

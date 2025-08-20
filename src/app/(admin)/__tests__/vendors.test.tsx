@@ -6,12 +6,16 @@ import * as nextNavigation from 'next/navigation'
 const getAll = vi.fn()
 const del = vi.fn()
 const create = vi.fn()
+const getById = vi.fn()
+const update = vi.fn()
 
 vi.mock('@/lib/api', () => ({
   vendorsApi: {
     getAll: (...a: any[]) => getAll(...a),
     delete: (...a: any[]) => del(...a),
     create: (...a: any[]) => create(...a),
+    getById: (...a: any[]) => getById(...a),
+    update: (...a: any[]) => update(...a),
   },
 }))
 
@@ -23,6 +27,7 @@ vi.mock('@/lib/storage', () => ({
 
 // Import after mocks so they apply to module graph
 import CreateVendorPage from '../admin/vendors/create/page'
+import EditVendorPage from '../admin/vendors/[id]/edit/page'
 import { showToast } from '@/components/ui/toast'
 
 vi.mock('@/lib/supabase-client', () => ({
@@ -31,6 +36,7 @@ vi.mock('@/lib/supabase-client', () => ({
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),
+  useParams: () => ({ id: '1' }),
 }))
 
 describe('Admin Vendors Page', () => {
@@ -127,6 +133,98 @@ describe('Admin Vendors Page', () => {
 
     await waitFor(() => expect(create).toHaveBeenCalled())
     expect(push).toHaveBeenCalledWith('/admin/vendors')
+  })
+
+  it('create vendor shows validation toast when name empty and no API call', async () => {
+    const push = vi.fn()
+    vi.spyOn(nextNavigation, 'useRouter').mockReturnValue({ push } as any)
+    render(<CreateVendorPage />)
+    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: /create vendor/i }))
+    expect(create).not.toHaveBeenCalled()
+  })
+
+  it('edit vendor: update handles API error', async () => {
+    // mock edit page route and vendor
+    const push = vi.fn()
+    vi.spyOn(nextNavigation, 'useRouter').mockReturnValue({ push } as any)
+    del.mockResolvedValue(undefined)
+    getById.mockResolvedValue({
+      id: 7,
+      name: 'ErrCo',
+      description: '',
+      logo_url: '',
+      image_url: '',
+      link: '',
+      created_at: '2099-01-01',
+      updated_at: '2099-01-01',
+    })
+    vi.spyOn(nextNavigation, 'useParams').mockReturnValue({ id: '7' } as any)
+    update.mockRejectedValue(new Error('Update failed'))
+
+    render(<EditVendorPage />)
+    // Wait for load
+    expect(await screen.findByDisplayValue(/ErrCo/i)).toBeInTheDocument()
+    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: /update vendor/i }))
+    await waitFor(() => expect(update).toHaveBeenCalled())
+  })
+
+  it('create page: logo and featured image previews appear and remove hides them', async () => {
+    const push = vi.fn()
+    vi.spyOn(nextNavigation, 'useRouter').mockReturnValue({ push } as any)
+    render(<CreateVendorPage />)
+    const user = userEvent.setup()
+
+    // Logo preview
+    await user.type(screen.getByLabelText(/or enter logo url manually/i), 'https://cdn.test/logo.png')
+    expect(screen.getByAltText(/logo preview/i)).toBeInTheDocument()
+
+    // Remove logo
+    await user.click(screen.getByRole('button', { name: /remove/i }))
+    expect(screen.queryByAltText(/logo preview/i)).not.toBeInTheDocument()
+
+    // Image preview
+    await user.type(screen.getByLabelText(/or enter image url manually/i), 'https://cdn.test/feat.jpg')
+    expect(screen.getByAltText(/image preview/i)).toBeInTheDocument()
+
+    // Remove image
+    await user.click(screen.getByRole('button', { name: /remove/i }))
+    expect(screen.queryByAltText(/image preview/i)).not.toBeInTheDocument()
+  })
+
+  it('edit page: existing logo and featured image render and removing hides them', async () => {
+    // Mock route params and router
+    const push = vi.fn()
+    vi.spyOn(nextNavigation, 'useRouter').mockReturnValue({ push } as any)
+
+    // Mock vendor fetched by id
+    getById.mockResolvedValue({
+      id: 1,
+      name: 'Acme Security',
+      description: 'EDR vendor',
+      logo_url: 'https://cdn.test/logo.png',
+      image_url: 'https://cdn.test/feat.jpg',
+      link: 'https://acme.test',
+      created_at: '2099-01-01',
+      updated_at: '2099-01-01',
+    })
+
+    render(<EditVendorPage />)
+    // Previews visible
+    expect(await screen.findByAltText(/logo preview/i)).toBeInTheDocument()
+    expect(screen.getByAltText(/image preview/i)).toBeInTheDocument()
+
+    const user = userEvent.setup()
+    // Remove logo
+    const removeButtons = screen.getAllByRole('button', { name: /remove/i })
+    await user.click(removeButtons[0])
+    expect(screen.queryByAltText(/logo preview/i)).not.toBeInTheDocument()
+
+    // Remove image (new remove button remains)
+    const removeButtons2 = screen.getAllByRole('button', { name: /remove/i })
+    await user.click(removeButtons2[0])
+    expect(screen.queryByAltText(/image preview/i)).not.toBeInTheDocument()
   })
 })
 

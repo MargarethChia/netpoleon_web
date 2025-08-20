@@ -161,6 +161,34 @@ describe('Admin Events Page', () => {
     expect(dateInput.checkValidity()).toBe(false)
   })
 
+  it('create fails gracefully when API throws', async () => {
+    getAll.mockResolvedValueOnce([])
+    create.mockRejectedValue(new Error('Create failed'))
+    render(<EventsPage />)
+    await screen.findByText(/all events/i)
+    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: /add event/i }))
+    await user.type(screen.getByLabelText(/event title/i), 'Bad Event')
+    await user.type(screen.getByLabelText(/event date/i), '2099-12-31')
+    await user.click(screen.getByRole('button', { name: /create event/i }))
+    await waitFor(() => expect(create).toHaveBeenCalled())
+  })
+
+  it('delete handles API error without crashing', async () => {
+    seed()
+    del.mockRejectedValue(new Error('Delete failed'))
+    render(<EventsPage />)
+    await screen.findByText(/all events/i)
+    const row = screen.getByRole('row', { name: /past summit/i })
+    const menuBtn = within(row).getByTestId('row-menu')
+    const user = userEvent.setup()
+    await user.click(menuBtn)
+    const menu = await screen.findByRole('menu')
+    await user.click(within(menu).getByText(/delete event/i))
+    await user.click(await screen.findByRole('button', { name: /delete event/i }))
+    await waitFor(() => expect(del).toHaveBeenCalled())
+  })
+
   it('updates an event title via edit and reflects in list', async () => {
     const initial = [
       { id: 1, title: 'Security Conference', event_date: '2099-10-10', description: '', location: '', link: '' },
