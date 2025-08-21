@@ -44,32 +44,7 @@ export default function AboutUs() {
     },
   ]
 
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "CISO",
-      company: "Global Financial Services",
-      text: "Netpoleon's cybersecurity expertise and strategic guidance helped us achieve SOC 2 compliance ahead of schedule while reducing costs by 30%.",
-      avatar: "/professional-woman-executive.png",
-    },
-    {
-      name: "Michael Chen",
-      role: "IT Director",
-      company: "Healthcare Systems Inc.",
-      text: "Their VAD model provided access to enterprise security solutions at competitive pricing, with implementation support that exceeded expectations.",
-      avatar: "/professional-it-director.png",
-    },
-    {
-      name: "Emma Davis",
-      role: "Security Manager",
-      company: "Manufacturing Corp",
-      text: "Outstanding implementation support and ongoing security management services. The team's expertise is unmatched in the industry.",
-      avatar: "/professional-woman-security-manager.png",
-    },
-  ]
-
   
-
   const fadeInUp = {
     hidden: { opacity: 0, y: 24 },
     visible: {
