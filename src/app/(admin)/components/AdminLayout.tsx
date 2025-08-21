@@ -47,7 +47,7 @@ export default function AdminLayout({
     { href: "/admin/events", label: "Events", icon: <Calendar className="w-4 h-4" /> },
     { href: "/admin/resources", label: "Resources", icon: <FileText className="w-4 h-4" /> },
     { href: "/admin/vendors", label: "Vendors", icon: <Building2 className="w-4 h-4" /> },
-    { href: "/admin/analytics", label: "Analytics", icon: <TrendingUp className="w-4 h-4" />, disabled: true },
+    { href: "/admin/analytics", label: "Analytics", icon: <TrendingUp className="w-4 h-4" />},
   ];
 
   return (
