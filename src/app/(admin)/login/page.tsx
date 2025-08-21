@@ -69,7 +69,7 @@ export default function LoginPage() {
           </div>
           <h1 className="text-3xl font-bold text-foreground">Netpoleon</h1>
           <p className="text-muted-foreground">Admin Portal</p>
-        </div>
+      </div>
 
         {/* Login Card */}
         <Card className="border-border/50 shadow-lg">
@@ -165,11 +165,11 @@ export default function LoginPage() {
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <div className="w-2 h-2 bg-green-500 rounded-full" />
-            <span>Secure connection • Protected by Supabase</span>
+                <span>Secure connection • Protected by Supabase</span>
           </div>
           <p className="text-xs text-muted-foreground">
-            © 2024 Netpoleon. All rights reserved.
-          </p>
+              © 2024 Netpoleon. All rights reserved.
+            </p>
         </div>
       </div>
     </div>

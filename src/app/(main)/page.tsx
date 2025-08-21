@@ -1,11 +1,13 @@
 import HeroSection from "../components/HeroSection";
-import AboutSection from "../components/AboutSection";
 import ImageTextSection from "../components/ImageTextSection";
 import VendorCarousel from "../components/VendorCarousel";
 import StatisticsSection from "../components/StatisticsSection";
-import InfoSection from "../components/InfoSection";
 import NewsSection from "../components/CardsSection";
 import Footer from "../components/Footer";
+import ForceBasedGraph from "../components/ForceBasedGraph";
+
+// import AboutSection from "../components/AboutSection";
+// import InfoSection from "../components/InfoSection";
 
 export default function Home() {
   // Home Page
@@ -15,15 +17,15 @@ export default function Home() {
       "Empowering businesses with innovative solutions and cutting-edge technology. We help companies transform their digital presence and achieve remarkable growth.",
     primaryButtonText: "Get Started Today",
     secondaryButtonText: "Learn More",
-    heroImage: "/images/hero/hero-main.jpg",
+    heroImage: "/images/hero/hero-main.webp",
     heroImageAlt: "Netpoleon - Innovative Technology Solutions",
   };
 
-  const about = {
-    title: "About Netpoleon",
-    description:
-      "We are a team of passionate innovators dedicated to helping businesses thrive in the digital age. Our mission is to deliver exceptional solutions that drive growth and create lasting impact.",
-  };
+  // const about = {
+  //   title: "About Netpoleon",
+  //   description:
+  //     "We are a team of passionate innovators dedicated to helping businesses thrive in the digital age. Our mission is to deliver exceptional solutions that drive growth and create lasting impact.",
+  // };
 
   const imageTextSections = [
     {
@@ -68,48 +70,54 @@ export default function Home() {
   ];
 
   const statistics = [
-    { 
-      id: 1, 
-      value: "500+", 
+    {
+      id: 1,
+      value: "500+",
       label: "Projects Completed",
-      excerpt: "Successfully delivered innovative solutions across various industries and technologies."
+      excerpt:
+        "Successfully delivered innovative solutions across various industries and technologies.",
     },
-    { 
-      id: 2, 
-      value: "99%", 
+    {
+      id: 2,
+      value: "99%",
       label: "Client Satisfaction",
-      excerpt: "Maintaining exceptional quality standards and exceeding client expectations consistently."
+      excerpt:
+        "Maintaining exceptional quality standards and exceeding client expectations consistently.",
     },
-    { 
-      id: 3, 
-      value: "24/7", 
+    {
+      id: 3,
+      value: "24/7",
       label: "Support Available",
-      excerpt: "Round-the-clock technical support and maintenance for all our client projects."
+      excerpt:
+        "Round-the-clock technical support and maintenance for all our client projects.",
     },
   ];
 
-  const info = {
-    title: "Why Choose Netpoleon?",
-    points: [
-      {
-        id: 1,
-        title: "Expert Team",
-        description: "Our experienced developers and designers deliver exceptional results.",
-      },
-      {
-        id: 2,
-        title: "Quality Assurance",
-        description: "Rigorous testing ensures your project meets the highest standards.",
-      },
-      {
-        id: 3,
-        title: "Ongoing Support",
-        description: "We provide continuous support and maintenance for all our projects.",
-      },
-    ],
-    image: "/images/why-choose-us.webp",
-    imageAlt: "Netpoleon team working on innovative solutions",
-  };
+  // const info = {
+  //   title: "Why Choose Netpoleon?",
+  //   points: [
+  //     {
+  //       id: 1,
+  //       title: "Expert Team",
+  //       description:
+  //         "Our experienced developers and designers deliver exceptional results.",
+  //     },
+  //     {
+  //       id: 2,
+  //       title: "Quality Assurance",
+  //       description:
+  //         "Rigorous testing ensures your project meets the highest standards.",
+  //     },
+  //     {
+  //       id: 3,
+  //       title: "Ongoing Support",
+  //       description:
+  //         "We provide continuous support and maintenance for all our projects.",
+  //     },
+  //   ],
+  //   image: "/images/why-choose-us.webp",
+  //   imageAlt: "Netpoleon team working on innovative solutions",
+  // };
 
   const news = {
     title: "Latest News & Insights",
@@ -117,49 +125,53 @@ export default function Home() {
     posts: [
       {
         id: 1,
-        title: "Use Slack to make your SMB organisation more efficient and productive",
-        excerpt: "Learn how Slack can help make your organisation more efficient and increase the impact of your sales, service and marketing teams.",
+        title:
+          "Use Slack to make your SMB organisation more efficient and productive",
+        excerpt:
+          "Learn how Slack can help make your organisation more efficient and increase the impact of your sales, service and marketing teams.",
         type: "On-demand",
-        image: "/images/news/news-1.jpg"
+        image: "/images/news/news-1.jpg",
       },
       {
         id: 2,
         title: "Slack for HR, Onboarding and People & Culture teams",
-        excerpt: "Join this interactive session to learn from Slack's Customer Success team how to create an exceptional onboarding experience for your new employees.",
+        excerpt:
+          "Join this interactive session to learn from Slack's Customer Success team how to create an exceptional onboarding experience for your new employees.",
         type: "On-demand",
-        image: "/images/news/news-2.jpg"
+        image: "/images/news/news-2.jpg",
       },
       {
         id: 3,
         title: "Workshop 101: Learn the basics",
-        excerpt: "Learn the Slack basics and participate in interactive activities at this on-demand training session led by our customer success experts.",
+        excerpt:
+          "Learn the Slack basics and participate in interactive activities at this on-demand training session led by our customer success experts.",
         type: "On-demand",
-        image: "/images/news/news-3.webp"
+        image: "/images/news/news-3.webp",
       },
       {
         id: 4,
         title: "What is Slack?",
-        excerpt: "Discover the new ways of working that power business results with Slack.",
+        excerpt:
+          "Discover the new ways of working that power business results with Slack.",
         type: "On-demand",
-        image: "/images/news/news-4.png"
-      }
+        image: "/images/news/news-4.png",
+      },
     ],
   };
 
   return (
-    <div className="min-h-screen">
+    <div>
       <HeroSection {...hero} />
-      <AboutSection {...about} />
-      {imageTextSections.map((section, idx) => (
-        <ImageTextSection key={idx} {...section} />
-      ))}
       <VendorCarousel
         title="Trusted by Industry Leaders"
         subtitle="We work with companies of all sizes to deliver exceptional results"
         vendors={vendors}
       />
+      {imageTextSections.map((section, idx) => (
+        <ImageTextSection key={idx} {...section} />
+      ))}
+      <ForceBasedGraph />
       <StatisticsSection statistics={statistics} />
-      <InfoSection {...info} />
       <NewsSection {...news} />
       <Footer />
     </div>
