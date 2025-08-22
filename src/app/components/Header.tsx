@@ -1,6 +1,7 @@
 'use client';
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -9,21 +10,22 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Image 
-              src="/images/netpoleon.png" 
-              alt="Netpoleon" 
-              width={120} 
-              height={80} 
-              className="h-16 w-auto"
-            />
+            <Link href="/">
+              <Image 
+                src="/images/netpoleon.png" 
+                alt="Netpoleon" 
+                width={120} 
+                height={80} 
+                className="h-16 w-auto cursor-pointer hover:opacity-90 transition-opacity"
+              />
+            </Link>
           </div>
           
           {/* Navigation */}
           <nav className="hidden md:flex space-x-10">
             {[
-              { href: "/", text: "Home" },
               { href: "/about", text: "About" },
-              { href: "#security_partners", text: "Security Partners" },
+              { href: "/partners", text: "Cybersecurity Vendors" },
               { href: "#services", text: "Services" },
               { href: "#events", text: "Events" },
               { href: "#resources", text: "Resources" },
