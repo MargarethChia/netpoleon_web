@@ -23,7 +23,7 @@ export default function Header() {
             {[
               { href: "/", text: "Home" },
               { href: "/about", text: "About" },
-              { href: "#security_partners", text: "Security Partners" },
+              { href: "/partners", text: "Security Partners" },
               { href: "#services", text: "Services" },
               { href: "#events", text: "Events" },
               { href: "#resources", text: "Resources" },
