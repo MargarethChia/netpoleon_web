@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { motion } from "framer-motion";
 
@@ -17,28 +17,31 @@ export default function HeroSection({
   heroImage,
   heroImageAlt = "Hero Image",
   onExploreVendors,
-  onExploreSolutions
+  onExploreSolutions,
 }: HeroSectionProps) {
   return (
-    <section id="home" className="relative py-32 flex items-center overflow-hidden">
+    <section
+      id="home"
+      className="relative py-32 flex items-center overflow-hidden"
+    >
       {/* Background Image */}
       {heroImage && (
         <div className="absolute inset-0 z-0">
-          <img 
-            src={heroImage} 
-            alt={heroImageAlt} 
-            className="w-full h-full object-cover" 
+          <img
+            src={heroImage}
+            alt={heroImageAlt}
+            className="w-full h-full object-cover"
           />
-          {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/60"></div>
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-black/60 z-10"></div>
         </div>
       )}
 
       {/* Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-20">
         <div className="max-w-2xl">
           {/* Header */}
-          <motion.h1 
+          <motion.h1
             className="text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -48,7 +51,7 @@ export default function HeroSection({
           </motion.h1>
 
           {/* Descriptive Text */}
-          <motion.p 
+          <motion.p
             className="text-xl lg:text-2xl text-white/90 leading-relaxed mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -58,13 +61,13 @@ export default function HeroSection({
           </motion.p>
 
           {/* CTA Buttons */}
-          <motion.div 
+          <motion.div
             className="flex flex-col sm:flex-row gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
-            <motion.button 
+            <motion.button
               onClick={onExploreVendors}
               className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition-all duration-300"
               whileHover={{ scale: 1.05 }}
@@ -72,8 +75,8 @@ export default function HeroSection({
             >
               Explore Vendors
             </motion.button>
-            
-            <motion.button 
+
+            <motion.button
               onClick={onExploreSolutions}
               className="px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-gray-900 transition-all duration-300"
               whileHover={{ scale: 1.05 }}
@@ -86,4 +89,4 @@ export default function HeroSection({
       </div>
     </section>
   );
-} 
+}

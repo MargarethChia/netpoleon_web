@@ -183,14 +183,7 @@ export default function ForceBasedGraph() {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50 relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-blue-200 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-200 rounded-full blur-3xl"></div>
-      </div>
-      
-      <div className="relative w-full max-w-7xl mx-auto mt-16 h-[700px]">
+    <div className="relative w-full max-w-7xl mx-auto h-[600px]">
         <svg 
           viewBox="0 0 1200 900" 
           className="w-full h-full"
@@ -207,7 +200,7 @@ export default function ForceBasedGraph() {
               const angle = (nodeIndex * 60 - 90) * (Math.PI / 180); // Start from top
               const radius = 140;
               const centerX = 600;
-              const centerY = 450;
+              const centerY = 500;
               const mainNodeX = centerX + radius * Math.cos(angle);
               const mainNodeY = centerY + radius * Math.sin(angle);
               
@@ -244,7 +237,7 @@ export default function ForceBasedGraph() {
               const angle = (nodeIndex * 60 - 90) * (Math.PI / 180);
               const radius = 140;
               const centerX = 600;
-              const centerY = 450;
+              const centerY = 500;
               const mainNodeX = centerX + radius * Math.cos(angle);
               const mainNodeY = centerY + radius * Math.sin(angle);
               
@@ -300,7 +293,7 @@ export default function ForceBasedGraph() {
             const angle = (index * 60 - 90) * (Math.PI / 180); // Start from top
             const radius = 140;
             const centerX = 600;
-            const centerY = 450;
+            const centerY = 500;
             const x = centerX + radius * Math.cos(angle);
             const y = centerY + radius * Math.sin(angle);
 
@@ -344,6 +337,5 @@ export default function ForceBasedGraph() {
           })}
         </svg>
       </div>
-    </section>
   );
 } 

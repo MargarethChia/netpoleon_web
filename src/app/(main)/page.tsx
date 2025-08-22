@@ -3,8 +3,7 @@ import ImageTextSection from "../components/ImageTextSection";
 import VendorCarousel from "../components/VendorCarousel";
 import StatisticsSection from "../components/StatisticsSection";
 import NewsSection from "../components/CardsSection";
-import Footer from "../components/Footer";
-import ForceBasedGraph from "../components/ForceBasedGraph";
+import GraphSection from "../components/GraphSection";
 
 // import AboutSection from "../components/AboutSection";
 // import InfoSection from "../components/InfoSection";
@@ -17,7 +16,7 @@ export default function Home() {
       "Empowering businesses with innovative solutions and cutting-edge technology. We help companies transform their digital presence and achieve remarkable growth.",
     primaryButtonText: "Get Started Today",
     secondaryButtonText: "Learn More",
-    heroImage: "/images/hero/hero-main.webp",
+    heroImage: "/images/hero/hero-main.jpg",
     heroImageAlt: "Netpoleon - Innovative Technology Solutions",
   };
 
@@ -37,27 +36,7 @@ export default function Home() {
       layout: "left" as const,
       ctaText: "Explore Our Work",
       ctaLink: "#",
-    },
-    {
-      title: "Mobile App Development",
-      description:
-        "Transform your business with custom mobile applications that engage users and drive results. We build apps for iOS and Android that deliver exceptional user experiences.",
-      imageSrc: "/images/mobile-development.jpg",
-      imageAlt: "Mobile Development",
-      layout: "right" as const,
-      ctaText: "View Portfolio",
-      ctaLink: "#",
-    },
-    {
-      title: "Cloud Infrastructure",
-      description:
-        "Leverage the power of cloud computing with our scalable infrastructure solutions. We help businesses optimize their operations and reduce costs with modern cloud technologies.",
-      imageSrc: "/images/cloud-solutions.jpg",
-      imageAlt: "Cloud Solutions",
-      layout: "left" as const,
-      ctaText: "Learn More",
-      ctaLink: "#",
-    },
+    }
   ];
 
   const vendors = [
@@ -170,10 +149,9 @@ export default function Home() {
       {imageTextSections.map((section, idx) => (
         <ImageTextSection key={idx} {...section} />
       ))}
-      <ForceBasedGraph />
+      <GraphSection />
       <StatisticsSection statistics={statistics} />
       <NewsSection {...news} />
-      <Footer />
     </div>
   );
 }
