@@ -180,7 +180,30 @@ const mainNodes: MainNode[] = [
 ];
 
 export default function ForceBasedGraph() {
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [clickedNode, setClickedNode] = useState<string | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  const handleNodeClick = (nodeId: string) => {
+    if (clickedNode === nodeId) {
+      // Clicking the same node - return to original view
+      setClickedNode(null);
+      setIsZoomed(false);
+    } else {
+      // Clicking a different node - zoom in
+      setClickedNode(nodeId);
+      setIsZoomed(true);
+    }
+  };
+
+  const handleBackgroundClick = () => {
+    // Clicking away from nodes - return to original view
+    setClickedNode(null);
+    setIsZoomed(false);
+  };
+
+  // Calculate center position for zoomed view
+  const centerX = 600;
+  const centerY = 500;
 
   return (
     <div className="relative w-full max-w-7xl mx-auto h-[600px]">
@@ -188,21 +211,24 @@ export default function ForceBasedGraph() {
           viewBox="0 0 1200 900" 
           className="w-full h-full"
           style={{ display: 'block' }}
+          onClick={handleBackgroundClick}
         >
           {/* Connection lines from main nodes to subcategories */}
           <AnimatePresence>
-            {hoveredNode && mainNodes.find(n => n.id === hoveredNode)?.subCategories.map((subCat, index) => {
-              const mainNode = mainNodes.find(n => n.id === hoveredNode);
+            {clickedNode && mainNodes.find(n => n.id === clickedNode)?.subCategories.map((subCat, index) => {
+              const mainNode = mainNodes.find(n => n.id === clickedNode);
               if (!mainNode) return null;
               
               // Calculate position for main node (arranged in a circle)
-              const nodeIndex = mainNodes.findIndex(n => n.id === hoveredNode);
+              const nodeIndex = mainNodes.findIndex(n => n.id === clickedNode);
               const angle = (nodeIndex * 60 - 90) * (Math.PI / 180); // Start from top
               const radius = 140;
-              const centerX = 600;
-              const centerY = 500;
-              const mainNodeX = centerX + radius * Math.cos(angle);
-              const mainNodeY = centerY + radius * Math.sin(angle);
+              const originalX = centerX + radius * Math.cos(angle);
+              const originalY = centerY + radius * Math.sin(angle);
+              
+              // When zoomed, main node is at center, when not zoomed, it's at original position
+              const mainNodeX = isZoomed ? centerX : originalX;
+              const mainNodeY = isZoomed ? centerY : originalY;
               
               // Calculate multi-layer positions for subcategories
               const positions = getMultiLayerPositions(mainNodeX, mainNodeY, mainNode.subCategories, nodeIndex);
@@ -229,17 +255,19 @@ export default function ForceBasedGraph() {
 
           {/* Subcategory nodes */}
           <AnimatePresence>
-            {hoveredNode && mainNodes.find(n => n.id === hoveredNode)?.subCategories.map((subCat, index) => {
-              const mainNode = mainNodes.find(n => n.id === hoveredNode);
+            {clickedNode && mainNodes.find(n => n.id === clickedNode)?.subCategories.map((subCat, index) => {
+              const mainNode = mainNodes.find(n => n.id === clickedNode);
               if (!mainNode) return null;
               
-              const nodeIndex = mainNodes.findIndex(n => n.id === hoveredNode);
+              const nodeIndex = mainNodes.findIndex(n => n.id === clickedNode);
               const angle = (nodeIndex * 60 - 90) * (Math.PI / 180);
               const radius = 140;
-              const centerX = 600;
-              const centerY = 500;
-              const mainNodeX = centerX + radius * Math.cos(angle);
-              const mainNodeY = centerY + radius * Math.sin(angle);
+              const originalX = centerX + radius * Math.cos(angle);
+              const originalY = centerY + radius * Math.sin(angle);
+              
+              // When zoomed, main node is at center, when not zoomed, it's at original position
+              const mainNodeX = isZoomed ? centerX : originalX;
+              const mainNodeY = isZoomed ? centerY : originalY;
               
               // Calculate multi-layer positions for subcategories
               const positions = getMultiLayerPositions(mainNodeX, mainNodeY, mainNode.subCategories, nodeIndex);
@@ -256,7 +284,7 @@ export default function ForceBasedGraph() {
                   <circle
                     cx={subCatPos.x}
                     cy={subCatPos.y}
-                    r={40}
+                    r={isZoomed ? 60 : 40}
                     fill={subCat.color}
                     className="drop-shadow-lg"
                   />
@@ -266,13 +294,13 @@ export default function ForceBasedGraph() {
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill="white"
-                    fontSize="10"
+                    fontSize={isZoomed ? "14" : "10"}
                     fontWeight="bold"
                     className="pointer-events-none"
                   >
                     {(() => {
                       const words = subCat.label.split(' ');
-                      const lineHeight = 14;
+                      const lineHeight = isZoomed ? 18 : 14;
                       const totalHeight = (words.length - 1) * lineHeight;
                       const startY = -totalHeight / 2;
                       
@@ -292,10 +320,23 @@ export default function ForceBasedGraph() {
           {mainNodes.map((node, index) => {
             const angle = (index * 60 - 90) * (Math.PI / 180); // Start from top
             const radius = 140;
-            const centerX = 600;
-            const centerY = 500;
-            const x = centerX + radius * Math.cos(angle);
-            const y = centerY + radius * Math.sin(angle);
+            const originalX = centerX + radius * Math.cos(angle);
+            const originalY = centerY + radius * Math.sin(angle);
+
+            // Calculate final position based on zoom state
+            let finalX = originalX;
+            let finalY = originalY;
+            
+            if (isZoomed && clickedNode === node.id) {
+              // Move clicked node to center when zoomed
+              finalX = centerX;
+              finalY = centerY;
+            }
+
+            // Hide other nodes when zoomed in
+            if (isZoomed && clickedNode !== node.id) {
+              return null;
+            }
 
             return (
               <motion.g
@@ -304,31 +345,42 @@ export default function ForceBasedGraph() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 whileHover={{ scale: 1.05 }}
-                onMouseEnter={() => setHoveredNode(node.id)}
-                onMouseLeave={() => setHoveredNode(null)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent background click
+                  handleNodeClick(node.id);
+                }}
                 style={{ cursor: 'pointer' }}
               >
                 <motion.circle
-                  cx={x}
-                  cy={y}
-                  r={48}
+                  cx={finalX}
+                  cy={finalY}
+                  r={isZoomed && clickedNode === node.id ? 72 : 48}
                   fill={node.color}
                   className="drop-shadow-xl"
                   animate={{
-                    scale: hoveredNode === node.id ? 1.05 : 1,
+                    scale: clickedNode === node.id ? (isZoomed ? 1.2 : 1.05) : 1,
                   }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    ease: "easeInOut",
+                    cx: { duration: 0.6, ease: "easeInOut" },
+                    cy: { duration: 0.6, ease: "easeInOut" }
+                  }}
                 />
                 
                 <text
-                  x={x}
-                  y={y}
+                  x={finalX}
+                  y={finalY}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  fill="#2D3748"
-                  fontSize="18"
+                  fill="#000000"
+                  fontSize={isZoomed && clickedNode === node.id ? "24" : "18"}
                   fontWeight="bold"
                   className="pointer-events-none"
+                  style={{ 
+                    pointerEvents: 'none',
+                    userSelect: 'none'
+                  }}
                 >
                   {node.label}
                 </text>
