@@ -1,6 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import FogBackground from "./FogBackground";
+import CloudBackground from "./CloudBackground";
+import HeroParticles from "./ParticlesBackground";
 
 interface HeroSectionProps {
   title: string;
@@ -24,18 +27,17 @@ export default function HeroSection({
       id="home"
       className="relative py-32 flex items-center overflow-hidden"
     >
-      {/* Background Image */}
-      {heroImage && (
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroImage}
-            alt={heroImageAlt}
-            className="w-full h-full object-cover"
-          />
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-black/60 z-10"></div>
-        </div>
-      )}
+      {/* Cloud Background */}
+      {/* <CloudBackground /> */}
+
+      {/* Fog Background */}
+      {/*  <FogBackground /> */}
+
+      {/* Particle Background */}
+      <HeroParticles />
+      
+      {/* Light overlay for text readability */}
+      {/* <div className="absolute inset-0 bg-black/30 z-10"></div> */}
 
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-20">

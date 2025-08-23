@@ -1,7 +1,7 @@
 import HeroSection from "../components/HeroSection";
 import ImageTextSection from "../components/ImageTextSection";
 import VendorCarousel from "../components/VendorCarousel";
-import StatisticsSection from "../components/StatisticsSection";
+import Statistics from "../components/Statistics";
 import NewsSection from "../components/CardsSection";
 import GraphSection from "../components/GraphSection";
 
@@ -150,7 +150,7 @@ export default function Home() {
         <ImageTextSection key={idx} {...section} />
       ))}
       <GraphSection />
-      <StatisticsSection statistics={statistics} />
+      <Statistics statistics={statistics} />
       <NewsSection {...news} />
     </div>
   );
