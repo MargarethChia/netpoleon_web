@@ -7,15 +7,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 
-import { Calendar, Upload, Eye, Save, Send, ArrowLeft, FileText, X } from "lucide-react"
+import { Calendar, Upload, Save, Send, ArrowLeft, X } from "lucide-react"
 import { resourcesApi } from "@/lib/api"
-import { showToast } from "../../../../../components/ui/toast"
-import AdminLayout from "../../../components/AdminLayout"
-import ReactMarkdown from 'react-markdown'
-import { uploadImage } from "../../../../../lib/storage"
+import { showToast } from "@/components/ui/toast"
+import AdminLayout from "@/app/(admin)/components/AdminLayout"
+import { uploadImage } from "@/lib/storage"
+import RichTextEditor from "@/components/ui/rich-text-editor"
 
 export default function CreateResourcePage() {
   const router = useRouter()
@@ -80,6 +79,10 @@ export default function CreateResourcePage() {
 
   const removeImage = () => {
     setFormData(prev => ({ ...prev, cover_image_url: '' }))
+  }
+
+  const handleContentChange = (content: string) => {
+    setFormData(prev => ({ ...prev, content }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -333,119 +336,14 @@ export default function CreateResourcePage() {
                 </div>
               </CardContent>
             </Card>
-
-            <Card className="flex-1">
-              <CardHeader>
-                <CardTitle>Content Editor</CardTitle>
-                <CardDescription>Write your content in markdown format</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Textarea
-                  id="content"
-                  value={formData.content}
-                  onChange={(e) => handleInputChange('content', e.target.value)}
-                  placeholder="Write your content here in markdown format...
-
-# Main Heading
-## Subheading
-### Section Title
-
-**Bold text** and *italic text*
-
-- Bullet points
-- More points
-- Another point
-
-1. Numbered list
-2. Second item
-3. Third item
-
-[Links](https://example.com)
-
-![Images](https://example.com/image.jpg)
-
-> Blockquotes for important information
-
-`Inline code` and code blocks:
-
-```javascript
-function example() {
-  return 'Hello World!';
-}
-```"
-                  className="font-mono text-sm h-[400px] resize-none"
-                  required
-                />
-              </CardContent>
-            </Card>
           </div>
 
-          {/* Right Side - Preview */}
+          {/* Right Side - Rich Text Editor */}
           <div className="space-y-4">
-            <Card className="h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  Live Preview
-                </CardTitle>
-                <CardDescription>See how your content will appear</CardDescription>
-              </CardHeader>
-              <CardContent className="h-[calc(100%-80px)] overflow-y-auto">
-                {formData.title || formData.content ? (
-                  <div className="prose prose-sm max-w-none">
-                    {/* Cover Image at the top */}
-                    {formData.cover_image_url && (
-                      <div className="mb-6">
-                        <img 
-                          src={formData.cover_image_url} 
-                          alt="Cover" 
-                          className="w-full h-48 object-cover rounded-lg shadow-sm"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none'
-                          }}
-                        />
-                      </div>
-                    )}
-                    
-                    {formData.title && (
-                      <h1 className="text-2xl font-bold mb-4 text-foreground">
-                        {formData.title}
-                      </h1>
-                    )}
-                    
-                    {formData.content && (
-                      <div className="markdown-content text-foreground">
-                        <ReactMarkdown 
-                          components={{
-                            h1: ({...props}) => <h1 className="text-2xl font-bold mb-4" {...props} />,
-                            h2: ({...props}) => <h2 className="text-xl font-semibold mb-3" {...props} />,
-                            h3: ({...props}) => <h3 className="text-lg font-medium mb-2" {...props} />,
-                            p: ({...props}) => <p className="mb-3" {...props} />,
-                            ul: ({...props}) => <ul className="list-disc list-inside mb-3" {...props} />,
-                            ol: ({...props}) => <ol className="list-decimal list-inside mb-3" {...props} />,
-                            li: ({...props}) => <li className="mb-1" {...props} />,
-                            strong: ({...props}) => <strong className="font-bold" {...props} />,
-                            em: ({...props}) => <em className="italic" {...props} />,
-                            code: ({...props}) => <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono" {...props} />,
-                            pre: ({...props}) => <pre className="bg-muted p-3 rounded mb-3 overflow-x-auto" {...props} />,
-                            blockquote: ({...props}) => <blockquote className="border-l-4 border-muted-foreground pl-4 italic mb-3" {...props} />,
-                            a: ({...props}) => <a className="text-blue-600 hover:underline" {...props} />,
-                            img: ({...props}) => <img className="max-w-full h-auto rounded mb-3" {...props} />
-                          }}
-                        >
-                          {formData.content}
-                        </ReactMarkdown>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center text-muted-foreground py-8">
-                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Start writing to see a live preview...</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <RichTextEditor
+              content={formData.content}
+              onContentChange={handleContentChange}
+            />
           </div>
         </div>
       </div>
