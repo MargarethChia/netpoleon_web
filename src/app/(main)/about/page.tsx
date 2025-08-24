@@ -1,4 +1,5 @@
 "use client"
+
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -232,7 +233,7 @@ export default function AboutUs() {
               </Badge>
               <h2 className="text-4xl lg:text-5xl font-bold text-foreground">Our Services</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Comprehensive cybersecurity distribution and support services tailored to your organization's needs.
+                Comprehensive cybersecurity distribution and support services tailored to your organization&apos;s needs.
               </p>
             </motion.div>
           </div>
