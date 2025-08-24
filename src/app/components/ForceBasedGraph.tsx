@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface SubCategory {
   id: string;
@@ -182,6 +182,42 @@ const mainNodes: MainNode[] = [
 export default function ForceBasedGraph() {
   const [clickedNode, setClickedNode] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [dimensions, setDimensions] = useState({ width: 800, height: 600, centerX: 400, centerY: 300 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Update dimensions when container size changes
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (!containerRef.current) return;
+      
+      const rect = containerRef.current.getBoundingClientRect();
+      const width = Math.max(rect.width || 800, 600); // Minimum width
+      const height = Math.max(rect.height || 600, 400); // Minimum height
+      
+      setDimensions({
+        width,
+        height,
+        centerX: width / 2,
+        centerY: height / 2
+      });
+    };
+
+    updateDimensions();
+    
+    // Add resize listener
+    const resizeObserver = new ResizeObserver(updateDimensions);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    // Also listen for window resize
+    window.addEventListener('resize', updateDimensions);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', updateDimensions);
+    };
+  }, []);
 
   const handleNodeClick = (nodeId: string) => {
     if (clickedNode === nodeId) {
@@ -201,14 +237,16 @@ export default function ForceBasedGraph() {
     setIsZoomed(false);
   };
 
-  // Calculate center position for zoomed view
-  const centerX = 600;
-  const centerY = 500;
+  const { width, height, centerX, centerY } = dimensions;
+  const radius = Math.min(width, height) * 0.15; // Responsive radius
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto h-[600px]">
+    <div 
+      ref={containerRef}
+      className="relative w-full h-full min-h-[400px]"
+    >
         <svg 
-          viewBox="0 0 1200 900" 
+          viewBox={`0 0 ${width} ${height}`}
           className="w-full h-full"
           style={{ display: 'block' }}
           onClick={handleBackgroundClick}
@@ -222,7 +260,6 @@ export default function ForceBasedGraph() {
               // Calculate position for main node (arranged in a circle)
               const nodeIndex = mainNodes.findIndex(n => n.id === clickedNode);
               const angle = (nodeIndex * 60 - 90) * (Math.PI / 180); // Start from top
-              const radius = 140;
               const originalX = centerX + radius * Math.cos(angle);
               const originalY = centerY + radius * Math.sin(angle);
               
@@ -261,7 +298,6 @@ export default function ForceBasedGraph() {
               
               const nodeIndex = mainNodes.findIndex(n => n.id === clickedNode);
               const angle = (nodeIndex * 60 - 90) * (Math.PI / 180);
-              const radius = 140;
               const originalX = centerX + radius * Math.cos(angle);
               const originalY = centerY + radius * Math.sin(angle);
               
@@ -319,7 +355,6 @@ export default function ForceBasedGraph() {
           {/* Main nodes arranged in a circle */}
           {mainNodes.map((node, index) => {
             const angle = (index * 60 - 90) * (Math.PI / 180); // Start from top
-            const radius = 140;
             const originalX = centerX + radius * Math.cos(angle);
             const originalY = centerY + radius * Math.sin(angle);
 
