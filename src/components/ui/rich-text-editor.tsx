@@ -16,7 +16,16 @@ interface RichTextEditorProps {
 const RichTextEditor = ({ content, onContentChange, showPreview = false, className = "" }: RichTextEditorProps) => {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+        orderedList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+      }),
       UnderlineExtension,
     ],
     content,
@@ -29,13 +38,18 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
       },
     },
     onCreate: () => {
-      // Add some basic CSS to ensure headings are visible
+      // Add some basic CSS to ensure headings and lists are visible
       const style = document.createElement('style')
       style.textContent = `
         .ProseMirror h1 { font-size: 2em; font-weight: bold; margin: 0.67em 0; }
         .ProseMirror h2 { font-size: 1.5em; font-weight: bold; margin: 0.83em 0; }
         .ProseMirror h3 { font-size: 1.17em; font-weight: bold; margin: 1em 0; }
         .ProseMirror p { margin: 1em 0; }
+        .ProseMirror ul { margin: 1em 0; padding-left: 1.5em; }
+        .ProseMirror ol { margin: 1em 0; padding-left: 1.5em; }
+        .ProseMirror li { margin: 0.5em 0; }
+        .ProseMirror ul li { list-style-type: disc; }
+        .ProseMirror ol li { list-style-type: decimal; }
       `
       document.head.appendChild(style)
     },
@@ -47,15 +61,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
     return <div className="border rounded-lg bg-card p-4">Loading editor...</div>
   }
 
-  // Debug: Check what commands are available
-  console.log('Editor capabilities:', {
-    canHeading1: editor.can().chain().focus().toggleHeading({ level: 1 }).run(),
-    canHeading2: editor.can().chain().focus().toggleHeading({ level: 2 }).run(),
-    canHeading3: editor.can().chain().focus().toggleHeading({ level: 3 }).run(),
-    canBold: editor.can().chain().focus().toggleBold().run(),
-    canItalic: editor.can().chain().focus().toggleItalic().run(),
-    currentContent: editor.getHTML(),
-  })
+
 
   return (
     <div className={`border rounded-lg bg-card ${className}`}>
@@ -98,11 +104,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
             <Button
               variant={editor.isActive('heading', { level: 1 }) ? "default" : "ghost"}
               size="sm"
-              onClick={() => {
-                console.log('H1 clicked, current state:', editor.isActive('heading', { level: 1 }))
-                editor.chain().focus().toggleHeading({ level: 1 }).run()
-                console.log('After H1, state:', editor.isActive('heading', { level: 1 }))
-              }}
+              onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
               className="h-8 px-2 text-xs"
               title="Heading 1"
             >
@@ -111,11 +113,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
             <Button
               variant={editor.isActive('heading', { level: 2 }) ? "default" : "ghost"}
               size="sm"
-              onClick={() => {
-                console.log('H2 clicked, current state:', editor.isActive('heading', { level: 2 }))
-                editor.chain().focus().toggleHeading({ level: 2 }).run()
-                console.log('After H2, state:', editor.isActive('heading', { level: 2 }))
-              }}
+              onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
               className="h-8 px-2 text-xs"
               title="Heading 2"
             >
@@ -124,11 +122,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
             <Button
               variant={editor.isActive('heading', { level: 3 }) ? "default" : "ghost"}
               size="sm"
-              onClick={() => {
-                console.log('H3 clicked, current state:', editor.isActive('heading', { level: 3 }))
-                editor.chain().focus().toggleHeading({ level: 3 }).run()
-                console.log('After H3, state:', editor.isActive('heading', { level: 3 }))
-              }}
+              onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
               className="h-8 px-2 text-xs"
               title="Heading 3"
             >
