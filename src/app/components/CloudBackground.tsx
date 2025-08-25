@@ -1,4 +1,4 @@
-// components/ParticleBackground.tsx
+// components/CloudBackground.tsx
 "use client";
 
 import { useEffect, useRef } from 'react';

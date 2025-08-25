@@ -4,7 +4,7 @@ import ForceBasedGraph from "./ForceBasedGraph";
 
 export default function GraphSection() {
   return (
-    <section className="mt-20 bg-white relative overflow-hidden">
+    <section className="bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center lg:items-center justify-between gap-12">
           {/* Left side - Services heading */}

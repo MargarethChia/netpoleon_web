@@ -11,7 +11,7 @@ import GraphSection from "../components/GraphSection";
 export default function Home() {
   // Home Page
   const hero = {
-    title: "Welcome to Netpoleon",
+    title: "Netpoleon ANZ",
     subtitle:
       "Empowering businesses with innovative solutions and cutting-edge technology. We help companies transform their digital presence and achieve remarkable growth.",
     primaryButtonText: "Get Started Today",
@@ -19,6 +19,8 @@ export default function Home() {
     heroImage: "/images/hero/hero-main.jpg",
     heroImageAlt: "Netpoleon - Innovative Technology Solutions",
   };
+
+  console.log('Home page rendering with hero props:', hero);
 
   // const about = {
   //   title: "About Netpoleon",
