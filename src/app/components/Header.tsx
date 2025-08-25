@@ -26,10 +26,10 @@ export default function Header() {
             {[
               { href: "/about", text: "About" },
               { href: "/partners", text: "Cybersecurity Vendors" },
-              { href: "#services", text: "Services" },
-              { href: "#events", text: "Events" },
-              { href: "#resources", text: "Resources" },
-              { href: "#contact_us", text: "Contact Us" }
+              { href: "/services", text: "Services" },
+              { href: "/events", text: "Events" },
+              { href: "/resources", text: "Resources" },
+              { href: "/contact_us", text: "Contact Us" }
             ].map((link) => (
               <a 
                 key={link.href}
