@@ -7,55 +7,55 @@ const services = [
     id: 1,
     title: "Channel Sales & Enablement",
     description: "Comprehensive channel sales strategies and enablement programs to maximize your distribution network effectiveness.",
-    icon: "/images/icons/channel-sales.svg"
+    icon: "/icons/Channel Sales & Enablement.png"
   },
   {
     id: 2,
     title: "Operations & Logistics Services",
     description: "End-to-end operational excellence and logistics solutions to streamline your business processes.",
-    icon: "/images/icons/operations-logistics.svg"
+    icon: "/icons/Operations & Logistics Services.png"
   },
   {
     id: 3,
     title: "Pre-Sales POV, Consultation & Professional Services",
     description: "Strategic pre-sales consultation and professional services to enhance customer engagement and solution design.",
-    icon: "/images/icons/pre-sales-consultation.svg"
+    icon: "/icons/Pre-Sales POV, Consultation & Professional Services.png"
   },
   {
     id: 4,
-    title: "Post Sales & Customer Support Services",
+    title: "Post-Sales & Customer Support Services",
     description: "Comprehensive post-sales support and customer service solutions to ensure long-term customer satisfaction.",
-    icon: "/images/icons/post-sales-support.svg"
+    icon: "/icons/Post Sales & Customer Support Services.png"
   },
   {
     id: 5,
     title: "Technology & Product Training",
     description: "Specialized training programs for technology products and solutions to maximize user adoption and proficiency.",
-    icon: "/images/icons/tech-training.svg"
+    icon: "/icons/Technology & Product Training.png"
   },
   {
     id: 6,
     title: "Vendor Promotion & Augmentation",
     description: "Strategic vendor promotion and augmentation services to enhance market presence and operational capabilities.",
-    icon: "/images/icons/vendor-promotion.svg"
+    icon: "/icons/Vendor Promotion & Augmentation.png"
   },
   {
     id: 7,
     title: "Marketing & Business Development Support",
     description: "Comprehensive marketing strategies and business development support to drive growth and market expansion.",
-    icon: "/images/icons/marketing-business-dev.svg"
+    icon: "/icons/Marketing & Business Development Support.png"
   },
   {
     id: 8,
     title: "Finance Services",
     description: "Professional financial services and consulting to optimize your business financial performance and strategy.",
-    icon: "/images/icons/finance-services.svg"
+    icon: "/icons/Financial Services.png"
   },
   {
     id: 9,
     title: "Marketplace",
     description: "Digital marketplace solutions and platforms to facilitate commerce and business transactions.",
-    icon: "/images/icons/marketplace.svg"
+    icon: "/icons/Marketplace.png"
   }
 ];
 
@@ -102,44 +102,25 @@ export default function ServicesPage() {
     return (
       <div
         key={service.id}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transition: 'opacity 1s ease-in-out',
-          opacity: index === activeService ? 1 : 0
-        }}
+        className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${
+          index === activeService ? 'opacity-100' : 'opacity-0'
+        }`}
       >
-        {/* Large icon taking up most of the left side */}
-        <div style={{
-          width: '80%',
-          height: '80%',
-          background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-        }}>
-          <div style={{
-            width: '60%',
-            height: '60%',
-            background: 'rgba(255, 255, 255, 0.2)',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <span style={{
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '4rem'
-            }}>
-              {service.id}
-            </span>
+        {/* Large icon container with consistent positioning */}
+        <div className="w-5/6 h-5/6 flex flex-col items-center justify-start pt-16">
+          {/* Icon display area with fixed sizing */}
+          <div className="w-64 h-64 flex items-center justify-start mb-6">
+            <img 
+              src={service.icon} 
+              alt={service.title} 
+              className="w-64 h-64 object-contain drop-shadow-lg"
+              style={{ minWidth: '256px', minHeight: '256px', maxWidth: '256px', maxHeight: '256px' }}
+            />
           </div>
+          {/* Service title below the icon */}
+          {/* <h3 className="text-2xl font-bold text-amber-800 text-center px-4">
+            {service.title.split(' ')[0]}
+          </h3> */}
         </div>
       </div>
     );
@@ -227,16 +208,10 @@ export default function ServicesPage() {
       </nav>
 
       {/* Main Content */}
-      <div style={{ display: 'flex', minHeight: '100vh' }}>
+      <div className="flex min-h-screen">
         {/* Left Side - Fixed Icon (Half the page) */}
-        <div style={{
-          width: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'linear-gradient(135deg, #fef3c7, #fde68a)',
-          position: 'sticky',
-          top: '5rem',
+        <div className="w-1/2 flex items-center justify-center top-20 h-screen sticky bg-blue-600" style={{
+          width: '60%',
           height: '100vh'
         }}>
           <div style={{ textAlign: 'center' }}>
@@ -244,16 +219,7 @@ export default function ServicesPage() {
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
               {services.map((service, index) => renderIcon(service, index))}
             </div>
-            {/* Service Title below icon */}
-            <div style={{ marginTop: '2rem' }}>
-              <h3 style={{
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
-                color: '#92400e'
-              }}>
-                {services[activeService].title.split(' ')[0]}
-              </h3>
-            </div>
+
           </div>
         </div>
 
