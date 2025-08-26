@@ -128,8 +128,8 @@ export default function RippleBackground() {
       dy = y + newVy * s;
       dl = fadeInOut(l, ttl);
       
-      // Use white color with varying opacity
-      c = `rgba(255, 255, 255, ${dl * 0.8})`;
+      // Use orange color with varying opacity
+      c = `rgba(255, 140, 0, ${dl * 0.8})`; // Orange color (#ff8c00)
 
       const newL = l + 1;
 

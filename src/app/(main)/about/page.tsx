@@ -194,7 +194,7 @@ export default function AboutUs() {
                 {
                   year: "2022",
                   title: "Innovation",
-                  desc: "Launched our managed security services division and achieved SOC 2 Type II certification.",
+                  desc: "Launched our managed security services division and achieved SOC 2 Type II certification hjhguiuguihgyuhgtyujhgtyujhgtyuijhgtyujh.",
                 },
                 {
                   year: "2024",

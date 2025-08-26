@@ -13,7 +13,7 @@ export default function Home() {
   const hero = {
     title: "Netpoleon ANZ",
     subtitle:
-      "Empowering businesses with innovative solutions and cutting-edge technology. We help companies transform their digital presence and achieve remarkable growth.",
+      "Innovative Cybersecurity Solutions",
     primaryButtonText: "Get Started Today",
     secondaryButtonText: "Learn More",
     heroImage: "/images/hero/hero-main.jpg",

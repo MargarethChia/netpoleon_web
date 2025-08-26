@@ -7,6 +7,7 @@ import RippleBackground from './RippleBackground';
 export default function BigBangBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [showRipple, setShowRipple] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 
@@ -84,8 +85,8 @@ export default function BigBangBackground() {
     galaxyGeometry.setAttribute("size", new THREE.BufferAttribute(galaxySize, 1));
     galaxyGeometry.setAttribute("seed", new THREE.BufferAttribute(galaxySeed, 3));
 
-    const innColor = new THREE.Color("#f40");
-    const outColor = new THREE.Color("#a7f");
+    const innColor = new THREE.Color("#ff8c00");  // Nice orange center
+    const outColor = new THREE.Color("#ff8c00");  // Orange outer stars too
 
     const galaxyMaterial = new THREE.ShaderMaterial({
       uniforms: {
@@ -185,8 +186,9 @@ export default function BigBangBackground() {
           if (a < 0.1) discard;
 
           vec3 color = mix(uColorInn, uColorOut, vDistance);
-          float c = step(0.99, (sin(gl_PointCoord.x * PI) + sin(gl_PointCoord.y * PI)) * 0.5);
-          color = max(color, vec3(c));
+          // Remove white highlights to keep stars fully orange
+          // float c = step(0.99, (sin(gl_PointCoord.x * PI) + sin(gl_PointCoord.y * PI)) * 0.5);
+          // color = max(color, vec3(c));
 
           gl_FragColor = vec4(color, a);
         }
@@ -325,7 +327,7 @@ export default function BigBangBackground() {
       if (showRipple) return;
 
       const elapsed = (Date.now() - startTime) / 1000;
-      const progress = Math.min(elapsed / 5, 1); // 5 second animation
+      const progress = Math.min(elapsed / 2, 1); // 5 second animation
 
       // Animate galaxy parameters using TWEEN-like easing
       const radius = THREE.MathUtils.lerp(0, 1.618, progress);
@@ -357,7 +359,7 @@ export default function BigBangBackground() {
     // Zoom-out effect function
     const startZoomOut = () => {
       const zoomStartTime = Date.now();
-      const zoomDuration = 2000; // 2 seconds for zoom-out
+      const zoomDuration = 1500; // 2 seconds for zoom-out
       const startZ = camera.position.z;
       const endZ = 20; // Zoom out to z=20
 
@@ -384,8 +386,10 @@ export default function BigBangBackground() {
         if (zoomProgress < 1) {
           requestAnimationFrame(zoomOut);
         } else {
-          // Zoom-out complete, transition to ripple
-          setTimeout(() => setShowRipple(true), 500);
+          // Start fade-out effect
+          setFadeOut(true);
+          // Wait for fade-out animation to complete, then cleanup
+          setTimeout(() => setShowRipple(true), 600);
         }
       };
 
@@ -413,16 +417,28 @@ export default function BigBangBackground() {
     };
   }, [showRipple]);
 
-  if (showRipple) {
-    return <RippleBackground />;
-  }
-
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none bg-black" style={{ zIndex: 1 }}>
+      {/* RippleBackground - always mounted, controlled by opacity */}
+      <div 
+        className="absolute inset-0 w-full h-full transition-opacity duration-500"
+        style={{ 
+          opacity: fadeOut ? 1 : 0,
+          zIndex: fadeOut ? 2 : 1
+        }}
+      >
+        <RippleBackground />
+      </div>
+      
+      {/* BigBangBackground canvas - controlled by opacity */}
       <canvas
         ref={canvasRef}
-        className="w-full h-full"
-        style={{ display: 'block' }}
+        className="absolute inset-0 w-full h-full transition-opacity duration-500"
+        style={{ 
+          display: 'block',
+          opacity: fadeOut ? 0 : 1,
+          zIndex: fadeOut ? 1 : 2
+        }}
       />
     </div>
   );
