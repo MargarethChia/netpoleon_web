@@ -1,8 +1,5 @@
-name: Node.js CI
+name: CI
 
-env:
-  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-  NEXT_PUBLIC_ANON_KEY: ${{ secrets.NEXT_PUBLIC_ANON_KEY }}
 on:
   push:
     branches: ['main', 'dev', 'development']
@@ -10,37 +7,40 @@ on:
     branches: ['main', 'dev', 'development']
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
-      - name: Set up Node.js
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
-          cache: 'pnpm' # This will now work correctly
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
-      - name: Run linters
-        run: pnpm run lint
+      - name: Run linting
+        run: npm run lint
 
       - name: Check formatting
-        run: pnpm run format:check
+        run: npm run format:check
 
       - name: Check TypeScript types
-        run: pnpm exec tsc --noEmit
+        run: npx tsc --noEmit
 
-      - name: Build project
-        run: pnpm run build
+      - name: Run tests
+        run: npm run test:coverage
 
-      - name: Build project
-        run: pnpm run build
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_ANON_KEY: ${{ secrets.NEXT_PUBLIC_ANON_KEY }}

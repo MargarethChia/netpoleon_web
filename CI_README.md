@@ -185,11 +185,6 @@ npm run commit           # Interactive commit with Commitizen
 - Runs `lint-staged` to check and format staged files
 - Ensures code quality before commits
 
-### Commit-msg Hook
-
-- Validates commit message format using `commitlint`
-- Ensures conventional commit standards
-
 ### Lint-staged Configuration
 
 - Runs ESLint and Prettier on staged files
@@ -201,7 +196,7 @@ npm run commit           # Interactive commit with Commitizen
 - **`.eslintrc.js`**: ESLint configuration
 - **`.prettierrc`**: Prettier formatting rules
 - **`.lintstagedrc.js`**: Lint-staged configuration
-- **`commitlint.config.js`**: Commit message validation rules
+
 - **`.husky/`**: Git hooks configuration
 
 ## 🚨 Troubleshooting
