@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
       .from('vendors')
       .insert([{
         name: body.name,
+        content: body.content || null,
         logo_url: body.logo_url || null,
         description: body.description || null,
         content: body.content || null,
