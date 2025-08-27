@@ -7,12 +7,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MoreHorizontal, Eye, Edit, Trash2, Search, Building2, Calendar, Image, ExternalLink, Globe } from "lucide-react";
+import { MoreHorizontal, Eye, Edit, Trash2, Search, Building2, Calendar, Image, ExternalLink, Globe, Upload, FileText, Download } from "lucide-react";
 import AdminLayout from "../../components/AdminLayout";
 import { Vendor, vendorsApi } from "@/lib/api";
 import { ConfirmDialog } from "../../../../components/ui/confirm-dialog";
 import { showToast } from "../../../../components/ui/toast";
 import { useRouter } from "next/navigation";
+import { uploadVendorPortfolio, getVendorPortfolioUrl } from "@/lib/storage";
 
 export default function VendorsPage() {
   const [vendors, setVendors] = useState<Vendor[]>([])
@@ -20,6 +21,8 @@ export default function VendorsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [vendorToDelete, setVendorToDelete] = useState<Vendor | null>(null)
+  const [isUploadingPortfolio, setIsUploadingPortfolio] = useState(false)
+  const [portfolioUrl, setPortfolioUrl] = useState<string | null>(null)
 
   const router = useRouter()
 
@@ -36,8 +39,20 @@ export default function VendorsPage() {
     }
   }
 
+  // Get current portfolio URL
+  const fetchPortfolioUrl = () => {
+    try {
+      const url = getVendorPortfolioUrl()
+      console.log("Portfolio URL:", url)
+      setPortfolioUrl(url)
+    } catch (error) {
+      console.error("Error getting portfolio URL:", error)
+    }
+  }
+
   useEffect(() => {
     fetchVendors()
+    fetchPortfolioUrl()
   }, [])
 
   const handleAddVendor = () => {
@@ -65,6 +80,49 @@ export default function VendorsPage() {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  const handlePortfolioUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    setIsUploadingPortfolio(true)
+    
+    try {
+      const result = await uploadVendorPortfolio(file)
+      
+      if (result.success && result.url) {
+        setPortfolioUrl(result.url)
+        showToast({
+          title: "Success",
+          message: "Vendor portfolio updated successfully!",
+          type: "success"
+        })
+        // Refresh the portfolio URL
+        fetchPortfolioUrl()
+      } else {
+        showToast({
+          title: "Upload Failed",
+          message: result.error || "Failed to upload portfolio",
+          type: "error"
+        })
+      }
+    } catch (error) {
+      console.error('Portfolio upload error:', error)
+      showToast({
+        title: "Upload Failed",
+        message: "An unexpected error occurred",
+        type: "error"
+      })
+    } finally {
+      setIsUploadingPortfolio(false)
+    }
+  }
+
+  const handleDownloadPortfolio = () => {
+    if (portfolioUrl) {
+      window.open(portfolioUrl, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   // Filter vendors based on search term
   const filteredVendors = vendors.filter(vendor =>
     !searchTerm || 
@@ -83,6 +141,17 @@ export default function VendorsPage() {
         onAddClick={handleAddVendor}
       >
         <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
+          {/* Portfolio Upload Loading */}
+          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+            <CardHeader>
+              <div className="h-6 w-48 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
+              <div className="h-4 w-64 bg-muted rounded transition-all duration-300 ease-out"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-10 w-32 bg-muted rounded transition-all duration-300 ease-out"></div>
+            </CardContent>
+          </Card>
+
           {/* Search Loading */}
           <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
             <CardHeader>
@@ -136,6 +205,63 @@ export default function VendorsPage() {
       onAddClick={handleAddVendor}
     >
       <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
+        {/* Portfolio Upload */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Vendor Portfolio Management
+            </CardTitle>
+            <CardDescription>
+              Upload and manage the Netpoleon ANZ Vendor Portfolio PDF document
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-4">
+              <div className="flex gap-2">
+                <input
+                  id="portfolio-upload"
+                  type="file"
+                  accept=".pdf"
+                  onChange={handlePortfolioUpload}
+                  className="hidden"
+                />
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => document.getElementById('portfolio-upload')?.click()}
+                  disabled={isUploadingPortfolio}
+                  className="flex items-center gap-2"
+                >
+                  <Upload className="h-4 w-4" />
+                  {isUploadingPortfolio ? 'Uploading...' : 'Upload Portfolio'}
+                </Button>
+                {portfolioUrl && (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleDownloadPortfolio}
+                    className="flex items-center gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    View Portfolio
+                  </Button>
+                )}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {portfolioUrl ? (
+                  <span className="text-green-600">✓ Portfolio available</span>
+                ) : (
+                  <span className="text-amber-600">No portfolio uploaded</span>
+                )}
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Upload a PDF file to replace the existing vendor portfolio. Maximum file size: 10MB.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Search */}
         <Card>
           <CardHeader>

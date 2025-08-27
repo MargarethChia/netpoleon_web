@@ -4,12 +4,13 @@ import { supabase } from '@/lib/supabase'
 // GET /api/resources/[id] - Fetch single resource
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const resourceId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(resourceId)) {
       return NextResponse.json(
         { error: 'Invalid resource ID' },
         { status: 400 }
@@ -19,7 +20,7 @@ export async function GET(
     const { data, error } = await supabase
       .from('resources')
       .select('*')
-      .eq('id', id)
+      .eq('id', resourceId)
       .single()
     
     if (error) {
@@ -49,12 +50,13 @@ export async function GET(
 // PUT /api/resources/[id] - Update resource
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const resourceId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(resourceId)) {
       return NextResponse.json(
         { error: 'Invalid resource ID' },
         { status: 400 }
@@ -90,7 +92,7 @@ export async function PUT(
         cover_image_url: body.cover_image_url || null,
         updated_at: new Date().toISOString()
       })
-      .eq('id', id)
+      .eq('id', resourceId)
       .select()
       .single()
     
@@ -121,12 +123,13 @@ export async function PUT(
 // DELETE /api/resources/[id] - Delete resource
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const resourceId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(resourceId)) {
       return NextResponse.json(
         { error: 'Invalid resource ID' },
         { status: 400 }
@@ -136,7 +139,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('resources')
       .delete()
-      .eq('id', id)
+      .eq('id', resourceId)
     
     if (error) {
       console.error('Database error:', error)
