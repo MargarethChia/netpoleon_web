@@ -4,12 +4,15 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { vendorsApi, type Vendor } from '@/lib/api';
+import { getVendorPortfolioUrl } from '@/lib/storage';
 
 export default function OurVendors() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [displayedVendors, setDisplayedVendors] = useState<number>(6);
+  const [portfolioUrl, setPortfolioUrl] = useState<string>("");
+  const [portfolioLoading, setPortfolioLoading] = useState(false);
 
   useEffect(() => {
     const fetchVendors = async () => {
@@ -24,7 +27,20 @@ export default function OurVendors() {
       }
     };
 
+    const fetchPortfolioUrl = async () => {
+      try {
+        setPortfolioLoading(true);
+        const url = getVendorPortfolioUrl();
+        setPortfolioUrl(url);
+      } catch (err) {
+        console.error('Error fetching portfolio URL:', err);
+      } finally {
+        setPortfolioLoading(false);
+      }
+    };
+
     fetchVendors();
+    fetchPortfolioUrl();
   }, []);
 
   // Load more vendors
@@ -35,15 +51,17 @@ export default function OurVendors() {
     });
   };
 
+  // Handle portfolio download
+  const handlePortfolioDownload = () => {
+    if (portfolioUrl) {
+      window.open(portfolioUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   // Animation variants
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 }
-  };
-
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 }
   };
 
   const staggerContainer = {
@@ -56,10 +74,7 @@ export default function OurVendors() {
     }
   };
 
-  const scaleIn = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { opacity: 1, scale: 1 }
-  };
+
 
   if (loading) {
     return (
@@ -160,14 +175,20 @@ export default function OurVendors() {
                 </p>
               </div>
               <motion.button 
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center font-bold"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                onClick={handlePortfolioDownload}
+                disabled={portfolioLoading || !portfolioUrl}
+                className={`px-6 py-3 rounded-lg transition-colors inline-flex items-center font-bold ${
+                  portfolioLoading || !portfolioUrl 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                }`}
+                whileHover={portfolioLoading || !portfolioUrl ? {} : { scale: 1.05 }}
+                whileTap={portfolioLoading || !portfolioUrl ? {} : { scale: 0.95 }}
               >
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Download PDF
+                {portfolioLoading ? 'Loading...' : !portfolioUrl ? 'No PDF Available' : 'Download PDF'}
               </motion.button>
             </div>
           </div>
