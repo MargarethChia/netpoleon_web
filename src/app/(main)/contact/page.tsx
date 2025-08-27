@@ -4,6 +4,19 @@ import React, { useState } from 'react';
 
 export default function ContactUs() {
   const [subject, setSubject] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    company: '',
+    message: ''
+  });
+  const [partnerFile, setPartnerFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
 
   const subjectOptions = [
     'General Inquiry',
@@ -19,42 +32,121 @@ export default function ContactUs() {
   const isPartnerApplication = subject === 'Apply for Partner';
   const isVendorPartnership = subject === 'Vendor Partnership';
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setPartnerFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      const payload = {
+        ...formData,
+        subject,
+        partnerFile: partnerFile ? partnerFile.name : null,
+        isPartnerApplication,
+        isVendorPartnership
+      };
+
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({
+          type: 'success',
+          message: 'Thank you! Your message has been sent successfully. You will receive a confirmation email shortly.'
+        });
+        
+        // Reset form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          company: '',
+          message: ''
+        });
+        setSubject('');
+        setPartnerFile(null);
+      } else {
+        setSubmitStatus({
+          type: 'error',
+          message: result.error || 'Failed to send message. Please try again.'
+        });
+      }
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Network error. Please check your connection and try again.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen py-16">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
-        {/* Header */}
-        <section className="text-center mb-16">
-          <h1 className="text-4xl lg:text-5xl mb-6">Contact Us</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Ready to get started? We'd love to hear from you. Send us a message and we'll 
-            respond as soon as possible.
-          </p>
-        </section>
+
+        {/* Submit Status Messages */}
+        {submitStatus.type && (
+          <div className={`mb-6 p-4 rounded-lg ${
+            submitStatus.type === 'success' 
+              ? 'bg-green-50 border border-green-200 text-green-800' 
+              : 'bg-red-50 border border-red-200 text-red-800'
+          }`}>
+            {submitStatus.message}
+          </div>
+        )}
 
         {/* Main Contact Form */}
         <div className="bg-white rounded-lg shadow-sm border p-8 mb-12">
           <h2 className="text-2xl mb-6">Send us a Message</h2>
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid lg:grid-cols-2 gap-6">
               {/* Left Column - Form Fields */}
               <div className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="firstName" className="block mb-2">First Name</label>
+                    <label htmlFor="firstName" className="block mb-2">First Name *</label>
                     <input
                       type="text"
                       id="firstName"
                       name="firstName"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      required
                       className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                       placeholder="John"
                     />
                   </div>
                   <div>
-                    <label htmlFor="lastName" className="block mb-2">Last Name</label>
+                    <label htmlFor="lastName" className="block mb-2">Last Name *</label>
                     <input
                       type="text"
                       id="lastName"
                       name="lastName"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      required
                       className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                       placeholder="Doe"
                     />
@@ -62,11 +154,14 @@ export default function ContactUs() {
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block mb-2">Email Address</label>
+                  <label htmlFor="email" className="block mb-2">Email Address *</label>
                   <input
                     type="email"
                     id="email"
                     name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                     placeholder="john.doe@company.com"
                   />
@@ -78,18 +173,21 @@ export default function ContactUs() {
                     type="text"
                     id="company"
                     name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                     placeholder="Company Name"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block mb-2">Subject</label>
+                  <label htmlFor="subject" className="block mb-2">Subject *</label>
                   <select
                     id="subject"
                     name="subject"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
+                    required
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 bg-white"
                   >
                     <option value="">Select a subject...</option>
@@ -98,8 +196,6 @@ export default function ContactUs() {
                     ))}
                   </select>
                 </div>
-
-
               </div>
 
               {/* Right Column - Message/File Upload */}
@@ -131,31 +227,16 @@ export default function ContactUs() {
                     </div>
 
                     <div>
-                      <label htmlFor="vendorFile" className="block mb-2">Upload Company Profile</label>
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                        <input
-                          type="file"
-                          id="vendorFile"
-                          name="vendorFile"
-                          className="hidden"
-                          accept=".pdf,.doc,.docx,.ppt,.pptx"
-                        />
-                        <label htmlFor="vendorFile" className="cursor-pointer">
-                          <div className="text-gray-400 mb-2">
-                            <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                          </div>
-                          <p className="text-gray-600 mb-1">Click to upload your company profile or product information</p>
-                          <p className="text-sm text-gray-500">PDF, DOC, DOCX, PPT, PPTX up to 10MB</p>
-                        </label>
-                      </div>
-                      <p className="text-sm text-gray-600 mt-4">
-                        Please email your uploaded documents to: 
-                        <a href="mailto:vendors@netpoleon.com" className="text-blue-600 hover:underline ml-1">
-                          vendors@netpoleon.com
-                        </a>
-                      </p>
+                      <label htmlFor="message" className="block mb-2">Additional Message</label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        rows={8}
+                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                        placeholder="Tell us about your vendor partnership interest..."
+                      ></textarea>
                     </div>
                   </>
                 ) : isPartnerApplication ? (
@@ -191,6 +272,7 @@ export default function ContactUs() {
                           type="file"
                           id="partnerFile"
                           name="partnerFile"
+                          onChange={handleFileChange}
                           className="hidden"
                           accept=".pdf,.doc,.docx"
                         />
@@ -202,22 +284,35 @@ export default function ContactUs() {
                           </div>
                           <p className="text-gray-600 mb-1">Click to upload your company profile or partnership proposal</p>
                           <p className="text-sm text-gray-500">PDF, DOC, DOCX up to 10MB</p>
+                          {partnerFile && (
+                            <p className="text-sm text-blue-600 mt-2">✓ {partnerFile.name}</p>
+                          )}
                         </label>
                       </div>
-                      <p className="text-sm text-gray-600 mt-4">
-                        After uploading, please email your completed application to: 
-                        <a href="mailto:partnerships@netpoleon.com" className="text-blue-600 hover:underline ml-1">
-                          partnerships@netpoleon.com
-                        </a>
-                      </p>
+                    </div>
+
+                    <div>
+                      <label htmlFor="message" className="block mb-2">Additional Message</label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        rows={6}
+                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                        placeholder="Tell us about your partnership goals..."
+                      ></textarea>
                     </div>
                   </>
                 ) : (
                   <div>
-                    <label htmlFor="message" className="block mb-2">Message</label>
+                    <label htmlFor="message" className="block mb-2">Message *</label>
                     <textarea
                       id="message"
                       name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
                       rows={12}
                       className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                       placeholder="Tell us about your project or inquiry..."
@@ -229,9 +324,24 @@ export default function ContactUs() {
 
             <button
               type="submit"
-              className="w-full bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+              disabled={isSubmitting}
+              className={`w-full px-8 py-3 rounded-lg transition-colors ${
+                isSubmitting
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-gray-900 hover:bg-gray-800'
+              } text-white`}
             >
-              {isPartnerApplication ? 'Submit Application' : isVendorPartnership ? 'Submit Vendor Inquiry' : 'Send Message'}
+              {isSubmitting ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Sending...
+                </span>
+              ) : (
+                isPartnerApplication ? 'Submit Application' : isVendorPartnership ? 'Submit Vendor Inquiry' : 'Send Message'
+              )}
             </button>
           </form>
         </div>
