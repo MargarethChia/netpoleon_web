@@ -77,6 +77,7 @@ export async function PUT(
       .from('vendors')
       .update({
         name: body.name,
+        content: body.content,
         logo_url: body.logo_url || null,
         description: body.description || null,
         image_url: body.image_url || null,
