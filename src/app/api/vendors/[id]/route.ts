@@ -4,12 +4,13 @@ import { supabase } from '@/lib/supabase'
 // GET /api/vendors/[id] - Fetch single vendor
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const vendorId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(vendorId)) {
       return NextResponse.json(
         { error: 'Invalid vendor ID' },
         { status: 400 }
@@ -19,7 +20,7 @@ export async function GET(
     const { data, error } = await supabase
       .from('vendors')
       .select('*')
-      .eq('id', id)
+      .eq('id', vendorId)
       .single()
     
     if (error) {
@@ -49,12 +50,13 @@ export async function GET(
 // PUT /api/vendors/[id] - Update vendor
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const vendorId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(vendorId)) {
       return NextResponse.json(
         { error: 'Invalid vendor ID' },
         { status: 400 }
@@ -81,7 +83,7 @@ export async function PUT(
         link: body.link || null,
         updated_at: new Date().toISOString()
       })
-      .eq('id', id)
+      .eq('id', vendorId)
       .select()
       .single()
     
@@ -112,12 +114,13 @@ export async function PUT(
 // DELETE /api/vendors/[id] - Delete vendor
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const vendorId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(vendorId)) {
       return NextResponse.json(
         { error: 'Invalid vendor ID' },
         { status: 400 }
@@ -127,7 +130,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('vendors')
       .delete()
-      .eq('id', id)
+      .eq('id', vendorId)
     
     if (error) {
       console.error('Database error:', error)

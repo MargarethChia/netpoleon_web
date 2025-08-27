@@ -4,12 +4,13 @@ import { supabase } from '@/lib/supabase'
 // GET /api/events/[id] - Fetch single event
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const eventId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(eventId)) {
       return NextResponse.json(
         { error: 'Invalid event ID' },
         { status: 400 }
@@ -19,7 +20,7 @@ export async function GET(
     const { data, error } = await supabase
       .from('events')
       .select('*')
-      .eq('id', id)
+      .eq('id', eventId)
       .single()
     
     if (error) {
@@ -49,12 +50,13 @@ export async function GET(
 // PUT /api/events/[id] - Update event
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const eventId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(eventId)) {
       return NextResponse.json(
         { error: 'Invalid event ID' },
         { status: 400 }
@@ -66,7 +68,7 @@ export async function PUT(
     // Basic validation
     if (!body.title || !body.event_date) {
       return NextResponse.json(
-        { error: 'Title and event_date are required' },
+        { error: 'Title and event date are required' },
         { status: 400 }
       )
     }
@@ -81,7 +83,7 @@ export async function PUT(
         link: body.link || null,
         updated_at: new Date().toISOString()
       })
-      .eq('id', id)
+      .eq('id', eventId)
       .select()
       .single()
     
@@ -112,12 +114,13 @@ export async function PUT(
 // DELETE /api/events/[id] - Delete event
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const eventId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(eventId)) {
       return NextResponse.json(
         { error: 'Invalid event ID' },
         { status: 400 }
@@ -127,7 +130,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('events')
       .delete()
-      .eq('id', id)
+      .eq('id', eventId)
     
     if (error) {
       console.error('Database error:', error)
