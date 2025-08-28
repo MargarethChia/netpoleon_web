@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
 
 module.exports = {
   images: {
-    remotePatterns: [new URL('**')],
+    remotePatterns: [new URL('https://wdhsptkchoptjguliwyq.supabase.co/**')],
   },
 };
 
