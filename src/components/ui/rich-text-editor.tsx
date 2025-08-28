@@ -1,19 +1,32 @@
-"use client"
+'use client';
 
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import UnderlineExtension from '@tiptap/extension-underline'
-import { Button } from "@/components/ui/button"
-import { Bold, Italic, Underline, List, ListOrdered, Quote, Code } from "lucide-react"
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import UnderlineExtension from '@tiptap/extension-underline';
+import { Button } from '@/components/ui/button';
+import {
+  Bold,
+  Italic,
+  Underline,
+  List,
+  ListOrdered,
+  Quote,
+  Code,
+} from 'lucide-react';
 
 interface RichTextEditorProps {
-  content: string
-  onContentChange: (content: string) => void
-  showPreview?: boolean
-  className?: string
+  content: string;
+  onContentChange: (content: string) => void;
+  showPreview?: boolean;
+  className?: string;
 }
 
-const RichTextEditor = ({ content, onContentChange, showPreview = false, className = "" }: RichTextEditorProps) => {
+const RichTextEditor = ({
+  content,
+  onContentChange,
+  showPreview = false,
+  className = '',
+}: RichTextEditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -30,7 +43,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
     ],
     content,
     onUpdate: ({ editor }) => {
-      onContentChange(editor.getHTML())
+      onContentChange(editor.getHTML());
     },
     editorProps: {
       attributes: {
@@ -39,7 +52,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
     },
     onCreate: () => {
       // Add some basic CSS to ensure headings and lists are visible
-      const style = document.createElement('style')
+      const style = document.createElement('style');
       style.textContent = `
         .ProseMirror h1 { font-size: 2em; font-weight: bold; margin: 0.67em 0; }
         .ProseMirror h2 { font-size: 1.5em; font-weight: bold; margin: 0.83em 0; }
@@ -50,18 +63,18 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
         .ProseMirror li { margin: 0.5em 0; }
         .ProseMirror ul li { list-style-type: disc; }
         .ProseMirror ol li { list-style-type: decimal; }
-      `
-      document.head.appendChild(style)
+      `;
+      document.head.appendChild(style);
     },
     // Fix SSR hydration issues
     immediatelyRender: false,
-  })
+  });
 
   if (!editor) {
-    return <div className="border rounded-lg bg-card p-4">Loading editor...</div>
+    return (
+      <div className="border rounded-lg bg-card p-4">Loading editor...</div>
+    );
   }
-
-
 
   return (
     <div className={`border rounded-lg bg-card ${className}`}>
@@ -71,7 +84,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
           {/* Text Formatting */}
           <div className="flex items-center gap-1 border-r pr-2">
             <Button
-              variant={editor.isActive('bold') ? "default" : "ghost"}
+              variant={editor.isActive('bold') ? 'default' : 'ghost'}
               size="sm"
               onClick={() => editor.chain().focus().toggleBold().run()}
               className="h-8 w-8 p-0"
@@ -80,7 +93,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
               <Bold className="h-4 w-4" />
             </Button>
             <Button
-              variant={editor.isActive('italic') ? "default" : "ghost"}
+              variant={editor.isActive('italic') ? 'default' : 'ghost'}
               size="sm"
               onClick={() => editor.chain().focus().toggleItalic().run()}
               className="h-8 w-8 p-0"
@@ -89,7 +102,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
               <Italic className="h-4 w-4" />
             </Button>
             <Button
-              variant={editor.isActive('underline') ? "default" : "ghost"}
+              variant={editor.isActive('underline') ? 'default' : 'ghost'}
               size="sm"
               onClick={() => editor.chain().focus().toggleUnderline().run()}
               className="h-8 w-8 p-0"
@@ -102,27 +115,39 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
           {/* Headings */}
           <div className="flex items-center gap-1 border-r pr-2">
             <Button
-              variant={editor.isActive('heading', { level: 1 }) ? "default" : "ghost"}
+              variant={
+                editor.isActive('heading', { level: 1 }) ? 'default' : 'ghost'
+              }
               size="sm"
-              onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 1 }).run()
+              }
               className="h-8 px-2 text-xs"
               title="Heading 1"
             >
               H1
             </Button>
             <Button
-              variant={editor.isActive('heading', { level: 2 }) ? "default" : "ghost"}
+              variant={
+                editor.isActive('heading', { level: 2 }) ? 'default' : 'ghost'
+              }
               size="sm"
-              onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+              }
               className="h-8 px-2 text-xs"
               title="Heading 2"
             >
               H2
             </Button>
             <Button
-              variant={editor.isActive('heading', { level: 3 }) ? "default" : "ghost"}
+              variant={
+                editor.isActive('heading', { level: 3 }) ? 'default' : 'ghost'
+              }
               size="sm"
-              onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
+              }
               className="h-8 px-2 text-xs"
               title="Heading 3"
             >
@@ -133,7 +158,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
           {/* Lists */}
           <div className="flex items-center gap-1 border-r pr-2">
             <Button
-              variant={editor.isActive('bulletList') ? "default" : "ghost"}
+              variant={editor.isActive('bulletList') ? 'default' : 'ghost'}
               size="sm"
               onClick={() => editor.chain().focus().toggleBulletList().run()}
               className="h-8 w-8 p-0"
@@ -142,7 +167,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
               <List className="h-4 w-4" />
             </Button>
             <Button
-              variant={editor.isActive('orderedList') ? "default" : "ghost"}
+              variant={editor.isActive('orderedList') ? 'default' : 'ghost'}
               size="sm"
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
               className="h-8 w-8 p-0"
@@ -152,12 +177,10 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
             </Button>
           </div>
 
-
-
           {/* Special Elements */}
           <div className="flex items-center gap-1">
             <Button
-              variant={editor.isActive('blockquote') ? "default" : "ghost"}
+              variant={editor.isActive('blockquote') ? 'default' : 'ghost'}
               size="sm"
               onClick={() => editor.chain().focus().toggleBlockquote().run()}
               className="h-8 w-8 p-0"
@@ -166,7 +189,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
               <Quote className="h-4 w-4" />
             </Button>
             <Button
-              variant={editor.isActive('codeBlock') ? "default" : "ghost"}
+              variant={editor.isActive('codeBlock') ? 'default' : 'ghost'}
               size="sm"
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
               className="h-8 w-8 p-0"
@@ -174,7 +197,6 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
             >
               <Code className="h-4 w-4" />
             </Button>
-
           </div>
         </div>
       </div>
@@ -184,7 +206,7 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
         <EditorContent editor={editor} />
       </div>
     </div>
-  )
+  );
 
   // Preview mode - shows content without toolbar
   if (showPreview) {
@@ -194,8 +216,8 @@ const RichTextEditor = ({ content, onContentChange, showPreview = false, classNa
           <EditorContent editor={editor} />
         </div>
       </div>
-    )
+    );
   }
-} 
+};
 
 export default RichTextEditor;
