@@ -67,10 +67,6 @@ export default function Statistics() {
     }, duration + 100);
   };
 
-  // Debug logging
-  useEffect(() => {
-    console.log('Animation started:', animationStarted);
-  }, [animationStarted]);
 
   // Animated background lights effect
   useEffect(() => {
