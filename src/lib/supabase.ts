@@ -43,6 +43,7 @@ export interface Vendor {
   description: string | null;
   image_url: string | null;
   link: string | null;
+  content: string | null;
   created_at: string;
   updated_at: string;
 }
