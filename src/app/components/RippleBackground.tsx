@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useRef } from 'react';
 
@@ -17,14 +17,14 @@ const fadeInOut = (t: number, d: number) => {
 // Simplex Noise implementation
 class SimplexNoise {
   private perm: number[];
-
+  
   constructor() {
     this.perm = new Array(512);
     for (let i = 0; i < 512; i++) {
       this.perm[i] = Math.floor(Math.random() * 256);
     }
   }
-
+  
   noise3D(x: number, y: number, z: number): number {
     return (Math.sin(x * 10) + Math.sin(y * 10) + Math.sin(z * 10)) / 3;
   }
@@ -36,27 +36,27 @@ export default function RippleBackground() {
 
   useEffect(() => {
     console.log('RippleBackground mounting...');
-
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
-
+    
     // Create buffer canvas
     const bufferCanvas = document.createElement('canvas');
     const bufferCtx = bufferCanvas.getContext('2d')!;
     const mainCtx = canvas.getContext('2d')!;
-
+    
     const particleCount = 2000;
     const particlePropCount = 9;
-
+    const particlePropsLength = particleCount * particlePropCount;
     const spawnRadius = rand(900) + 500;
     const noiseSteps = 6;
-
+    
     let center: [number, number];
     let tick: number;
     let simplex: SimplexNoise;
     let particleProps: Float32Array;
-    const buffer: CanvasRenderingContext2D = bufferCtx;
-    const ctx: CanvasRenderingContext2D = mainCtx;
+    let buffer: CanvasRenderingContext2D = bufferCtx;
+    let ctx: CanvasRenderingContext2D = mainCtx;
 
     function setup() {
       tick = 0;
@@ -69,29 +69,34 @@ export default function RippleBackground() {
     function createParticles() {
       simplex = new SimplexNoise();
       particleProps = new Float32Array(particleCount * particlePropCount);
-
+      
       let i;
-
+      
       for (i = 0; i < particleCount; i++) {
         initParticle(i);
       }
     }
 
     function initParticle(i: number) {
-      const rd = rand(spawnRadius);
-      const rt = rand(TAU);
-      const cx = cos(rt);
-      const sy = sin(rt);
-      const x = center[0] + cx * rd;
-      const y = center[1] + sy * rd;
-      const rv = randIn(0.1, 1);
-      const s = randIn(1, 8);
-      const vx = rv * cx * 0.1;
-      const vy = rv * sy * 0.1;
-      const w = randIn(0.1, 2);
-      const l = 0;
-      const ttl = randIn(50, 200);
-
+      let iy, ih, rd, rt, cx, sy, x, y, s, rv, vx, vy, t, h, w, l, ttl;
+      
+      iy = i + 1;
+      ih = 0.5 * i | 0;
+      rd = rand(spawnRadius);
+      rt = rand(TAU);
+      cx = cos(rt);
+      sy = sin(rt);
+      x = center[0] + cx * rd;
+      y = center[1] + sy * rd;
+      rv = randIn(0.1, 1);
+      s = randIn(1, 8);
+      vx = rv * cx * 0.1;
+      vy = rv * sy * 0.1;
+      w = randIn(0.1, 2);
+      // Remove h (hue) since we want white color
+      l = 0;
+      ttl = randIn(50, 200);
+      
       const startIndex = i * particlePropCount;
       particleProps[startIndex] = x;
       particleProps[startIndex + 1] = y;
@@ -105,6 +110,7 @@ export default function RippleBackground() {
     }
 
     function drawParticle(i: number) {
+      let n, dx, dy, dl, c;
       const startIndex = i * particlePropCount;
       const x = particleProps[startIndex];
       const y = particleProps[startIndex + 1];
@@ -114,19 +120,16 @@ export default function RippleBackground() {
       const w = particleProps[startIndex + 6];
       const l = particleProps[startIndex + 7];
       const ttl = particleProps[startIndex + 8];
-
-      const n =
-        simplex.noise3D(x * 0.0025, y * 0.0025, tick * 0.0005) *
-        TAU *
-        noiseSteps;
+      
+      n = simplex.noise3D(x * 0.0025, y * 0.0025, tick * 0.0005) * TAU * noiseSteps;
       const newVx = lerp(vx, cos(n), 0.05);
       const newVy = lerp(vy, sin(n), 0.05);
-      const dx = x + newVx * s;
-      const dy = y + newVy * s;
-      const dl = fadeInOut(l, ttl);
-
+      dx = x + newVx * s;
+      dy = y + newVy * s;
+      dl = fadeInOut(l, ttl);
+      
       // Use orange color with varying opacity
-      const c = `rgba(255, 140, 0, ${dl * 0.8})`; // Orange color (#ff8c00)
+      c = `rgba(255, 140, 0, ${dl * 0.8})`; // Orange color (#ff8c00)
 
       const newL = l + 1;
 
@@ -139,7 +142,7 @@ export default function RippleBackground() {
       buffer.stroke();
       buffer.closePath();
       buffer.restore();
-
+      
       // Update particle properties
       particleProps[startIndex] = dx;
       particleProps[startIndex + 1] = dy;
@@ -158,19 +161,22 @@ export default function RippleBackground() {
 
     function checkBounds(x: number, y: number) {
       return (
-        x > buffer.canvas.width || x < 0 || y > buffer.canvas.height || y < 0
+        x > buffer.canvas.width ||
+        x < 0 ||
+        y > buffer.canvas.height ||
+        y < 0
       );
     }
 
     function resize() {
       const width = window.innerWidth;
       const height = window.innerHeight;
-
+      
       buffer.canvas.width = width;
       buffer.canvas.height = height;
       ctx.canvas.width = width;
       ctx.canvas.height = height;
-
+      
       center[0] = 0.5 * width;
       center[1] = 0.5 * height;
     }
@@ -178,37 +184,37 @@ export default function RippleBackground() {
     function draw() {
       tick++;
       buffer.clearRect(0, 0, buffer.canvas.width, buffer.canvas.height);
-
+      
       ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
+      
       let i = 0;
-
+      
       for (; i < particleCount; i++) {
         drawParticle(i);
       }
-
+      
       ctx.save();
       ctx.filter = 'blur(8px)';
       ctx.globalCompositeOperation = 'lighten';
       ctx.drawImage(buffer.canvas, 0, 0);
       ctx.restore();
-
+      
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
       ctx.drawImage(buffer.canvas, 0, 0);
       ctx.restore();
-
+      
       animationRef.current = window.requestAnimationFrame(draw);
     }
 
     // Initialize
     setup();
-
+    
     // Handle resize
     const handleResize = () => resize();
     window.addEventListener('resize', handleResize);
-
+    
     return () => {
       console.log('RippleBackground unmounting...');
       window.removeEventListener('resize', handleResize);
@@ -222,10 +228,10 @@ export default function RippleBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-screen h-screen pointer-events-none"
-      style={{
+      style={{ 
         zIndex: -1,
         width: '100vw',
-        height: '100vh',
+        height: '100vh'
       }}
     />
   );

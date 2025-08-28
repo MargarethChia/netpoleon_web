@@ -1,9 +1,9 @@
-import HeroSection from '../components/HeroSection';
-import ImageTextSection from '../components/ImageTextSection';
-import VendorCarousel from '../components/VendorCarousel';
-import StatisticsSection from '../components/StatisticsSection';
-import NewsSection from '../components/CardsSection';
-import GraphSection from '../components/GraphSection';
+import HeroSection from "../components/HeroSection";
+import ImageTextSection from "../components/ImageTextSection";
+import VendorCarousel from "../components/VendorCarousel";
+import Statistics from "../components/Statistics";
+import NewsSection from "../components/CardsSection";
+import GraphSection from "../components/GraphSection";
 
 // import AboutSection from "../components/AboutSection";
 // import InfoSection from "../components/InfoSection";
@@ -11,14 +11,16 @@ import GraphSection from '../components/GraphSection';
 export default function Home() {
   // Home Page
   const hero = {
-    title: 'Welcome to Netpoleon',
+    title: "Netpoleon ANZ",
     subtitle:
-      'Empowering businesses with innovative solutions and cutting-edge technology. We help companies transform their digital presence and achieve remarkable growth.',
-    primaryButtonText: 'Get Started Today',
-    secondaryButtonText: 'Learn More',
-    heroImage: '/images/hero/hero-main.jpg',
-    heroImageAlt: 'Netpoleon - Innovative Technology Solutions',
+      "Innovative Cybersecurity Solutions",
+    primaryButtonText: "Get Started Today",
+    secondaryButtonText: "Learn More",
+    heroImage: "/images/hero/hero-main.jpg",
+    heroImageAlt: "Netpoleon - Innovative Technology Solutions",
   };
+
+  console.log('Home page rendering with hero props:', hero);
 
   // const about = {
   //   title: "About Netpoleon",
@@ -46,30 +48,6 @@ export default function Home() {
     { id: 4, name: 'Apple', logo: '/images/logos/logo-4.png' },
     { id: 5, name: 'Meta', logo: '/images/logos/logo-5.png' },
     { id: 6, name: 'Netflix', logo: '/images/logos/logo-6.png' },
-  ];
-
-  const statistics = [
-    {
-      id: 1,
-      value: '500+',
-      label: 'Projects Completed',
-      excerpt:
-        'Successfully delivered innovative solutions across various industries and technologies.',
-    },
-    {
-      id: 2,
-      value: '99%',
-      label: 'Client Satisfaction',
-      excerpt:
-        'Maintaining exceptional quality standards and exceeding client expectations consistently.',
-    },
-    {
-      id: 3,
-      value: '24/7',
-      label: 'Support Available',
-      excerpt:
-        'Round-the-clock technical support and maintenance for all our client projects.',
-    },
   ];
 
   // const info = {
@@ -150,7 +128,7 @@ export default function Home() {
         <ImageTextSection key={idx} {...section} />
       ))}
       <GraphSection />
-      <StatisticsSection statistics={statistics} />
+      <Statistics />
       <NewsSection {...news} />
     </div>
   );

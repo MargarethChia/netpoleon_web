@@ -240,9 +240,9 @@ export default function AboutUs() {
                   desc: 'Expanded our vendor network to 50+ partners and established our first enterprise client relationships.',
                 },
                 {
-                  year: '2022',
-                  title: 'Innovation',
-                  desc: 'Launched our managed security services division and achieved SOC 2 Type II certification.',
+                  year: "2022",
+                  title: "Innovation",
+                  desc: "Launched our managed security services division and achieved SOC 2 Type II certification hjhguiuguihgyuhgtyujhgtyujhgtyuijhgtyujh.",
                 },
                 {
                   year: '2024',
