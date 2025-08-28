@@ -1,19 +1,20 @@
 // components/CloudBackground.tsx
-"use client";
+'use client';
 
 import { useEffect, useRef } from 'react';
 
 declare global {
   interface Window {
     VANTA: {
-      CLOUDS: (config: any) => any;
+      CLOUDS: (config: Record<string, unknown>) => { destroy: () => void };
+      FOG: (config: Record<string, unknown>) => { destroy: () => void };
     };
-    THREE: any;
+    THREE: Record<string, unknown>;
   }
 }
 
 export default function CloudBackground() {
-  const vantaRef = useRef<any>(null);
+  const vantaRef = useRef<{ destroy: () => void } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,7 +26,8 @@ export default function CloudBackground() {
       if (!window.THREE) {
         console.log('Loading Three.js...');
         const threeScript = document.createElement('script');
-        threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+        threeScript.src =
+          'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
         threeScript.onload = () => {
           console.log('Three.js loaded, now loading Vanta.js...');
           loadVanta();
@@ -42,7 +44,8 @@ export default function CloudBackground() {
       if (!window.VANTA) {
         console.log('Loading Vanta.js CLOUDS...');
         const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.clouds.min.js';
+        script.src =
+          'https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.clouds.min.js';
         script.onload = () => {
           console.log('Vanta.js loaded, initializing effect...');
           initVanta();
@@ -56,33 +59,33 @@ export default function CloudBackground() {
 
     const initVanta = () => {
       if (!window.VANTA || !window.THREE || !containerRef.current) {
-        console.log('Dependencies not ready:', { 
-          VANTA: !!window.VANTA, 
-          THREE: !!window.THREE, 
-          container: !!containerRef.current 
+        console.log('Dependencies not ready:', {
+          VANTA: !!window.VANTA,
+          THREE: !!window.THREE,
+          container: !!containerRef.current,
         });
         return;
       }
 
       console.log('Initializing Vanta.js CLOUDS effect...');
-      
+
       vantaRef.current = window.VANTA.CLOUDS({
         el: containerRef.current,
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
+        minHeight: 200.0,
+        minWidth: 200.0,
         skyColor: 0x6899b7,
         cloudColor: 0xadc4d6,
         cloudShadowColor: 0x183a4a,
         sunColor: 0xffd93c,
         sunGlareColor: 0xff6b35,
         sunlightColor: 0xffd93c,
-        speed: 1.00,
-        backgroundColor: 0x0a0a0a
+        speed: 1.0,
+        backgroundColor: 0x0a0a0a,
       });
-      
+
       console.log('Vanta.js CLOUDS effect initialized successfully');
     };
 
@@ -96,13 +99,13 @@ export default function CloudBackground() {
   }, []);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ 
+      style={{
         zIndex: 0,
         minHeight: '100vh',
-        minWidth: '100vw'
+        minWidth: '100vw',
       }}
     />
   );
