@@ -12,6 +12,9 @@ const getAll = vi.fn();
 const del = vi.fn();
 const create = vi.fn();
 const update = vi.fn();
+const getFeatured = vi.fn();
+const addFeatured = vi.fn();
+const removeFeatured = vi.fn();
 
 vi.mock('@/lib/api', () => ({
   eventsApi: {
@@ -19,6 +22,9 @@ vi.mock('@/lib/api', () => ({
     delete: (...args: any[]) => del(...args),
     create: (...args: any[]) => create(...args),
     update: (...args: any[]) => update(...args),
+    getFeatured: (...args: any[]) => getFeatured(...args),
+    addFeatured: (...args: any[]) => addFeatured(...args),
+    removeFeatured: (...args: any[]) => removeFeatured(...args),
   },
 }));
 
@@ -44,6 +50,11 @@ describe('Admin Events Page', () => {
     del.mockReset();
     create.mockReset();
     update.mockReset();
+    getFeatured.mockReset();
+    addFeatured.mockReset();
+    removeFeatured.mockReset();
+    // Mock featured events API to return empty array by default
+    getFeatured.mockResolvedValue([]);
   });
 
   function seed() {
@@ -55,6 +66,7 @@ describe('Admin Events Page', () => {
         description: 'Future conf',
         location: 'SG',
         link: '',
+        video: '',
       },
       {
         id: 2,
@@ -63,6 +75,7 @@ describe('Admin Events Page', () => {
         description: 'Old event',
         location: 'US',
         link: '',
+        video: '',
       },
     ]);
   }
@@ -135,6 +148,7 @@ describe('Admin Events Page', () => {
         description: 'Future conf',
         location: 'SG',
         link: '',
+        video: '',
       },
     ];
     const newEvent = {
@@ -144,6 +158,7 @@ describe('Admin Events Page', () => {
       description: '',
       location: 'MY',
       link: '',
+      video: '',
     };
     const updated = [...initial, newEvent];
 
@@ -164,9 +179,7 @@ describe('Admin Events Page', () => {
 
     await waitFor(() => expect(create).toHaveBeenCalled());
     await screen.findByText(/blue team meetup/i);
-    expect(
-      screen.getByText(/2 events total|3 events total/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/2 events total/i)).toBeInTheDocument();
   });
 
   it('shows required validation when title missing', async () => {
@@ -244,6 +257,7 @@ describe('Admin Events Page', () => {
         description: '',
         location: '',
         link: '',
+        video: '',
       },
     ];
     const updated = [
@@ -254,6 +268,7 @@ describe('Admin Events Page', () => {
         description: '',
         location: '',
         link: '',
+        video: '',
       },
     ];
 
@@ -289,6 +304,7 @@ describe('Admin Events Page', () => {
         description: '',
         location: '',
         link: '',
+        video: '',
       },
     ];
     const updated = [
@@ -299,6 +315,7 @@ describe('Admin Events Page', () => {
         description: '',
         location: '',
         link: '',
+        video: '',
       },
     ];
     getAll.mockResolvedValueOnce(initial);
@@ -333,6 +350,7 @@ describe('Admin Events Page', () => {
         description: '',
         location: '',
         link: '',
+        video: '',
       },
     ];
     const updated = [
@@ -343,6 +361,7 @@ describe('Admin Events Page', () => {
         description: '',
         location: '',
         link: '',
+        video: '',
       },
     ];
     getAll.mockResolvedValueOnce(initial);
@@ -366,6 +385,15 @@ describe('Admin Events Page', () => {
     await waitFor(() => expect(update).toHaveBeenCalled());
     const updatedRow = screen.getByRole('row', { name: /rise status/i });
     expect(within(updatedRow).getByText(/upcoming/i)).toBeInTheDocument();
+  });
+
+  it('shows empty state when no events exist', async () => {
+    getAll.mockResolvedValue([]);
+    render(<EventsPage />);
+
+    await screen.findByText(/all events/i);
+    expect(screen.getByText(/no events found/i)).toBeInTheDocument();
+    expect(screen.getByText(/create your first event/i)).toBeInTheDocument();
   });
 });
 
