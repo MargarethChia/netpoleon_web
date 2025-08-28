@@ -20,6 +20,7 @@ export interface Event {
   location: string | null;
   description: string | null;
   link: string | null;
+  video: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -51,6 +52,12 @@ export interface Vendor {
 export interface FeaturedResource {
   id: number;
   resource_id: number;
+  featured_at: string;
+}
+
+export interface FeaturedEvent {
+  id: number;
+  event_id: number;
   featured_at: string;
 }
 

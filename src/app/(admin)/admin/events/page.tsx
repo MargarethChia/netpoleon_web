@@ -34,16 +34,18 @@ import {
   Calendar,
   MapPin,
   ExternalLink,
+  Star,
 } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
 import EventForm from './components/EventForm';
 import ViewEventDialog from './components/ViewEventDialog';
-import { Event, eventsApi } from '@/lib/api';
+import { Event, FeaturedEvent, eventsApi } from '@/lib/api';
 import { showToast } from '@/components/ui/toast';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
+  const [featuredEvents, setFeaturedEvents] = useState<FeaturedEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -55,8 +57,12 @@ export default function EventsPage() {
   const fetchEvents = async () => {
     try {
       setIsLoading(true);
-      const data = await eventsApi.getAll();
-      setEvents(data);
+      const [eventsData, featuredData] = await Promise.all([
+        eventsApi.getAll(),
+        eventsApi.getFeatured(),
+      ]);
+      setEvents(eventsData);
+      setFeaturedEvents(featuredData);
     } catch (error) {
       console.error('Error fetching events:', error);
       showToast({
@@ -145,6 +151,43 @@ export default function EventsPage() {
       (event.description &&
         event.description.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+
+  const handleToggleFeatured = async (eventId: number) => {
+    try {
+      const isCurrentlyFeatured = isFeatured(eventId);
+
+      if (isCurrentlyFeatured) {
+        // Remove from featured
+        await eventsApi.removeFeatured(eventId);
+        showToast({
+          title: 'Success',
+          message: 'Event removed from featured',
+          type: 'success',
+        });
+      } else {
+        // Add to featured (this will automatically remove any existing featured event)
+        await eventsApi.addFeatured(eventId);
+        showToast({
+          title: 'Success',
+          message: 'Event is now featured',
+          type: 'success',
+        });
+      }
+
+      fetchEvents(); // Refresh the data
+    } catch (error) {
+      console.error('Error toggling featured status:', error);
+      showToast({
+        title: 'Error',
+        message: 'Failed to update featured status',
+        type: 'error',
+      });
+    }
+  };
+
+  const isFeatured = (eventId: number) => {
+    return featuredEvents.some(fe => fe.event_id === eventId);
+  };
 
   if (isLoading) {
     return (
@@ -258,7 +301,9 @@ export default function EventsPage() {
                       <TableHead>Date</TableHead>
                       <TableHead>Location</TableHead>
                       <TableHead>Status</TableHead>
+                      <TableHead>Video</TableHead>
                       <TableHead>Link</TableHead>
+                      <TableHead className="text-center">Featured</TableHead>
                       <TableHead className="w-[50px]"></TableHead>
                     </TableRow>
                   </TableHeader>
@@ -293,6 +338,23 @@ export default function EventsPage() {
                             </Badge>
                           </TableCell>
                           <TableCell>
+                            {event.video ? (
+                              <Button variant="ghost" size="sm" asChild>
+                                <a
+                                  href={event.video}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <ExternalLink className="h-4 w-4" />
+                                </a>
+                              </Button>
+                            ) : (
+                              <span className="text-muted-foreground text-sm">
+                                N/A
+                              </span>
+                            )}
+                          </TableCell>
+                          <TableCell>
                             {event.link && (
                               <Button variant="ghost" size="sm" asChild>
                                 <a
@@ -304,6 +366,20 @@ export default function EventsPage() {
                                 </a>
                               </Button>
                             )}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <Button
+                              variant={
+                                isFeatured(event.id) ? 'default' : 'outline'
+                              }
+                              size="sm"
+                              onClick={() => handleToggleFeatured(event.id)}
+                              className="mx-auto"
+                            >
+                              <Star
+                                className={`h-4 w-4 ${isFeatured(event.id) ? 'text-yellow-500' : ''}`}
+                              />
+                            </Button>
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
@@ -349,7 +425,7 @@ export default function EventsPage() {
           </Card>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -405,6 +481,21 @@ export default function EventsPage() {
                   }
                 </div>
                 <p className="text-xs text-muted-foreground">Current month</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Featured Events
+                </CardTitle>
+                <Star className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-card-foreground">
+                  {featuredEvents.length}
+                </div>
+                <p className="text-xs text-muted-foreground">Highlighted</p>
               </CardContent>
             </Card>
           </div>

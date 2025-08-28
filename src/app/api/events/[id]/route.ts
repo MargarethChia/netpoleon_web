@@ -72,6 +72,7 @@ export async function PUT(
         location: body.location || null,
         description: body.description || null,
         link: body.link || null,
+        video: body.video || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', eventId)

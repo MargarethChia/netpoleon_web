@@ -98,6 +98,62 @@ export const eventsApi = {
       throw error;
     }
   },
+
+  // Get featured events
+  getFeatured: async (): Promise<FeaturedEvent[]> => {
+    try {
+      const response = await fetch('/api/events/featured');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch featured events');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching featured events:', error);
+      throw error;
+    }
+  },
+
+  // Add featured event
+  addFeatured: async (eventId: number): Promise<FeaturedEvent> => {
+    try {
+      const response = await fetch('/api/events/featured', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ event_id: eventId }),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to add featured event');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error adding featured event:', error);
+      throw error;
+    }
+  },
+
+  // Remove featured event
+  removeFeatured: async (eventId: number): Promise<void> => {
+    try {
+      const response = await fetch('/api/events/featured', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ event_id: eventId }),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to remove featured event');
+      }
+    } catch (error) {
+      console.error('Error removing featured event:', error);
+      throw error;
+    }
+  },
 };
 
 // Resources API
@@ -346,7 +402,13 @@ export const vendorsApi = {
 };
 
 // Import types from supabase
-import type { Event, Resource, Vendor, FeaturedResource } from './supabase';
+import type {
+  Event,
+  Resource,
+  Vendor,
+  FeaturedResource,
+  FeaturedEvent,
+} from './supabase';
 
 // Re-export types for use in components
-export type { Event, Resource, Vendor, FeaturedResource };
+export type { Event, Resource, Vendor, FeaturedResource, FeaturedEvent };
