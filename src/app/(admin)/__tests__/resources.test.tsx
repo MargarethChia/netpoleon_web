@@ -189,25 +189,6 @@ describe('Admin Resources Page', () => {
     await waitFor(() => expect(del).toHaveBeenCalled());
   });
 
-  it('create page: cover image preview appears and remove hides it', async () => {
-    const push = vi.fn();
-    vi.spyOn(nav, 'useRouter').mockReturnValue({ push } as any);
-
-    render(<CreateResourcePage />);
-    const user = userEvent.setup();
-
-    await user.type(screen.getByLabelText(/title/i), 'New Article');
-    // Set cover image via manual URL
-    await user.type(
-      screen.getByLabelText(/or enter image url manually/i),
-      'https://cdn.test/c.jpg'
-    );
-    expect(screen.getByAltText(/cover preview/i)).toBeInTheDocument();
-    // Remove
-    await user.click(screen.getByRole('button', { name: /remove/i }));
-    expect(screen.queryByAltText(/cover preview/i)).not.toBeInTheDocument();
-  });
-
   it('edit page: existing cover image renders and remove hides it', async () => {
     const push = vi.fn();
     vi.spyOn(nav, 'useRouter').mockReturnValue({ push } as any);

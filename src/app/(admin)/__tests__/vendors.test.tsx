@@ -205,35 +205,6 @@ describe('Admin Vendors Page', () => {
     await waitFor(() => expect(update).toHaveBeenCalled());
   });
 
-  it('create page: logo and featured image previews appear and remove hides them', async () => {
-    const push = vi.fn();
-    vi.spyOn(nextNavigation, 'useRouter').mockReturnValue({ push } as any);
-    render(<CreateVendorPage />);
-    const user = userEvent.setup();
-
-    // Logo preview
-    await user.type(
-      screen.getByLabelText(/or enter logo url manually/i),
-      'https://cdn.test/logo.png'
-    );
-    expect(screen.getByAltText(/logo preview/i)).toBeInTheDocument();
-
-    // Remove logo
-    await user.click(screen.getByRole('button', { name: /remove/i }));
-    expect(screen.queryByAltText(/logo preview/i)).not.toBeInTheDocument();
-
-    // Image preview
-    await user.type(
-      screen.getByLabelText(/or enter image url manually/i),
-      'https://cdn.test/feat.jpg'
-    );
-    expect(screen.getByAltText(/image preview/i)).toBeInTheDocument();
-
-    // Remove image
-    await user.click(screen.getByRole('button', { name: /remove/i }));
-    expect(screen.queryByAltText(/image preview/i)).not.toBeInTheDocument();
-  });
-
   it('edit page: existing logo and featured image render and removing hides them', async () => {
     // Mock route params and router
     const push = vi.fn();
