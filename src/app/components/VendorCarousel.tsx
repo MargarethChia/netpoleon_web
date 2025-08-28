@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 interface Vendor {
   id: number;
@@ -49,12 +50,17 @@ export default function VendorCarousel({
       <div className="relative overflow-hidden w-full">
         <div className="flex animate-marquee p-8">
           {/* First set of vendors */}
-          {vendors.map((vendor) => (
-            <div key={`first-${vendor.id}`} className="flex-shrink-0 mx-6 items-center justify-center">
+          {vendors.map(vendor => (
+            <div
+              key={`first-${vendor.id}`}
+              className="flex-shrink-0 mx-6 items-center justify-center"
+            >
               {vendor.logo ? (
-                <img
+                <Image
                   src={vendor.logo}
                   alt={vendor.name}
+                  width={128}
+                  height={128}
                   className="h-32 object-contain p-3"
                 />
               ) : (
@@ -65,12 +71,17 @@ export default function VendorCarousel({
             </div>
           ))}
           {/* Duplicate set for seamless loop */}
-          {vendors.map((vendor) => (
-            <div key={`second-${vendor.id}`} className="flex-shrink-0 mx-6 items-center justify-center">
+          {vendors.map(vendor => (
+            <div
+              key={`second-${vendor.id}`}
+              className="flex-shrink-0 mx-6 items-center justify-center"
+            >
               {vendor.logo ? (
-                <img
+                <Image
                   src={vendor.logo}
                   alt={vendor.name}
+                  width={128}
+                  height={128}
                   className="h-32 object-contain p-3"
                 />
               ) : (

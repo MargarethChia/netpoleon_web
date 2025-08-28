@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import ForceBasedGraph from "./ForceBasedGraph";
+import ForceBasedGraph from './ForceBasedGraph';
 
 export default function GraphSection() {
   return (

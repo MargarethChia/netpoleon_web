@@ -1,77 +1,78 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 
 const services = [
   {
     id: 1,
-    title: "Channel Sales & Enablement",
+    title: 'Channel Sales & Enablement',
     description:
-      "Comprehensive channel sales strategies and enablement programs to maximize your distribution network effectiveness.",
-    icon: "/icons/Channel Sales & Enablement.png",
+      'Comprehensive channel sales strategies and enablement programs to maximize your distribution network effectiveness.',
+    icon: '/icons/Channel Sales & Enablement.png',
   },
   {
     id: 2,
-    title: "Operations & Logistics Services",
+    title: 'Operations & Logistics Services',
     description:
-      "End-to-end operational excellence and logistics solutions to streamline your business processes.",
-    icon: "/icons/Operations & Logistics Services.png",
+      'End-to-end operational excellence and logistics solutions to streamline your business processes.',
+    icon: '/icons/Operations & Logistics Services.png',
   },
   {
     id: 3,
-    title: "Pre-Sales POV, Consultation & Professional Services",
+    title: 'Pre-Sales POV, Consultation & Professional Services',
     description:
-      "Strategic pre-sales consultation and professional services to enhance customer engagement and solution design.",
-    icon: "/icons/Pre-Sales POV, Consultation & Professional Services.png",
+      'Strategic pre-sales consultation and professional services to enhance customer engagement and solution design.',
+    icon: '/icons/Pre-Sales POV, Consultation & Professional Services.png',
   },
   {
     id: 4,
-    title: "Post-Sales & Customer Support Services",
+    title: 'Post-Sales & Customer Support Services',
     description:
-      "Comprehensive post-sales support and customer service solutions to ensure long-term customer satisfaction.",
-    icon: "/icons/Post Sales & Customer Support Services.png",
+      'Comprehensive post-sales support and customer service solutions to ensure long-term customer satisfaction.',
+    icon: '/icons/Post Sales & Customer Support Services.png',
   },
   {
     id: 5,
-    title: "Technology & Product Training",
+    title: 'Technology & Product Training',
     description:
-      "Specialized training programs for technology products and solutions to maximize user adoption and proficiency.",
-    icon: "/icons/Technology & Product Training.png",
+      'Specialized training programs for technology products and solutions to maximize user adoption and proficiency.',
+    icon: '/icons/Technology & Product Training.png',
   },
   {
     id: 6,
-    title: "Vendor Promotion & Augmentation",
+    title: 'Vendor Promotion & Augmentation',
     description:
-      "Strategic vendor promotion and augmentation services to enhance market presence and operational capabilities.",
-    icon: "/icons/Vendor Promotion & Augmentation.png",
+      'Strategic vendor promotion and augmentation services to enhance market presence and operational capabilities.',
+    icon: '/icons/Vendor Promotion & Augmentation.png',
   },
   {
     id: 7,
-    title: "Marketing & Business Development Support",
+    title: 'Marketing & Business Development Support',
     description:
-      "Comprehensive marketing strategies and business development support to drive growth and market expansion.",
-    icon: "/icons/Marketing & Business Development Support.png",
+      'Comprehensive marketing strategies and business development support to drive growth and market expansion.',
+    icon: '/icons/Marketing & Business Development Support.png',
   },
   {
     id: 8,
-    title: "Finance Services",
+    title: 'Finance Services',
     description:
-      "Professional financial services and consulting to optimize your business financial performance and strategy.",
-    icon: "/icons/Financial Services.png",
+      'Professional financial services and consulting to optimize your business financial performance and strategy.',
+    icon: '/icons/Financial Services.png',
   },
   {
     id: 9,
-    title: "Marketplace",
+    title: 'Marketplace',
     description:
-      "Digital marketplace solutions and platforms to facilitate commerce and business transactions.",
-    icon: "/icons/Marketplace.png",
+      'Digital marketplace solutions and platforms to facilitate commerce and business transactions.',
+    icon: '/icons/Marketplace.png',
   },
 ];
 
 export default function ServicesPage() {
   const [activeService, setActiveService] = useState(0);
   const [sectionOpacities, setSectionOpacities] = useState<number[]>(
-    services.map((_, index) => index === 0 ? 1 : 0.1)
+    services.map((_, index) => (index === 0 ? 1 : 0.1))
   );
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -110,8 +111,8 @@ export default function ServicesPage() {
       setSectionOpacities(newOpacities);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const renderIcon = (service: (typeof services)[0], index: number) => {
@@ -119,17 +120,19 @@ export default function ServicesPage() {
       <div
         key={service.id}
         className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${
-          index === activeService ? "opacity-100" : "opacity-0"
+          index === activeService ? 'opacity-100' : 'opacity-0'
         }`}
       >
-                {/* Large icon container with consistent positioning */}
+        {/* Large icon container with consistent positioning */}
         <div className="w-5/6 h-5/6 flex flex-col items-center justify-center">
           {/* Icon display area with fixed sizing */}
           <div className="w-64 h-64 flex items-center justify-center">
-            <img 
-              src={service.icon} 
-              alt={service.title} 
-              className="w-64 h-64 min-w-64 min-h-64 max-w-64 max-h-64 object-contain drop-shadow-lg mb-16"
+            <Image
+              src={service.icon}
+              alt={service.title}
+              width={256}
+              height={256}
+              className="object-contain drop-shadow-lg mb-16"
             />
           </div>
         </div>
@@ -149,7 +152,9 @@ export default function ServicesPage() {
             {/* Active Progress Bar */}
             <div
               className="absolute bottom-0 left-0 h-1 bg-amber-600 rounded-sm transition-all duration-300"
-              style={{ width: `${((activeService + 1) / services.length) * 100}%` }}
+              style={{
+                width: `${((activeService + 1) / services.length) * 100}%`,
+              }}
             ></div>
 
             {services.map((service, index) => (
@@ -157,15 +162,15 @@ export default function ServicesPage() {
                 key={service.id}
                 className={`text-sm font-semibold transition-all duration-300 px-6 py-3 border-none cursor-pointer bg-transparent relative uppercase tracking-wide ${
                   index === activeService
-                    ? "text-amber-700 bg-amber-50 border-b-2 border-amber-600 pb-2"
-                    : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+                    ? 'text-amber-700 bg-amber-50 border-b-2 border-amber-600 pb-2'
+                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
                 }`}
                 onClick={() => {
                   const element = document.getElementById(`service-${index}`);
-                  element?.scrollIntoView({ behavior: "smooth" });
+                  element?.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
-                {service.title.split(" ")[0]}
+                {service.title.split(' ')[0]}
               </button>
             ))}
           </div>
@@ -197,7 +202,7 @@ export default function ServicesPage() {
                   className="max-w-md"
                   style={{
                     opacity: sectionOpacities[index],
-                    transition: "opacity 0.3s ease",
+                    transition: 'opacity 0.3s ease',
                   }}
                 >
                   {/* Section Indicator */}

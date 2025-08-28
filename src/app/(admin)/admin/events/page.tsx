@@ -1,120 +1,150 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { MoreHorizontal, Eye, Edit, Trash2, Search, Calendar, MapPin, ExternalLink } from "lucide-react";
-import AdminLayout from "../../components/AdminLayout";
-import EventForm from "./components/EventForm";
-import ViewEventDialog from "./components/ViewEventDialog";
-import { Event, eventsApi } from "@/lib/api";
-import { showToast } from "@/components/ui/toast";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { useState, useEffect } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  MoreHorizontal,
+  Eye,
+  Edit,
+  Trash2,
+  Search,
+  Calendar,
+  MapPin,
+  ExternalLink,
+} from 'lucide-react';
+import AdminLayout from '../../components/AdminLayout';
+import EventForm from './components/EventForm';
+import ViewEventDialog from './components/ViewEventDialog';
+import { Event, eventsApi } from '@/lib/api';
+import { showToast } from '@/components/ui/toast';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function EventsPage() {
-  const [events, setEvents] = useState<Event[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const [editingEvent, setEditingEvent] = useState<Event | null>(null)
-  const [deleteEventId, setDeleteEventId] = useState<number | null>(null)
-  const [viewingEvent, setViewingEvent] = useState<Event | null>(null)
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [deleteEventId, setDeleteEventId] = useState<number | null>(null);
+  const [viewingEvent, setViewingEvent] = useState<Event | null>(null);
 
   // Fetch events from API
   const fetchEvents = async () => {
     try {
-      setIsLoading(true)
-      const data = await eventsApi.getAll()
-      setEvents(data)
+      setIsLoading(true);
+      const data = await eventsApi.getAll();
+      setEvents(data);
     } catch (error) {
-      console.error("Error fetching events:", error)
+      console.error('Error fetching events:', error);
       showToast({
-        title: "Error",
-        message: "Failed to fetch events. Please refresh the page.",
-        type: "error"
-      })
+        title: 'Error',
+        message: 'Failed to fetch events. Please refresh the page.',
+        type: 'error',
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchEvents()
-  }, [])
+    fetchEvents();
+  }, []);
 
   const handleAddEvent = () => {
-    setEditingEvent(null)
-    setIsFormOpen(true)
+    setEditingEvent(null);
+    setIsFormOpen(true);
   };
 
   const handleEditEvent = (eventId: number) => {
-    const event = events.find(e => e.id === eventId)
+    const event = events.find(e => e.id === eventId);
     if (event) {
-      setEditingEvent(event)
-      setIsFormOpen(true)
+      setEditingEvent(event);
+      setIsFormOpen(true);
     }
   };
 
   const handleDeleteEvent = (eventId: number) => {
-    setDeleteEventId(eventId)
+    setDeleteEventId(eventId);
   };
 
   const confirmDeleteEvent = async () => {
     if (deleteEventId) {
       try {
-        await eventsApi.delete(deleteEventId)
+        await eventsApi.delete(deleteEventId);
         showToast({
-          title: "Event Deleted",
-          message: "The event has been deleted successfully.",
-          type: "success"
-        })
-        fetchEvents() // Refresh the list
+          title: 'Event Deleted',
+          message: 'The event has been deleted successfully.',
+          type: 'success',
+        });
+        fetchEvents(); // Refresh the list
       } catch (error) {
-        console.error("Error deleting event:", error)
+        console.error('Error deleting event:', error);
         showToast({
-          title: "Error",
-          message: "Failed to delete event. Please try again.",
-          type: "error"
-        })
+          title: 'Error',
+          message: 'Failed to delete event. Please try again.',
+          type: 'error',
+        });
       }
     }
   };
 
   const handleViewEvent = (eventId: number) => {
-    const event = events.find(e => e.id === eventId)
+    const event = events.find(e => e.id === eventId);
     if (event) {
-      setViewingEvent(event)
+      setViewingEvent(event);
     }
   };
 
   const handleFormSuccess = () => {
-    fetchEvents() // Refresh the list after successful operation
-  }
+    fetchEvents(); // Refresh the list after successful operation
+  };
 
   const getEventStatus = (eventDate: string) => {
     const today = new Date();
     const eventDateObj = new Date(eventDate);
-    
+
     if (eventDateObj < today) {
-      return { status: "Past", variant: "secondary" as const };
+      return { status: 'Past', variant: 'secondary' as const };
     } else if (eventDateObj.toDateString() === today.toDateString()) {
-      return { status: "Today", variant: "default" as const };
+      return { status: 'Today', variant: 'default' as const };
     } else {
-      return { status: "Upcoming", variant: "outline" as const };
+      return { status: 'Upcoming', variant: 'outline' as const };
     }
   };
 
   // Filter events based on search term only
-  const filteredEvents = events.filter(event =>
-    !searchTerm || 
-    event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (event.location && event.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (event.description && event.description.toLowerCase().includes(searchTerm.toLowerCase()))
-  )
+  const filteredEvents = events.filter(
+    event =>
+      !searchTerm ||
+      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (event.location &&
+        event.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (event.description &&
+        event.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   if (isLoading) {
     return (
@@ -139,7 +169,10 @@ export default function EventsPage() {
           </Card>
 
           {/* Events Table Loading */}
-          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500" style={{ animationDelay: '100ms' }}>
+          <Card
+            className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+            style={{ animationDelay: '100ms' }}
+          >
             <CardHeader>
               <div className="h-6 w-24 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
               <div className="h-4 w-48 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -161,7 +194,7 @@ export default function EventsPage() {
           </Card>
         </div>
       </AdminLayout>
-    )
+    );
   }
 
   return (
@@ -179,7 +212,9 @@ export default function EventsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Search Events</CardTitle>
-              <CardDescription>Find specific events by title, location, or description</CardDescription>
+              <CardDescription>
+                Find specific events by title, location, or description
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="relative">
@@ -188,7 +223,7 @@ export default function EventsPage() {
                   placeholder="Search events..."
                   className="pl-10"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                 />
               </div>
             </CardContent>
@@ -199,13 +234,21 @@ export default function EventsPage() {
             <CardHeader>
               <CardTitle>All Events</CardTitle>
               <CardDescription>
-                {filteredEvents.length} events total • {filteredEvents.filter(e => getEventStatus(e.event_date).status === "Upcoming").length} upcoming
+                {filteredEvents.length} events total •{' '}
+                {
+                  filteredEvents.filter(
+                    e => getEventStatus(e.event_date).status === 'Upcoming'
+                  ).length
+                }{' '}
+                upcoming
               </CardDescription>
             </CardHeader>
             <CardContent>
               {filteredEvents.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  {searchTerm ? "No events found matching your search." : "No events found. Create your first event!"}
+                  {searchTerm
+                    ? 'No events found matching your search.'
+                    : 'No events found. Create your first event!'}
                 </div>
               ) : (
                 <Table>
@@ -220,7 +263,7 @@ export default function EventsPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredEvents.map((event) => {
+                    {filteredEvents.map(event => {
                       const status = getEventStatus(event.event_date);
                       return (
                         <TableRow key={event.id}>
@@ -241,7 +284,7 @@ export default function EventsPage() {
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <MapPin className="h-4 w-4 text-muted-foreground" />
-                              {event.location || "N/A"}
+                              {event.location || 'N/A'}
                             </div>
                           </TableCell>
                           <TableCell>
@@ -252,7 +295,11 @@ export default function EventsPage() {
                           <TableCell>
                             {event.link && (
                               <Button variant="ghost" size="sm" asChild>
-                                <a href={event.link} target="_blank" rel="noopener noreferrer">
+                                <a
+                                  href={event.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
                                   <ExternalLink className="h-4 w-4" />
                                 </a>
                               </Button>
@@ -261,20 +308,31 @@ export default function EventsPage() {
                           <TableCell>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0" data-testid="row-menu">
+                                <Button
+                                  variant="ghost"
+                                  className="h-8 w-8 p-0"
+                                  data-testid="row-menu"
+                                >
                                   <MoreHorizontal className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => handleViewEvent(event.id)}>
+                                <DropdownMenuItem
+                                  onClick={() => handleViewEvent(event.id)}
+                                >
                                   <Eye className="mr-2 h-4 w-4" />
                                   View Details
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => handleEditEvent(event.id)}>
+                                <DropdownMenuItem
+                                  onClick={() => handleEditEvent(event.id)}
+                                >
                                   <Edit className="mr-2 h-4 w-4" />
                                   Edit Event
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-600" onClick={() => handleDeleteEvent(event.id)}>
+                                <DropdownMenuItem
+                                  className="text-red-600"
+                                  onClick={() => handleDeleteEvent(event.id)}
+                                >
                                   <Trash2 className="mr-2 h-4 w-4" />
                                   Delete Event
                                 </DropdownMenuItem>
@@ -294,40 +352,57 @@ export default function EventsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Events</CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-card-foreground">{events.length}</div>
-                <p className="text-xs text-muted-foreground">All time</p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Upcoming Events</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Total Events
+                </CardTitle>
                 <Calendar className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-card-foreground">
-                  {events.filter(e => getEventStatus(e.event_date).status === "Upcoming").length}
+                  {events.length}
+                </div>
+                <p className="text-xs text-muted-foreground">All time</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Upcoming Events
+                </CardTitle>
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-card-foreground">
+                  {
+                    events.filter(
+                      e => getEventStatus(e.event_date).status === 'Upcoming'
+                    ).length
+                  }
                 </div>
                 <p className="text-xs text-muted-foreground">Scheduled</p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">This Month</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  This Month
+                </CardTitle>
                 <Calendar className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-card-foreground">
-                  {events.filter(e => {
-                    const eventDate = new Date(e.event_date);
-                    const now = new Date();
-                    return eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear();
-                  }).length}
+                  {
+                    events.filter(e => {
+                      const eventDate = new Date(e.event_date);
+                      const now = new Date();
+                      return (
+                        eventDate.getMonth() === now.getMonth() &&
+                        eventDate.getFullYear() === now.getFullYear()
+                      );
+                    }).length
+                  }
                 </div>
                 <p className="text-xs text-muted-foreground">Current month</p>
               </CardContent>
@@ -340,8 +415,8 @@ export default function EventsPage() {
       <EventForm
         isOpen={isFormOpen}
         onClose={() => {
-          setIsFormOpen(false)
-          setEditingEvent(null)
+          setIsFormOpen(false);
+          setEditingEvent(null);
         }}
         event={editingEvent}
         onSuccess={handleFormSuccess}
@@ -367,4 +442,4 @@ export default function EventsPage() {
       />
     </>
   );
-} 
+}

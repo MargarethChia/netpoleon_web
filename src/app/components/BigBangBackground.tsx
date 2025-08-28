@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -22,16 +22,21 @@ export default function BigBangBackground() {
 
     const count = 128 ** 2;
 
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100
+    );
     camera.position.set(0, 0, 5);
 
-    const renderer = new THREE.WebGLRenderer({ 
-      canvas, 
-      alpha: true, 
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
       antialias: true,
       preserveDrawingBuffer: false,
       depth: true,
-      stencil: false
+      stencil: false,
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -43,22 +48,26 @@ export default function BigBangBackground() {
     // ------------------------ //
     // STAR ALPHA TEXTURE
 
-    const ctx = document.createElement("canvas").getContext("2d")!;
+    const ctx = document.createElement('canvas').getContext('2d')!;
     ctx.canvas.width = ctx.canvas.height = 32;
 
-    ctx.fillStyle = "#000";
+    ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, 32, 32);
 
     let grd = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-    grd.addColorStop(0.0, "#fff");
-    grd.addColorStop(1.0, "#000");
+    grd.addColorStop(0.0, '#fff');
+    grd.addColorStop(1.0, '#000');
     ctx.fillStyle = grd;
-    ctx.beginPath(); ctx.rect(15, 0, 2, 32); ctx.fill();
-    ctx.beginPath(); ctx.rect(0, 15, 32, 2); ctx.fill();
+    ctx.beginPath();
+    ctx.rect(15, 0, 2, 32);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.rect(0, 15, 32, 2);
+    ctx.fill();
 
     grd = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-    grd.addColorStop(0.1, "#ffff");
-    grd.addColorStop(0.6, "#0000");
+    grd.addColorStop(0.1, '#ffff');
+    grd.addColorStop(0.6, '#0000');
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, 32, 32);
 
@@ -81,12 +90,21 @@ export default function BigBangBackground() {
       galaxySize[i] = Math.random() * 2 + 0.5;
     }
 
-    galaxyGeometry.setAttribute("position", new THREE.BufferAttribute(galaxyPosition, 3));
-    galaxyGeometry.setAttribute("size", new THREE.BufferAttribute(galaxySize, 1));
-    galaxyGeometry.setAttribute("seed", new THREE.BufferAttribute(galaxySeed, 3));
+    galaxyGeometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(galaxyPosition, 3)
+    );
+    galaxyGeometry.setAttribute(
+      'size',
+      new THREE.BufferAttribute(galaxySize, 1)
+    );
+    galaxyGeometry.setAttribute(
+      'seed',
+      new THREE.BufferAttribute(galaxySeed, 3)
+    );
 
-    const innColor = new THREE.Color("#ff8c00");  // Nice orange center
-    const outColor = new THREE.Color("#ff8c00");  // Orange outer stars too
+    const innColor = new THREE.Color('#ff8c00'); // Nice orange center
+    const outColor = new THREE.Color('#ff8c00'); // Orange outer stars too
 
     const galaxyMaterial = new THREE.ShaderMaterial({
       uniforms: {
@@ -207,8 +225,8 @@ export default function BigBangBackground() {
 
     const universeGeometry = new THREE.BufferGeometry();
 
-    const universePosition = new Float32Array(count * 3 / 2);
-    const universeSeed = new Float32Array(count * 3 / 2);
+    const universePosition = new Float32Array((count * 3) / 2);
+    const universeSeed = new Float32Array((count * 3) / 2);
     const universeSize = new Float32Array(count / 2);
 
     for (let i = 0; i < count / 2; i++) {
@@ -218,9 +236,18 @@ export default function BigBangBackground() {
       universeSize[i] = Math.random() * 2 + 0.5;
     }
 
-    universeGeometry.setAttribute("position", new THREE.BufferAttribute(universePosition, 3));
-    universeGeometry.setAttribute("seed", new THREE.BufferAttribute(universeSeed, 3));
-    universeGeometry.setAttribute("size", new THREE.BufferAttribute(universeSize, 1));
+    universeGeometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(universePosition, 3)
+    );
+    universeGeometry.setAttribute(
+      'seed',
+      new THREE.BufferAttribute(universeSeed, 3)
+    );
+    universeGeometry.setAttribute(
+      'size',
+      new THREE.BufferAttribute(universeSize, 1)
+    );
 
     const universeMaterial = new THREE.ShaderMaterial({
       uniforms: {
@@ -320,7 +347,7 @@ export default function BigBangBackground() {
     // ------------------------ //
     // ANIMATION
 
-    let startTime = Date.now();
+    const startTime = Date.now();
     let animationComplete = false;
 
     const animate = () => {
@@ -366,21 +393,21 @@ export default function BigBangBackground() {
       const zoomOut = () => {
         const zoomElapsed = (Date.now() - zoomStartTime) / 1000;
         const zoomProgress = Math.min(zoomElapsed / (zoomDuration / 1000), 1);
-        
+
         // Smooth easing for zoom-out
         const easeOut = 1 - Math.pow(1 - zoomProgress, 3);
         const currentZ = THREE.MathUtils.lerp(startZ, endZ, easeOut);
-        
+
         camera.position.z = currentZ;
-        
+
         // Continue rotating during zoom-out
         galaxy.rotation.y += 0.02;
         universe.rotation.y += 0.01;
-        
+
         // Update time uniforms
         galaxyMaterial.uniforms.uTime.value += 0.001;
         universeMaterial.uniforms.uTime.value += 0.00067;
-        
+
         renderer.render(scene, camera);
 
         if (zoomProgress < 1) {
@@ -418,26 +445,29 @@ export default function BigBangBackground() {
   }, [showRipple]);
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none bg-black" style={{ zIndex: 1 }}>
+    <div
+      className="absolute inset-0 w-full h-full pointer-events-none bg-black"
+      style={{ zIndex: 1 }}
+    >
       {/* RippleBackground - always mounted, controlled by opacity */}
-      <div 
+      <div
         className="absolute inset-0 w-full h-full transition-opacity duration-500"
-        style={{ 
+        style={{
           opacity: fadeOut ? 1 : 0,
-          zIndex: fadeOut ? 2 : 1
+          zIndex: fadeOut ? 2 : 1,
         }}
       >
         <RippleBackground />
       </div>
-      
+
       {/* BigBangBackground canvas - controlled by opacity */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full transition-opacity duration-500"
-        style={{ 
+        style={{
           display: 'block',
           opacity: fadeOut ? 0 : 1,
-          zIndex: fadeOut ? 1 : 2
+          zIndex: fadeOut ? 1 : 2,
         }}
       />
     </div>

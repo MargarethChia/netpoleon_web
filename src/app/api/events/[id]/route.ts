@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { NextRequest, NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
 
 // GET /api/events/[id] - Fetch single event
 export async function GET(
@@ -7,43 +7,37 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params
-    const eventId = parseInt(id)
-    
+    const { id } = await params;
+    const eventId = parseInt(id);
+
     if (isNaN(eventId)) {
-      return NextResponse.json(
-        { error: 'Invalid event ID' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Invalid event ID' }, { status: 400 });
     }
 
     const { data, error } = await supabase
       .from('events')
       .select('*')
       .eq('id', eventId)
-      .single()
-    
+      .single();
+
     if (error) {
       if (error.code === 'PGRST116') {
-        return NextResponse.json(
-          { error: 'Event not found' },
-          { status: 404 }
-        )
+        return NextResponse.json({ error: 'Event not found' }, { status: 404 });
       }
-      console.error('Database error:', error)
+      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to fetch event' },
         { status: 500 }
-      )
+      );
     }
 
-    return NextResponse.json(data)
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Unexpected error:', error)
+    console.error('Unexpected error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
-    )
+    );
   }
 }
 
@@ -53,24 +47,21 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params
-    const eventId = parseInt(id)
-    
+    const { id } = await params;
+    const eventId = parseInt(id);
+
     if (isNaN(eventId)) {
-      return NextResponse.json(
-        { error: 'Invalid event ID' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Invalid event ID' }, { status: 400 });
     }
 
-    const body = await request.json()
-    
+    const body = await request.json();
+
     // Basic validation
     if (!body.title || !body.event_date) {
       return NextResponse.json(
         { error: 'Title and event date are required' },
         { status: 400 }
-      )
+      );
     }
 
     const { data, error } = await supabase
@@ -81,33 +72,30 @@ export async function PUT(
         location: body.location || null,
         description: body.description || null,
         link: body.link || null,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', eventId)
       .select()
-      .single()
-    
+      .single();
+
     if (error) {
       if (error.code === 'PGRST116') {
-        return NextResponse.json(
-          { error: 'Event not found' },
-          { status: 404 }
-        )
+        return NextResponse.json({ error: 'Event not found' }, { status: 404 });
       }
-      console.error('Database error:', error)
+      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to update event' },
         { status: 500 }
-      )
+      );
     }
 
-    return NextResponse.json(data)
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Unexpected error:', error)
+    console.error('Unexpected error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
-    )
+    );
   }
 }
 
@@ -117,35 +105,29 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params
-    const eventId = parseInt(id)
-    
+    const { id } = await params;
+    const eventId = parseInt(id);
+
     if (isNaN(eventId)) {
-      return NextResponse.json(
-        { error: 'Invalid event ID' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Invalid event ID' }, { status: 400 });
     }
 
-    const { error } = await supabase
-      .from('events')
-      .delete()
-      .eq('id', eventId)
-    
+    const { error } = await supabase.from('events').delete().eq('id', eventId);
+
     if (error) {
-      console.error('Database error:', error)
+      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to delete event' },
         { status: 500 }
-      )
+      );
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Unexpected error:', error)
+    console.error('Unexpected error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
-    )
+    );
   }
-} 
+}

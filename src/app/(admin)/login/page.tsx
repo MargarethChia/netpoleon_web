@@ -1,12 +1,18 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Shield, Eye, EyeOff, Lock, Mail } from "lucide-react";
-import { useState } from "react";
-import { login } from "./actions";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Loader2, Shield, Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { useState } from 'react';
+import { login } from './actions';
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
@@ -28,32 +34,34 @@ export default function LoginPage() {
             }
             break;
           case 400:
-            setError("No account found with this email. Please contact an administrator.");
+            setError(
+              'No account found with this email. Please contact an administrator.'
+            );
             break;
           case 401:
-            setError("Invalid email or password. Please try again.");
+            setError('Invalid email or password. Please try again.');
             break;
           case 500:
             setError(
-              result.message || "Something went wrong. Please try again later.",
+              result.message || 'Something went wrong. Please try again later.'
             );
             break;
           default:
-            setError("An unexpected error occurred. Please try again.");
+            setError('An unexpected error occurred. Please try again.');
         }
         return;
       }
     } catch (error: unknown) {
       if (
         error &&
-        typeof error === "object" &&
-        "message" in error &&
-        error.message === "NEXT_REDIRECT"
+        typeof error === 'object' &&
+        'message' in error &&
+        error.message === 'NEXT_REDIRECT'
       ) {
         // Ignore redirect errors
         return;
       }
-      setError("An unexpected error occurred. Please try again.");
+      setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -69,12 +77,14 @@ export default function LoginPage() {
           </div>
           <h1 className="text-3xl font-bold text-foreground">Netpoleon</h1>
           <p className="text-muted-foreground">Admin Portal</p>
-      </div>
+        </div>
 
         {/* Login Card */}
         <Card className="border-border/50 shadow-lg">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-semibold text-center">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl font-semibold text-center">
+              Welcome Back
+            </CardTitle>
             <CardDescription className="text-center">
               Enter your credentials to access the admin panel
             </CardDescription>
@@ -86,12 +96,14 @@ export default function LoginPage() {
               </div>
             )}
 
-            <form onSubmit={async (e) => {
-              e.preventDefault();
-              const formData = new FormData(e.currentTarget);
-              await handleLogin(formData);
-            }} className="space-y-4">
-              
+            <form
+              onSubmit={async e => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                await handleLogin(formData);
+              }}
+              className="space-y-4"
+            >
               {/* Email Field */}
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
@@ -143,11 +155,7 @@ export default function LoginPage() {
               </div>
 
               {/* Submit Button */}
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -165,13 +173,13 @@ export default function LoginPage() {
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <span>Secure connection • Protected by Supabase</span>
+            <span>Secure connection • Protected by Supabase</span>
           </div>
           <p className="text-xs text-muted-foreground">
-              © 2024 Netpoleon. All rights reserved.
-            </p>
+            © 2024 Netpoleon. All rights reserved.
+          </p>
         </div>
       </div>
     </div>
   );
-} 
+}
