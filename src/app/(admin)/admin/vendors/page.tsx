@@ -33,7 +33,7 @@ import {
   Search,
   Building2,
   Calendar,
-  Image,
+  Image as ImageIcon,
   ExternalLink,
   Globe,
   Upload,
@@ -359,10 +359,7 @@ export default function VendorsPage() {
                         <div className="flex items-start gap-3">
                           {vendor.logo_url && (
                             <div className="w-12 h-12 bg-muted rounded flex items-center justify-center">
-                              <Image
-                                className="h-6 w-6 text-muted-foreground"
-                                alt="Vendor logo placeholder"
-                              />
+                              <ImageIcon className="h-6 w-6 text-muted-foreground" />
                             </div>
                           )}
                           <div>
@@ -383,7 +380,7 @@ export default function VendorsPage() {
                       <TableCell>
                         {vendor.logo_url ? (
                           <Badge variant="outline">
-                            <Image className="h-3 w-3 mr-1" />
+                            <ImageIcon className="h-3 w-3 mr-1" />
                             Logo
                           </Badge>
                         ) : (
@@ -477,7 +474,7 @@ export default function VendorsPage() {
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 With Logos
               </CardTitle>
-              <Image className="h-4 w-4 text-muted-foreground" />
+              <ImageIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-card-foreground">

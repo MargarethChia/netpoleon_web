@@ -431,10 +431,12 @@ export default function CreateVendorPage() {
                     <div className="flex items-center gap-4">
                       {formData.logo_url && (
                         <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
-                          <img
+                          <Image
                             src={formData.logo_url}
                             alt="Logo"
-                            className="w-12 h-12 object-contain"
+                            width={48}
+                            height={48}
+                            className="object-contain"
                             onError={e => {
                               e.currentTarget.style.display = 'none';
                             }}
@@ -462,9 +464,11 @@ export default function CreateVendorPage() {
                     {/* Featured Image */}
                     {formData.image_url && (
                       <div className="w-full">
-                        <img
+                        <Image
                           src={formData.image_url}
                           alt="Featured"
+                          width={400}
+                          height={192}
                           className="w-full h-48 object-cover rounded-lg shadow-sm"
                           onError={e => {
                             e.currentTarget.style.display = 'none';
