@@ -379,28 +379,33 @@ const mainNodes: MainNode[] = [
 export default function ForceBasedGraph() {
   const [clickedNode, setClickedNode] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
-  const [dimensions, setDimensions] = useState({ width: 800, height: 600, centerX: 400, centerY: 300 });
+  const [dimensions, setDimensions] = useState({
+    width: 800,
+    height: 600,
+    centerX: 400,
+    centerY: 300,
+  });
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Update dimensions when container size changes
   useEffect(() => {
     const updateDimensions = () => {
       if (!containerRef.current) return;
-      
+
       const rect = containerRef.current.getBoundingClientRect();
       const width = Math.max(rect.width || 800, 600); // Minimum width
       const height = Math.max(rect.height || 600, 400); // Minimum height
-      
+
       setDimensions({
         width,
         height,
         centerX: width / 2,
-        centerY: height / 2
+        centerY: height / 2,
       });
     };
 
     updateDimensions();
-    
+
     // Add resize listener
     const resizeObserver = new ResizeObserver(updateDimensions);
     if (containerRef.current) {
@@ -438,188 +443,209 @@ export default function ForceBasedGraph() {
   const radius = Math.min(width, height) * 0.15; // Responsive radius
 
   return (
-    <div 
-      ref={containerRef}
-      className="relative w-full h-full min-h-[400px]"
-    >
-        <svg 
-          viewBox={`0 0 ${width} ${height}`}
-          className="w-full h-full"
-          style={{ display: 'block' }}
-          onClick={handleBackgroundClick}
-        >
-          {/* Connection lines from main nodes to subcategories */}
-          <AnimatePresence>
-            {clickedNode && mainNodes.find(n => n.id === clickedNode)?.subCategories.map((subCat, index) => {
-              const mainNode = mainNodes.find(n => n.id === clickedNode);
-              if (!mainNode) return null;
-              
-              // Calculate position for main node (arranged in a circle)
-              const nodeIndex = mainNodes.findIndex(n => n.id === clickedNode);
-              const angle = (nodeIndex * 60 - 90) * (Math.PI / 180); // Start from top
-              const originalX = centerX + radius * Math.cos(angle);
-              const originalY = centerY + radius * Math.sin(angle);
-              
-              // When zoomed, main node is at center, when not zoomed, it's at original position
-              const mainNodeX = isZoomed ? centerX : originalX;
-              const mainNodeY = isZoomed ? centerY : originalY;
-              
-              // Calculate multi-layer positions for subcategories
-              const positions = getMultiLayerPositions(mainNodeX, mainNodeY, mainNode.subCategories, nodeIndex);
-              const subCatPos = positions[index];
-              
-              return (
-                <motion.line
-                  key={`line-${subCat.id}`}
-                  x1={mainNodeX}
-                  y1={mainNodeY}
-                  x2={subCatPos.x}
-                  y2={subCatPos.y}
-                  stroke="#dddddd"
-                  strokeWidth={2.5}
-                  strokeDasharray="5,5"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  exit={{ pathLength: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                />
-              );
-            })}
-          </AnimatePresence>
+    <div ref={containerRef} className="relative w-full h-full min-h-[400px]">
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className="w-full h-full"
+        style={{ display: 'block' }}
+        onClick={handleBackgroundClick}
+      >
+        {/* Connection lines from main nodes to subcategories */}
+        <AnimatePresence>
+          {clickedNode &&
+            mainNodes
+              .find(n => n.id === clickedNode)
+              ?.subCategories.map((subCat, index) => {
+                const mainNode = mainNodes.find(n => n.id === clickedNode);
+                if (!mainNode) return null;
 
-          {/* Subcategory nodes */}
-          <AnimatePresence>
-            {clickedNode && mainNodes.find(n => n.id === clickedNode)?.subCategories.map((subCat, index) => {
-              const mainNode = mainNodes.find(n => n.id === clickedNode);
-              if (!mainNode) return null;
-              
-              const nodeIndex = mainNodes.findIndex(n => n.id === clickedNode);
-              const angle = (nodeIndex * 60 - 90) * (Math.PI / 180);
-              const originalX = centerX + radius * Math.cos(angle);
-              const originalY = centerY + radius * Math.sin(angle);
-              
-              // When zoomed, main node is at center, when not zoomed, it's at original position
-              const mainNodeX = isZoomed ? centerX : originalX;
-              const mainNodeY = isZoomed ? centerY : originalY;
-              
-              // Calculate multi-layer positions for subcategories
-              const positions = getMultiLayerPositions(mainNodeX, mainNodeY, mainNode.subCategories, nodeIndex);
-              const subCatPos = positions[index];
-              
-              return (
-                <motion.g
-                  key={subCat.id}
-                  initial={{ opacity: 0, scale: 0, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0, y: 20 }}
-                  transition={{ duration: 0.25, delay: index * 0.05 }}
-                >
-                  <circle
-                    cx={subCatPos.x}
-                    cy={subCatPos.y}
-                    r={isZoomed ? 60 : 40}
-                    fill={subCat.color}
-                    className="drop-shadow-lg"
+                // Calculate position for main node (arranged in a circle)
+                const nodeIndex = mainNodes.findIndex(
+                  n => n.id === clickedNode
+                );
+                const angle = (nodeIndex * 60 - 90) * (Math.PI / 180); // Start from top
+                const originalX = centerX + radius * Math.cos(angle);
+                const originalY = centerY + radius * Math.sin(angle);
+
+                // When zoomed, main node is at center, when not zoomed, it's at original position
+                const mainNodeX = isZoomed ? centerX : originalX;
+                const mainNodeY = isZoomed ? centerY : originalY;
+
+                // Calculate multi-layer positions for subcategories
+                const positions = getMultiLayerPositions(
+                  mainNodeX,
+                  mainNodeY,
+                  mainNode.subCategories,
+                  nodeIndex
+                );
+                const subCatPos = positions[index];
+
+                return (
+                  <motion.line
+                    key={`line-${subCat.id}`}
+                    x1={mainNodeX}
+                    y1={mainNodeY}
+                    x2={subCatPos.x}
+                    y2={subCatPos.y}
+                    stroke="#dddddd"
+                    strokeWidth={2.5}
+                    strokeDasharray="5,5"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    exit={{ pathLength: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
                   />
-                  <text
-                    x={subCatPos.x}
-                    y={subCatPos.y}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill="white"
-                    fontSize={isZoomed ? "14" : "10"}
-                    fontWeight="bold"
-                    className="pointer-events-none"
+                );
+              })}
+        </AnimatePresence>
+
+        {/* Subcategory nodes */}
+        <AnimatePresence>
+          {clickedNode &&
+            mainNodes
+              .find(n => n.id === clickedNode)
+              ?.subCategories.map((subCat, index) => {
+                const mainNode = mainNodes.find(n => n.id === clickedNode);
+                if (!mainNode) return null;
+
+                const nodeIndex = mainNodes.findIndex(
+                  n => n.id === clickedNode
+                );
+                const angle = (nodeIndex * 60 - 90) * (Math.PI / 180);
+                const originalX = centerX + radius * Math.cos(angle);
+                const originalY = centerY + radius * Math.sin(angle);
+
+                // When zoomed, main node is at center, when not zoomed, it's at original position
+                const mainNodeX = isZoomed ? centerX : originalX;
+                const mainNodeY = isZoomed ? centerY : originalY;
+
+                // Calculate multi-layer positions for subcategories
+                const positions = getMultiLayerPositions(
+                  mainNodeX,
+                  mainNodeY,
+                  mainNode.subCategories,
+                  nodeIndex
+                );
+                const subCatPos = positions[index];
+
+                return (
+                  <motion.g
+                    key={subCat.id}
+                    initial={{ opacity: 0, scale: 0, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0, y: 20 }}
+                    transition={{ duration: 0.25, delay: index * 0.05 }}
                   >
-                    {(() => {
-                      const words = subCat.label.split(' ');
-                      const lineHeight = isZoomed ? 18 : 14;
-                      const totalHeight = (words.length - 1) * lineHeight;
-                      const startY = -totalHeight / 2;
-                      
-                      return words.map((word, i) => (
-                        <tspan key={i} x={subCatPos.x} dy={i === 0 ? startY : lineHeight}>
-                          {word}
-                        </tspan>
-                      ));
-                    })()}
-                  </text>
-                </motion.g>
-              );
-            })}
-          </AnimatePresence>
+                    <circle
+                      cx={subCatPos.x}
+                      cy={subCatPos.y}
+                      r={isZoomed ? 60 : 40}
+                      fill={subCat.color}
+                      className="drop-shadow-lg"
+                    />
+                    <text
+                      x={subCatPos.x}
+                      y={subCatPos.y}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fill="white"
+                      fontSize={isZoomed ? '14' : '10'}
+                      fontWeight="bold"
+                      className="pointer-events-none"
+                    >
+                      {(() => {
+                        const words = subCat.label.split(' ');
+                        const lineHeight = isZoomed ? 18 : 14;
+                        const totalHeight = (words.length - 1) * lineHeight;
+                        const startY = -totalHeight / 2;
 
-          {/* Main nodes arranged in a circle */}
-          {mainNodes.map((node, index) => {
-            const angle = (index * 60 - 90) * (Math.PI / 180); // Start from top
-            const originalX = centerX + radius * Math.cos(angle);
-            const originalY = centerY + radius * Math.sin(angle);
+                        return words.map((word, i) => (
+                          <tspan
+                            key={i}
+                            x={subCatPos.x}
+                            dy={i === 0 ? startY : lineHeight}
+                          >
+                            {word}
+                          </tspan>
+                        ));
+                      })()}
+                    </text>
+                  </motion.g>
+                );
+              })}
+        </AnimatePresence>
 
-            // Calculate final position based on zoom state
-            let finalX = originalX;
-            let finalY = originalY;
-            
-            if (isZoomed && clickedNode === node.id) {
-              // Move clicked node to center when zoomed
-              finalX = centerX;
-              finalY = centerY;
-            }
+        {/* Main nodes arranged in a circle */}
+        {mainNodes.map((node, index) => {
+          const angle = (index * 60 - 90) * (Math.PI / 180); // Start from top
+          const originalX = centerX + radius * Math.cos(angle);
+          const originalY = centerY + radius * Math.sin(angle);
 
-            // Hide other nodes when zoomed in
-            if (isZoomed && clickedNode !== node.id) {
-              return null;
-            }
+          // Calculate final position based on zoom state
+          let finalX = originalX;
+          let finalY = originalY;
 
-            return (
-              <motion.g
-                key={node.id}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                whileHover={{ scale: 1.05 }}
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent background click
-                  handleNodeClick(node.id);
+          if (isZoomed && clickedNode === node.id) {
+            // Move clicked node to center when zoomed
+            finalX = centerX;
+            finalY = centerY;
+          }
+
+          // Hide other nodes when zoomed in
+          if (isZoomed && clickedNode !== node.id) {
+            return null;
+          }
+
+          return (
+            <motion.g
+              key={node.id}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              whileHover={{ scale: 1.05 }}
+              onClick={e => {
+                e.stopPropagation(); // Prevent background click
+                handleNodeClick(node.id);
+              }}
+              style={{ cursor: 'pointer' }}
+            >
+              <motion.circle
+                cx={finalX}
+                cy={finalY}
+                r={isZoomed && clickedNode === node.id ? 72 : 48}
+                fill={node.color}
+                className="drop-shadow-xl"
+                animate={{
+                  scale: clickedNode === node.id ? (isZoomed ? 1.2 : 1.05) : 1,
                 }}
-                style={{ cursor: 'pointer' }}
+                transition={{
+                  duration: 0.6,
+                  ease: 'easeInOut',
+                  cx: { duration: 0.6, ease: 'easeInOut' },
+                  cy: { duration: 0.6, ease: 'easeInOut' },
+                }}
+              />
+
+              <text
+                x={finalX}
+                y={finalY}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill="#000000"
+                fontSize={isZoomed && clickedNode === node.id ? '24' : '18'}
+                fontWeight="bold"
+                className="pointer-events-none"
+                style={{
+                  pointerEvents: 'none',
+                  userSelect: 'none',
+                }}
               >
-                <motion.circle
-                  cx={finalX}
-                  cy={finalY}
-                  r={isZoomed && clickedNode === node.id ? 72 : 48}
-                  fill={node.color}
-                  className="drop-shadow-xl"
-                  animate={{
-                    scale: clickedNode === node.id ? (isZoomed ? 1.2 : 1.05) : 1,
-                  }}
-                  transition={{ 
-                    duration: 0.6, 
-                    ease: "easeInOut",
-                    cx: { duration: 0.6, ease: "easeInOut" },
-                    cy: { duration: 0.6, ease: "easeInOut" }
-                  }}
-                />
-                
-                <text
-                  x={finalX}
-                  y={finalY}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="#000000"
-                  fontSize={isZoomed && clickedNode === node.id ? "24" : "18"}
-                  fontWeight="bold"
-                  className="pointer-events-none"
-                  style={{ 
-                    pointerEvents: 'none',
-                    userSelect: 'none'
-                  }}
-                >
-                  {node.label}
-                </text>
-              </motion.g>
-            );
-          })}
-        </svg>
-      </div>
+                {node.label}
+              </text>
+            </motion.g>
+          );
+        })}
+      </svg>
+    </div>
   );
 }

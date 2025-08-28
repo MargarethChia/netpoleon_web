@@ -1,9 +1,9 @@
-import HeroSection from "../components/HeroSection";
-import ImageTextSection from "../components/ImageTextSection";
-import VendorCarousel from "../components/VendorCarousel";
-import Statistics from "../components/Statistics";
-import NewsSection from "../components/CardsSection";
-import GraphSection from "../components/GraphSection";
+import HeroSection from '../components/HeroSection';
+import ImageTextSection from '../components/ImageTextSection';
+import VendorCarousel from '../components/VendorCarousel';
+import Statistics from '../components/Statistics';
+import NewsSection from '../components/CardsSection';
+import GraphSection from '../components/GraphSection';
 
 // import AboutSection from "../components/AboutSection";
 // import InfoSection from "../components/InfoSection";
@@ -11,13 +11,12 @@ import GraphSection from "../components/GraphSection";
 export default function Home() {
   // Home Page
   const hero = {
-    title: "Netpoleon ANZ",
-    subtitle:
-      "Innovative Cybersecurity Solutions",
-    primaryButtonText: "Get Started Today",
-    secondaryButtonText: "Learn More",
-    heroImage: "/images/hero/hero-main.jpg",
-    heroImageAlt: "Netpoleon - Innovative Technology Solutions",
+    title: 'Netpoleon ANZ',
+    subtitle: 'Innovative Cybersecurity Solutions',
+    primaryButtonText: 'Get Started Today',
+    secondaryButtonText: 'Learn More',
+    heroImage: '/images/hero/hero-main.jpg',
+    heroImageAlt: 'Netpoleon - Innovative Technology Solutions',
   };
 
   console.log('Home page rendering with hero props:', hero);
