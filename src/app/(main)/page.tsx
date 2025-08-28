@@ -50,30 +50,6 @@ export default function Home() {
     { id: 6, name: "Netflix", logo: "/images/logos/logo-6.png" },
   ];
 
-  const statistics = [
-    {
-      id: 1,
-      value: "500+",
-      label: "Projects Completed",
-      excerpt:
-        "Successfully delivered innovative solutions across various industries and technologies.",
-    },
-    {
-      id: 2,
-      value: "99%",
-      label: "Client Satisfaction",
-      excerpt:
-        "Maintaining exceptional quality standards and exceeding client expectations consistently.",
-    },
-    {
-      id: 3,
-      value: "24/7",
-      label: "Support Available",
-      excerpt:
-        "Round-the-clock technical support and maintenance for all our client projects.",
-    },
-  ];
-
   // const info = {
   //   title: "Why Choose Netpoleon?",
   //   points: [
@@ -152,7 +128,7 @@ export default function Home() {
         <ImageTextSection key={idx} {...section} />
       ))}
       <GraphSection />
-      <Statistics statistics={statistics} />
+      <Statistics />
       <NewsSection {...news} />
     </div>
   );

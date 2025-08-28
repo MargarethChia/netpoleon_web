@@ -18,37 +18,29 @@ export default function Statistics() {
 
   // Custom intersection observer for more reliable detection
   useEffect(() => {
-    if (!ref.current || animationStarted) return;
+    if (!ref.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !animationStarted) {
-            console.log('Statistics section in view via IntersectionObserver, starting animation...');
+            console.log('Statistics section in view, starting animation...');
             setAnimationStarted(true);
             startAnimation();
-          }
+          } 
         });
       },
-      { threshold: 0.3 }
+      { 
+        threshold: 0.3,  // Trigger when 30% of the element is visible
+        rootMargin: '0px 0px -50px 0px'  // Start slightly before fully in view
+      }
     );
 
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, [animationStarted]);
 
-  // Fallback: start animation after a delay if not triggered by intersection
-  useEffect(() => {
-    const fallbackTimer = setTimeout(() => {
-      if (!animationStarted) {
-        console.log('Fallback animation trigger after 3 seconds');
-        setAnimationStarted(true);
-        startAnimation();
-      }
-    }, 3000);
-
-    return () => clearTimeout(fallbackTimer);
-  }, [animationStarted]);
+  // Remove fallback timer - animation only starts when in view
 
   const startAnimation = () => {
     const duration = 4000; // 4 seconds (increased from 2 seconds)
