@@ -41,6 +41,7 @@ import {
   Resource,
   Vendor,
   FeaturedResource,
+  FeaturedEvent,
   eventsApi,
   resourcesApi,
   vendorsApi,
@@ -53,6 +54,7 @@ export default function AdminPage() {
   const [featuredResources, setFeaturedResources] = useState<
     FeaturedResource[]
   >([]);
+  const [featuredEvents, setFeaturedEvents] = useState<FeaturedEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,18 +64,25 @@ export default function AdminPage() {
       setIsLoading(true);
       setError(null);
 
-      const [eventsData, resourcesData, vendorsData, featuredData] =
-        await Promise.all([
-          eventsApi.getAll(),
-          resourcesApi.getAll(),
-          vendorsApi.getAll(),
-          resourcesApi.getFeatured(),
-        ]);
+      const [
+        eventsData,
+        resourcesData,
+        vendorsData,
+        featuredResourcesData,
+        featuredEventsData,
+      ] = await Promise.all([
+        eventsApi.getAll(),
+        resourcesApi.getAll(),
+        vendorsApi.getAll(),
+        resourcesApi.getFeatured(),
+        eventsApi.getFeatured(),
+      ]);
 
       setEvents(eventsData);
       setResources(resourcesData);
       setVendors(vendorsData);
-      setFeaturedResources(featuredData);
+      setFeaturedResources(featuredResourcesData);
+      setFeaturedEvents(featuredEventsData);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
       setError(
@@ -97,8 +106,8 @@ export default function AdminPage() {
       >
         <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
           {/* Loading Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            {[...Array(5)].map((_, i) => (
               <Card
                 key={i}
                 className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
@@ -225,7 +234,7 @@ export default function AdminPage() {
     >
       <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -283,6 +292,23 @@ export default function AdminPage() {
             <CardContent>
               <div className="text-2xl font-bold text-card-foreground">
                 {featuredResources.length}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Currently featured
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Featured Events
+              </CardTitle>
+              <Star className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-card-foreground">
+                {featuredEvents.length}
               </div>
               <p className="text-xs text-muted-foreground">
                 Currently featured

@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
           location: body.location || null,
           description: body.description || null,
           link: body.link || null,
+          video: body.video || null,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },

@@ -36,6 +36,7 @@ export default function EventForm({
     location: '',
     description: '',
     link: '',
+    video: '',
   });
 
   useEffect(() => {
@@ -46,14 +47,16 @@ export default function EventForm({
         location: event.location || '',
         description: event.description || '',
         link: event.link || '',
+        video: event.video || '',
       });
     } else {
       setFormData({
         title: '',
         event_date: '',
-        location: '',
         description: '',
+        location: '',
         link: '',
+        video: '',
       });
     }
   }, [event]);
@@ -162,6 +165,17 @@ export default function EventForm({
               onChange={e => handleInputChange('description', e.target.value)}
               placeholder="Enter event description"
               rows={4}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="video">Video URL</Label>
+            <Input
+              id="video"
+              type="url"
+              value={formData.video}
+              onChange={e => handleInputChange('video', e.target.value)}
+              placeholder="https://youtube.com/watch?v=..."
             />
           </div>
 
