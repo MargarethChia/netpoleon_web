@@ -1,18 +1,15 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { vendorsApi, type Vendor } from '@/lib/api';
-
-interface VendorDetailProps {
-  vendorId?: string;
-}
 
 export default function VendorDetailPage() {
   const params = useParams();
   const vendorId = params.id as string;
-  
+
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,11 +17,11 @@ export default function VendorDetailPage() {
   useEffect(() => {
     const fetchVendor = async () => {
       if (!vendorId) return;
-      
+
       try {
         setLoading(true);
         setError(null);
-        
+
         const vendorData = await vendorsApi.getById(parseInt(vendorId));
         setVendor(vendorData);
       } catch (err) {
@@ -50,7 +47,7 @@ export default function VendorDetailPage() {
                   <div className="h-4 bg-gray-200 rounded w-24 mb-4"></div>
                   <div className="h-8 bg-gray-200 rounded w-64 mb-6"></div>
                   <div className="grid grid-cols-2 gap-4">
-                    {[1, 2, 3, 4].map((i) => (
+                    {[1, 2, 3, 4].map(i => (
                       <div key={i} className="h-4 bg-gray-200 rounded"></div>
                     ))}
                   </div>
@@ -69,12 +66,14 @@ export default function VendorDetailPage() {
       <div className="min-h-screen py-16">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <div className="bg-red-50 border border-red-200 rounded-lg p-8">
-            <h2 className="text-2xl text-red-800 mb-4 font-bold">Vendor Not Found</h2>
+            <h2 className="text-2xl text-red-800 mb-4 font-bold">
+              Vendor Not Found
+            </h2>
             <p className="text-red-600 font-normal">
               {error || 'The vendor you are looking for could not be found.'}
             </p>
-            <Link 
-              href="/partners" 
+            <Link
+              href="/partners"
               className="mt-4 inline-block bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors font-bold"
             >
               Back to Partners
@@ -97,7 +96,7 @@ export default function VendorDetailPage() {
 
 Our team of certified security professionals has successfully completed over 150 projects across various industries, from startups to Fortune 500 companies. We pride ourselves on our customer-first approach and commitment to delivering results that protect business assets and ensure compliance.
 
-Founded in 2018, ${vendor.name} has built a reputation for reliability, innovation, and exceptional customer service. We work closely with our clients to understand their unique security challenges and provide tailored solutions that align with their business objectives and compliance requirements.`
+Founded in 2018, ${vendor.name} has built a reputation for reliability, innovation, and exceptional customer service. We work closely with our clients to understand their unique security challenges and provide tailored solutions that align with their business objectives and compliance requirements.`,
   };
 
   return (
@@ -105,8 +104,8 @@ Founded in 2018, ${vendor.name} has built a reputation for reliability, innovati
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         {/* Back Button */}
         <div className="mb-8">
-          <Link 
-            href="/partners" 
+          <Link
+            href="/partners"
             className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
           >
             ← Back to Partners
@@ -123,7 +122,9 @@ Founded in 2018, ${vendor.name} has built a reputation for reliability, innovati
                 </span>
                 <div className="flex items-center">
                   <span className="text-yellow-500">★</span>
-                  <span className="text-sm text-gray-600 ml-1">{vendorDetails.rating}</span>
+                  <span className="text-sm text-gray-600 ml-1">
+                    {vendorDetails.rating}
+                  </span>
                 </div>
               </div>
               <h1 className="text-3xl lg:text-4xl mb-6">{vendor.name}</h1>
@@ -148,9 +149,11 @@ Founded in 2018, ${vendor.name} has built a reputation for reliability, innovati
             </div>
             <div className="aspect-video overflow-hidden rounded-lg bg-gray-200 flex items-center justify-center">
               {vendor.logo_url ? (
-                <img 
-                  src={vendor.logo_url} 
+                <Image
+                  src={vendor.logo_url}
                   alt={`${vendor.name} logo`}
+                  width={400}
+                  height={225}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -178,25 +181,39 @@ Founded in 2018, ${vendor.name} has built a reputation for reliability, innovati
           <div className="bg-gray-100 rounded-lg h-64 md:h-80 flex items-center justify-center">
             <div className="text-center text-gray-600">
               <div className="w-16 h-16 bg-gray-300 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <svg
+                  className="w-8 h-8"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
                 </svg>
               </div>
               <p className="text-lg mb-2">Architecture Diagram</p>
-              <p className="text-sm">Security solution implementation diagram for {vendor.name}</p>
+              <p className="text-sm">
+                Security solution implementation diagram for {vendor.name}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Interested Section */}
         <div className="bg-gray-50 rounded-lg p-8 text-center">
-          <h3 className="text-2xl mb-4">Interested in Working with {vendor.name}?</h3>
+          <h3 className="text-2xl mb-4">
+            Interested in Working with {vendor.name}?
+          </h3>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Ready to discuss your project requirements? Get in touch with us to learn more about 
-            how {vendor.name} can help your business succeed.
+            Ready to discuss your project requirements? Get in touch with us to
+            learn more about how {vendor.name} can help your business succeed.
           </p>
-          <Link 
-            href="/contact" 
+          <Link
+            href="/contact"
             className="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors inline-flex items-center"
           >
             Contact Us About This Vendor

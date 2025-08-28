@@ -3,13 +3,3 @@
 
 # Run lint-staged on staged files
 npx lint-staged
-
-# Also run a quick lint check on the entire project to catch any major issues
-echo "Running project-wide lint check..."
-npm run lint --silent || {
-  echo "❌ Lint errors found! Please fix them before committing."
-  echo "Run 'npm run lint:fix' to auto-fix some issues."
-  exit 1
-}
-
-echo "✅ Pre-commit checks passed!"

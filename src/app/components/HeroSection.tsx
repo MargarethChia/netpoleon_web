@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 interface HeroSectionProps {
   title: string;
@@ -15,7 +16,7 @@ export default function HeroSection({
   title,
   subtitle,
   heroImage,
-  heroImageAlt = "Hero Image",
+  heroImageAlt = 'Hero Image',
   onExploreVendors,
   onExploreSolutions,
 }: HeroSectionProps) {
@@ -27,10 +28,12 @@ export default function HeroSection({
       {/* Background Image */}
       {heroImage && (
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src={heroImage}
             alt={heroImageAlt}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
           />
           {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-black/60 z-10"></div>
@@ -45,7 +48,7 @@ export default function HeroSection({
             className="text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             {title}
           </motion.h1>
@@ -55,7 +58,7 @@ export default function HeroSection({
             className="text-xl lg:text-2xl text-white/90 leading-relaxed mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
           >
             {subtitle}
           </motion.p>
@@ -65,7 +68,7 @@ export default function HeroSection({
             className="flex flex-col sm:flex-row gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
           >
             <motion.button
               onClick={onExploreVendors}
