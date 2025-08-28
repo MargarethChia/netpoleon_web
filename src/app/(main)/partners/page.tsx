@@ -129,7 +129,7 @@ export default function OurVendors() {
     <div className="min-h-screen">
       {/* Header - Full Width */}
       <motion.section
-        className="relative h-[500px] overflow-hidden bg-gradient-to-br from-orange-600 to-amber-600 shadow-lg z-50 mb-16"
+        className="relative h-[500px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg z-50 mb-16"
         style={{
           clipPath:
             'polygon(0 0, 100% 0, 100% 90%, 80% 95%, 50% 100%, 20% 95%, 0 90%)',
@@ -264,21 +264,6 @@ export default function OurVendors() {
                         )}
                       </motion.div>
                       <div className="p-6">
-                        <div className="flex items-center justify-between mb-3">
-                          <motion.span
-                            className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold"
-                            whileHover={{ scale: 1.1 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            Cybersecurity
-                          </motion.span>
-                          <div className="flex items-center">
-                            <span className="text-yellow-500">★</span>
-                            <span className="text-sm text-gray-600 ml-1 font-normal">
-                              4.8
-                            </span>
-                          </div>
-                        </div>
                         <h3 className="text-xl mb-3 group-hover:text-blue-600 transition-colors font-bold">
                           {vendor.name}
                         </h3>
@@ -286,8 +271,7 @@ export default function OurVendors() {
                           {vendor.description ||
                             'Leading cybersecurity solutions provider with proven enterprise deployment success.'}
                         </p>
-                        <div className="flex items-center justify-between text-sm text-gray-500">
-                          <span className="font-normal">Enterprise Ready</span>
+                        <div className="flex items-center justify-right text-sm text-gray-500">
                           <motion.span
                             className="group-hover:text-blue-600 transition-colors font-normal"
                             whileHover={{ x: 5 }}
@@ -366,7 +350,7 @@ export default function OurVendors() {
 
       {/* CTA Section */}
       <motion.section
-        className="text-center mt-16 relative h-[270px] overflow-hidden bg-gradient-to-br from-orange-900 via-orange-600 to-orange-400"
+        className="text-center mt-16 relative h-[270px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600"
         style={{
           clipPath:
             'polygon(0 10%, 20% 5%, 50% 0, 80% 5%, 100% 10%, 100% 100%, 0 100%)',

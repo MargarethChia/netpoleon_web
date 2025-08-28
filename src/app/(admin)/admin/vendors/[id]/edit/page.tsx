@@ -42,6 +42,7 @@ export default function EditVendorPage() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    content: '',
     logo_url: '',
     image_url: '',
     link: '',
@@ -56,6 +57,7 @@ export default function EditVendorPage() {
         setFormData({
           name: data.name,
           description: data.description || '',
+          content: data.content || '',
           logo_url: data.logo_url || '',
           image_url: data.image_url || '',
           link: data.link || '',
@@ -304,6 +306,21 @@ export default function EditVendorPage() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="content">Content</Label>
+                  <Textarea
+                    id="content"
+                    value={formData.content}
+                    onChange={e => handleInputChange('content', e.target.value)}
+                    placeholder="Enter the main content about the vendor (supports HTML)..."
+                    className="h-32 resize-none"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    This field supports HTML content and will be displayed on
+                    the vendor detail page.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="link">Website URL</Label>
                   <div className="relative">
                     <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -492,6 +509,7 @@ export default function EditVendorPage() {
               <CardContent className="h-[calc(100%-80px)] overflow-y-auto">
                 {formData.name ||
                 formData.description ||
+                formData.content ||
                 formData.logo_url ||
                 formData.image_url ? (
                   <div className="space-y-6">
@@ -551,6 +569,19 @@ export default function EditVendorPage() {
                         <p className="text-foreground leading-relaxed">
                           {formData.description}
                         </p>
+                      </div>
+                    )}
+
+                    {/* Content */}
+                    {formData.content && (
+                      <div className="prose prose-sm max-w-none">
+                        <h3 className="text-lg font-semibold text-foreground mb-2">
+                          Main Content
+                        </h3>
+                        <div
+                          className="text-foreground leading-relaxed"
+                          dangerouslySetInnerHTML={{ __html: formData.content }}
+                        />
                       </div>
                     )}
                   </div>
