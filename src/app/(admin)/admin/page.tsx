@@ -110,7 +110,7 @@ export default function AdminPage() {
             {[...Array(5)].map((_, i) => (
               <Card
                 key={i}
-                className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+                className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -129,7 +129,7 @@ export default function AdminPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Events Table Loading */}
             <Card
-              className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+              className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
               style={{ animationDelay: '200ms' }}
             >
               <CardHeader>
@@ -152,7 +152,7 @@ export default function AdminPage() {
 
             {/* Resources Table Loading */}
             <Card
-              className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+              className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
               style={{ animationDelay: '300ms' }}
             >
               <CardHeader>
@@ -176,7 +176,7 @@ export default function AdminPage() {
 
           {/* Vendors Table Loading */}
           <Card
-            className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+            className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
             style={{ animationDelay: '400ms' }}
           >
             <CardHeader>

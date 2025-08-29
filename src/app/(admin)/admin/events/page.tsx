@@ -27,7 +27,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   MoreHorizontal,
-  Eye,
   Edit,
   Trash2,
   Search,
@@ -117,13 +116,6 @@ export default function EventsPage() {
     }
   };
 
-  const handleViewEvent = (eventId: number) => {
-    const event = events.find(e => e.id === eventId);
-    if (event) {
-      setViewingEvent(event);
-    }
-  };
-
   const handleFormSuccess = () => {
     fetchEvents(); // Refresh the list after successful operation
   };
@@ -201,7 +193,7 @@ export default function EventsPage() {
       >
         <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
           {/* Search Loading */}
-          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+          <Card className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500">
             <CardHeader>
               <div className="h-6 w-32 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
               <div className="h-4 w-64 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -213,7 +205,7 @@ export default function EventsPage() {
 
           {/* Events Table Loading */}
           <Card
-            className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+            className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
             style={{ animationDelay: '100ms' }}
           >
             <CardHeader>
@@ -393,12 +385,6 @@ export default function EventsPage() {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                  onClick={() => handleViewEvent(event.id)}
-                                >
-                                  <Eye className="mr-2 h-4 w-4" />
-                                  View Details
-                                </DropdownMenuItem>
                                 <DropdownMenuItem
                                   onClick={() => handleEditEvent(event.id)}
                                 >
