@@ -34,11 +34,13 @@ export default function CreateResourcePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
+    description: '',
     content: '',
     type: 'article' as 'article' | 'blog',
     is_published: false,
-    published_at: '',
+    published_at: new Date().toISOString().split('T')[0], // Default to today's date
     cover_image_url: '',
+    article_link: '',
   });
   const [isUploading, setIsUploading] = useState(false);
 
@@ -101,10 +103,30 @@ export default function CreateResourcePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.content || !formData.type) {
+    if (!formData.title || !formData.type) {
       showToast({
         title: 'Validation Error',
         message: 'Please fill in all required fields',
+        type: 'error',
+      });
+      return;
+    }
+
+    // Content is only required for blog posts, not for articles
+    if (formData.type === 'blog' && !formData.content) {
+      showToast({
+        title: 'Validation Error',
+        message: 'Content is required for blog posts',
+        type: 'error',
+      });
+      return;
+    }
+
+    // Article link is required for articles
+    if (formData.type === 'article' && !formData.article_link) {
+      showToast({
+        title: 'Validation Error',
+        message: 'Article link is required for articles',
         type: 'error',
       });
       return;
@@ -115,6 +137,7 @@ export default function CreateResourcePage() {
     try {
       await resourcesApi.create({
         ...formData,
+        content: formData.type === 'article' ? '' : formData.content, // Empty content for articles
         published_at: formData.published_at || null,
       });
 
@@ -257,6 +280,33 @@ export default function CreateResourcePage() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Input
+                    id="description"
+                    value={formData.description}
+                    onChange={e =>
+                      handleInputChange('description', e.target.value)
+                    }
+                    placeholder="Enter a brief description of the resource"
+                  />
+                </div>
+
+                {formData.type === 'article' && (
+                  <div className="space-y-2">
+                    <Label htmlFor="article_link">Article Link</Label>
+                    <Input
+                      id="article_link"
+                      value={formData.article_link}
+                      onChange={e =>
+                        handleInputChange('article_link', e.target.value)
+                      }
+                      placeholder="https://example.com/article"
+                      type="url"
+                    />
+                  </div>
+                )}
+
+                <div className="space-y-2">
                   <Label htmlFor="cover_image">Cover Image</Label>
                   <div className="space-y-3">
                     {/* File Upload */}
@@ -369,10 +419,45 @@ export default function CreateResourcePage() {
 
           {/* Right Side - Rich Text Editor */}
           <div className="space-y-4">
-            <RichTextEditor
-              content={formData.content}
-              onContentChange={handleContentChange}
-            />
+            {formData.type === 'article' ? (
+              <div className="space-y-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-5 h-5 text-blue-600 mt-0.5">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-blue-900">
+                        Article Content
+                      </h4>
+                      <p className="text-sm text-blue-700 mt-1">
+                        For articles, the content is managed externally via the
+                        article link. The rich text editor is disabled for
+                        article type resources.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div className="text-sm text-gray-600">
+                    <strong>Note:</strong> Articles with external links will
+                    redirect users to the source content rather than displaying
+                    content in this CMS.
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <RichTextEditor
+                content={formData.content}
+                onContentChange={handleContentChange}
+              />
+            )}
           </div>
         </div>
       </div>

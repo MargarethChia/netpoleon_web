@@ -306,8 +306,21 @@ export default function ResourcesPage() {
                           <div>
                             <div className="font-medium">{resource.title}</div>
                             <div className="text-sm text-muted-foreground max-w-[300px] truncate">
-                              {resource.content}
+                              {resource.description || 'No description'}
                             </div>
+                            {resource.type === 'article' &&
+                              resource.article_link && (
+                                <div className="text-xs text-blue-600 mt-1">
+                                  <a
+                                    href={resource.article_link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:underline"
+                                  >
+                                    View Article →
+                                  </a>
+                                </div>
+                              )}
                           </div>
                         </div>
                       </TableCell>
