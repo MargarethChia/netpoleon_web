@@ -27,7 +27,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   MoreHorizontal,
-  Eye,
   Edit,
   Trash2,
   Search,
@@ -101,11 +100,6 @@ export default function VendorsPage() {
       setVendorToDelete(vendor);
       setShowDeleteDialog(true);
     }
-  };
-
-  const handleViewVendor = (vendorId: number) => {
-    // TODO: Navigate to view page
-    console.log('View vendor:', vendorId);
   };
 
   const handleVisitWebsite = (url: string) => {
@@ -422,12 +416,6 @@ export default function VendorsPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => handleViewVendor(vendor.id)}
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Details
-                            </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleEditVendor(vendor.id)}
                             >

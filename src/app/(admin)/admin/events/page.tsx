@@ -27,7 +27,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   MoreHorizontal,
-  Eye,
   Edit,
   Trash2,
   Search,
@@ -114,13 +113,6 @@ export default function EventsPage() {
           type: 'error',
         });
       }
-    }
-  };
-
-  const handleViewEvent = (eventId: number) => {
-    const event = events.find(e => e.id === eventId);
-    if (event) {
-      setViewingEvent(event);
     }
   };
 
@@ -393,12 +385,6 @@ export default function EventsPage() {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                  onClick={() => handleViewEvent(event.id)}
-                                >
-                                  <Eye className="mr-2 h-4 w-4" />
-                                  View Details
-                                </DropdownMenuItem>
                                 <DropdownMenuItem
                                   onClick={() => handleEditEvent(event.id)}
                                 >

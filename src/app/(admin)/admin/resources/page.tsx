@@ -28,7 +28,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   MoreHorizontal,
-  Eye,
   Edit,
   Trash2,
   Search,
@@ -91,11 +90,6 @@ export default function ResourcesPage() {
       setResourceToDelete(resource);
       setShowDeleteDialog(true);
     }
-  };
-
-  const handleViewResource = (resourceId: number) => {
-    // TODO: Navigate to view page
-    console.log('View resource:', resourceId);
   };
 
   const handleTogglePublish = async (resourceId: number) => {
@@ -380,12 +374,6 @@ export default function ResourcesPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => handleViewResource(resource.id)}
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Details
-                            </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleEditResource(resource.id)}
                             >
