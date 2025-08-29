@@ -172,7 +172,7 @@ export default function VendorsPage() {
       >
         <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
           {/* Portfolio Upload Loading */}
-          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+          <Card className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500">
             <CardHeader>
               <div className="h-6 w-48 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
               <div className="h-4 w-64 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -183,7 +183,7 @@ export default function VendorsPage() {
           </Card>
 
           {/* Search Loading */}
-          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+          <Card className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500">
             <CardHeader>
               <div className="h-6 w-32 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
               <div className="h-4 w-64 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -195,7 +195,7 @@ export default function VendorsPage() {
 
           {/* Vendors Table Loading */}
           <Card
-            className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+            className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
             style={{ animationDelay: '100ms' }}
           >
             <CardHeader>

@@ -171,7 +171,7 @@ export default function ResourcesPage() {
       >
         <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
           {/* Search Loading */}
-          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+          <Card className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500">
             <CardHeader>
               <div className="h-6 w-36 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
               <div className="h-4 w-64 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -183,7 +183,7 @@ export default function ResourcesPage() {
 
           {/* Resources Table Loading */}
           <Card
-            className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+            className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
             style={{ animationDelay: '100ms' }}
           >
             <CardHeader>
