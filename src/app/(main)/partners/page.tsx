@@ -60,8 +60,8 @@ export default function OurVendors() {
   };
 
   // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 30 },
+  const fadeInDown = {
+    hidden: { opacity: 0, y: -50 },
     visible: { opacity: 1, y: 0 },
   };
 
@@ -137,7 +137,7 @@ export default function OurVendors() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        variants={fadeInUp}
+        variants={fadeInDown}
         transition={{ duration: 0.6 }}
       >
         {/* Circular overlays at bottom */}
@@ -166,7 +166,7 @@ export default function OurVendors() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
+          variants={fadeInDown}
           transition={{ duration: 0.6 }}
         >
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
@@ -358,7 +358,7 @@ export default function OurVendors() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        variants={fadeInUp}
+        variants={fadeInDown}
         transition={{ duration: 0.6 }}
       >
         <div className="p-12">
