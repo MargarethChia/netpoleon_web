@@ -97,16 +97,6 @@ export async function PUT(
       );
     }
 
-    // Validate article_link is only provided for articles
-    if (body.article_link && body.type !== 'article') {
-      return NextResponse.json(
-        {
-          error: 'Article link can only be provided for article type resources',
-        },
-        { status: 400 }
-      );
-    }
-
     const { data, error } = await supabase
       .from('resources')
       .update({
