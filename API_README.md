@@ -121,13 +121,20 @@ const resources = await resourcesApi.getAll();
 ```typescript
 {
   title: string,              // Required
-  content: string,            // Required
+  description?: string,       // Optional
+  content?: string,           // Required for blog posts, optional for articles
   type: 'article' | 'blog',   // Required
   published_at?: string,      // Optional (YYYY-MM-DD)
   is_published?: boolean,     // Optional (default: false)
-  cover_image_url?: string    // Optional (URL)
+  cover_image_url?: string,   // Optional (URL)
+  article_link?: string       // Required for articles, optional for blog posts
 }
 ```
+
+**Notes:**
+
+- For `type: 'article'`: `article_link` is required, `content` is optional
+- For `type: 'blog'`: `content` is required, `article_link` is optional
 
 **Response:** Created Resource object  
 **Example:**
@@ -303,197 +310,6 @@ All API routes include basic validation:
 
 All API routes return consistent error responses:
 
-```typescript
-// Success Response
-{
-  "id": 1,
-  "title": "Event Title",
-  // ... other fields
-}
-
-// Error Response
-{
-  "error": "Descriptive error message"
-}
 ```
 
-### HTTP Status Codes
-
-- `200` - Success (GET, PUT)
-- `201` - Created (POST)
-- `400` - Bad Request (validation errors)
-- `404` - Not Found (resource doesn't exist)
-- `500` - Internal Server Error (database/server issues)
-
-## 🗄️ Database Schema
-
-The API works with these Supabase tables:
-
-### Events Table
-
-```sql
-CREATE TABLE events (
-  id SERIAL PRIMARY KEY,
-  title TEXT NOT NULL,
-  event_date DATE NOT NULL,
-  location TEXT,
-  description TEXT,
-  link TEXT,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
 ```
-
-### Resources Table
-
-```sql
-CREATE TABLE resources (
-  id SERIAL PRIMARY KEY,
-  title TEXT NOT NULL,
-  content TEXT NOT NULL,
-  type TEXT NOT NULL CHECK (type IN ('article', 'blog')),
-  published_at DATE,
-  is_published BOOLEAN DEFAULT FALSE,
-  cover_image_url TEXT,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-### Vendors Table
-
-```sql
-CREATE TABLE vendors (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  logo_url TEXT,
-  description TEXT,
-  image_url TEXT,
-  link TEXT,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-### Featured Resources Table
-
-```sql
-CREATE TABLE featured_resource (
-  id SERIAL PRIMARY KEY,
-  resource_id INTEGER NOT NULL REFERENCES resources(id),
-  featured_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-## 🚀 Environment Setup
-
-### Required Environment Variables
-
-Create a `.env.local` file in your project root:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-```
-
-**Important:** Use the service role key (not the anon key) for admin operations.
-
-### Database Setup
-
-1. **Create Supabase Project** at [supabase.com](https://supabase.com)
-2. **Run the SQL schema** from the Database Schema section above
-3. **Set environment variables** with your project credentials
-4. **Restart development server** after setting environment variables
-
-## 🧪 Testing the API
-
-### Test Endpoint
-
-Visit `/api/test` to verify the API is working:
-
-```bash
-curl http://localhost:3000/api/test
-# Expected: {"message":"API is working!","timestamp":"..."}
-```
-
-### Testing Individual Endpoints
-
-```bash
-# Test events endpoint
-curl http://localhost:3000/api/events
-
-# Test resources endpoint
-curl http://localhost:3000/api/resources
-
-# Test vendors endpoint
-curl http://localhost:3000/api/vendors
-```
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-1. **"Unexpected token '<'" Error**
-   - Restart development server after creating API routes
-   - Check that route.ts files are in correct locations
-   - Verify file syntax and imports
-
-2. **"Failed to fetch" Errors**
-   - Check environment variables are set correctly
-   - Verify Supabase project is accessible
-   - Check database tables exist
-
-3. **TypeScript Errors**
-   - Ensure types are properly imported from `@/lib/api`
-   - Check that API functions are called with correct parameters
-
-### Debug Steps
-
-1. **Check Browser Network Tab** for API request details
-2. **Verify API Routes** are accessible directly in browser
-3. **Check Console Logs** for detailed error messages
-4. **Test with Simple Endpoints** like `/api/test` first
-
-## 📚 Best Practices
-
-### Component Implementation
-
-1. **Use proper loading states** for better UX
-2. **Implement error boundaries** for graceful error handling
-3. **Cache data appropriately** to avoid unnecessary API calls
-4. **Handle empty states** when no data is returned
-
-### API Usage
-
-1. **Always handle errors** with try-catch blocks
-2. **Use TypeScript types** for better development experience
-3. **Implement retry logic** for failed requests
-4. **Validate data** before sending to API
-
-### Performance
-
-1. **Use Promise.all** for multiple concurrent API calls
-2. **Implement pagination** for large datasets
-3. **Cache responses** when appropriate
-4. **Debounce search inputs** to avoid excessive API calls
-
-## 🔄 Migration from Old System
-
-If migrating from the previous direct database approach:
-
-1. **Replace `db.getEvents()`** with `eventsApi.getAll()`
-2. **Replace `db.createEvent()`** with `eventsApi.create()`
-3. **Update error handling** to catch API errors
-4. **Remove old database imports** and hooks
-5. **Update component state management** to use new API pattern
-
-## 📖 Additional Resources
-
-- [Next.js API Routes Documentation](https://nextjs.org/docs/api-routes/introduction)
-- [Supabase JavaScript Client](https://supabase.com/docs/reference/javascript)
-- [React Query for Advanced Caching](https://tanstack.com/query/latest)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-
----
-
-**Need Help?** Check the troubleshooting section or create an issue in the project repository.

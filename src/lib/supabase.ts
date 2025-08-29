@@ -28,11 +28,13 @@ export interface Event {
 export interface Resource {
   id: number;
   title: string;
+  description: string | null;
   content: string;
   type: 'article' | 'blog';
   published_at: string | null;
   is_published: boolean;
   cover_image_url: string | null;
+  article_link: string | null;
   created_at: string;
   updated_at: string;
 }

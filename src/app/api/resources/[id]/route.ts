@@ -66,9 +66,25 @@ export async function PUT(
     const body = await request.json();
 
     // Basic validation
-    if (!body.title || !body.content || !body.type) {
+    if (!body.title || !body.type) {
       return NextResponse.json(
-        { error: 'Title, content, and type are required' },
+        { error: 'Title and type are required' },
+        { status: 400 }
+      );
+    }
+
+    // Content is only required for blog posts, not for articles
+    if (body.type === 'blog' && !body.content) {
+      return NextResponse.json(
+        { error: 'Content is required for blog posts' },
+        { status: 400 }
+      );
+    }
+
+    // Article link is required for articles
+    if (body.type === 'article' && !body.article_link) {
+      return NextResponse.json(
+        { error: 'Article link is required for articles' },
         { status: 400 }
       );
     }
@@ -85,11 +101,13 @@ export async function PUT(
       .from('resources')
       .update({
         title: body.title,
+        description: body.description || null,
         content: body.content,
         type: body.type,
         published_at: body.published_at || null,
         is_published: body.is_published || false,
         cover_image_url: body.cover_image_url || null,
+        article_link: body.article_link || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', resourceId)

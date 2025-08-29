@@ -24,11 +24,13 @@ CONSTRAINT featured_resource_resource_id_fkey FOREIGN KEY (resource_id) REFERENC
 CREATE TABLE public.resources (
 id integer NOT NULL DEFAULT nextval('resources_id_seq'::regclass),
 title text NOT NULL,
+description text,
 content text NOT NULL,
 type text NOT NULL CHECK (type = ANY (ARRAY['article'::text, 'blog'::text])),
 published_at date,
 is_published boolean DEFAULT false,
 cover_image_url text,
+article_link text,
 created_at timestamp without time zone DEFAULT now(),
 updated_at timestamp without time zone DEFAULT now(),
 CONSTRAINT resources_pkey PRIMARY KEY (id)
