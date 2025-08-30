@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Search, ExternalLink, Calendar, Eye } from 'lucide-react';
 import { resourcesApi, type Resource, type FeaturedResource } from '@/lib/api';
 import Image from 'next/image';
+import Link from 'next/link';
+import { generateSlug } from '@/lib/utils';
 
 export default function ResourcesPage() {
   const [resources, setResources] = useState<Resource[]>([]);
@@ -126,10 +128,17 @@ export default function ResourcesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-white">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-xl text-gray-600">Loading resources...</p>
+      <div className="min-h-screen py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+          <motion.div
+            className="animate-pulse"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="h-12 bg-gray-200 rounded w-3/4 mx-auto mb-6"></div>
+            <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto"></div>
+          </motion.div>
         </div>
       </div>
     );
@@ -297,10 +306,13 @@ export default function ResourcesPage() {
                           Read Article
                         </a>
                       ) : (
-                        <button className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium text-base">
+                        <Link
+                          href={`/blog/${generateSlug(resource.title)}`}
+                          className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium text-base w-fit"
+                        >
                           <Eye className="h-4 w-4" />
                           Read More
-                        </button>
+                        </Link>
                       )}
                     </div>
                   </div>
@@ -450,10 +462,13 @@ export default function ResourcesPage() {
                           Read Article
                         </a>
                       ) : (
-                        <button className="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium self-start mt-auto">
+                        <Link
+                          href={`/blog/${generateSlug(resource.title)}`}
+                          className="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium self-start mt-auto"
+                        >
                           <Eye className="h-3 w-3" />
                           Read More
-                        </button>
+                        </Link>
                       )}
                     </div>
                   </div>
