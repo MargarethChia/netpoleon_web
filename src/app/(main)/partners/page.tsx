@@ -65,6 +65,11 @@ export default function OurVendors() {
     visible: { opacity: 1, y: 0 },
   };
 
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   const staggerContainer = {
     hidden: { opacity: 0 },
     visible: {
@@ -126,7 +131,7 @@ export default function OurVendors() {
   const hasMoreVendors = displayedVendors < vendors.length;
 
   return (
-    <div className="min-h-screen">
+    <div>
       {/* Header - Full Width */}
       <motion.section
         className="relative h-[500px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg z-50 mb-16"
@@ -350,7 +355,7 @@ export default function OurVendors() {
 
       {/* CTA Section */}
       <motion.section
-        className="text-center mt-16 relative h-[270px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600"
+        className="text-center mt-16 mb-0 relative h-[300px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600"
         style={{
           clipPath:
             'polygon(0 10%, 20% 5%, 50% 0, 80% 5%, 100% 10%, 100% 100%, 0 100%)',
@@ -358,7 +363,7 @@ export default function OurVendors() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        variants={fadeInDown}
+        variants={fadeInUp}
         transition={{ duration: 0.6 }}
       >
         <div className="p-12">

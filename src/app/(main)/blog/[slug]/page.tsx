@@ -45,7 +45,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     }
 
     return (
-      <div className="min-h-screen bg-white">
+      <div className="bg-white">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8">
           {/* Breadcrumb Navigation */}
           <nav className="mb-8 text-sm text-gray-600 flex items-center">
