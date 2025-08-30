@@ -126,10 +126,17 @@ export default function ResourcesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-white">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-xl text-gray-600">Loading resources...</p>
+      <div className="min-h-screen py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+          <motion.div
+            className="animate-pulse"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="h-12 bg-gray-200 rounded w-3/4 mx-auto mb-6"></div>
+            <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto"></div>
+          </motion.div>
         </div>
       </div>
     );
