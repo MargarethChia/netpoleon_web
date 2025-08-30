@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Search, ExternalLink, Calendar, Eye } from 'lucide-react';
 import { resourcesApi, type Resource, type FeaturedResource } from '@/lib/api';
 import Image from 'next/image';
+import Link from 'next/link';
+import { generateSlug } from '@/lib/utils';
 
 export default function ResourcesPage() {
   const [resources, setResources] = useState<Resource[]>([]);
@@ -304,10 +306,13 @@ export default function ResourcesPage() {
                           Read Article
                         </a>
                       ) : (
-                        <button className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium text-base">
+                        <Link
+                          href={`/blog/${generateSlug(resource.title)}`}
+                          className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium text-base w-fit"
+                        >
                           <Eye className="h-4 w-4" />
                           Read More
-                        </button>
+                        </Link>
                       )}
                     </div>
                   </div>
@@ -457,10 +462,13 @@ export default function ResourcesPage() {
                           Read Article
                         </a>
                       ) : (
-                        <button className="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium self-start mt-auto">
+                        <Link
+                          href={`/blog/${generateSlug(resource.title)}`}
+                          className="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium self-start mt-auto"
+                        >
                           <Eye className="h-3 w-3" />
                           Read More
-                        </button>
+                        </Link>
                       )}
                     </div>
                   </div>
