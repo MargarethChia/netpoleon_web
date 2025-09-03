@@ -27,7 +27,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   MoreHorizontal,
-  Eye,
   Edit,
   Trash2,
   Search,
@@ -103,11 +102,6 @@ export default function VendorsPage() {
     }
   };
 
-  const handleViewVendor = (vendorId: number) => {
-    // TODO: Navigate to view page
-    console.log('View vendor:', vendorId);
-  };
-
   const handleVisitWebsite = (url: string) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
@@ -178,7 +172,7 @@ export default function VendorsPage() {
       >
         <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
           {/* Portfolio Upload Loading */}
-          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+          <Card className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500">
             <CardHeader>
               <div className="h-6 w-48 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
               <div className="h-4 w-64 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -189,7 +183,7 @@ export default function VendorsPage() {
           </Card>
 
           {/* Search Loading */}
-          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+          <Card className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500">
             <CardHeader>
               <div className="h-6 w-32 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
               <div className="h-4 w-64 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -201,7 +195,7 @@ export default function VendorsPage() {
 
           {/* Vendors Table Loading */}
           <Card
-            className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+            className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
             style={{ animationDelay: '100ms' }}
           >
             <CardHeader>
@@ -346,7 +340,9 @@ export default function VendorsPage() {
                   <TableRow>
                     <TableHead>Vendor</TableHead>
                     <TableHead>Description</TableHead>
+                    <TableHead>Type</TableHead>
                     <TableHead>Logo</TableHead>
+                    <TableHead>Diagram</TableHead>
                     <TableHead>Website</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead className="w-[50px]"></TableHead>
@@ -371,10 +367,15 @@ export default function VendorsPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="max-w-[300px]">
+                        <div className="max-w-[200px] truncate">
                           <p className="text-sm text-muted-foreground line-clamp-3">
                             {vendor.description}
                           </p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="max-w-[120px] truncate">
+                          {vendor.type}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -386,6 +387,18 @@ export default function VendorsPage() {
                         ) : (
                           <span className="text-muted-foreground text-sm">
                             No logo
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {vendor.diagram_url ? (
+                          <Badge variant="outline">
+                            <ImageIcon className="h-3 w-3 mr-1" />
+                            Diagram
+                          </Badge>
+                        ) : (
+                          <span className="text-muted-foreground text-sm">
+                            No diagram
                           </span>
                         )}
                       </TableCell>
@@ -422,12 +435,6 @@ export default function VendorsPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => handleViewVendor(vendor.id)}
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Details
-                            </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleEditVendor(vendor.id)}
                             >

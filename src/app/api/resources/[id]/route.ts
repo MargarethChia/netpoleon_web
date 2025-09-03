@@ -65,16 +65,54 @@ export async function PUT(
 
     const body = await request.json();
 
-    // Basic validation
-    if (!body.title || !body.content || !body.type) {
+    // For partial updates, we need to fetch the existing resource first
+    const { data: existingResource, error: fetchError } = await supabase
+      .from('resources')
+      .select('*')
+      .eq('id', resourceId)
+      .single();
+
+    if (fetchError) {
+      console.error('Error fetching existing resource:', fetchError);
       return NextResponse.json(
-        { error: 'Title, content, and type are required' },
+        { error: 'Failed to fetch existing resource' },
+        { status: 500 }
+      );
+    }
+
+    // Merge existing data with updates
+    const updatedData = {
+      ...existingResource,
+      ...body,
+      updated_at: new Date().toISOString(),
+    };
+
+    // Basic validation for the merged data
+    if (!updatedData.title || !updatedData.type) {
+      return NextResponse.json(
+        { error: 'Title and type are required' },
+        { status: 400 }
+      );
+    }
+
+    // Content is only required for blog posts, not for articles
+    if (updatedData.type === 'blog' && !updatedData.content) {
+      return NextResponse.json(
+        { error: 'Content is required for blog posts' },
+        { status: 400 }
+      );
+    }
+
+    // Article link is required for articles
+    if (updatedData.type === 'article' && !updatedData.article_link) {
+      return NextResponse.json(
+        { error: 'Article link is required for articles' },
         { status: 400 }
       );
     }
 
     // Validate type
-    if (!['article', 'blog'].includes(body.type)) {
+    if (!['article', 'blog'].includes(updatedData.type)) {
       return NextResponse.json(
         { error: 'Type must be either "article" or "blog"' },
         { status: 400 }
@@ -83,15 +121,7 @@ export async function PUT(
 
     const { data, error } = await supabase
       .from('resources')
-      .update({
-        title: body.title,
-        content: body.content,
-        type: body.type,
-        published_at: body.published_at || null,
-        is_published: body.is_published || false,
-        cover_image_url: body.cover_image_url || null,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updatedData)
       .eq('id', resourceId)
       .select()
       .single();

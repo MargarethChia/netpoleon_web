@@ -28,11 +28,13 @@ export interface Event {
 export interface Resource {
   id: number;
   title: string;
+  description: string | null;
   content: string;
   type: 'article' | 'blog';
   published_at: string | null;
   is_published: boolean;
   cover_image_url: string | null;
+  article_link: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -45,6 +47,8 @@ export interface Vendor {
   image_url: string | null;
   link: string | null;
   content: string | null;
+  type: string | null;
+  diagram_url: string | null;
   created_at: string;
   updated_at: string;
 }

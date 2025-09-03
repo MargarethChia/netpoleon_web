@@ -14,6 +14,8 @@ interface Vendor {
   logo_url: string | null;
   image_url: string | null;
   link: string | null;
+  type: string | null;
+  diagram_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -183,6 +185,27 @@ export default function VendorDetailPage() {
               </motion.div>
             )}
 
+            {/* Vendor Diagram */}
+            {vendor.diagram_url && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="bg-white rounded-lg shadow-sm border p-6"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Architecture Diagram
+                </h3>
+                <Image
+                  src={vendor.diagram_url}
+                  alt={`${vendor.name} diagram`}
+                  width={400}
+                  height={256}
+                  className="w-full h-64 object-contain rounded-lg bg-gray-50"
+                />
+              </motion.div>
+            )}
+
             {/* Quick Info */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -222,6 +245,12 @@ export default function VendorDetailPage() {
                     </p>
                   </div>
                 )}
+                <div>
+                  <span className="text-sm font-medium text-gray-500">
+                    Type:
+                  </span>
+                  <p className="text-gray-900">{vendor.type}</p>
+                </div>
               </div>
             </motion.div>
 

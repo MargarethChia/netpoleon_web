@@ -28,7 +28,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   MoreHorizontal,
-  Eye,
   Edit,
   Trash2,
   Search,
@@ -91,11 +90,6 @@ export default function ResourcesPage() {
       setResourceToDelete(resource);
       setShowDeleteDialog(true);
     }
-  };
-
-  const handleViewResource = (resourceId: number) => {
-    // TODO: Navigate to view page
-    console.log('View resource:', resourceId);
   };
 
   const handleTogglePublish = async (resourceId: number) => {
@@ -177,7 +171,7 @@ export default function ResourcesPage() {
       >
         <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
           {/* Search Loading */}
-          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+          <Card className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500">
             <CardHeader>
               <div className="h-6 w-36 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
               <div className="h-4 w-64 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -189,7 +183,7 @@ export default function ResourcesPage() {
 
           {/* Resources Table Loading */}
           <Card
-            className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+            className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
             style={{ animationDelay: '100ms' }}
           >
             <CardHeader>
@@ -306,8 +300,21 @@ export default function ResourcesPage() {
                           <div>
                             <div className="font-medium">{resource.title}</div>
                             <div className="text-sm text-muted-foreground max-w-[300px] truncate">
-                              {resource.content}
+                              {resource.description || 'No description'}
                             </div>
+                            {resource.type === 'article' &&
+                              resource.article_link && (
+                                <div className="text-xs text-blue-600 mt-1">
+                                  <a
+                                    href={resource.article_link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:underline"
+                                  >
+                                    View Article →
+                                  </a>
+                                </div>
+                              )}
                           </div>
                         </div>
                       </TableCell>
@@ -367,12 +374,6 @@ export default function ResourcesPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => handleViewResource(resource.id)}
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Details
-                            </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleEditResource(resource.id)}
                             >
