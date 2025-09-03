@@ -92,18 +92,18 @@ export default function Statistics() {
   return (
     <div
       ref={ref}
-      className="relative w-full h-[600px] bg-gradient-to-r from-orange-400 to-amber-600"
+      className="relative w-full h-[400px] bg-gradient-to-r from-orange-400 to-amber-600"
     >
       {/* Statistics Overlay */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="flex space-x-20 px-12">
+        <div className="flex space-x-16 px-8">
           {/* Stat 1 */}
           <div className="text-center">
             <div className="relative">
               <div className="w-3 h-3 bg-white rounded-full mx-auto mb-3"></div>
               <div className="w-1 h-12 bg-white mx-auto"></div>
             </div>
-            <div className="text-6xl font-bold text-white mb-3">
+            <div className="text-5xl font-bold text-white mb-2">
               {stats[0].current}
               {stats[0].current === 0 ? '' : stats[0].suffix}
             </div>
@@ -118,7 +118,7 @@ export default function Statistics() {
               <div className="w-3 h-3 bg-white rounded-full mx-auto mb-3"></div>
               <div className="w-1 h-12 bg-white mx-auto"></div>
             </div>
-            <div className="text-6xl font-bold text-white mb-3">
+            <div className="text-5xl font-bold text-white mb-2">
               {stats[1].current}
               {stats[1].current === 0 ? '' : stats[1].suffix}
             </div>
@@ -133,7 +133,7 @@ export default function Statistics() {
               <div className="w-3 h-3 bg-white rounded-full mx-auto mb-3"></div>
               <div className="w-1 h-12 bg-white mx-auto"></div>
             </div>
-            <div className="text-6xl font-bold text-white mb-3">
+            <div className="text-5xl font-bold text-white mb-2">
               {stats[2].current}
               {stats[2].current === 0 ? '' : stats[2].suffix}
             </div>
@@ -148,7 +148,7 @@ export default function Statistics() {
               <div className="w-3 h-3 bg-white rounded-full mx-auto mb-3"></div>
               <div className="w-1 h-12 bg-white mx-auto"></div>
             </div>
-            <div className="text-6xl font-bold text-white mb-3">
+            <div className="text-5xl font-bold text-white mb-2">
               {stats[3].current}
               {stats[3].current === 0 ? '' : stats[3].suffix}
             </div>

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { vendorsApi, type Vendor } from '@/lib/api';
 
 interface SubCategory {
   id: string;
@@ -607,6 +608,7 @@ export default function ForceBasedGraph() {
   const [clickedNode, setClickedNode] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
   const [showFullDiagram, setShowFullDiagram] = useState(false);
+  const [, setVendors] = useState<Vendor[]>([]);
   const [dimensions, setDimensions] = useState({
     width: 800,
     height: 600,
@@ -647,6 +649,21 @@ export default function ForceBasedGraph() {
       resizeObserver.disconnect();
       window.removeEventListener('resize', updateDimensions);
     };
+  }, []);
+
+  // Fetch vendors
+  useEffect(() => {
+    const fetchVendors = async () => {
+      try {
+        const data = await vendorsApi.getAll();
+        const vendorsWithLogos = data.filter(v => v.logo_url);
+        setVendors(vendorsWithLogos);
+      } catch (error) {
+        console.error('Error fetching vendors:', error);
+      }
+    };
+
+    fetchVendors();
   }, []);
 
   const handleNodeClick = (nodeId: string) => {
