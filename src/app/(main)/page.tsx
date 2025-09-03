@@ -1,9 +1,10 @@
 import HeroSection from '../components/HeroSection';
 import ImageTextSection from '../components/ImageTextSection';
 import VendorCarousel from '../components/VendorCarousel';
-import Statistics from '../components/Statistics';
+//import Statistics from '../components/Statistics';
 import NewsSection from '../components/CardsSection';
 import GraphSection from '../components/GraphSection';
+import Statistics from '../components/Statistics';
 
 // import AboutSection from "../components/AboutSection";
 // import InfoSection from "../components/InfoSection";
@@ -11,8 +12,9 @@ import GraphSection from '../components/GraphSection';
 export default function Home() {
   // Home Page
   const hero = {
-    title: 'Netpoleon ANZ',
-    subtitle: 'Innovative Cybersecurity Solutions',
+    title: 'Secure, defend, and thrive everywhere',
+    subtitle:
+      'We safeguard your data, systems, and networks with cutting-edge cybersecurity solutions. Our platform empowers businesses to stay resilient, compliant, and ready for the future.',
     primaryButtonText: 'Get Started Today',
     secondaryButtonText: 'Learn More',
     heroImage: '/images/hero/hero-main.jpg',
@@ -38,15 +40,6 @@ export default function Home() {
       ctaText: 'Explore Our Work',
       ctaLink: '#',
     },
-  ];
-
-  const vendors = [
-    { id: 1, name: 'Microsoft', logo: '/images/logos/logo-1.png' },
-    { id: 2, name: 'Google', logo: '/images/logos/logo-2.png' },
-    { id: 3, name: 'Amazon', logo: '/images/logos/logo-3.png' },
-    { id: 4, name: 'Apple', logo: '/images/logos/logo-4.png' },
-    { id: 5, name: 'Meta', logo: '/images/logos/logo-5.png' },
-    { id: 6, name: 'Netflix', logo: '/images/logos/logo-6.png' },
   ];
 
   // const info = {
@@ -118,16 +111,12 @@ export default function Home() {
   return (
     <div>
       <HeroSection {...hero} />
-      <VendorCarousel
-        title="Trusted by Industry Leaders"
-        subtitle="We work with companies of all sizes to deliver exceptional results"
-        vendors={vendors}
-      />
+      <VendorCarousel title="Trusted by 10,000+ customers, from startup to enterprise " />
       {imageTextSections.map((section, idx) => (
         <ImageTextSection key={idx} {...section} />
       ))}
-      <GraphSection />
       <Statistics />
+      <GraphSection />
       <NewsSection {...news} />
     </div>
   );

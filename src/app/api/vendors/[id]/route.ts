@@ -71,9 +71,10 @@ export async function PUT(
         content: body.content,
         logo_url: body.logo_url || null,
         description: body.description || null,
-        //content: body.content || null,
         image_url: body.image_url || null,
         link: body.link || null,
+        type: body.type || null,
+        diagram_url: body.diagram_url || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', vendorId)

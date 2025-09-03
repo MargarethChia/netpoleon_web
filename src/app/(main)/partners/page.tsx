@@ -250,7 +250,7 @@ export default function OurVendors() {
                   <Link href={`/partners/${vendor.id}`} className="group block">
                     <div className="bg-white rounded-lg shadow-sm border overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
                       <motion.div
-                        className="aspect-video overflow-hidden bg-gray-200 flex items-center justify-center"
+                        className="aspect-video overflow-hidden bg-white flex items-center justify-center p-8"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                       >
@@ -260,7 +260,7 @@ export default function OurVendors() {
                             alt={`${vendor.name} logo`}
                             width={400}
                             height={225}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                           />
                         ) : (
                           <span className="text-gray-500 text-sm font-normal">
