@@ -11,7 +11,6 @@ interface Vendor {
 
 interface VendorCarouselProps {
   title: string;
-  subtitle: string;
   vendors: Vendor[];
 }
 
