@@ -160,14 +160,14 @@ export default function VendorDetailPage() {
                 )}
               </div>
             </div>
-            <div className="aspect-video overflow-hidden rounded-lg bg-gray-200 flex items-center justify-center">
+            <div className="aspect-video overflow-hidden rounded-lg bg-white flex items-center justify-center p-8">
               {vendor.logo_url ? (
                 <Image
                   src={vendor.logo_url}
                   alt={`${vendor.name} logo`}
                   width={400}
                   height={225}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               ) : (
                 <span className="text-gray-500">{vendor.name} Logo</span>
