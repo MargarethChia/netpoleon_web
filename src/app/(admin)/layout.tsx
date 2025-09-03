@@ -1,21 +1,21 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./admin.css";
-
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './admin.css';
+import { ToastContainer } from '@/components/ui/toast';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Netpoleon Admin Dashboard",
-  description: "Administrative dashboard for Netpoleon website management",
+  title: 'Netpoleon Admin Dashboard',
+  description: 'Administrative dashboard for Netpoleon website management',
 };
 
 export default function AdminLayout({
@@ -29,7 +29,8 @@ export default function AdminLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <ToastContainer />
       </body>
     </html>
   );
-} 
+}
