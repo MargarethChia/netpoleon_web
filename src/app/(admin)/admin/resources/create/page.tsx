@@ -358,25 +358,6 @@ export default function CreateResourcePage() {
                         </div>
                       </div>
                     )}
-
-                    {/* Manual URL Input */}
-                    <div className="space-y-1">
-                      <Label
-                        htmlFor="cover_image_url"
-                        className="text-sm text-muted-foreground"
-                      >
-                        Or enter image URL manually
-                      </Label>
-                      <Input
-                        id="cover_image_url"
-                        value={formData.cover_image_url}
-                        onChange={e =>
-                          handleInputChange('cover_image_url', e.target.value)
-                        }
-                        placeholder="https://example.com/image.jpg"
-                        type="url"
-                      />
-                    </div>
                   </div>
                 </div>
 

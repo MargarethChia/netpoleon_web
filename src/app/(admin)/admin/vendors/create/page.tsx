@@ -27,6 +27,13 @@ import { vendorsApi } from '@/lib/api';
 import { showToast } from '../../../../../components/ui/toast';
 import AdminLayout from '../../../components/AdminLayout';
 import { uploadImage } from '../../../../../lib/storage';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export default function CreateVendorPage() {
   const router = useRouter();
@@ -40,6 +47,7 @@ export default function CreateVendorPage() {
     logo_url: '',
     image_url: '',
     link: '',
+    type: '',
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -237,6 +245,41 @@ export default function CreateVendorPage() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="type">Type</Label>
+                  <Select
+                    value={formData.type}
+                    onValueChange={value => handleInputChange('type', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select vendor type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Application & Cloud Security">
+                        Application & Cloud Security
+                      </SelectItem>
+                      <SelectItem value="Identity & Access">
+                        Identity & Access
+                      </SelectItem>
+                      <SelectItem value="Security Operations">
+                        Security Operations
+                      </SelectItem>
+                      <SelectItem value="Emerging Security">
+                        Emerging Security
+                      </SelectItem>
+                      <SelectItem value="Network & Perimeter Security">
+                        Network & Perimeter Security
+                      </SelectItem>
+                      <SelectItem value="Endpoint Security">
+                        Endpoint Security
+                      </SelectItem>
+                      <SelectItem value="Data Security">
+                        Data Security
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="content">Content</Label>
                   <Textarea
                     id="content"
@@ -322,25 +365,6 @@ export default function CreateVendorPage() {
                       </div>
                     </div>
                   )}
-
-                  {/* Manual URL Input */}
-                  <div className="space-y-1">
-                    <Label
-                      htmlFor="logo_url"
-                      className="text-sm text-muted-foreground"
-                    >
-                      Or enter logo URL manually
-                    </Label>
-                    <Input
-                      id="logo_url"
-                      value={formData.logo_url}
-                      onChange={e =>
-                        handleInputChange('logo_url', e.target.value)
-                      }
-                      placeholder="https://example.com/logo.png"
-                      type="url"
-                    />
-                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -401,25 +425,6 @@ export default function CreateVendorPage() {
                       </div>
                     </div>
                   )}
-
-                  {/* Manual URL Input */}
-                  <div className="space-y-1">
-                    <Label
-                      htmlFor="image_url"
-                      className="text-sm text-muted-foreground"
-                    >
-                      Or enter image URL manually
-                    </Label>
-                    <Input
-                      id="image_url"
-                      value={formData.image_url}
-                      onChange={e =>
-                        handleInputChange('image_url', e.target.value)
-                      }
-                      placeholder="https://example.com/image.jpg"
-                      type="url"
-                    />
-                  </div>
                 </div>
               </CardContent>
             </Card>

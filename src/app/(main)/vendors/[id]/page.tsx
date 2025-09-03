@@ -14,6 +14,7 @@ interface Vendor {
   logo_url: string | null;
   image_url: string | null;
   link: string | null;
+  type: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -222,6 +223,12 @@ export default function VendorDetailPage() {
                     </p>
                   </div>
                 )}
+                <div>
+                  <span className="text-sm font-medium text-gray-500">
+                    Type:
+                  </span>
+                  <p className="text-gray-900">{vendor.type}</p>
+                </div>
               </div>
             </motion.div>
 

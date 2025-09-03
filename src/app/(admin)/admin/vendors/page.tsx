@@ -340,6 +340,7 @@ export default function VendorsPage() {
                   <TableRow>
                     <TableHead>Vendor</TableHead>
                     <TableHead>Description</TableHead>
+                    <TableHead>Type</TableHead>
                     <TableHead>Logo</TableHead>
                     <TableHead>Website</TableHead>
                     <TableHead>Created</TableHead>
@@ -371,6 +372,7 @@ export default function VendorsPage() {
                           </p>
                         </div>
                       </TableCell>
+                      <TableCell>{vendor.type}</TableCell>
                       <TableCell>
                         {vendor.logo_url ? (
                           <Badge variant="outline">
