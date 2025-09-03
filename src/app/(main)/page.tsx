@@ -11,8 +11,9 @@ import GraphSection from '../components/GraphSection';
 export default function Home() {
   // Home Page
   const hero = {
-    title: 'Netpoleon ANZ',
-    subtitle: 'Innovative Cybersecurity Solutions',
+    title: 'Secure, defend, and thrive everywhere',
+    subtitle:
+      'We safeguard your data, systems, and networks with cutting-edge cybersecurity solutions. Our platform empowers businesses to stay resilient, compliant, and ready for the future.',
     primaryButtonText: 'Get Started Today',
     secondaryButtonText: 'Learn More',
     heroImage: '/images/hero/hero-main.jpg',
@@ -119,8 +120,7 @@ export default function Home() {
     <div>
       <HeroSection {...hero} />
       <VendorCarousel
-        title="Trusted by Industry Leaders"
-        subtitle="We work with companies of all sizes to deliver exceptional results"
+        title="Trusted by 10,000+ customers, from startup to enterprise "
         vendors={vendors}
       />
       {imageTextSections.map((section, idx) => (

@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 interface SubCategory {
   id: string;
@@ -39,6 +40,175 @@ const getCurvedPositions = (
   return positions;
 };
 
+// Function to calculate custom positions for Network & Perimeter Security
+const getNetworkPerimeterPositions = (
+  centerX: number,
+  centerY: number,
+  subCategories: SubCategory[]
+) => {
+  const positions: { x: number; y: number; layer: number }[] = [];
+
+  // Custom positions based on the image layout, centered around the original center
+  const customPositions = [
+    { x: centerX - 140, y: centerY - 150 }, // Top-left: SSE SASE SWG NGFW
+    { x: centerX + 15, y: centerY - 150 }, // Top-middle: IDS NDR
+    { x: centerX + 150, y: centerY - 190 }, // Top-right: NSPM
+    { x: centerX - 80, y: centerY - 20 }, // Middle-left: Micro-segmentation
+    { x: centerX + 90, y: centerY - 40 }, // Middle-right: Visibility CAASM
+    { x: centerX - 120, y: centerY + 120 }, // Bottom-left: SWG VPN ZTNA
+    { x: centerX + 30, y: centerY + 80 }, // Bottom-right: Email Security
+  ];
+
+  for (let i = 0; i < subCategories.length && i < customPositions.length; i++) {
+    positions.push({
+      ...customPositions[i],
+      layer: 0,
+    });
+  }
+
+  return positions;
+};
+
+// Function to calculate custom positions for Endpoint Security
+const getEndpointSecurityPositions = (
+  centerX: number,
+  centerY: number,
+  subCategories: SubCategory[]
+) => {
+  const positions: { x: number; y: number; layer: number }[] = [];
+
+  // Custom positions based on the image layout, centered around the original center
+  const customPositions = [
+    { x: centerX - 120, y: centerY - 140 }, // Top-left: SDP DNS
+    { x: centerX + 50, y: centerY - 100 }, // Top-right: Browser Isolation
+    { x: centerX - 80, y: centerY - 0 }, // Middle-left: Endpoint Protection
+    { x: centerX + 50, y: centerY + 100 }, // Bottom-left: OT ICS IoT
+    { x: centerX - 120, y: centerY + 140 }, // Middle-right: EDR
+    { x: centerX + 80, y: centerY + 60 }, // Bottom-right: Endpoint Security
+  ];
+
+  for (let i = 0; i < subCategories.length && i < customPositions.length; i++) {
+    positions.push({
+      ...customPositions[i],
+      layer: 0,
+    });
+  }
+
+  return positions;
+};
+
+// Function to calculate custom positions for Data Security
+const getDataSecurityPositions = (
+  centerX: number,
+  centerY: number,
+  subCategories: SubCategory[]
+) => {
+  const positions: { x: number; y: number; layer: number }[] = [];
+
+  // Custom positions based on the image layout, centered around the original center
+  const customPositions = [
+    { x: centerX - 120, y: centerY - 140 }, // Top-left: Data Encryption & Tokenization
+    { x: centerX - 80, y: centerY - 0 }, // Top-right: Data Discovery & Classification
+    { x: centerX - 120, y: centerY + 140 }, // Bottom-center: DSPM DLP
+  ];
+
+  for (let i = 0; i < subCategories.length && i < customPositions.length; i++) {
+    positions.push({
+      ...customPositions[i],
+      layer: 0,
+    });
+  }
+
+  return positions;
+};
+
+// Function to calculate custom positions for Application & Cloud Security
+const getApplicationCloudSecurityPositions = (
+  centerX: number,
+  centerY: number,
+  subCategories: SubCategory[]
+) => {
+  const positions: { x: number; y: number; layer: number }[] = [];
+
+  // Custom positions based on the image layout, centered around the original center
+  const customPositions = [
+    { x: centerX - 140, y: centerY - 150 }, // Top-left: APPSEC API Security
+    { x: centerX + 15, y: centerY - 150 }, // Top-middle: RASP WAF CASB
+    { x: centerX + 150, y: centerY - 190 }, // Top-right: CWPP CNAPP CSPM
+    { x: centerX - 80, y: centerY - 20 }, // Middle-left: SSPM KSPM
+    { x: centerX + 90, y: centerY - 40 }, // Middle-right: Container Security
+    { x: centerX - 120, y: centerY + 120 }, // Bottom-left: DDOS BOT + BPT Protection
+    { x: centerX + 30, y: centerY + 80 }, // Bottom-right: (if needed)
+  ];
+
+  for (let i = 0; i < subCategories.length && i < customPositions.length; i++) {
+    positions.push({
+      ...customPositions[i],
+      layer: 0,
+    });
+  }
+
+  return positions;
+};
+
+// Function to calculate custom positions for Emerging Security
+const getEmergingSecurityPositions = (
+  centerX: number,
+  centerY: number,
+  subCategories: SubCategory[]
+) => {
+  const positions: { x: number; y: number; layer: number }[] = [];
+
+  // Custom positions based on the image layout, centered around the original center
+  const customPositions = [
+    { x: centerX - 120, y: centerY - 140 }, // Top-left: AI Security
+    { x: centerX - 80, y: centerY - 0 }, // Top-right: Security Awareness Training
+    { x: centerX - 120, y: centerY + 140 }, // Bottom-center: Anti Phishing Training
+  ];
+
+  for (let i = 0; i < subCategories.length && i < customPositions.length; i++) {
+    positions.push({
+      ...customPositions[i],
+      layer: 0,
+    });
+  }
+
+  return positions;
+};
+
+// Function to calculate custom positions for Security Operations
+const getSecurityOperationsPositions = (
+  centerX: number,
+  centerY: number,
+  subCategories: SubCategory[]
+) => {
+  const positions: { x: number; y: number; layer: number }[] = [];
+
+  // Custom positions based on the image layout, centered around the original center
+  const customPositions = [
+    { x: centerX - 120, y: centerY - 160 }, // TPRM GRC CAASM
+    { x: centerX - 80, y: centerY - 0 }, // SRM Forensics
+    { x: centerX - 120, y: centerY + 160 }, // SIEM SOAR UEBA SOC
+
+    { x: centerX + 30, y: centerY - 130 }, // Backup & Disaster Recov
+    { x: centerX + 60, y: centerY + 50 }, // XDR MDR
+    { x: centerX + 30, y: centerY + 190 }, // CTEM BAS
+
+    { x: centerX + 160, y: centerY - 70 }, // Incident Response
+    { x: centerX + 170, y: centerY + 130 }, // DevSecOps
+    { x: centerX + 270, y: centerY + 20 }, // Tip
+  ];
+
+  for (let i = 0; i < subCategories.length && i < customPositions.length; i++) {
+    positions.push({
+      ...customPositions[i],
+      layer: 0,
+    });
+  }
+
+  return positions;
+};
+
 // Function to calculate multi-layer positions
 const getMultiLayerPositions = (
   centerX: number,
@@ -46,6 +216,39 @@ const getMultiLayerPositions = (
   subCategories: SubCategory[],
   nodeIndex: number
 ) => {
+  // Special case for Application & Cloud Security
+  if (nodeIndex === 0) {
+    return getApplicationCloudSecurityPositions(
+      centerX,
+      centerY,
+      subCategories
+    );
+  }
+
+  // Special case for Emerging Security
+  if (nodeIndex === 3) {
+    return getEmergingSecurityPositions(centerX, centerY, subCategories);
+  }
+
+  // Special case for Security Operations
+  if (nodeIndex === 2) {
+    return getSecurityOperationsPositions(centerX, centerY, subCategories);
+  }
+
+  // Special case for Network & Perimeter Security
+  if (nodeIndex === 4) {
+    return getNetworkPerimeterPositions(centerX, centerY, subCategories);
+  }
+
+  // Special case for Endpoint Security
+  if (nodeIndex === 5) {
+    return getEndpointSecurityPositions(centerX, centerY, subCategories);
+  }
+
+  if (nodeIndex === 6) {
+    return getDataSecurityPositions(centerX, centerY, subCategories);
+  }
+
   const positions: { x: number; y: number; layer: number }[] = [];
 
   // Dynamic first layer count: 4-6 by default, 6-8 if more than 10 total nodes
@@ -59,36 +262,36 @@ const getMultiLayerPositions = (
   const secondLayerCount = subCategories.length - firstLayerCount;
 
   // Base radius for first layer - increased distance from main node
-  const firstLayerRadius = 200;
-  const secondLayerRadius = 300; // 100px further out
+  const firstLayerRadius = 280; // Increased from 200
+  const secondLayerRadius = 380; // Increased from 300
 
   let startAngle, endAngle;
 
   // Adjust angles based on main node position for better visual flow
   if (nodeIndex === 1) {
-    // Protect (right side)
-    startAngle = -Math.PI / 3 - Math.PI / 4;
-    endAngle = Math.PI / 3 - Math.PI / 4;
+    // Identity & Access (top-right)
+    startAngle = -Math.PI / 6;
+    endAngle = Math.PI / 6;
   } else if (nodeIndex === 2) {
-    // Detect (bottom right)
-    startAngle = -Math.PI / 4 + Math.PI / 4;
-    endAngle = Math.PI / 4;
+    // Security Operations (bottom-right)
+    startAngle = Math.PI / 6;
+    endAngle = Math.PI / 2;
   } else if (nodeIndex === 3) {
-    // Respond (bottom left)
-    startAngle = (9.5 * Math.PI) / 4;
-    endAngle = (10.5 * Math.PI) / 4;
-  } else if (nodeIndex === 4) {
-    // Recover (left side)
-    startAngle = (2 * Math.PI) / 4;
-    endAngle = (3.25 * Math.PI) / 4;
+    // Emerging Security (bottom)
+    startAngle = Math.PI / 2;
+    endAngle = (5 * Math.PI) / 6;
   } else if (nodeIndex === 5) {
-    // Govern (top left)
-    startAngle = (3 * Math.PI) / 4;
-    endAngle = (5 * Math.PI) / 4;
+    // Endpoint Security (left)
+    startAngle = (7 * Math.PI) / 6;
+    endAngle = (3 * Math.PI) / 2;
+  } else if (nodeIndex === 6) {
+    // Data Security (top-left)
+    startAngle = (3 * Math.PI) / 2;
+    endAngle = (11 * Math.PI) / 6;
   } else {
-    // Identify (top)
-    startAngle = (4.75 * Math.PI) / 4;
-    endAngle = (5.75 * Math.PI) / 4;
+    // Application & Cloud Security (top)
+    startAngle = (11 * Math.PI) / 6;
+    endAngle = (13 * Math.PI) / 6;
   }
 
   // First layer
@@ -134,243 +337,267 @@ const getMultiLayerPositions = (
 
 const mainNodes: MainNode[] = [
   {
-    id: 'identify',
-    label: 'Identify',
-    color: '#E6E6FA',
+    id: 'application-cloud-security',
+    label: 'Application & Cloud Security',
+    color: '#FFBD59FF', // Yellowish-orange
     subCategories: [
-      {
-        id: 'visibility-caasm',
-        label: 'Visibility CAASM',
-        color: '#8B4513',
-        tag: 'Network & Perimeter Security',
-      },
-      {
-        id: 'dast-sast-sca',
-        label: 'DAST SAST SCA',
-        color: '#FF8C00',
-        tag: 'Application & Cloud Security',
-      },
-    ],
-  },
-  {
-    id: 'protect',
-    label: 'Protect',
-    color: '#E6E6FA',
-    subCategories: [
-      {
-        id: 'ddos-protection',
-        label: 'DDOS BOT + BOT Protection',
-        color: '#8B4513',
-        tag: 'Network & Perimeter Security',
-      },
-      {
-        id: 'microsegmentation',
-        label: 'Micro Segmentation',
-        color: '#8B4513',
-        tag: 'Network & Perimeter Security',
-      },
-      {
-        id: 'swg',
-        label: 'SWG',
-        color: '#8B4513',
-        tag: 'Network & Perimeter Security',
-      },
-      {
-        id: 'vpn',
-        label: 'VPN',
-        color: '#8B4513',
-        tag: 'Network & Perimeter Security',
-      },
-      {
-        id: 'data-discovery',
-        label: 'Data Discovery & Classification',
-        color: '#FF8C00',
-        tag: 'Data Security',
-      },
-      {
-        id: 'dspm-dlp',
-        label: 'DSPM DLP',
-        color: '#FF8C00',
-        tag: 'Data Security',
-      },
-      {
-        id: 'data-encryption',
-        label: 'Data Encryption & Tokenization',
-        color: '#FF8C00',
-        tag: 'Data Security',
-      },
-      {
-        id: 'endpoint-protection',
-        label: 'Endpoint Protection',
-        color: '#A0522D',
-        tag: 'Endpoint Security',
-      },
-      {
-        id: 'ctem-bas',
-        label: 'CTEM BAS',
-        color: '#A0522D',
-        tag: 'Endpoint Security',
-      },
-      {
-        id: 'ztna-sdp-dns',
-        label: 'ZTNA SDP DNS',
-        color: '#A0522D',
-        tag: 'Endpoint Security',
-      },
-      {
-        id: 'sse-sase-swg-ngfw',
-        label: 'SSE SASE SWG NGFW',
-        color: '#A0522D',
-        tag: 'Endpoint Security',
-      },
       {
         id: 'appsec-api',
         label: 'APPSEC API Security',
-        color: '#FFD700',
+        color: '#FFBD59FF',
         tag: 'Application & Cloud Security',
       },
       {
         id: 'rasp-waf-casb',
         label: 'RASP WAF CASB',
-        color: '#FFD700',
+        color: '#FFBD59FF',
         tag: 'Application & Cloud Security',
       },
       {
-        id: 'iam-iga-pam',
-        label: 'IAM IGA PAM',
-        color: '#FFB6C1',
-        tag: 'Identity & Access',
-      },
-      {
-        id: 'ai-security',
-        label: 'AI Security',
-        color: '#696969',
-        tag: 'Emerging Security',
-      },
-    ],
-  },
-  {
-    id: 'detect',
-    label: 'Detect',
-    color: '#E6E6FA',
-    subCategories: [
-      {
-        id: 'ot-ics-iot',
-        label: 'OT ICS IoT',
-        color: '#8B4513',
-        tag: 'Network & Perimeter Security',
-      },
-      {
-        id: 'edr-xdr-ndr-mdr',
-        label: 'EDR XDR NDR MDR',
-        color: '#000080',
-        tag: 'Security Operations',
-      },
-    ],
-  },
-  {
-    id: 'respond',
-    label: 'Respond',
-    color: '#E6E6FA',
-    subCategories: [
-      {
-        id: 'ids-tip',
-        label: 'IDS TIP',
-        color: '#000080',
-        tag: 'Security Operations',
-      },
-      {
-        id: 'siem-soar-ueba-soc',
-        label: 'SIEM SOAR UEBA SOC',
-        color: '#000080',
-        tag: 'Security Operations',
-      },
-    ],
-  },
-  {
-    id: 'recover',
-    label: 'Recover',
-    color: '#E6E6FA',
-    subCategories: [
-      {
-        id: 'incident-response',
-        label: 'Incident Response',
-        color: '#8B4513',
-        tag: 'Network & Perimeter Security',
-      },
-      {
-        id: 'backup-disaster-recovery',
-        label: 'Backup & Disaster Recovery',
-        color: '#8B4513',
-        tag: 'Network & Perimeter Security',
-      },
-      {
-        id: 'srm-forensics',
-        label: 'SRM Forensics',
-        color: '#8B4513',
-        tag: 'Network & Perimeter Security',
-      },
-    ],
-  },
-  {
-    id: 'govern',
-    label: 'Govern',
-    color: '#E6E6FA',
-    subCategories: [
-      {
-        id: 'container-security',
-        label: 'Container Security',
-        color: '#7A0000',
-        tag: 'Network & Perimeter Security',
-      },
-      {
-        id: 'browser-isolation',
-        label: 'Browser Isolation',
-        color: '#7A0000',
-        tag: 'Network & Perimeter Security',
-      },
-      { id: 'nspm', label: 'NSPM', color: '#8B0000', tag: 'Endpoint Security' },
-      {
-        id: 'email-security',
-        label: 'Email Security',
-        color: '#8B0000',
-        tag: 'Endpoint Security',
+        id: 'dast-sast-sca',
+        label: 'DAST SAST SCA',
+        color: '#FFBD59FF',
+        tag: 'Application & Cloud Security',
       },
       {
         id: 'cwpp-cnapp-cspm',
         label: 'CWPP CNAPP CSPM',
-        color: '#FFD700',
+        color: '#FFBD59FF',
         tag: 'Application & Cloud Security',
       },
       {
         id: 'sspm-kspm',
         label: 'SSPM KSPM',
-        color: '#FFD700',
+        color: '#FFBD59FF',
         tag: 'Application & Cloud Security',
       },
       {
+        id: 'container-security',
+        label: 'Container Security',
+        color: '#FFBD59FF',
+        tag: 'Application & Cloud Security',
+      },
+      {
+        id: 'ddos-bot-+-bot-protection',
+        label: 'DDOS BOT + BPT Protection',
+        color: '#FFBD59FF',
+        tag: 'Application & Cloud Security',
+      },
+    ],
+  },
+  {
+    id: 'identity-access',
+    label: 'Identity & Access',
+    color: '#FFC393FF', // Light peach/pale orange
+    subCategories: [
+      {
+        id: 'iam-iga',
+        label: 'IAM IGA',
+        color: '#FFC393FF',
+        tag: 'Identity & Access',
+      },
+      {
+        id: 'pam',
+        label: 'PAM',
+        color: '#FFC393FF',
+        tag: 'Identity & Access',
+      },
+    ],
+  },
+  {
+    id: 'security-operations',
+    label: 'Security  Operations',
+    color: '#042F5EFF', // Dark blue
+    subCategories: [
+      {
         id: 'tprm-grc-caasm',
         label: 'TPRM GRC CAASM',
-        color: '#000080',
+        color: '#042F5EFF',
+        tag: 'Security Operations',
+      },
+      {
+        id: 'srm-forensics',
+        label: 'SRM Forensics',
+        color: '#042F5EFF',
+        tag: 'Security Operations',
+      },
+      {
+        id: 'siem-soar-ueba-soc',
+        label: 'SIEM SOAR UEBA SOC',
+        color: '#042F5EFF',
+        tag: 'Security Operations',
+      },
+      {
+        id: 'backup-disaster-recovery',
+        label: 'Backup & Disaster Recovery',
+        color: '#042F5EFF',
+        tag: 'Security Operations',
+      },
+      {
+        id: 'xdr-mdr',
+        label: 'XDR MDR',
+        color: '#042F5EFF',
+        tag: 'Security Operations',
+      },
+      {
+        id: 'ctem-bas',
+        label: 'CTEM BAS',
+        color: '#042F5EFF',
+        tag: 'Security Operations',
+      },
+      {
+        id: 'incident-response',
+        label: 'Incident Response',
+        color: '#042F5EFF',
         tag: 'Security Operations',
       },
       {
         id: 'devsecops',
         label: 'DevSecOps',
-        color: '#000080',
+        color: '#042F5EFF',
         tag: 'Security Operations',
       },
       {
-        id: 'anti-phishing-training',
-        label: 'Anti Phishing Training',
-        color: '#696969',
+        id: 'tip',
+        label: 'TIP',
+        color: '#042F5EFF',
+        tag: 'Security Operations',
+      },
+    ],
+  },
+  {
+    id: 'emerging-security',
+    label: 'Emerging  Security',
+    color: '#545454FF', // Dark grey
+    subCategories: [
+      {
+        id: 'ai-security',
+        label: 'AI Security',
+        color: '#545454FF',
         tag: 'Emerging Security',
       },
       {
         id: 'security-awareness-training',
         label: 'Security Awareness Training',
-        color: '#696969',
+        color: '#545454FF',
         tag: 'Emerging Security',
+      },
+      {
+        id: 'anti-phishing-training',
+        label: 'Anti Phishing Training',
+        color: '#545454FF',
+        tag: 'Emerging Security',
+      },
+    ],
+  },
+  {
+    id: 'network-perimeter-security',
+    label: 'Network & Perimeter  Security',
+    color: '#690D00FF', // Dark red/maroon
+    subCategories: [
+      {
+        id: 'sse-sase-swg-ngfw',
+        label: 'SSE SASE SWG NGFW',
+        color: '#690D00FF',
+        tag: 'Network & Perimeter Security',
+      },
+      {
+        id: 'ids-ndr',
+        label: 'IDS NDR',
+        color: '#690D00FF',
+        tag: 'Network & Perimeter Security',
+      },
+      {
+        id: 'nspm',
+        label: 'NSPM',
+        color: '#690D00FF',
+        tag: 'Network & Perimeter Security',
+      },
+      {
+        id: 'microsegmentation',
+        label: 'Micro- segmentation',
+        color: '#690D00FF',
+        tag: 'Network & Perimeter Security',
+      },
+      {
+        id: 'visibility-caasm',
+        label: 'Visibility CAASM',
+        color: '#690D00FF',
+        tag: 'Network & Perimeter Security',
+      },
+      {
+        id: 'swg-vpn-ztna',
+        label: 'SWG VPN ZTNA',
+        color: '#690D00FF',
+        tag: 'Network & Perimeter Security',
+      },
+      {
+        id: 'email-security',
+        label: 'Email Security',
+        color: '#690D00FF',
+        tag: 'Network & Perimeter Security',
+      },
+    ],
+  },
+  {
+    id: 'endpoint-security',
+    label: 'Endpoint  Security',
+    color: '#962610FF', // Reddish-brown
+    subCategories: [
+      {
+        id: 'sdp-dns',
+        label: 'SDP DNS',
+        color: '#962610FF',
+        tag: 'Endpoint Security',
+      },
+      {
+        id: 'browser-isolation',
+        label: 'Browser Isolation',
+        color: '#962610FF',
+        tag: 'Endpoint Security',
+      },
+      {
+        id: 'endpoint-protection',
+        label: 'Endpoint Protection',
+        color: '#962610FF',
+        tag: 'Endpoint Security',
+      },
+      {
+        id: 'ot-ics-iot',
+        label: 'OT ICS IoT',
+        color: '#962610FF',
+        tag: 'Endpoint Security',
+      },
+      {
+        id: 'edr',
+        label: 'EDR',
+        color: '#962610FF',
+        tag: 'Endpoint Security',
+      },
+    ],
+  },
+  {
+    id: 'data-security',
+    label: 'Data  Security',
+    color: '#FF7A25FF', // Orange
+    subCategories: [
+      {
+        id: 'data-encryption-tokenization',
+        label: 'Data Encryption & Tokenization',
+        color: '#FF7A25FF',
+        tag: 'Data Security',
+      },
+      {
+        id: 'data-discovery-classification',
+        label: 'Data Discovery & Classification',
+        color: '#FF7A25FF',
+        tag: 'Data Security',
+      },
+      {
+        id: 'dspm-dlp',
+        label: 'DSPM DLP',
+        color: '#FF7A25FF',
+        tag: 'Data Security',
       },
     ],
   },
@@ -379,6 +606,7 @@ const mainNodes: MainNode[] = [
 export default function ForceBasedGraph() {
   const [clickedNode, setClickedNode] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [showFullDiagram, setShowFullDiagram] = useState(false);
   const [dimensions, setDimensions] = useState({
     width: 800,
     height: 600,
@@ -422,6 +650,8 @@ export default function ForceBasedGraph() {
   }, []);
 
   const handleNodeClick = (nodeId: string) => {
+    if (showFullDiagram) return; // Don't handle individual node clicks in full diagram mode
+
     if (clickedNode === nodeId) {
       // Clicking the same node - return to original view
       setClickedNode(null);
@@ -434,218 +664,238 @@ export default function ForceBasedGraph() {
   };
 
   const handleBackgroundClick = () => {
+    if (showFullDiagram) return; // Don't handle background clicks in full diagram mode
     // Clicking away from nodes - return to original view
     setClickedNode(null);
     setIsZoomed(false);
   };
 
+  const handleFullDiagramToggle = () => {
+    setShowFullDiagram(!showFullDiagram);
+    setClickedNode(null);
+    setIsZoomed(false);
+  };
+
   const { width, height, centerX, centerY } = dimensions;
-  const radius = Math.min(width, height) * 0.15; // Responsive radius
+  const radius = Math.min(width, height) * 0.25; // Increased radius for more spacing
 
   return (
     <div ref={containerRef} className="relative w-full h-full min-h-[400px]">
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        className="w-full h-full"
-        style={{ display: 'block' }}
-        onClick={handleBackgroundClick}
+      {/* Full Diagram Button */}
+      <button
+        onClick={handleFullDiagramToggle}
+        className="absolute top-4 left-4 z-20 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors duration-200 shadow-lg"
       >
-        {/* Connection lines from main nodes to subcategories */}
-        <AnimatePresence>
-          {clickedNode &&
-            mainNodes
-              .find(n => n.id === clickedNode)
-              ?.subCategories.map((subCat, index) => {
-                const mainNode = mainNodes.find(n => n.id === clickedNode);
-                if (!mainNode) return null;
+        {showFullDiagram ? 'Hide Full Diagram' : 'Full Diagram'}
+      </button>
 
-                // Calculate position for main node (arranged in a circle)
-                const nodeIndex = mainNodes.findIndex(
-                  n => n.id === clickedNode
-                );
-                const angle = (nodeIndex * 60 - 90) * (Math.PI / 180); // Start from top
-                const originalX = centerX + radius * Math.cos(angle);
-                const originalY = centerY + radius * Math.sin(angle);
+      {showFullDiagram ? (
+        <div className="w-full h-full flex items-center justify-center bg-transparent">
+          <Image
+            src="/images/full-diagram/full_diagram.png"
+            alt="Full Security Diagram"
+            width={800}
+            height={600}
+            className="w-full h-full object-cover"
+            style={{ objectPosition: 'center' }}
+          />
+        </div>
+      ) : (
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          className="w-full h-full"
+          style={{ display: 'block' }}
+          onClick={handleBackgroundClick}
+        >
+          {/* Removed connection lines */}
 
-                // When zoomed, main node is at center, when not zoomed, it's at original position
-                const mainNodeX = isZoomed ? centerX : originalX;
-                const mainNodeY = isZoomed ? centerY : originalY;
+          {/* Subcategory nodes */}
+          <AnimatePresence>
+            {(clickedNode
+              ? mainNodes.find(n => n.id === clickedNode)?.subCategories || []
+              : []
+            ).map((subCat, index) => {
+              // Find which main node this subcategory belongs to
+              const mainNode = mainNodes.find(n =>
+                n.subCategories.some(sc => sc.id === subCat.id)
+              );
+              if (!mainNode) return null;
 
-                // Calculate multi-layer positions for subcategories
-                const positions = getMultiLayerPositions(
-                  mainNodeX,
-                  mainNodeY,
-                  mainNode.subCategories,
-                  nodeIndex
-                );
-                const subCatPos = positions[index];
+              const nodeIndex = mainNodes.findIndex(n => n.id === mainNode.id);
+              const angle = (nodeIndex * (360 / 7) - 90) * (Math.PI / 180); // Start from top, 7 nodes
+              const originalX = centerX + radius * Math.cos(angle);
+              const originalY = centerY + radius * Math.sin(angle);
 
-                return (
-                  <motion.line
-                    key={`line-${subCat.id}`}
-                    x1={mainNodeX}
-                    y1={mainNodeY}
-                    x2={subCatPos.x}
-                    y2={subCatPos.y}
-                    stroke="#dddddd"
-                    strokeWidth={2.5}
-                    strokeDasharray="5,5"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ pathLength: 1, opacity: 1 }}
-                    exit={{ pathLength: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
+              // Position subcategories around the clicked node's current position
+              const mainNodeX = isZoomed
+                ? nodeIndex === 0 ||
+                  nodeIndex === 2 ||
+                  nodeIndex === 3 ||
+                  nodeIndex === 4 ||
+                  nodeIndex === 5 ||
+                  nodeIndex === 6
+                  ? centerX
+                  : centerX * 0.3
+                : originalX;
+              const mainNodeY = isZoomed ? centerY : originalY;
+
+              const positions = getMultiLayerPositions(
+                mainNodeX,
+                mainNodeY,
+                mainNode.subCategories,
+                nodeIndex
+              );
+              const subCatPos = positions[index];
+
+              // Safety check to prevent undefined position errors
+              if (!subCatPos) {
+                return null;
+              }
+
+              return (
+                <motion.g
+                  key={subCat.id}
+                  initial={{ opacity: 0, scale: 0, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0, y: 20 }}
+                  transition={{ duration: 0.25, delay: index * 0.05 }}
+                >
+                  <circle
+                    cx={subCatPos.x}
+                    cy={subCatPos.y}
+                    r={isZoomed ? 60 : 45}
+                    fill={subCat.color}
+                    className="drop-shadow-lg"
                   />
-                );
-              })}
-        </AnimatePresence>
-
-        {/* Subcategory nodes */}
-        <AnimatePresence>
-          {clickedNode &&
-            mainNodes
-              .find(n => n.id === clickedNode)
-              ?.subCategories.map((subCat, index) => {
-                const mainNode = mainNodes.find(n => n.id === clickedNode);
-                if (!mainNode) return null;
-
-                const nodeIndex = mainNodes.findIndex(
-                  n => n.id === clickedNode
-                );
-                const angle = (nodeIndex * 60 - 90) * (Math.PI / 180);
-                const originalX = centerX + radius * Math.cos(angle);
-                const originalY = centerY + radius * Math.sin(angle);
-
-                // When zoomed, main node is at center, when not zoomed, it's at original position
-                const mainNodeX = isZoomed ? centerX : originalX;
-                const mainNodeY = isZoomed ? centerY : originalY;
-
-                // Calculate multi-layer positions for subcategories
-                const positions = getMultiLayerPositions(
-                  mainNodeX,
-                  mainNodeY,
-                  mainNode.subCategories,
-                  nodeIndex
-                );
-                const subCatPos = positions[index];
-
-                return (
-                  <motion.g
-                    key={subCat.id}
-                    initial={{ opacity: 0, scale: 0, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0, y: 20 }}
-                    transition={{ duration: 0.25, delay: index * 0.05 }}
+                  <text
+                    x={subCatPos.x}
+                    y={subCatPos.y}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    fill="white"
+                    fontSize={isZoomed ? '12' : '8'}
+                    fontWeight="bold"
+                    className="pointer-events-none"
                   >
-                    <circle
-                      cx={subCatPos.x}
-                      cy={subCatPos.y}
-                      r={isZoomed ? 60 : 40}
-                      fill={subCat.color}
-                      className="drop-shadow-lg"
-                    />
-                    <text
-                      x={subCatPos.x}
-                      y={subCatPos.y}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fill="white"
-                      fontSize={isZoomed ? '14' : '10'}
-                      fontWeight="bold"
-                      className="pointer-events-none"
-                    >
-                      {(() => {
-                        const words = subCat.label.split(' ');
-                        const lineHeight = isZoomed ? 18 : 14;
-                        const totalHeight = (words.length - 1) * lineHeight;
-                        const startY = -totalHeight / 2;
+                    {(() => {
+                      const words = subCat.label.split(' ');
+                      const lineHeight = isZoomed ? 15 : 12;
+                      const totalHeight = (words.length - 1) * lineHeight;
+                      const startY = -totalHeight / 2;
 
-                        return words.map((word, i) => (
-                          <tspan
-                            key={i}
-                            x={subCatPos.x}
-                            dy={i === 0 ? startY : lineHeight}
-                          >
-                            {word}
-                          </tspan>
-                        ));
-                      })()}
-                    </text>
-                  </motion.g>
-                );
-              })}
-        </AnimatePresence>
+                      return words.map((word, i) => (
+                        <tspan
+                          key={i}
+                          x={subCatPos.x}
+                          dy={i === 0 ? startY : lineHeight}
+                        >
+                          {word}
+                        </tspan>
+                      ));
+                    })()}
+                  </text>
+                </motion.g>
+              );
+            })}
+          </AnimatePresence>
 
-        {/* Main nodes arranged in a circle */}
-        {mainNodes.map((node, index) => {
-          const angle = (index * 60 - 90) * (Math.PI / 180); // Start from top
-          const originalX = centerX + radius * Math.cos(angle);
-          const originalY = centerY + radius * Math.sin(angle);
+          {/* Main nodes arranged in a circle */}
+          {mainNodes.map((node, index) => {
+            const angle = (index * (360 / 7) - 90) * (Math.PI / 180); // Start from top, 7 nodes
+            const originalX = centerX + radius * Math.cos(angle);
+            const originalY = centerY + radius * Math.sin(angle);
 
-          // Calculate final position based on zoom state
-          let finalX = originalX;
-          let finalY = originalY;
+            // Calculate final position based on zoom state
+            let finalX = originalX;
+            let finalY = originalY;
 
-          if (isZoomed && clickedNode === node.id) {
-            // Move clicked node to center when zoomed
-            finalX = centerX;
-            finalY = centerY;
-          }
+            if (isZoomed && clickedNode === node.id) {
+              // Move clicked node to left middle when zoomed
+              finalX = centerX * 0.3; // Left side of screen
+              finalY = centerY; // Middle vertically
+            }
 
-          // Hide other nodes when zoomed in
-          if (isZoomed && clickedNode !== node.id) {
-            return null;
-          }
+            // Hide other nodes when zoomed in
+            if (isZoomed && clickedNode !== node.id) {
+              return null;
+            }
 
-          return (
-            <motion.g
-              key={node.id}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              whileHover={{ scale: 1.05 }}
-              onClick={e => {
-                e.stopPropagation(); // Prevent background click
-                handleNodeClick(node.id);
-              }}
-              style={{ cursor: 'pointer' }}
-            >
-              <motion.circle
-                cx={finalX}
-                cy={finalY}
-                r={isZoomed && clickedNode === node.id ? 72 : 48}
-                fill={node.color}
-                className="drop-shadow-xl"
-                animate={{
-                  scale: clickedNode === node.id ? (isZoomed ? 1.2 : 1.05) : 1,
+            return (
+              <motion.g
+                key={node.id}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                whileHover={{ scale: 1.05 }}
+                onClick={e => {
+                  e.stopPropagation(); // Prevent background click
+                  handleNodeClick(node.id);
                 }}
-                transition={{
-                  duration: 0.6,
-                  ease: 'easeInOut',
-                  cx: { duration: 0.6, ease: 'easeInOut' },
-                  cy: { duration: 0.6, ease: 'easeInOut' },
-                }}
-              />
-
-              <text
-                x={finalX}
-                y={finalY}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fill="#000000"
-                fontSize={isZoomed && clickedNode === node.id ? '24' : '18'}
-                fontWeight="bold"
-                className="pointer-events-none"
-                style={{
-                  pointerEvents: 'none',
-                  userSelect: 'none',
-                }}
+                style={{ cursor: 'pointer' }}
               >
-                {node.label}
-              </text>
-            </motion.g>
-          );
-        })}
-      </svg>
+                <motion.circle
+                  cx={finalX}
+                  cy={finalY}
+                  r={isZoomed && clickedNode === node.id ? 90 : 71}
+                  fill={node.color}
+                  className="drop-shadow-xl"
+                  animate={{
+                    scale:
+                      clickedNode === node.id ? (isZoomed ? 1.2 : 1.05) : 1,
+                  }}
+                  transition={{
+                    duration: 0.6,
+                    ease: 'easeInOut',
+                    cx: { duration: 0.6, ease: 'easeInOut' },
+                    cy: { duration: 0.6, ease: 'easeInOut' },
+                  }}
+                />
+
+                <text
+                  x={finalX}
+                  y={finalY}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fill="white"
+                  fontSize={isZoomed && clickedNode === node.id ? '20' : '14'}
+                  fontWeight="bold"
+                  className="pointer-events-none"
+                  style={{
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                  }}
+                >
+                  {(() => {
+                    // Split long labels into multiple lines
+                    const words = node.label.split(' ');
+                    const maxWordsPerLine = 2;
+                    const lines = [];
+
+                    for (let i = 0; i < words.length; i += maxWordsPerLine) {
+                      lines.push(words.slice(i, i + maxWordsPerLine).join(' '));
+                    }
+
+                    const lineHeight =
+                      isZoomed && clickedNode === node.id ? 24 : 18;
+                    const totalHeight = (lines.length - 1) * lineHeight;
+                    const startY = -totalHeight / 2;
+
+                    return lines.map((line, i) => (
+                      <tspan
+                        key={i}
+                        x={finalX}
+                        dy={i === 0 ? startY : lineHeight}
+                      >
+                        {line}
+                      </tspan>
+                    ));
+                  })()}
+                </text>
+              </motion.g>
+            );
+          })}
+        </svg>
+      )}
     </div>
   );
 }
