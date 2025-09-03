@@ -48,6 +48,7 @@ export interface Vendor {
   link: string | null;
   content: string | null;
   type: string | null;
+  diagram_url: string | null;
   created_at: string;
   updated_at: string;
 }

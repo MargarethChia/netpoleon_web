@@ -74,6 +74,7 @@ export async function PUT(
         image_url: body.image_url || null,
         link: body.link || null,
         type: body.type || null,
+        diagram_url: body.diagram_url || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', vendorId)

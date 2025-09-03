@@ -45,6 +45,7 @@ export default function EditVendorPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingDiagram, setIsUploadingDiagram] = useState(false);
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -54,6 +55,7 @@ export default function EditVendorPage() {
     image_url: '',
     link: '',
     type: '',
+    diagram_url: '',
   });
 
   // Fetch vendor data on component mount
@@ -70,6 +72,7 @@ export default function EditVendorPage() {
           image_url: data.image_url || '',
           link: data.link || '',
           type: data.type || '',
+          diagram_url: data.diagram_url || '',
         });
       } catch (error) {
         console.error('Error fetching vendor:', error);
@@ -157,16 +160,50 @@ export default function EditVendorPage() {
     }
   };
 
+  const handleDiagramUpload = async (file: File) => {
+    setIsUploadingDiagram(true);
+
+    try {
+      const result = await uploadImage(file);
+
+      if (result.success && result.url) {
+        setFormData(prev => ({ ...prev, diagram_url: result.url! }));
+        showToast({
+          title: 'Success',
+          message: 'Diagram uploaded successfully!',
+          type: 'success',
+        });
+      } else {
+        showToast({
+          title: 'Upload Failed',
+          message: result.error || 'Failed to upload diagram',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      showToast({
+        title: 'Upload Failed',
+        message: 'An unexpected error occurred',
+        type: 'error',
+      });
+    } finally {
+      setIsUploadingDiagram(false);
+    }
+  };
+
   const handleFileSelect = (
     event: React.ChangeEvent<HTMLInputElement>,
-    type: 'logo' | 'image'
+    type: 'logo' | 'image' | 'diagram'
   ) => {
     const file = event.target.files?.[0];
     if (file) {
       if (type === 'logo') {
         handleLogoUpload(file);
-      } else {
+      } else if (type === 'image') {
         handleImageUpload(file);
+      } else {
+        handleDiagramUpload(file);
       }
     }
   };
@@ -177,6 +214,10 @@ export default function EditVendorPage() {
 
   const removeImage = () => {
     setFormData(prev => ({ ...prev, image_url: '' }));
+  };
+
+  const removeDiagram = () => {
+    setFormData(prev => ({ ...prev, diagram_url: '' }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -488,6 +529,68 @@ export default function EditVendorPage() {
                       />
                       <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
                         Featured Image
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Diagram</CardTitle>
+                <CardDescription>
+                  Upload a diagram or architecture image for the vendor
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  {/* File Upload */}
+                  <div className="flex gap-2">
+                    <input
+                      id="diagram"
+                      type="file"
+                      accept="image/*"
+                      onChange={e => handleFileSelect(e, 'diagram')}
+                      className="hidden"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        document.getElementById('diagram')?.click()
+                      }
+                      disabled={isUploadingDiagram}
+                      className="flex items-center gap-2"
+                    >
+                      <Upload className="h-4 w-4" />
+                      {isUploadingDiagram ? 'Uploading...' : 'Upload Diagram'}
+                    </Button>
+                    {formData.diagram_url && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={removeDiagram}
+                        className="flex items-center gap-2"
+                      >
+                        <X className="h-4 w-4" />
+                        Remove
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* Diagram Preview */}
+                  {formData.diagram_url && (
+                    <div className="relative">
+                      <Image
+                        src={formData.diagram_url}
+                        alt="Diagram preview"
+                        width={400}
+                        height={128}
+                        className="w-full h-32 object-cover rounded-md border"
+                      />
+                      <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                        Diagram
                       </div>
                     </div>
                   )}

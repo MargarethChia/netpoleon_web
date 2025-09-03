@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
           image_url: body.image_url || null,
           link: body.link || null,
           type: body.type || null,
+          diagram_url: body.diagram_url || null,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },

@@ -342,6 +342,7 @@ export default function VendorsPage() {
                     <TableHead>Description</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>Logo</TableHead>
+                    <TableHead>Diagram</TableHead>
                     <TableHead>Website</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead className="w-[50px]"></TableHead>
@@ -366,13 +367,17 @@ export default function VendorsPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="max-w-[300px]">
+                        <div className="max-w-[200px] truncate">
                           <p className="text-sm text-muted-foreground line-clamp-3">
                             {vendor.description}
                           </p>
                         </div>
                       </TableCell>
-                      <TableCell>{vendor.type}</TableCell>
+                      <TableCell>
+                        <div className="max-w-[120px] truncate">
+                          {vendor.type}
+                        </div>
+                      </TableCell>
                       <TableCell>
                         {vendor.logo_url ? (
                           <Badge variant="outline">
@@ -382,6 +387,18 @@ export default function VendorsPage() {
                         ) : (
                           <span className="text-muted-foreground text-sm">
                             No logo
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {vendor.diagram_url ? (
+                          <Badge variant="outline">
+                            <ImageIcon className="h-3 w-3 mr-1" />
+                            Diagram
+                          </Badge>
+                        ) : (
+                          <span className="text-muted-foreground text-sm">
+                            No diagram
                           </span>
                         )}
                       </TableCell>
