@@ -701,7 +701,7 @@ export default function ForceBasedGraph() {
       {/* Full Diagram Button */}
       <button
         onClick={handleFullDiagramToggle}
-        className="absolute top-4 left-4 z-20 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors duration-200 shadow-lg"
+        className="absolute top-4 left-4 z-20 bg-gray-300/30 backdrop-blur-lg border border-white/60 hover:bg-gray-300/40 text-gray-700 hover:text-gray-900 px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 backdrop-saturate-150"
       >
         {showFullDiagram ? 'Hide Full Diagram' : 'Full Diagram'}
       </button>

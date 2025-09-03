@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
 
 interface ImageTextSectionProps {
   ctaText?: string;
@@ -13,7 +12,7 @@ export default function ImageTextSection({
   ctaLink,
 }: ImageTextSectionProps) {
   return (
-    <section className="py-12 bg-gradient-to-b from-white via-red-200 to-white relative overflow-hidden">
+    <section className="pt-24 pb-36 bg-white relative overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Title */}
         <motion.div
@@ -25,7 +24,7 @@ export default function ImageTextSection({
         >
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
             Simplify security and compliance{' '}
-            <span className="text-red-600">at every stage</span>
+            <span className="text-orange-600">at every stage</span>
           </h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
             Whether you&apos;re working toward your first SOC 2 audit or running
@@ -415,169 +414,11 @@ export default function ImageTextSection({
           </motion.div>
         </div>
 
-        {/* Statistics Section */}
+        {/* Statistics Section
         <div className="mt-8">
           <Statistics />
-        </div>
+        </div> */}
       </div>
     </section>
-  );
-}
-
-// Statistics component
-function Statistics() {
-  const [stats, setStats] = useState([
-    {
-      id: 1,
-      target: 60,
-      current: 0,
-      suffix: '+',
-      label: 'cloud services available globally',
-    },
-    {
-      id: 2,
-      target: 190,
-      current: 0,
-      suffix: 'B',
-      label: 'cyber threats blocked each day',
-    },
-    {
-      id: 3,
-      target: 20,
-      current: 0,
-      suffix: '%',
-      label: 'of all websites are protected by Netpoleon',
-    },
-    {
-      id: 4,
-      target: 330,
-      current: 0,
-      suffix: '+',
-      label: 'cities in 125+ countries, including mainland China',
-    },
-  ]);
-
-  const [animationStarted, setAnimationStarted] = useState(false);
-  const ref = useRef(null);
-
-  // Custom intersection observer for more reliable detection
-  useEffect(() => {
-    if (!ref.current) return;
-
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !animationStarted) {
-            console.log('Statistics section in view, starting animation...');
-            setAnimationStarted(true);
-            startAnimation();
-          }
-        });
-      },
-      {
-        threshold: 0.3, // Trigger when 30% of the element is visible
-        rootMargin: '0px 0px -50px 0px', // Start slightly before fully in view
-      }
-    );
-
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [animationStarted]);
-
-  const startAnimation = () => {
-    const duration = 4000; // 4 seconds (increased from 2 seconds)
-    const interval = 100; // Update every 100ms (increased from 50ms for smoother counting)
-    const steps = duration / interval;
-
-    const timer = setInterval(() => {
-      setStats(prevStats =>
-        prevStats.map(stat => {
-          const increment = stat.target / steps;
-          const newCurrent = Math.min(stat.current + increment, stat.target);
-
-          return {
-            ...stat,
-            current: Math.round(newCurrent),
-          };
-        })
-      );
-    }, interval);
-
-    // Cleanup timer after animation completes
-    setTimeout(() => {
-      clearInterval(timer);
-    }, duration + 100);
-  };
-
-  return (
-    <div
-      ref={ref}
-      className="relative w-full h-[300px] bg-gradient-to-b from-white via-red-200 to-white rounded-2xl shadow-2xl"
-    >
-      {/* Statistics Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="flex space-x-12 px-8">
-          {/* Stat 1 */}
-          <div className="text-center">
-            <div className="relative">
-              <div className="w-3 h-3 bg-red-600 rounded-full mx-auto mb-3"></div>
-              <div className="w-1 h-12 bg-red-600 mx-auto"></div>
-            </div>
-            <div className="text-4xl font-bold text-gray-900 mb-2">
-              {stats[0].current}
-              {stats[0].current === 0 ? '' : stats[0].suffix}
-            </div>
-            <div className="text-sm text-gray-700 font-bold max-w-[160px]">
-              {stats[0].label}
-            </div>
-          </div>
-
-          {/* Stat 2 */}
-          <div className="text-center">
-            <div className="relative">
-              <div className="w-3 h-3 bg-red-600 rounded-full mx-auto mb-3"></div>
-              <div className="w-1 h-12 bg-red-600 mx-auto"></div>
-            </div>
-            <div className="text-4xl font-bold text-gray-900 mb-2">
-              {stats[1].current}
-              {stats[1].current === 0 ? '' : stats[1].suffix}
-            </div>
-            <div className="text-sm text-gray-700 font-bold max-w-[160px]">
-              {stats[1].label}
-            </div>
-          </div>
-
-          {/* Stat 3 */}
-          <div className="text-center">
-            <div className="relative">
-              <div className="w-3 h-3 bg-red-600 rounded-full mx-auto mb-3"></div>
-              <div className="w-1 h-12 bg-red-600 mx-auto"></div>
-            </div>
-            <div className="text-4xl font-bold text-gray-900 mb-2">
-              {stats[2].current}
-              {stats[2].current === 0 ? '' : stats[2].suffix}
-            </div>
-            <div className="text-sm text-gray-700 font-bold max-w-[160px]">
-              {stats[2].label}
-            </div>
-          </div>
-
-          {/* Stat 4 */}
-          <div className="text-center">
-            <div className="relative">
-              <div className="w-3 h-3 bg-red-600 rounded-full mx-auto mb-3"></div>
-              <div className="w-1 h-12 bg-red-600 mx-auto"></div>
-            </div>
-            <div className="text-4xl font-bold text-gray-900 mb-2">
-              {stats[3].current}
-              {stats[3].current === 0 ? '' : stats[3].suffix}
-            </div>
-            <div className="text-sm text-gray-700 font-bold max-w-[160px]">
-              {stats[3].label}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }

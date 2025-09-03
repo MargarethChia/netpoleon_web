@@ -18,7 +18,7 @@ interface HeroSectionProps {
 export default function HeroSection({ title, subtitle }: HeroSectionProps) {
   const globeConfig = {
     pointSize: 4,
-    globeColor: '#f05922', // Orange base globe
+    globeColor: '#f07222', // Orange base globe
     showAtmosphere: true,
     atmosphereColor: '#f05922', // Orange atmosphere
     atmosphereAltitude: 0.1,
