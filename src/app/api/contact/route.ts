@@ -6,16 +6,16 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      firstName, 
-      lastName, 
-      email, 
-      company, 
-      subject, 
+    const {
+      firstName,
+      lastName,
+      email,
+      company,
+      subject,
       message,
       partnerFile,
       isPartnerApplication,
-      isVendorPartnership 
+      isVendorPartnership,
     } = body;
 
     // Validate required fields
@@ -103,14 +103,13 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { 
-        success: true, 
+      {
+        success: true,
         message: 'Email sent successfully',
-        data 
+        data,
       },
       { status: 200 }
     );
-
   } catch (error) {
     console.error('Contact form error:', error);
     return NextResponse.json(
