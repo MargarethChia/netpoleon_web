@@ -8,4 +8,4 @@ interface ClientWrapperProps {
 
 export default function ClientWrapper({ children }: ClientWrapperProps) {
   return <>{children}</>;
-} 
+}

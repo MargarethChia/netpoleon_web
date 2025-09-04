@@ -1,163 +1,204 @@
-"use client"
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 
-import { Calendar, Upload, Eye, Save, Send, ArrowLeft, FileText, X } from "lucide-react"
-import { resourcesApi } from "@/lib/api"
-import { showToast } from "../../../../../components/ui/toast"
-import AdminLayout from "../../../components/AdminLayout"
-import ReactMarkdown from 'react-markdown'
-import { uploadImage } from "../../../../../lib/storage"
+import { Calendar, Upload, Save, Send, ArrowLeft, X } from 'lucide-react';
+import { resourcesApi } from '@/lib/api';
+import { showToast } from '@/components/ui/toast';
+import AdminLayout from '@/app/(admin)/components/AdminLayout';
+import { uploadImage } from '@/lib/storage';
+import RichTextEditor from '@/components/ui/rich-text-editor';
 
 export default function CreateResourcePage() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
+    description: '',
     content: '',
     type: 'article' as 'article' | 'blog',
     is_published: false,
-    published_at: '',
-    cover_image_url: ''
-  })
-  const [isUploading, setIsUploading] = useState(false)
+    published_at: new Date().toISOString().split('T')[0], // Default to today's date
+    cover_image_url: '',
+    article_link: '',
+  });
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleFileUpload = async (file: File) => {
-    console.log('handleFileUpload called with file:', file)
-    setIsUploading(true)
-    
+    console.log('handleFileUpload called with file:', file);
+    setIsUploading(true);
+
     try {
-      console.log('Calling uploadImage...')
-      const result = await uploadImage(file)
-      console.log('uploadImage result:', result)
-      
+      console.log('Calling uploadImage...');
+      const result = await uploadImage(file);
+      console.log('uploadImage result:', result);
+
       if (result.success && result.url) {
-        console.log('Upload successful, setting URL:', result.url)
-        setFormData(prev => ({ ...prev, cover_image_url: result.url! }))
+        console.log('Upload successful, setting URL:', result.url);
+        setFormData(prev => ({ ...prev, cover_image_url: result.url! }));
         showToast({
-          title: "Success",
-          message: "Image uploaded successfully!",
-          type: "success"
-        })
+          title: 'Success',
+          message: 'Image uploaded successfully!',
+          type: 'success',
+        });
       } else {
-        console.log('Upload failed:', result.error)
+        console.log('Upload failed:', result.error);
         showToast({
-          title: "Upload Failed",
-          message: result.error || "Failed to upload image",
-          type: "error"
-        })
+          title: 'Upload Failed',
+          message: result.error || 'Failed to upload image',
+          type: 'error',
+        });
       }
     } catch (error) {
-      console.error('Upload error:', error)
+      console.error('Upload error:', error);
       showToast({
-        title: "Upload Failed",
-        message: "An unexpected error occurred",
-        type: "error"
-      })
+        title: 'Upload Failed',
+        message: 'An unexpected error occurred',
+        type: 'error',
+      });
     } finally {
-      setIsUploading(false)
+      setIsUploading(false);
     }
-  }
+  };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      handleFileUpload(file)
+      handleFileUpload(file);
     }
-  }
+  };
 
   const removeImage = () => {
-    setFormData(prev => ({ ...prev, cover_image_url: '' }))
-  }
+    setFormData(prev => ({ ...prev, cover_image_url: '' }));
+  };
+
+  const handleContentChange = (content: string) => {
+    setFormData(prev => ({ ...prev, content }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!formData.title || !formData.content || !formData.type) {
+    e.preventDefault();
+
+    if (!formData.title || !formData.type) {
       showToast({
-        title: "Validation Error",
-        message: "Please fill in all required fields",
-        type: "error"
-      })
-      return
+        title: 'Validation Error',
+        message: 'Please fill in all required fields',
+        type: 'error',
+      });
+      return;
     }
 
-    setIsLoading(true)
-    
+    // Content is only required for blog posts, not for articles
+    if (formData.type === 'blog' && !formData.content) {
+      showToast({
+        title: 'Validation Error',
+        message: 'Content is required for blog posts',
+        type: 'error',
+      });
+      return;
+    }
+
+    // Article link is required for articles
+    if (formData.type === 'article' && !formData.article_link) {
+      showToast({
+        title: 'Validation Error',
+        message: 'Article link is required for articles',
+        type: 'error',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
       await resourcesApi.create({
         ...formData,
-        published_at: formData.published_at || null
-      })
-      
+        content: formData.type === 'article' ? '' : formData.content, // Empty content for articles
+        published_at: formData.published_at || null,
+      });
+
       showToast({
-        title: "Success",
-        message: "Resource created successfully!",
-        type: "success"
-      })
-      
-      router.push('/admin/resources')
+        title: 'Success',
+        message: 'Resource created successfully!',
+        type: 'success',
+      });
+
+      router.push('/admin/resources');
     } catch (error) {
-      console.error('Error creating resource:', error)
+      console.error('Error creating resource:', error);
       showToast({
-        title: "Error",
-        message: error instanceof Error ? error.message : 'Failed to create resource',
-        type: "error"
-      })
+        title: 'Error',
+        message:
+          error instanceof Error ? error.message : 'Failed to create resource',
+        type: 'error',
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleSaveDraft = async () => {
     if (!formData.title || !formData.content || !formData.type) {
       showToast({
-        title: "Validation Error",
-        message: "Please fill in all required fields",
-        type: "error"
-      })
-      return
+        title: 'Validation Error',
+        message: 'Please fill in all required fields',
+        type: 'error',
+      });
+      return;
     }
 
-    setIsLoading(true)
-    
+    setIsLoading(true);
+
     try {
       await resourcesApi.create({
         ...formData,
         is_published: false,
-        published_at: null
-      })
-      
+        published_at: null,
+      });
+
       showToast({
-        title: "Success",
-        message: "Draft saved successfully!",
-        type: "success"
-      })
-      
-      router.push('/admin/resources')
+        title: 'Success',
+        message: 'Draft saved successfully!',
+        type: 'success',
+      });
+
+      router.push('/admin/resources');
     } catch (error) {
-      console.error('Error saving draft:', error)
+      console.error('Error saving draft:', error);
       showToast({
-        title: "Error",
-        message: error instanceof Error ? error.message : 'Failed to save draft',
-        type: "error"
-      })
+        title: 'Error',
+        message:
+          error instanceof Error ? error.message : 'Failed to save draft',
+        type: 'error',
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <AdminLayout
@@ -168,8 +209,8 @@ export default function CreateResourcePage() {
       <div className="space-y-4">
         {/* Header with Back Button */}
         <div className="flex items-center justify-between">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => router.push('/admin/resources')}
             className="flex items-center gap-2"
           >
@@ -177,8 +218,8 @@ export default function CreateResourcePage() {
             Back to Resources
           </Button>
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={handleSaveDraft}
               disabled={isLoading}
               className="flex items-center gap-2"
@@ -186,7 +227,7 @@ export default function CreateResourcePage() {
               <Save className="h-4 w-4" />
               Save Draft
             </Button>
-            <Button 
+            <Button
               onClick={handleSubmit}
               disabled={isLoading}
               className="flex items-center gap-2"
@@ -199,13 +240,14 @@ export default function CreateResourcePage() {
 
         {/* Main Content - Side by Side Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-200px)]">
-          
           {/* Left Side - Form */}
           <div className="space-y-4">
             <Card>
               <CardHeader>
                 <CardTitle>Resource Details</CardTitle>
-                <CardDescription>Basic information about your resource</CardDescription>
+                <CardDescription>
+                  Basic information about your resource
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -214,17 +256,17 @@ export default function CreateResourcePage() {
                     <Input
                       id="title"
                       value={formData.title}
-                      onChange={(e) => handleInputChange('title', e.target.value)}
+                      onChange={e => handleInputChange('title', e.target.value)}
                       placeholder="Enter resource title"
                       required
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="type">Type *</Label>
                     <Select
                       value={formData.type}
-                      onValueChange={(value) => handleInputChange('type', value)}
+                      onValueChange={value => handleInputChange('type', value)}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select type" />
@@ -238,6 +280,33 @@ export default function CreateResourcePage() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Input
+                    id="description"
+                    value={formData.description}
+                    onChange={e =>
+                      handleInputChange('description', e.target.value)
+                    }
+                    placeholder="Enter a brief description of the resource"
+                  />
+                </div>
+
+                {formData.type === 'article' && (
+                  <div className="space-y-2">
+                    <Label htmlFor="article_link">Article Link</Label>
+                    <Input
+                      id="article_link"
+                      value={formData.article_link}
+                      onChange={e =>
+                        handleInputChange('article_link', e.target.value)
+                      }
+                      placeholder="https://example.com/article"
+                      type="url"
+                    />
+                  </div>
+                )}
+
+                <div className="space-y-2">
                   <Label htmlFor="cover_image">Cover Image</Label>
                   <div className="space-y-3">
                     {/* File Upload */}
@@ -249,10 +318,12 @@ export default function CreateResourcePage() {
                         onChange={handleFileSelect}
                         className="hidden"
                       />
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
-                        onClick={() => document.getElementById('cover_image')?.click()}
+                        onClick={() =>
+                          document.getElementById('cover_image')?.click()
+                        }
                         disabled={isUploading}
                         className="flex items-center gap-2"
                       >
@@ -260,8 +331,8 @@ export default function CreateResourcePage() {
                         {isUploading ? 'Uploading...' : 'Upload Image'}
                       </Button>
                       {formData.cover_image_url && (
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           onClick={removeImage}
                           className="flex items-center gap-2"
@@ -271,13 +342,15 @@ export default function CreateResourcePage() {
                         </Button>
                       )}
                     </div>
-                    
+
                     {/* Image Preview */}
                     {formData.cover_image_url && (
                       <div className="relative">
-                        <img 
-                          src={formData.cover_image_url} 
-                          alt="Cover preview" 
+                        <Image
+                          src={formData.cover_image_url}
+                          alt="Cover preview"
+                          width={400}
+                          height={128}
                           className="w-full h-32 object-cover rounded-md border"
                         />
                         <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
@@ -285,20 +358,6 @@ export default function CreateResourcePage() {
                         </div>
                       </div>
                     )}
-                    
-                    {/* Manual URL Input */}
-                    <div className="space-y-1">
-                      <Label htmlFor="cover_image_url" className="text-sm text-muted-foreground">
-                        Or enter image URL manually
-                      </Label>
-                      <Input
-                        id="cover_image_url"
-                        value={formData.cover_image_url}
-                        onChange={(e) => handleInputChange('cover_image_url', e.target.value)}
-                        placeholder="https://example.com/image.jpg"
-                        type="url"
-                      />
-                    </div>
                   </div>
                 </div>
 
@@ -310,7 +369,9 @@ export default function CreateResourcePage() {
                       <Input
                         id="published_at"
                         value={formData.published_at}
-                        onChange={(e) => handleInputChange('published_at', e.target.value)}
+                        onChange={e =>
+                          handleInputChange('published_at', e.target.value)
+                        }
                         type="date"
                         className="pl-10"
                       />
@@ -323,7 +384,9 @@ export default function CreateResourcePage() {
                       <Switch
                         id="is_published"
                         checked={formData.is_published}
-                        onCheckedChange={(checked) => handleInputChange('is_published', checked)}
+                        onCheckedChange={checked =>
+                          handleInputChange('is_published', checked)
+                        }
                       />
                       <Label htmlFor="is_published" className="text-sm">
                         {formData.is_published ? 'Published' : 'Draft'}
@@ -333,122 +396,52 @@ export default function CreateResourcePage() {
                 </div>
               </CardContent>
             </Card>
-
-            <Card className="flex-1">
-              <CardHeader>
-                <CardTitle>Content Editor</CardTitle>
-                <CardDescription>Write your content in markdown format</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Textarea
-                  id="content"
-                  value={formData.content}
-                  onChange={(e) => handleInputChange('content', e.target.value)}
-                  placeholder="Write your content here in markdown format...
-
-# Main Heading
-## Subheading
-### Section Title
-
-**Bold text** and *italic text*
-
-- Bullet points
-- More points
-- Another point
-
-1. Numbered list
-2. Second item
-3. Third item
-
-[Links](https://example.com)
-
-![Images](https://example.com/image.jpg)
-
-> Blockquotes for important information
-
-`Inline code` and code blocks:
-
-```javascript
-function example() {
-  return 'Hello World!';
-}
-```"
-                  className="font-mono text-sm h-[400px] resize-none"
-                  required
-                />
-              </CardContent>
-            </Card>
           </div>
 
-          {/* Right Side - Preview */}
+          {/* Right Side - Rich Text Editor */}
           <div className="space-y-4">
-            <Card className="h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  Live Preview
-                </CardTitle>
-                <CardDescription>See how your content will appear</CardDescription>
-              </CardHeader>
-              <CardContent className="h-[calc(100%-80px)] overflow-y-auto">
-                {formData.title || formData.content ? (
-                  <div className="prose prose-sm max-w-none">
-                    {/* Cover Image at the top */}
-                    {formData.cover_image_url && (
-                      <div className="mb-6">
-                        <img 
-                          src={formData.cover_image_url} 
-                          alt="Cover" 
-                          className="w-full h-48 object-cover rounded-lg shadow-sm"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none'
-                          }}
+            {formData.type === 'article' ? (
+              <div className="space-y-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-5 h-5 text-blue-600 mt-0.5">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                          clipRule="evenodd"
                         />
-                      </div>
-                    )}
-                    
-                    {formData.title && (
-                      <h1 className="text-2xl font-bold mb-4 text-foreground">
-                        {formData.title}
-                      </h1>
-                    )}
-                    
-                    {formData.content && (
-                      <div className="markdown-content text-foreground">
-                        <ReactMarkdown 
-                          components={{
-                            h1: ({...props}) => <h1 className="text-2xl font-bold mb-4" {...props} />,
-                            h2: ({...props}) => <h2 className="text-xl font-semibold mb-3" {...props} />,
-                            h3: ({...props}) => <h3 className="text-lg font-medium mb-2" {...props} />,
-                            p: ({...props}) => <p className="mb-3" {...props} />,
-                            ul: ({...props}) => <ul className="list-disc list-inside mb-3" {...props} />,
-                            ol: ({...props}) => <ol className="list-decimal list-inside mb-3" {...props} />,
-                            li: ({...props}) => <li className="mb-1" {...props} />,
-                            strong: ({...props}) => <strong className="font-bold" {...props} />,
-                            em: ({...props}) => <em className="italic" {...props} />,
-                            code: ({...props}) => <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono" {...props} />,
-                            pre: ({...props}) => <pre className="bg-muted p-3 rounded mb-3 overflow-x-auto" {...props} />,
-                            blockquote: ({...props}) => <blockquote className="border-l-4 border-muted-foreground pl-4 italic mb-3" {...props} />,
-                            a: ({...props}) => <a className="text-blue-600 hover:underline" {...props} />,
-                            img: ({...props}) => <img className="max-w-full h-auto rounded mb-3" {...props} />
-                          }}
-                        >
-                          {formData.content}
-                        </ReactMarkdown>
-                      </div>
-                    )}
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-blue-900">
+                        Article Content
+                      </h4>
+                      <p className="text-sm text-blue-700 mt-1">
+                        For articles, the content is managed externally via the
+                        article link. The rich text editor is disabled for
+                        article type resources.
+                      </p>
+                    </div>
                   </div>
-                ) : (
-                  <div className="text-center text-muted-foreground py-8">
-                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Start writing to see a live preview...</p>
+                </div>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div className="text-sm text-gray-600">
+                    <strong>Note:</strong> Articles with external links will
+                    redirect users to the source content rather than displaying
+                    content in this CMS.
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </div>
+              </div>
+            ) : (
+              <RichTextEditor
+                content={formData.content}
+                onContentChange={handleContentChange}
+              />
+            )}
           </div>
         </div>
       </div>
     </AdminLayout>
-  )
-} 
+  );
+}

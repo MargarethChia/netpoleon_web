@@ -102,4 +102,4 @@ Check the browser console for authentication errors and network requests.
 1. **HTTPS**: Always use HTTPS in production
 2. **Domain Restrictions**: Configure allowed domains in Supabase
 3. **Rate Limiting**: Consider implementing rate limiting on login attempts
-4. **Audit Logs**: Monitor authentication events in Supabase dashboard 
+4. **Audit Logs**: Monitor authentication events in Supabase dashboard

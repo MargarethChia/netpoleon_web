@@ -1,6 +1,7 @@
 'use client';
 
-import Image from "next/image";
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Header() {
   return (
@@ -9,29 +10,30 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Image 
-              src="/images/netpoleon.png" 
-              alt="Netpoleon" 
-              width={120} 
-              height={80} 
-              className="h-16 w-auto"
-            />
+            <Link href="/">
+              <Image
+                src="/images/netpoleon.png"
+                alt="Netpoleon"
+                width={120}
+                height={80}
+                className="h-16 w-auto cursor-pointer hover:opacity-90 transition-opacity"
+              />
+            </Link>
           </div>
-          
+
           {/* Navigation */}
           <nav className="hidden md:flex space-x-10">
             {[
-              { href: "/", text: "Home" },
-              { href: "/about", text: "About" },
-              { href: "/partners", text: "Security Partners" },
-              { href: "#services", text: "Services" },
-              { href: "#events", text: "Events" },
-              { href: "#resources", text: "Resources" },
-              { href: "contact", text: "Contact Us" }
-            ].map((link) => (
-              <a 
+              { href: '/about', text: 'About' },
+              { href: '/partners', text: 'Cybersecurity Vendors' },
+              { href: '/services', text: 'Services' },
+              { href: '/events', text: 'Events' },
+              { href: '/resources', text: 'Resources' },
+              { href: '/contact', text: 'Contact Us' },
+            ].map(link => (
+              <a
                 key={link.href}
-                href={link.href} 
+                href={link.href}
                 className="text-white/90 hover:text-white transition-colors font-medium relative group"
               >
                 {link.text}
@@ -40,12 +42,22 @@ export default function Header() {
               </a>
             ))}
           </nav>
-          
+
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button className="text-white hover:text-white/80 p-2 rounded-lg hover:bg-white/10 transition-all duration-300">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             </button>
           </div>
@@ -53,4 +65,4 @@ export default function Header() {
       </div>
     </header>
   );
-} 
+}

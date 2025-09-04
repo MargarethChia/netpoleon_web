@@ -1,51 +1,101 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Plus, Calendar, FileText, Users, Star, Eye, Edit, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import AdminLayout from "../components/AdminLayout";
-import { Event, Resource, Vendor, FeaturedResource, eventsApi, resourcesApi, vendorsApi } from "@/lib/api";
+import { useState, useEffect } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  MoreHorizontal,
+  Plus,
+  Calendar,
+  FileText,
+  Users,
+  Star,
+  Eye,
+  Edit,
+  Trash2,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import AdminLayout from '../components/AdminLayout';
+import {
+  Event,
+  Resource,
+  Vendor,
+  FeaturedResource,
+  FeaturedEvent,
+  eventsApi,
+  resourcesApi,
+  vendorsApi,
+} from '@/lib/api';
 
 export default function AdminPage() {
-  const [events, setEvents] = useState<Event[]>([])
-  const [resources, setResources] = useState<Resource[]>([])
-  const [vendors, setVendors] = useState<Vendor[]>([])
-  const [featuredResources, setFeaturedResources] = useState<FeaturedResource[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [events, setEvents] = useState<Event[]>([]);
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [featuredResources, setFeaturedResources] = useState<
+    FeaturedResource[]
+  >([]);
+  const [featuredEvents, setFeaturedEvents] = useState<FeaturedEvent[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch all dashboard data
   const fetchDashboardData = async () => {
     try {
-      setIsLoading(true)
-      setError(null)
-      
-      const [eventsData, resourcesData, vendorsData, featuredData] = await Promise.all([
+      setIsLoading(true);
+      setError(null);
+
+      const [
+        eventsData,
+        resourcesData,
+        vendorsData,
+        featuredResourcesData,
+        featuredEventsData,
+      ] = await Promise.all([
         eventsApi.getAll(),
         resourcesApi.getAll(),
         vendorsApi.getAll(),
-        resourcesApi.getFeatured()
-      ])
-      
-      setEvents(eventsData)
-      setResources(resourcesData)
-      setVendors(vendorsData)
-      setFeaturedResources(featuredData)
+        resourcesApi.getFeatured(),
+        eventsApi.getFeatured(),
+      ]);
+
+      setEvents(eventsData);
+      setResources(resourcesData);
+      setVendors(vendorsData);
+      setFeaturedResources(featuredResourcesData);
+      setFeaturedEvents(featuredEventsData);
     } catch (err) {
-      console.error("Error fetching dashboard data:", err)
-      setError(err instanceof Error ? err.message : "Failed to load dashboard data")
+      console.error('Error fetching dashboard data:', err);
+      setError(
+        err instanceof Error ? err.message : 'Failed to load dashboard data'
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchDashboardData()
-  }, [])
+    fetchDashboardData();
+  }, []);
 
   if (isLoading) {
     return (
@@ -56,11 +106,11 @@ export default function AdminPage() {
       >
         <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
           {/* Loading Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <Card 
-                key={i} 
-                className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            {[...Array(5)].map((_, i) => (
+              <Card
+                key={i}
+                className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -78,7 +128,10 @@ export default function AdminPage() {
           {/* Loading Tables Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Events Table Loading */}
-            <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500" style={{ animationDelay: '200ms' }}>
+            <Card
+              className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
+              style={{ animationDelay: '200ms' }}
+            >
               <CardHeader>
                 <div className="h-6 w-32 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
                 <div className="h-4 w-48 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -98,7 +151,10 @@ export default function AdminPage() {
             </Card>
 
             {/* Resources Table Loading */}
-            <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500" style={{ animationDelay: '300ms' }}>
+            <Card
+              className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
+              style={{ animationDelay: '300ms' }}
+            >
               <CardHeader>
                 <div className="h-6 w-24 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
                 <div className="h-4 w-40 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -119,7 +175,10 @@ export default function AdminPage() {
           </div>
 
           {/* Vendors Table Loading */}
-          <Card className="animate-pulse animate-in fade-in-0 slide-in-from-bottom-2 duration-500" style={{ animationDelay: '400ms' }}>
+          <Card
+            className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500"
+            style={{ animationDelay: '400ms' }}
+          >
             <CardHeader>
               <div className="h-6 w-20 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
               <div className="h-4 w-52 bg-muted rounded transition-all duration-300 ease-out"></div>
@@ -154,8 +213,8 @@ export default function AdminPage() {
           <div className="text-center">
             <p className="text-red-600 mb-2">Error loading dashboard data</p>
             <p className="text-sm text-muted-foreground">{error}</p>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="mt-4"
               onClick={fetchDashboardData}
             >
@@ -169,54 +228,91 @@ export default function AdminPage() {
 
   return (
     <AdminLayout
-        title="Dashboard"
-        description="Manage your content and data"
-        currentPage="/admin"
-      >
-        <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
+      title="Dashboard"
+      description="Manage your content and data"
+      currentPage="/admin"
+    >
+      <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Events</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Total Events
+              </CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">{events.length}</div>
-              <p className="text-xs text-muted-foreground">+2 from last month</p>
+              <div className="text-2xl font-bold text-card-foreground">
+                {events.length}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                +2 from last month
+              </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Published Resources</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Published Resources
+              </CardTitle>
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">{resources.filter((r: Resource) => r.is_published).length}</div>
+              <div className="text-2xl font-bold text-card-foreground">
+                {resources.filter((r: Resource) => r.is_published).length}
+              </div>
               <p className="text-xs text-muted-foreground">+1 from last week</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Active Vendors</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Active Vendors
+              </CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">{vendors.length}</div>
+              <div className="text-2xl font-bold text-card-foreground">
+                {vendors.length}
+              </div>
               <p className="text-xs text-muted-foreground">+1 new vendor</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Featured Resources</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Featured Resources
+              </CardTitle>
               <Star className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">{featuredResources.length}</div>
-              <p className="text-xs text-muted-foreground">Currently featured</p>
+              <div className="text-2xl font-bold text-card-foreground">
+                {featuredResources.length}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Currently featured
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Featured Events
+              </CardTitle>
+              <Star className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-card-foreground">
+                {featuredEvents.length}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Currently featured
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -233,7 +329,9 @@ export default function AdminPage() {
                   Add Event
                 </Button>
               </CardTitle>
-              <CardDescription>Manage your upcoming events and conferences</CardDescription>
+              <CardDescription>
+                Manage your upcoming events and conferences
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -248,9 +346,13 @@ export default function AdminPage() {
                 <TableBody>
                   {events.slice(0, 3).map((event: Event) => (
                     <TableRow key={event.id}>
-                      <TableCell className="font-medium">{event.title}</TableCell>
-                      <TableCell>{new Date(event.event_date).toLocaleDateString()}</TableCell>
-                      <TableCell>{event.location || "N/A"}</TableCell>
+                      <TableCell className="font-medium">
+                        {event.title}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(event.event_date).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>{event.location || 'N/A'}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -306,14 +408,26 @@ export default function AdminPage() {
                 <TableBody>
                   {resources.slice(0, 3).map((resource: Resource) => (
                     <TableRow key={resource.id}>
-                      <TableCell className="font-medium">{resource.title}</TableCell>
+                      <TableCell className="font-medium">
+                        {resource.title}
+                      </TableCell>
                       <TableCell>
-                        <Badge variant={resource.type === 'article' ? 'default' : 'secondary'}>
+                        <Badge
+                          variant={
+                            resource.type === 'article'
+                              ? 'default'
+                              : 'secondary'
+                          }
+                        >
                           {resource.type}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={resource.is_published ? 'default' : 'outline'}>
+                        <Badge
+                          variant={
+                            resource.is_published ? 'default' : 'outline'
+                          }
+                        >
                           {resource.is_published ? 'Published' : 'Draft'}
                         </Badge>
                       </TableCell>
@@ -358,7 +472,9 @@ export default function AdminPage() {
                 Add Vendor
               </Button>
             </CardTitle>
-            <CardDescription>Manage partner vendors and their information</CardDescription>
+            <CardDescription>
+              Manage partner vendors and their information
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
@@ -375,7 +491,9 @@ export default function AdminPage() {
                 {vendors.map((vendor: Vendor) => (
                   <TableRow key={vendor.id}>
                     <TableCell className="font-medium">{vendor.name}</TableCell>
-                    <TableCell className="max-w-[200px] truncate">{vendor.description || "No description"}</TableCell>
+                    <TableCell className="max-w-[200px] truncate">
+                      {vendor.description || 'No description'}
+                    </TableCell>
                     <TableCell>
                       {vendor.logo_url && (
                         <div className="w-8 h-8 bg-muted rounded flex items-center justify-center">
@@ -383,7 +501,9 @@ export default function AdminPage() {
                         </div>
                       )}
                     </TableCell>
-                    <TableCell>{new Date(vendor.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      {new Date(vendor.created_at).toLocaleDateString()}
+                    </TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -414,6 +534,6 @@ export default function AdminPage() {
           </CardContent>
         </Card>
       </div>
-      </AdminLayout>
-    );
-} 
+    </AdminLayout>
+  );
+}
