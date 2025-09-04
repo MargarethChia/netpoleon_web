@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
       to: ['owen.nicholas.yap@gmail.com'], // Change this to your email
       subject: emailSubject,
       html: emailContent,
-      reply_to: email, // Allow replies to go to the sender
+      replyTo: email, // Allow replies to go to the sender
     });
 
     if (error) {
