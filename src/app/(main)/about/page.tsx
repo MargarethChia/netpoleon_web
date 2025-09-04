@@ -4,42 +4,249 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Timeline } from '@/components/ui/timeline';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function AboutUs() {
+  const timelineData = [
+    {
+      title: '2018',
+      content: (
+        <div>
+          <p className="mb-4 text-sm font-normal text-gray-800 dark:text-neutral-200">
+            Foundation - Netpoleon was founded with the vision to democratize
+            enterprise cybersecurity solutions for organizations of all sizes.
+          </p>
+          <div className="grid grid-cols-1 gap-4">
+            <div className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-lg border border-gray-200">
+              <div className="flex items-center mb-4">
+                <Image
+                  src="/icons/User.png"
+                  alt="Foundation"
+                  width={24}
+                  height={24}
+                  className="mr-3"
+                />
+                <span className="font-semibold text-gray-900">
+                  Company Founded
+                </span>
+              </div>
+              <p className="text-sm text-gray-700 mb-4">
+                Started with a small team of cybersecurity experts dedicated to
+                making enterprise-grade security accessible to all
+                organizations.
+              </p>
+              <div className="text-xs text-gray-600">
+                <strong>Mission:</strong> Democratize enterprise cybersecurity
+                solutions
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: '2020',
+      content: (
+        <div>
+          <p className="mb-4 text-sm font-normal text-gray-800 dark:text-neutral-200">
+            Growth phase - Expanded our vendor network to 50+ partners and
+            established our first enterprise client relationships across the
+            region.
+          </p>
+          <div className="mb-8">
+            <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+              50+ Strategic vendor partnerships established
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+              First enterprise client relationships
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+              Regional expansion into Asia-Pacific
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+              Professional services team established
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-lg text-white">
+              <h4 className="font-semibold mb-2">Key Achievement</h4>
+              <p className="text-sm opacity-90">
+                Successfully onboarded first 100 enterprise clients with 99.8%
+                customer satisfaction rate
+              </p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: '2022',
+      content: (
+        <div>
+          <p className="mb-8 text-sm font-normal text-gray-800 dark:text-neutral-200">
+            Innovation milestone - Launched our managed security services
+            division and achieved SOC 2 Type II certification, establishing
+            ourselves as a trusted security partner.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
+              <div className="flex items-center mb-4">
+                <Image
+                  src="/icons/Post Sales & Customer Support Services.png"
+                  alt="Managed Services"
+                  width={24}
+                  height={24}
+                  className="mr-3"
+                />
+                <span className="font-semibold text-gray-900">
+                  Managed Services
+                </span>
+              </div>
+              <p className="text-sm text-gray-700">
+                24/7 security monitoring and management
+              </p>
+            </div>
+            <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-lg border border-blue-100">
+              <div className="flex items-center mb-4">
+                <Image
+                  src="/icons/Settings.png"
+                  alt="SOC 2"
+                  width={24}
+                  height={24}
+                  className="mr-3"
+                />
+                <span className="font-semibold text-gray-900">
+                  SOC 2 Type II
+                </span>
+              </div>
+              <p className="text-sm text-gray-700">
+                Security compliance certification
+              </p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: '2024',
+      content: (
+        <div>
+          <p className="mb-8 text-sm font-normal text-gray-800 dark:text-neutral-200">
+            Leadership position achieved - Now serving 200+ vendors and 500+
+            implementations, recognized as a leading cybersecurity value-added
+            distributor in the Asia-Pacific region.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
+              <div className="flex items-center mb-4">
+                <Image
+                  src="/icons/Marketing & Business Development Support.png"
+                  alt="Partners"
+                  width={24}
+                  height={24}
+                  className="mr-3"
+                />
+                <span className="font-semibold text-gray-900">
+                  200+ Vendors
+                </span>
+              </div>
+              <p className="text-sm text-gray-700">
+                Comprehensive partner network
+              </p>
+            </div>
+            <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-lg border border-blue-100">
+              <div className="flex items-center mb-4">
+                <Image
+                  src="/icons/Dashboard.png"
+                  alt="Implementations"
+                  width={24}
+                  height={24}
+                  className="mr-3"
+                />
+                <span className="font-semibold text-gray-900">
+                  500+ Deployments
+                </span>
+              </div>
+              <p className="text-sm text-gray-700">
+                Successful implementations
+              </p>
+            </div>
+            <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-lg border border-green-100">
+              <div className="flex items-center mb-4">
+                <Image
+                  src="/icons/Lock.png"
+                  alt="Security"
+                  width={24}
+                  height={24}
+                  className="mr-3"
+                />
+                <span className="font-semibold text-gray-900">
+                  Enterprise Grade
+                </span>
+              </div>
+              <p className="text-sm text-gray-700">Security solutions</p>
+            </div>
+            <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-lg border border-purple-100">
+              <div className="flex items-center mb-4">
+                <Image
+                  src="/icons/Technology & Product Training.png"
+                  alt="Training"
+                  width={24}
+                  height={24}
+                  className="mr-3"
+                />
+                <span className="font-semibold text-gray-900">
+                  Expert Training
+                </span>
+              </div>
+              <p className="text-sm text-gray-700">Comprehensive programs</p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   const services = [
     {
       title: 'Vendor Partner Management',
-      icon: '🤝',
+      icon: '/icons/Marketing & Business Development Support.png',
       desc: 'Strategic cybersecurity vendor relationship management and partnership optimization',
       highlight: 'Enterprise Focus',
     },
     {
       title: 'Solution Architecture',
-      icon: '🏗️',
+      icon: '/icons/Dashboard.png',
       desc: 'Custom security architecture design, planning, and implementation roadmaps',
       highlight: 'Custom Design',
     },
     {
       title: 'Implementation Services',
-      icon: '⚙️',
+      icon: '/icons/Module.png',
       desc: 'End-to-end deployment, integration, and configuration support',
       highlight: 'Full Service',
     },
     {
       title: 'Training & Certification',
-      icon: '📚',
+      icon: '/icons/Technology & Product Training.png',
       desc: 'Comprehensive security awareness and technical certification programs',
       highlight: 'Expert Training',
     },
     {
       title: 'Managed Security Services',
-      icon: '🛡️',
+      icon: '/icons/Lock.png',
       desc: 'Continuous monitoring, management, and optimization of security solutions',
       highlight: '24/7 Monitoring',
     },
     {
       title: 'Security Support',
-      icon: '🚨',
+      icon: '/icons/Post Sales & Customer Support Services.png',
       desc: 'Round-the-clock incident response, troubleshooting, and technical support',
       highlight: 'Always Available',
     },
@@ -54,242 +261,233 @@ export default function AboutUs() {
     },
   };
 
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.6 } },
-  };
-
   const staggerContainer = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
+      {/* Simple Animated Hero Section */}
       <motion.section
-        className="relative h-[500px] bg-gradient-to-br from-primary/10 via-background to-accent/5 overflow-hidden"
+        className="relative py-24 bg-gradient-to-br from-orange-50 to-white overflow-hidden"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
       >
-        <div className="absolute inset-0 bg-[url('/placeholder-0g1r7.png')] bg-cover bg-center opacity-10"></div>
-        <div className="relative max-w-6xl mx-auto px-6 lg:px-8 h-full flex flex-col justify-center text-center">
-          <motion.div className="space-y-6" variants={fadeInUp}>
-            <div className="typewriter">
-              <h1>Trusted Cybersecurity Partner Since 2018</h1>
-            </div>
+        {/* Simple background elements */}
+        <div className="absolute inset-0">
+          <motion.div
+            className="absolute top-32 right-32 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute bottom-32 left-32 w-48 h-48 bg-orange-400/8 rounded-full blur-2xl"
+            animate={{ scale: [1.1, 1, 1.1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
 
-            <h1 className="text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-              About <span className="text-primary">Netpoleon</span>
-            </h1>
-            <p className="text-xl lg:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div className="space-y-8" variants={fadeInUp}>
+            <motion.div
+              className="inline-block"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <Badge
+                variant="outline"
+                className="text-orange-600 border-orange-600 px-4 py-2 text-sm font-medium"
+              >
+                Trusted Cybersecurity Partner Since 2018
+              </Badge>
+            </motion.div>
+
+            <motion.h1
+              className="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              About{' '}
+              <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">
+                Netpoleon
+              </span>
+            </motion.h1>
+
+            <motion.p
+              className="text-xl lg:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
               Leading cybersecurity value-added distributor, empowering
               organizations with cutting-edge security technologies and expert
               implementation services.
-            </p>
+            </motion.p>
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
+              <Link href="/contact">
+                <Button
+                  size="lg"
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 text-lg"
+                >
+                  Partner With Us
+                </Button>
+              </Link>
+              <Link href="/services">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-orange-600 text-orange-600 hover:bg-orange-50 px-8 py-3 text-lg"
+                >
+                  View Our Solutions
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
       </motion.section>
 
+      {/* Hero Message Section - Inspired by Cloudflare */}
       <motion.section
-        className="py-16 bg-white"
+        className="py-20 bg-white"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={staggerContainer}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Mission Section */}
-            <div className="space-y-6">
-              {/* Mission Image Placeholder */}
-              <motion.div
-                className="bg-gray-300 rounded-lg h-48 flex items-center justify-center"
-                variants={fadeInUp}
-              >
-                <div className="text-center text-gray-600">
-                  <div className="w-12 h-12 bg-gray-400 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-gray-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-sm">Mission-focused image</p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="bg-gray-50 p-8 rounded-lg"
-                variants={fadeInUp}
-              >
-                <Badge
-                  variant="outline"
-                  className="text-primary border-primary"
-                >
-                  Our Mission
-                </Badge>
-                <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-                  Democratizing Enterprise Cybersecurity
-                </h2>
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  To provide organizations of all sizes access to world-class
-                  security technologies, expert implementation services, and
-                  ongoing support through our trusted distribution network.
-                </p>
-              </motion.div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Hero Image Section */}
+          <motion.div
+            className="relative h-64 bg-gradient-to-r from-orange-100 via-orange-50 to-blue-50 rounded-2xl overflow-hidden mb-16"
+            variants={fadeInUp}
+          >
+            {/* Animated Security Icons */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="grid grid-cols-8 gap-4 opacity-60">
+                {Array.from({ length: 24 }).map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="w-12 h-16 bg-gradient-to-b from-orange-400 to-orange-600 rounded-t-full rounded-b-sm"
+                    style={{
+                      background: `linear-gradient(to bottom, 
+                        ${
+                          i % 4 === 0
+                            ? '#f97316, #ea580c'
+                            : i % 4 === 1
+                              ? '#3b82f6, #1d4ed8'
+                              : i % 4 === 2
+                                ? '#10b981, #059669'
+                                : '#8b5cf6, #7c3aed'
+                        })`,
+                    }}
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      opacity: [0.6, 0.8, 0.6],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      delay: i * 0.1,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                ))}
+              </div>
             </div>
 
-            {/* Vision Section */}
-            <div className="space-y-6">
-              {/* Vision Image Placeholder */}
-              <motion.div
-                className="bg-gray-300 rounded-lg h-48 flex items-center justify-center"
-                variants={fadeInUp}
-              >
-                <div className="text-center text-gray-600">
-                  <div className="w-12 h-12 bg-gray-400 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-gray-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-sm">Vision-focused image</p>
-                </div>
-              </motion.div>
+            {/* Overlay pattern */}
+            <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
+          </motion.div>
 
-              <motion.div
-                className="bg-gray-50 p-8 rounded-lg"
-                variants={fadeInUp}
-              >
-                <Badge
-                  variant="outline"
-                  className="text-primary border-primary"
-                >
-                  Our Vision
-                </Badge>
-                <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-                  A More Secure Digital World
-                </h2>
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  To be the global leader in cybersecurity value-added
-                  distribution, creating a more secure digital world by
-                  connecting innovative security vendors with organizations that
-                  need protection.
-                </p>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </motion.section>
-
-      <motion.section
-        className="py-20 bg-background"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-      >
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <motion.div variants={fadeInUp} className="space-y-4">
-              <Badge variant="outline" className="text-primary border-primary">
-                Our Journey
-              </Badge>
-              <h2 className="text-4xl lg:text-5xl font-bold text-foreground">
-                Our Story
+          {/* Two Column Content */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column - Main Message */}
+            <motion.div variants={fadeInUp}>
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-8">
+                Building a more{' '}
+                <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">
+                  secure Internet
+                </span>
               </h2>
             </motion.div>
+
+            {/* Right Column - Description */}
+            <motion.div variants={fadeInUp} className="space-y-6">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  About Netpoleon
+                </h3>
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-3"></div>
+                  <p className="text-gray-700">
+                    Protecting organizations across the Asia-Pacific region
+                  </p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-3"></div>
+                  <p className="text-gray-700">
+                    Democratizing enterprise-grade security for businesses of
+                    all sizes
+                  </p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-3"></div>
+                  <p className="text-gray-700">
+                    Building the future of cybersecurity distribution
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
-
-          <motion.div className="space-y-12" variants={fadeIn}>
-            <div className="relative">
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary/30"></div>
-
-              {[
-                {
-                  year: '2018',
-                  title: 'Foundation',
-                  desc: 'Founded with the vision to democratize enterprise cybersecurity solutions for organizations of all sizes.',
-                },
-                {
-                  year: '2020',
-                  title: 'Growth',
-                  desc: 'Expanded our vendor network to 50+ partners and established our first enterprise client relationships.',
-                },
-                {
-                  year: '2022',
-                  title: 'Innovation',
-                  desc: 'Launched our managed security services division and achieved SOC 2 Type II certification hjhguiuguihgyuhgtyujhgtyujhgtyuijhgtyujh.',
-                },
-                {
-                  year: '2024',
-                  title: 'Leadership',
-                  desc: 'Now serving 200+ vendors and 500+ implementations, recognized as a leading cybersecurity VAD.',
-                },
-              ].map((milestone, index) => (
-                <motion.div
-                  key={index}
-                  className="relative flex items-start space-x-8"
-                  variants={fadeInUp}
-                >
-                  <div className="flex-shrink-0 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg">
-                    {milestone.year.slice(-2)}
-                  </div>
-                  <div className="flex-1 space-y-2">
-                    <h3 className="text-xl font-semibold text-foreground">
-                      {milestone.title}
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {milestone.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
         </div>
       </motion.section>
 
+      {/* Our Story Section with Timeline */}
+      <section className="bg-gray-50">
+        <div className="relative w-full overflow-clip">
+          <Timeline data={timelineData} />
+        </div>
+      </section>
+
+      {/* Services Section */}
       <motion.section
-        className="py-20 bg-card/30"
+        className="py-24 bg-white"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={staggerContainer}
       >
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <motion.div variants={fadeInUp} className="space-y-4">
-              <Badge variant="secondary" className="text-primary">
+            <motion.div variants={fadeInUp} className="space-y-6">
+              <Badge
+                variant="outline"
+                className="text-orange-600 border-orange-600 px-4 py-2"
+              >
                 What We Do
               </Badge>
-              <h2 className="text-4xl lg:text-5xl font-bold text-foreground">
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">
                 Our Services
               </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              <p className="text-xl text-gray-700 max-w-3xl mx-auto">
                 Comprehensive cybersecurity distribution and support services
                 tailored to your organization&apos;s needs.
               </p>
@@ -307,18 +505,29 @@ export default function AboutUs() {
                 whileHover={{ y: -8, scale: 1.02 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               >
-                <Card className="p-6 h-full border-2 hover:border-primary/30 transition-colors">
+                <Card className="p-6 h-full border border-gray-200 hover:border-orange-300 hover:shadow-lg transition-all duration-300 bg-white">
                   <CardContent className="p-0 space-y-4">
                     <div className="flex items-center justify-between">
-                      <div className="text-3xl">{service.icon}</div>
-                      <Badge variant="outline" className="text-xs">
+                      <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <Image
+                          src={service.icon}
+                          alt={service.title}
+                          width={32}
+                          height={32}
+                          className="w-8 h-8"
+                        />
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="text-xs text-orange-600 border-orange-600"
+                      >
                         {service.highlight}
                       </Badge>
                     </div>
-                    <h3 className="text-xl font-semibold text-foreground">
+                    <h3 className="text-xl font-semibold text-gray-900">
                       {service.title}
                     </h3>
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className="text-gray-700 leading-relaxed">
                       {service.desc}
                     </p>
                   </CardContent>
@@ -329,35 +538,42 @@ export default function AboutUs() {
         </div>
       </motion.section>
 
+      {/* Call to Action Section */}
       <motion.section
-        className="py-20 bg-gradient-to-r from-primary to-accent text-white"
+        className="py-24 bg-gradient-to-r from-orange-600 to-orange-500 text-white relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={staggerContainer}
       >
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-20 w-32 h-32 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-40 h-40 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div variants={fadeInUp} className="space-y-8">
-            <h2 className="text-4xl lg:text-5xl font-bold">
+            <h2 className="text-4xl lg:text-6xl font-bold">
               Ready to Strengthen Your Security Posture?
             </h2>
-            <p className="text-xl opacity-90 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl lg:text-2xl opacity-90 max-w-3xl mx-auto leading-relaxed">
               Partner with Netpoleon to access enterprise-grade cybersecurity
               solutions and expert implementation services tailored to your
               organization.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center pt-6">
               <Button
                 size="lg"
-                variant="secondary"
-                className="text-lg px-8 py-3"
+                className="bg-white text-orange-600 hover:bg-gray-50 text-lg px-8 py-4 font-semibold"
               >
                 Schedule Consultation
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-3 border-white text-white hover:bg-white hover:text-primary bg-transparent"
+                className="text-lg px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-orange-600 bg-transparent font-semibold"
               >
                 View Our Solutions
               </Button>

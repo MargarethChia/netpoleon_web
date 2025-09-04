@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { vendorsApi, type Vendor } from '@/lib/api';
 
@@ -604,11 +604,28 @@ const mainNodes: MainNode[] = [
   },
 ];
 
-export default function ForceBasedGraph() {
+// Mapping between main node IDs and vendor types - moved outside component to prevent recreation
+const nodeTypeMapping: { [key: string]: string[] } = {
+  'security-operations': ['Security Operations'],
+  'emerging-security': ['Emerging Security'],
+  'endpoint-security': ['Endpoint Security'],
+  'application-cloud-security': ['Application & Cloud Security'],
+  'network-perimeter-security': ['Network & Perimeter Security'],
+  'data-security': ['Data Security'],
+  'identity-access': ['Identity & Access'],
+};
+
+interface ForceBasedGraphProps {
+  onVendorsChange?: (vendors: Vendor[]) => void;
+}
+
+export default function ForceBasedGraph({
+  onVendorsChange,
+}: ForceBasedGraphProps = {}) {
   const [clickedNode, setClickedNode] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
   const [showFullDiagram, setShowFullDiagram] = useState(false);
-  const [, setVendors] = useState<Vendor[]>([]);
+  const [vendors, setVendors] = useState<Vendor[]>([]);
   const [dimensions, setDimensions] = useState({
     width: 800,
     height: 600,
@@ -616,6 +633,12 @@ export default function ForceBasedGraph() {
     centerY: 300,
   });
   const containerRef = useRef<HTMLDivElement>(null);
+  const onVendorsChangeRef = useRef(onVendorsChange);
+
+  // Update ref when callback changes
+  useEffect(() => {
+    onVendorsChangeRef.current = onVendorsChange;
+  }, [onVendorsChange]);
 
   // Update dimensions when container size changes
   useEffect(() => {
@@ -665,6 +688,26 @@ export default function ForceBasedGraph() {
 
     fetchVendors();
   }, []);
+
+  // Filter vendors based on clicked node using useMemo
+  const filteredVendorsMemo = useMemo(() => {
+    if (clickedNode && nodeTypeMapping[clickedNode]) {
+      const targetTypes = nodeTypeMapping[clickedNode];
+      return vendors.filter(vendor => {
+        if (!vendor.type) return false;
+        // Split comma-separated types and check if any match
+        const vendorTypes = vendor.type.split(',').map(type => type.trim());
+        return targetTypes.some(targetType => vendorTypes.includes(targetType));
+      });
+    } else {
+      return vendors; // Show all vendors when no node is clicked
+    }
+  }, [clickedNode, vendors]);
+
+  // Update filtered vendors state and call callback
+  useEffect(() => {
+    onVendorsChangeRef.current?.(filteredVendorsMemo);
+  }, [filteredVendorsMemo]);
 
   const handleNodeClick = (nodeId: string) => {
     if (showFullDiagram) return; // Don't handle individual node clicks in full diagram mode
