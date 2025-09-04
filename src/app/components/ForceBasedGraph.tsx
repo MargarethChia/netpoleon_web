@@ -706,7 +706,6 @@ export default function ForceBasedGraph({
 
   // Update filtered vendors state and call callback
   useEffect(() => {
-    setFilteredVendors(filteredVendorsMemo);
     onVendorsChangeRef.current?.(filteredVendorsMemo);
   }, [filteredVendorsMemo]);
 
