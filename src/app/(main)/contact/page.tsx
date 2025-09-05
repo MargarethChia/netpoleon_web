@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
 
 export default function ContactUs() {
   const [subject, setSubject] = useState('');
@@ -106,24 +108,66 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="min-h-screen py-16">
-      <div className="max-w-4xl mx-auto px-6 lg:px-8">
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <motion.section
+        className="py-20 bg-white"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <Badge
+              variant="outline"
+              className="text-orange-600 border-orange-600 px-4 py-2 text-sm font-medium mb-6"
+            >
+              Get in Touch
+            </Badge>
+            <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+              Contact{' '}
+              <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-700 bg-clip-text text-transparent">
+                Netpoleon
+              </span>
+            </h1>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+              Ready to strengthen your cybersecurity posture? Get in touch with
+              our experts to discuss how we can help secure your organization.
+            </p>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         {/* Submit Status Messages */}
         {submitStatus.type && (
-          <div
-            className={`mb-6 p-4 rounded-lg ${
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`mb-8 p-4 rounded-lg ${
               submitStatus.type === 'success'
                 ? 'bg-green-50 border border-green-200 text-green-800'
                 : 'bg-red-50 border border-red-200 text-red-800'
             }`}
           >
             {submitStatus.message}
-          </div>
+          </motion.div>
         )}
 
         {/* Main Contact Form */}
-        <div className="bg-white rounded-lg shadow-sm border p-8 mb-12">
-          <h2 className="text-2xl mb-6">Send us a Message</h2>
+        <motion.div
+          className="bg-white rounded-2xl shadow-lg border border-orange-100 p-8 mb-12"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">
+            Send us a Message
+          </h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid lg:grid-cols-2 gap-6">
               {/* Left Column - Form Fields */}
@@ -140,7 +184,7 @@ export default function ContactUs() {
                       value={formData.firstName}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       placeholder="John"
                     />
                   </div>
@@ -395,7 +439,7 @@ export default function ContactUs() {
               className={`w-full px-8 py-3 rounded-lg transition-colors ${
                 isSubmitting
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-gray-900 hover:bg-gray-800'
+                  : 'bg-orange-600 hover:bg-orange-700'
               } text-white`}
             >
               {isSubmitting ? (
@@ -431,10 +475,15 @@ export default function ContactUs() {
               )}
             </button>
           </form>
-        </div>
+        </motion.div>
 
         {/* Get in Touch Section */}
-        <div className="bg-white rounded-lg shadow-sm border p-8">
+        <motion.div
+          className="bg-white rounded-2xl shadow-lg border border-orange-100 p-8"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
           <h3 className="text-xl mb-6">Get in Touch</h3>
           <div className="grid md:grid-cols-3 gap-8">
             <div>
@@ -462,18 +511,23 @@ export default function ContactUs() {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Phone Number at Bottom */}
-        <div className="text-center mt-16 pt-8 border-t">
+        <motion.div
+          className="text-center mt-16 pt-8 border-t border-orange-100"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+        >
           <p className="text-gray-600 mb-2">Need immediate assistance?</p>
           <a
             href="tel:+1-555-123-4567"
-            className="text-2xl font-medium text-gray-900 hover:text-blue-600 transition-colors"
+            className="text-2xl font-bold text-orange-600 hover:text-orange-700 transition-colors"
           >
             +1 (555) 123-4567
           </a>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
