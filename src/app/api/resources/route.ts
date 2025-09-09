@@ -40,36 +40,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Content is only required for blog posts, not for articles
-    if (body.type === 'blog' && !body.content) {
-      return NextResponse.json(
-        { error: 'Content is required for blog posts' },
-        { status: 400 }
-      );
-    }
-
-    // Article link is required for articles
-    if (body.type === 'article' && !body.article_link) {
-      return NextResponse.json(
-        { error: 'Article link is required for articles' },
-        { status: 400 }
-      );
-    }
-
     // Validate type
-    if (!['article', 'blog'].includes(body.type)) {
+    if (!['article', 'blog', 'news'].includes(body.type)) {
       return NextResponse.json(
-        { error: 'Type must be either "article" or "blog"' },
+        { error: 'Type must be either "article", "blog", or "news"' },
         { status: 400 }
       );
     }
 
-    // Validate article_link is only provided for articles
-    if (body.article_link && body.type !== 'article') {
+    // Validate that either content or article_link is provided, but not both
+    const hasContent = body.content && body.content.trim().length > 0;
+    const hasArticleLink =
+      body.article_link && body.article_link.trim().length > 0;
+
+    if (!hasContent && !hasArticleLink) {
       return NextResponse.json(
-        {
-          error: 'Article link can only be provided for article type resources',
-        },
+        { error: 'Either content or article link is required' },
+        { status: 400 }
+      );
+    }
+
+    if (hasContent && hasArticleLink) {
+      return NextResponse.json(
+        { error: 'Cannot provide both content and article link' },
         { status: 400 }
       );
     }
@@ -80,7 +73,7 @@ export async function POST(request: NextRequest) {
         {
           title: body.title,
           description: body.description || null,
-          content: body.content,
+          content: body.content || '',
           type: body.type,
           published_at: body.published_at || null,
           is_published: body.is_published || false,
@@ -101,7 +94,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(data, { status: 201 });
+    return NextResponse.json(data);
   } catch (error) {
     console.error('Unexpected error:', error);
     return NextResponse.json(

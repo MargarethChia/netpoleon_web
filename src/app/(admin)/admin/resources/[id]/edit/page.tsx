@@ -43,12 +43,13 @@ export default function EditResourcePage() {
     title: '',
     description: '',
     content: '',
-    type: 'article' as 'article' | 'blog',
+    type: 'article' as 'article' | 'blog' | 'news',
     is_published: false,
     published_at: new Date().toISOString().split('T')[0], // Default to today's date
     cover_image_url: '',
     article_link: '',
   });
+  const [contentMode, setContentMode] = useState<'content' | 'link'>('content'); // Track whether user wants to create content or use a link
 
   // Fetch resource data on component mount
   useEffect(() => {
@@ -56,11 +57,24 @@ export default function EditResourcePage() {
       try {
         const data = await resourcesApi.getById(resourceId);
         setResource(data);
+
+        // Determine content mode based on existing data
+        const hasContent = data.content && data.content.trim().length > 0;
+        const hasLink =
+          data.article_link && data.article_link.trim().length > 0;
+
+        // Set content mode based on what data exists
+        if (hasLink && !hasContent) {
+          setContentMode('link');
+        } else {
+          setContentMode('content');
+        }
+
         setFormData({
           title: data.title,
           description: data.description || '',
           content: data.content,
-          type: data.type,
+          type: data.type as 'article' | 'blog' | 'news',
           is_published: data.is_published,
           published_at:
             data.published_at || new Date().toISOString().split('T')[0],
@@ -153,21 +167,23 @@ export default function EditResourcePage() {
       return;
     }
 
-    // Content is only required for blog posts, not for articles
-    if (formData.type === 'blog' && !formData.content) {
+    // Validate that either content or article_link is provided, but not both
+    const hasContent = formData.content.trim().length > 0;
+    const hasArticleLink = formData.article_link.trim().length > 0;
+
+    if (!hasContent && !hasArticleLink) {
       showToast({
         title: 'Validation Error',
-        message: 'Content is required for blog posts',
+        message: 'Please provide either content or an article link',
         type: 'error',
       });
       return;
     }
 
-    // Article link is required for articles
-    if (formData.type === 'article' && !formData.article_link) {
+    if (hasContent && hasArticleLink) {
       showToast({
         title: 'Validation Error',
-        message: 'Article link is required for articles',
+        message: 'Please provide either content OR an article link, not both',
         type: 'error',
       });
       return;
@@ -178,7 +194,9 @@ export default function EditResourcePage() {
     try {
       await resourcesApi.update(resourceId, {
         ...formData,
-        content: formData.type === 'article' ? '' : formData.content, // Empty content for articles
+        // Clear the field that shouldn't be used based on content mode
+        content: contentMode === 'content' ? formData.content : '',
+        article_link: contentMode === 'link' ? formData.article_link : '',
         published_at: formData.published_at || null,
       });
 
@@ -199,6 +217,16 @@ export default function EditResourcePage() {
       });
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleContentModeChange = (mode: 'content' | 'link') => {
+    setContentMode(mode);
+    // Clear the other field when switching modes
+    if (mode === 'content') {
+      setFormData(prev => ({ ...prev, article_link: '' }));
+    } else {
+      setFormData(prev => ({ ...prev, content: '' }));
     }
   };
 
@@ -298,6 +326,7 @@ export default function EditResourcePage() {
                       <SelectContent>
                         <SelectItem value="article">Article</SelectItem>
                         <SelectItem value="blog">Blog Post</SelectItem>
+                        <SelectItem value="news">News</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -315,9 +344,34 @@ export default function EditResourcePage() {
                   />
                 </div>
 
-                {formData.type === 'article' && (
+                {/* Content Mode Selection */}
+                <div className="space-y-2">
+                  <Label>Content Mode</Label>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant={
+                        contentMode === 'content' ? 'default' : 'outline'
+                      }
+                      size="sm"
+                      onClick={() => handleContentModeChange('content')}
+                    >
+                      Create Content
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={contentMode === 'link' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => handleContentModeChange('link')}
+                    >
+                      Use External Link
+                    </Button>
+                  </div>
+                </div>
+
+                {contentMode === 'link' && (
                   <div className="space-y-2">
-                    <Label htmlFor="article_link">Article Link</Label>
+                    <Label htmlFor="article_link">External Link *</Label>
                     <Input
                       id="article_link"
                       value={formData.article_link}
@@ -422,9 +476,9 @@ export default function EditResourcePage() {
             </Card>
           </div>
 
-          {/* Right Side - Rich Text Editor */}
+          {/* Right Side - Rich Text Editor or External Link Info */}
           <div className="space-y-4">
-            {formData.type === 'article' ? (
+            {contentMode === 'link' ? (
               <div className="space-y-4">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <div className="flex items-start gap-3">
@@ -439,21 +493,22 @@ export default function EditResourcePage() {
                     </div>
                     <div>
                       <h4 className="font-medium text-blue-900">
-                        Article Content
+                        External Link Mode
                       </h4>
                       <p className="text-sm text-blue-700 mt-1">
-                        For articles, the content is managed externally via the
-                        article link. The rich text editor is disabled for
-                        article type resources.
+                        This resource will link to external content. Users will
+                        be redirected to the provided URL when they access this
+                        resource.
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                   <div className="text-sm text-gray-600">
-                    <strong>Note:</strong> Articles with external links will
+                    <strong>Note:</strong> Resources with external links will
                     redirect users to the source content rather than displaying
-                    content in this CMS.
+                    content in this CMS. You can switch to &ldquo;Create
+                    Content&rdquo; mode to write content directly in the editor.
                   </div>
                 </div>
               </div>
