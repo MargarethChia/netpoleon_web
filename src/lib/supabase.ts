@@ -30,7 +30,7 @@ export interface Resource {
   title: string;
   description: string | null;
   content: string;
-  type: 'article' | 'blog';
+  type: 'article' | 'blog' | 'news';
   published_at: string | null;
   is_published: boolean;
   cover_image_url: string | null;

@@ -19,12 +19,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     // Create server-side Supabase client
     const supabase = await createClient();
 
-    // Fetch all resources directly from database
+    // Fetch all resources that have content (not external links)
     const { data: allResources, error } = await supabase
       .from('resources')
       .select('*')
       .eq('is_published', true)
-      .eq('type', 'blog');
+      .not('content', 'eq', ''); // Only resources with content (not empty)
 
     if (error) {
       console.error('Error fetching resources:', error);
@@ -127,15 +127,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             prose-td:border prose-td:border-gray-300 prose-td:px-4 prose-td:py-2
             [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
           >
-            {/* Article Link if external */}
-            {resource.type === 'article' && resource.article_link && (
+            {/* External Link Resources (shouldn't appear here since we filtered for content) */}
+            {resource.article_link && !resource.content && (
               <div className="mb-8 p-6 bg-blue-50 rounded-xl border border-blue-200">
                 <h3 className="text-lg font-semibold text-blue-900 mb-3">
-                  External Article
+                  External Resource
                 </h3>
                 <p className="text-blue-700 mb-4">
-                  This is an external article. Click the button below to read
-                  the full content.
+                  This resource links to external content. Click the button
+                  below to read the full content.
                 </p>
                 <a
                   href={resource.article_link}
@@ -144,13 +144,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
                 >
                   <ExternalLink className="w-4 h-4" />
-                  Read Full Article
+                  Read Full Content
                 </a>
               </div>
             )}
 
-            {/* Blog Content */}
-            {resource.type === 'blog' && resource.content && (
+            {/* Resource Content */}
+            {resource.content && (
               <div
                 className="[&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-gray-900 [&>h1]:mb-6 [&>h1]:mt-8 [&>h1]:border-b [&>h1]:border-gray-200 [&>h1]:pb-2
                   [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-gray-800 [&>h2]:mb-4 [&>h2]:mt-6
@@ -175,15 +175,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               />
             )}
 
-            {/* Fallback for blog posts without content */}
-            {resource.type === 'blog' && !resource.content && (
+            {/* Fallback for resources without content */}
+            {!resource.content && !resource.article_link && (
               <div className="text-center py-12">
                 <Eye className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-600 mb-2">
                   Content Not Available
                 </h3>
                 <p className="text-gray-500">
-                  The content for this blog post is not currently available.
+                  The content for this resource is not currently available.
                 </p>
               </div>
             )}
