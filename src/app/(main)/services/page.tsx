@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const whatWeDo = [
   {
@@ -37,6 +38,7 @@ const whatWeDo = [
 const services = [
   {
     id: 1,
+    slug: 'channel-sales-enablement',
     title: 'Channel Sales & Enablement',
     description:
       'Comprehensive channel sales strategies and enablement programs to maximize your distribution network effectiveness.',
@@ -44,6 +46,7 @@ const services = [
   },
   {
     id: 2,
+    slug: 'operations-logistics',
     title: 'Operations & Logistics Services',
     description:
       'End-to-end operational excellence and logistics solutions to streamline your business processes.',
@@ -51,6 +54,7 @@ const services = [
   },
   {
     id: 3,
+    slug: 'pre-sales-consultation',
     title: 'Pre-Sales POV, Consultation & Professional Services',
     description:
       'Strategic pre-sales consultation and professional services to enhance customer engagement and solution design.',
@@ -58,6 +62,7 @@ const services = [
   },
   {
     id: 4,
+    slug: 'post-sales-support',
     title: 'Post-Sales & Customer Support Services',
     description:
       'Comprehensive post-sales support and customer service solutions to ensure long-term customer satisfaction.',
@@ -65,6 +70,7 @@ const services = [
   },
   {
     id: 5,
+    slug: 'technology-training',
     title: 'Technology & Product Training',
     description:
       'Specialized training programs for technology products and solutions to maximize user adoption and proficiency.',
@@ -72,6 +78,7 @@ const services = [
   },
   {
     id: 6,
+    slug: 'vendor-promotion',
     title: 'Vendor Promotion & Augmentation',
     description:
       'Strategic vendor promotion and augmentation services to enhance market presence and operational capabilities.',
@@ -79,6 +86,7 @@ const services = [
   },
   {
     id: 7,
+    slug: 'marketing-business-development',
     title: 'Marketing & Business Development Support',
     description:
       'Comprehensive marketing strategies and business development support to drive growth and market expansion.',
@@ -86,6 +94,7 @@ const services = [
   },
   {
     id: 8,
+    slug: 'finance-services',
     title: 'Finance Services',
     description:
       'Professional financial services and consulting to optimize your business financial performance and strategy.',
@@ -93,6 +102,7 @@ const services = [
   },
   {
     id: 9,
+    slug: 'marketplace-solutions',
     title: 'Marketplace',
     description:
       'Digital marketplace solutions and platforms to facilitate commerce and business transactions.',
@@ -289,9 +299,10 @@ export default function ServicesPage() {
           {/* Services Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service, index) => (
-              <div
+              <Link
                 key={service.id}
-                className={`bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 border border-gray-100 transform hover:-translate-y-3 hover:scale-105 ${
+                href={`/services/${service.slug}`}
+                className={`block bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 border border-gray-100 transform hover:-translate-y-3 hover:scale-105 cursor-pointer ${
                   isServicesVisible
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-16'
@@ -324,7 +335,7 @@ export default function ServicesPage() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
