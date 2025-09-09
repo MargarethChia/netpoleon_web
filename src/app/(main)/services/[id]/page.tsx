@@ -5,15 +5,17 @@ import { Badge } from '@/components/ui/badge';
 import { getServiceData } from '@/data/services-data';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { use } from 'react';
 
 interface ServicePageProps {
-  params: {
-    serviceId: string;
-  };
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default function ServicePage({ params }: ServicePageProps) {
-  const serviceData = getServiceData(params.serviceId);
+  const { id } = use(params);
+  const serviceData = getServiceData(id);
 
   if (!serviceData) {
     notFound();
