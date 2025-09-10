@@ -44,12 +44,6 @@ export default function ContactUs() {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setPartnerFile(e.target.files[0]);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -266,8 +260,8 @@ export default function ContactUs() {
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                       <h4 className="mb-3">Vendor Partnership Information</h4>
                       <p className="text-gray-600 text-sm mb-4">
-                        Download our partnership information package and upload
-                        your company profile to get started.
+                        Download our partnership information package to get
+                        started.
                       </p>
                       <button
                         type="button"
@@ -308,7 +302,7 @@ export default function ContactUs() {
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}
-                        rows={8}
+                        rows={6}
                         className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                         placeholder="Tell us about your vendor partnership interest..."
                       ></textarea>
@@ -351,51 +345,6 @@ export default function ContactUs() {
                         </svg>
                         Download Application Template
                       </button>
-                    </div>
-
-                    <div>
-                      <label htmlFor="partnerFile" className="block mb-2">
-                        Upload Partnership Information
-                      </label>
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                        <input
-                          type="file"
-                          id="partnerFile"
-                          name="partnerFile"
-                          onChange={handleFileChange}
-                          className="hidden"
-                          accept=".pdf,.doc,.docx"
-                        />
-                        <label htmlFor="partnerFile" className="cursor-pointer">
-                          <div className="text-gray-400 mb-2">
-                            <svg
-                              className="w-8 h-8 mx-auto"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                              />
-                            </svg>
-                          </div>
-                          <p className="text-gray-600 mb-1">
-                            Click to upload your company profile or partnership
-                            proposal
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            PDF, DOC, DOCX up to 10MB
-                          </p>
-                          {partnerFile && (
-                            <p className="text-sm text-blue-600 mt-2">
-                              ✓ {partnerFile.name}
-                            </p>
-                          )}
-                        </label>
-                      </div>
                     </div>
 
                     <div>
