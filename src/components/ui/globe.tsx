@@ -177,6 +177,8 @@ export function Globe({ globeConfig, data }: WorldProps) {
     // Add white points at specific branch locations
     const branchPoints = [
       { lat: -33.8688, lng: 151.2093, size: defaultProps.pointSize }, // Australia, Sydney
+      { lat: -37.8136, lng: 144.9631, size: defaultProps.pointSize }, // Australia, Melbourne
+      { lat: -27.4698, lng: 153.0251, size: defaultProps.pointSize }, // Australia, Brisbane
       { lat: 12.5657, lng: 104.991, size: defaultProps.pointSize }, // Cambodia
       { lat: 20.5937, lng: 78.9629, size: defaultProps.pointSize }, // India
       { lat: -0.7893, lng: 113.9213, size: defaultProps.pointSize }, // Indonesia
@@ -225,6 +227,8 @@ export function Globe({ globeConfig, data }: WorldProps) {
     // Define branch points for ring animations
     const branchPointsForRings = [
       { lat: -33.8688, lng: 151.2093 }, // Australia, Sydney
+      { lat: -37.8136, lng: 144.9631 }, // Australia, Melbourne
+      { lat: -27.4698, lng: 153.0251 }, // Australia, Brisbane
       { lat: 12.5657, lng: 104.991 }, // Cambodia
       { lat: 20.5937, lng: 78.9629 }, // India
       { lat: -0.7893, lng: 113.9213 }, // Indonesia
