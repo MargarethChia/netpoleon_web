@@ -22,6 +22,7 @@ import {
   Building2,
   X,
   Globe,
+  ChevronDown,
 } from 'lucide-react';
 import { vendorsApi } from '@/lib/api';
 import { showToast } from '../../../../../../components/ui/toast';
@@ -29,12 +30,21 @@ import AdminLayout from '../../../../components/AdminLayout';
 import { uploadImage } from '../../../../../../lib/storage';
 import { Vendor } from '@/lib/api';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+const VENDOR_TYPES = [
+  'Application & Cloud Security',
+  'Identity & Access',
+  'Security Operations',
+  'Emerging Security',
+  'Network & Perimeter Security',
+  'Endpoint Security',
+  'Data Security',
+];
 
 export default function EditVendorPage() {
   const router = useRouter();
@@ -54,7 +64,7 @@ export default function EditVendorPage() {
     logo_url: '',
     image_url: '',
     link: '',
-    type: '',
+    types: [] as string[],
     diagram_url: '',
   });
 
@@ -71,7 +81,7 @@ export default function EditVendorPage() {
           logo_url: data.logo_url || '',
           image_url: data.image_url || '',
           link: data.link || '',
-          type: data.type || '',
+          types: data.type ? data.type.split(', ').filter(Boolean) : [],
           diagram_url: data.diagram_url || '',
         });
       } catch (error) {
@@ -94,6 +104,22 @@ export default function EditVendorPage() {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleTypeToggle = (type: string) => {
+    setFormData(prev => ({
+      ...prev,
+      types: prev.types.includes(type)
+        ? prev.types.filter(t => t !== type)
+        : [...prev.types, type],
+    }));
+  };
+
+  const removeType = (typeToRemove: string) => {
+    setFormData(prev => ({
+      ...prev,
+      types: prev.types.filter(t => t !== typeToRemove),
+    }));
   };
 
   const handleLogoUpload = async (file: File) => {
@@ -237,6 +263,7 @@ export default function EditVendorPage() {
     try {
       await vendorsApi.update(vendorId, {
         ...formData,
+        type: formData.types.join(', '), // Convert array to comma-separated string for DB
       });
 
       showToast({
@@ -354,38 +381,54 @@ export default function EditVendorPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="type">Type</Label>
-                  <Select
-                    value={formData.type}
-                    onValueChange={value => handleInputChange('type', value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select vendor type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Application & Cloud Security">
-                        Application & Cloud Security
-                      </SelectItem>
-                      <SelectItem value="Identity & Access">
-                        Identity & Access
-                      </SelectItem>
-                      <SelectItem value="Security Operations">
-                        Security Operations
-                      </SelectItem>
-                      <SelectItem value="Emerging Security">
-                        Emerging Security
-                      </SelectItem>
-                      <SelectItem value="Network & Perimeter Security">
-                        Network & Perimeter Security
-                      </SelectItem>
-                      <SelectItem value="Endpoint Security">
-                        Endpoint Security
-                      </SelectItem>
-                      <SelectItem value="Data Security">
-                        Data Security
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="types">Vendor Types</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between"
+                      >
+                        <span>
+                          {formData.types.length === 0
+                            ? 'Select vendor types'
+                            : `${formData.types.length} type${formData.types.length === 1 ? '' : 's'} selected`}
+                        </span>
+                        <ChevronDown className="h-4 w-4 opacity-50" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-[400px]">
+                      {VENDOR_TYPES.map(type => (
+                        <DropdownMenuCheckboxItem
+                          key={type}
+                          checked={formData.types.includes(type)}
+                          onCheckedChange={() => handleTypeToggle(type)}
+                        >
+                          {type}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  {/* Selected types display */}
+                  {formData.types.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {formData.types.map(type => (
+                        <div
+                          key={type}
+                          className="flex items-center gap-1 bg-primary text-primary-foreground px-2 py-1 rounded-md text-sm"
+                        >
+                          <span>{type}</span>
+                          <button
+                            type="button"
+                            onClick={() => removeType(type)}
+                            className="hover:bg-secondary/40 rounded p-0.5"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="content">Content</Label>
@@ -638,12 +681,24 @@ export default function EditVendorPage() {
                         <h1 className="text-2xl font-bold text-foreground">
                           {formData.name || 'Vendor Name'}
                         </h1>
+                        {formData.types.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-2">
+                            {formData.types.map(type => (
+                              <span
+                                key={type}
+                                className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
+                              >
+                                {type}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                         {formData.link && (
                           <a
                             href={formData.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline text-sm flex items-center gap-1"
+                            className="text-blue-600 hover:underline text-sm flex items-center gap-1 mt-2"
                           >
                             <Globe className="h-3 w-3" />
                             Visit Website

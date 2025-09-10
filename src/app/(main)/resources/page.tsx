@@ -16,9 +16,9 @@ export default function ResourcesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState<'all' | 'article' | 'blog'>(
-    'all'
-  );
+  const [selectedType, setSelectedType] = useState<
+    'all' | 'article' | 'blog' | 'news'
+  >('all');
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -218,11 +218,13 @@ export default function ResourcesPage() {
 
                 {/* Type Filter */}
                 <div className="flex gap-2">
-                  {['all', 'article', 'blog'].map(type => (
+                  {['all', 'article', 'blog', 'news'].map(type => (
                     <button
                       key={type}
                       onClick={() =>
-                        setSelectedType(type as 'all' | 'article' | 'blog')
+                        setSelectedType(
+                          type as 'all' | 'article' | 'blog' | 'news'
+                        )
                       }
                       className={`px-6 py-3 rounded-xl font-medium transition-all ${
                         selectedType === type
@@ -295,7 +297,7 @@ export default function ResourcesPage() {
                         </div>
                       </div>
 
-                      {resource.type === 'article' && resource.article_link ? (
+                      {resource.article_link ? (
                         <a
                           href={resource.article_link}
                           target="_blank"
@@ -303,7 +305,7 @@ export default function ResourcesPage() {
                           className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium text-base w-fit"
                         >
                           <ExternalLink className="h-4 w-4" />
-                          Read Article
+                          Read Full Content
                         </a>
                       ) : (
                         <Link
@@ -451,7 +453,7 @@ export default function ResourcesPage() {
                         </div>
                       </div>
 
-                      {resource.type === 'article' && resource.article_link ? (
+                      {resource.article_link ? (
                         <a
                           href={resource.article_link}
                           target="_blank"
@@ -459,7 +461,7 @@ export default function ResourcesPage() {
                           className="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium self-start mt-auto"
                         >
                           <ExternalLink className="h-3 w-3" />
-                          Read Article
+                          Read Full Content
                         </a>
                       ) : (
                         <Link

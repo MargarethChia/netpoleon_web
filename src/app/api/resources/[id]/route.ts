@@ -95,26 +95,30 @@ export async function PUT(
       );
     }
 
-    // Content is only required for blog posts, not for articles
-    if (updatedData.type === 'blog' && !updatedData.content) {
-      return NextResponse.json(
-        { error: 'Content is required for blog posts' },
-        { status: 400 }
-      );
-    }
-
-    // Article link is required for articles
-    if (updatedData.type === 'article' && !updatedData.article_link) {
-      return NextResponse.json(
-        { error: 'Article link is required for articles' },
-        { status: 400 }
-      );
-    }
-
     // Validate type
-    if (!['article', 'blog'].includes(updatedData.type)) {
+    if (!['article', 'blog', 'news'].includes(updatedData.type)) {
       return NextResponse.json(
-        { error: 'Type must be either "article" or "blog"' },
+        { error: 'Type must be either "article", "blog", or "news"' },
+        { status: 400 }
+      );
+    }
+
+    // Validate that either content or article_link is provided, but not both
+    const hasContent =
+      updatedData.content && updatedData.content.trim().length > 0;
+    const hasArticleLink =
+      updatedData.article_link && updatedData.article_link.trim().length > 0;
+
+    if (!hasContent && !hasArticleLink) {
+      return NextResponse.json(
+        { error: 'Either content or article link is required' },
+        { status: 400 }
+      );
+    }
+
+    if (hasContent && hasArticleLink) {
+      return NextResponse.json(
+        { error: 'Cannot provide both content and article link' },
         { status: 400 }
       );
     }

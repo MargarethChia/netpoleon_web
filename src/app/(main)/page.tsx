@@ -4,6 +4,7 @@ import VendorCarousel from '../components/VendorCarousel';
 //import Statistics from '../components/Statistics';
 import NewsSection from '../components/CardsSection';
 import GraphSection from '../components/GraphSection';
+import Statistics from '../components/Statistics';
 
 // import AboutSection from "../components/AboutSection";
 // import InfoSection from "../components/InfoSection";
@@ -114,8 +115,8 @@ export default function Home() {
       {imageTextSections.map((section, idx) => (
         <ImageTextSection key={idx} {...section} />
       ))}
+      <Statistics />
       <GraphSection />
-      {/*<Statistics />*/}
       <NewsSection {...news} />
     </div>
   );
