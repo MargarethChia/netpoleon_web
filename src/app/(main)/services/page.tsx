@@ -230,7 +230,7 @@ export default function ServicesPage() {
       {/* Main Content */}
       <div className="flex min-h-screen">
         {/* Left Side - Fixed Icon (Half the page) */}
-        <div className="w-1/2 flex items-center justify-center top-20 h-screen sticky bg-amber-100">
+        <div className="w-[30%] flex items-center justify-center top-20 h-screen sticky bg-amber-100">
           <div className="text-center">
             {/* Icon Container with Fade Effect */}
             <div className="relative w-full h-full">
@@ -240,7 +240,7 @@ export default function ServicesPage() {
         </div>
 
         {/* Right Side - Scrolling Content */}
-        <div className="w-1/2">
+        <div className="w-[70%]">
           <div ref={containerRef} className="relative">
             {whatWeDo.map((service, index) => (
               <div
