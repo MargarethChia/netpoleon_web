@@ -11,7 +11,7 @@ export default function OurVendors() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [displayedVendors, setDisplayedVendors] = useState<number>(6);
+  const [displayedVendors, setDisplayedVendors] = useState<number>(8);
   const [portfolioUrl, setPortfolioUrl] = useState<string>('');
   const [portfolioLoading, setPortfolioLoading] = useState(false);
 
@@ -47,7 +47,7 @@ export default function OurVendors() {
   // Load more vendors
   const loadMore = () => {
     setDisplayedVendors(prev => {
-      const newCount = Math.min(prev + 6, vendors.length);
+      const newCount = Math.min(prev + 8, vendors.length);
       return newCount;
     });
   };
@@ -233,7 +233,7 @@ export default function OurVendors() {
             variants={staggerContainer}
             transition={{ duration: 0.6 }}
           >
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {vendorsToShow.map((vendor, index) => (
                 <motion.div
                   key={vendor.id}
@@ -332,7 +332,7 @@ export default function OurVendors() {
           </motion.div>
         )}
 
-        {!hasMoreVendors && vendors.length > 6 && (
+        {!hasMoreVendors && vendors.length > 8 && (
           <motion.div
             className="text-center mt-12"
             initial={{ opacity: 0, y: 20 }}
@@ -341,7 +341,7 @@ export default function OurVendors() {
             transition={{ duration: 0.6 }}
           >
             <motion.button
-              onClick={() => setDisplayedVendors(6)}
+              onClick={() => setDisplayedVendors(8)}
               className="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors inline-flex items-center font-bold"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

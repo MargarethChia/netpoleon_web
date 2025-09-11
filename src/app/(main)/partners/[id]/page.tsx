@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
+import { Award } from 'lucide-react';
 
 interface Vendor {
   id: number;
@@ -13,6 +15,8 @@ interface Vendor {
   content: string | null;
   logo_url: string | null;
   image_url: string | null;
+  diagram_url: string | null;
+  type: string | null;
   link: string | null;
   created_at: string;
   updated_at: string;
@@ -95,12 +99,6 @@ export default function VendorDetailPage() {
             <p className="text-red-600 font-normal">
               {error || 'The vendor you are looking for could not be found.'}
             </p>
-            <Link
-              href="/partners"
-              className="mt-4 inline-block bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors font-bold"
-            >
-              Back to Partners
-            </Link>
           </div>
         </div>
       </div>
@@ -108,150 +106,149 @@ export default function VendorDetailPage() {
   }
 
   return (
-    <div className="min-h-screen py-16">
-      <div className="max-w-4xl mx-auto px-6 lg:px-8">
-        {/* Back Button */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <Link
-            href="/partners"
-            className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            ← Back to Partners
-          </Link>
-        </motion.div>
-
-        {/* Vendor Header */}
+    <div className="min-h-screen bg-stone-100">
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        {/* Card Container */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="bg-white rounded-lg shadow-sm border p-8 mb-8"
+          transition={{ duration: 0.6 }}
+          className="bg-white rounded-2xl shadow-lg overflow-hidden"
         >
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <h1 className="text-3xl lg:text-4xl mb-6">{vendor.name}</h1>
-
-              {vendor.description && (
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  {vendor.description}
-                </p>
-              )}
-
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                {vendor.link && (
-                  <div className="col-span-2">
-                    <span className="text-gray-500">Check Them Out:</span>
-                    <div className="font-medium">
-                      <a
-                        href={vendor.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 transition-colors"
-                      >
-                        Visit Website
-                      </a>
-                    </div>
-                  </div>
-                )}
-              </div>
+          {/* Featured Image Banner */}
+          {vendor.image_url && (
+            <div className="relative h-64 w-full overflow-hidden">
+              <Image
+                src={vendor.image_url}
+                alt={`${vendor.name} featured image`}
+                width={800}
+                height={600}
+                className="w-full h-full object-cover"
+              />
             </div>
-            <div className="aspect-video overflow-hidden rounded-lg bg-white flex items-center justify-center p-8">
+          )}
+
+          {/* Profile Section */}
+          <div className="relative px-8 pb-8">
+            {/* Circular Logo */}
+            <div className="absolute -top-16 left-8 w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
               {vendor.logo_url ? (
                 <Image
                   src={vendor.logo_url}
                   alt={`${vendor.name} logo`}
-                  width={400}
-                  height={225}
-                  className="w-full h-full object-contain"
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-contain p-4"
                 />
               ) : (
-                <span className="text-gray-500">{vendor.name} Logo</span>
+                <div className="text-gray-500 text-4xl font-bold">
+                  {vendor.name.charAt(0)}
+                </div>
               )}
             </div>
+
+            {/* Company Info */}
+            <div className="pt-20">
+              <div className="flex items-center gap-4 mb-4">
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {vendor.name}
+                </h1>
+                <Badge className="bg-orange-100 text-orange-600 border-orange-200 font-semibold">
+                  <Award className="w-4 h-4 mr-2" />
+                  Verified Partner
+                </Badge>
+              </div>
+
+              {/* Type Badges */}
+              {vendor.type && (
+                <div className="flex flex-wrap gap-2">
+                  {vendor.type.split(',').map((typeItem, index) => (
+                    <span
+                      key={index}
+                      className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium"
+                    >
+                      {typeItem.trim()}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Bookmark Icon */}
+              <div className="absolute top-8 right-8">
+                <svg
+                  className="w-6 h-6 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                  />
+                </svg>
+              </div>
+            </div>
           </div>
-        </motion.div>
 
-        {/* About Vendor - Using Dynamic Content */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white rounded-lg shadow-sm border p-8 mb-8"
-        >
-          <h2 className="text-2xl mb-6">About {vendor.name}</h2>
-
-          {vendor.content ? (
-            <div
-              className="prose max-w-none text-gray-600"
-              dangerouslySetInnerHTML={{ __html: vendor.content }}
-            />
-          ) : (
-            <div className="text-gray-500 text-center py-12">
-              <svg
-                className="w-16 h-16 mx-auto mb-4 text-gray-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              <p className="text-lg">No content available for this vendor.</p>
-              <p className="text-sm">
-                Please check back later or contact us for more information.
+          {/* Description */}
+          {vendor.description && (
+            <div className="px-8 pb-8">
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {vendor.description}
               </p>
+            </div>
+          )}
+
+          {/* Main Content Section */}
+          {vendor.content && (
+            <div className="px-8 pb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                About {vendor.name}
+              </h2>
+              <div
+                className="text-gray-700 leading-relaxed prose max-w-none"
+                dangerouslySetInnerHTML={{ __html: vendor.content }}
+              />
+            </div>
+          )}
+
+          {/* Diagram Section */}
+          {vendor.diagram_url && (
+            <div className="px-8 pb-8">
+              <div className="bg-stone-200 rounded-lg p-8 w-full h-80 flex items-center justify-center">
+                <Image
+                  src={vendor.diagram_url}
+                  alt={`${vendor.name} diagram`}
+                  width={600}
+                  height={400}
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </div>
           )}
         </motion.div>
 
-        {/* Vendor Image Section */}
-        {vendor.image_url && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="bg-white rounded-lg shadow-sm border p-8 mb-8"
-          >
-            <h2 className="text-2xl mb-6">Gallery</h2>
-            <div className="aspect-video overflow-hidden rounded-lg relative">
-              <Image
-                src={vendor.image_url}
-                alt={`${vendor.name} gallery image`}
-                fill
-                className="object-cover"
-              />
-            </div>
-          </motion.div>
-        )}
-
-        {/* Interested Section */}
+        {/* Interested in Working Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-gray-50 rounded-lg p-8 text-center"
+          className="bg-gray-50 rounded-lg p-12 lg:p-16 text-center mt-8 mb-8"
         >
-          <h3 className="text-2xl mb-4">
+          <h3 className="text-3xl lg:text-4xl mb-8 font-bold text-gray-900">
             Interested in Working with {vendor.name}?
           </h3>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-gray-600 mb-12 max-w-3xl mx-auto text-lg lg:text-xl leading-relaxed">
             Ready to discuss your project requirements? Get in touch with us to
             learn more about how {vendor.name} can help your business succeed.
           </p>
           <Link
             href="/contact"
-            className="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors inline-flex items-center"
+            className="inline-block bg-orange-600 hover:bg-orange-700 text-white px-12 py-5 rounded-lg font-semibold text-xl transition-colors duration-300 shadow-lg hover:shadow-xl"
           >
-            Contact Us About This Vendor
+            Contact us about this vendor
             <span className="ml-2">→</span>
           </Link>
         </motion.div>
