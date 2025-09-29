@@ -46,9 +46,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
     return (
       <div className="bg-white">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8 hidden lg:block">
           {/* Breadcrumb Navigation */}
-          <nav className="mb-8 text-sm text-gray-600 flex items-center">
+          <nav className="text-sm text-gray-600 flex items-center">
             <Link
               href="/resources"
               className="hover:text-gray-900 transition-colors flex items-center"
@@ -60,21 +60,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {resource.title.toUpperCase()}
             </span>
           </nav>
+        </div>
 
-          {/* Hero Image */}
-          {resource.cover_image_url && (
-            <div className="mb-8">
-              <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100">
-                <Image
-                  src={resource.cover_image_url}
-                  alt={resource.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+        {/* Hero Image - Edge to edge on mobile, text width on desktop */}
+        {resource.cover_image_url && (
+          <div className="mb-8">
+            <div className="relative aspect-video overflow-hidden bg-gray-100 lg:max-w-4xl lg:mx-auto lg:rounded-lg">
+              <Image
+                src={resource.cover_image_url}
+                alt={resource.title}
+                fill
+                className="object-cover"
+              />
             </div>
-          )}
+          </div>
+        )}
 
+        <div className="max-w-4xl mx-auto px-6 lg:px-8">
           {/* Blog Post Metadata */}
           <div className="mb-6 flex flex-wrap items-center gap-4">
             <div className="flex items-center text-gray-600 text-sm">
@@ -190,7 +192,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </article>
 
           {/* Back to Resources Link */}
-          <div className="mt-16 pt-8 border-t border-gray-200">
+          <div className="my-16 pt-8 border-t border-gray-200">
             <Link
               href="/resources"
               className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors font-medium"

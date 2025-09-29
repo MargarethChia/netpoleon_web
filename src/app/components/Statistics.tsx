@@ -92,22 +92,22 @@ export default function Statistics() {
   return (
     <div
       ref={ref}
-      className="relative w-full h-[400px] bg-gradient-to-r from-orange-400 to-amber-600"
+      className="relative w-full h-auto py-12 sm:py-16 lg:py-0 lg:h-[400px] bg-gradient-to-r from-orange-400 to-amber-600"
     >
       {/* Statistics Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="flex space-x-16 px-8">
+      <div className="relative lg:absolute lg:inset-0 flex items-center justify-center lg:items-center lg:justify-center z-10">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 px-4 sm:px-6 lg:px-8">
           {/* Stat 1 */}
           <div className="text-center">
             <div className="relative">
               <div className="w-3 h-3 bg-white rounded-full mx-auto mb-3"></div>
               <div className="w-1 h-12 bg-white mx-auto"></div>
             </div>
-            <div className="text-5xl font-bold text-white mb-2">
+            <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
               {stats[0].current}
               {stats[0].current === 0 ? '' : stats[0].suffix}
             </div>
-            <div className="text-base text-white font-bold max-w-[160px]">
+            <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
               {stats[0].label}
             </div>
           </div>
@@ -118,11 +118,11 @@ export default function Statistics() {
               <div className="w-3 h-3 bg-white rounded-full mx-auto mb-3"></div>
               <div className="w-1 h-12 bg-white mx-auto"></div>
             </div>
-            <div className="text-5xl font-bold text-white mb-2">
+            <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
               {stats[1].current}
               {stats[1].current === 0 ? '' : stats[1].suffix}
             </div>
-            <div className="text-base text-white font-bold max-w-[160px]">
+            <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
               {stats[1].label}
             </div>
           </div>
@@ -133,11 +133,11 @@ export default function Statistics() {
               <div className="w-3 h-3 bg-white rounded-full mx-auto mb-3"></div>
               <div className="w-1 h-12 bg-white mx-auto"></div>
             </div>
-            <div className="text-5xl font-bold text-white mb-2">
+            <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
               {stats[2].current}
               {stats[2].current === 0 ? '' : stats[2].suffix}
             </div>
-            <div className="text-base text-white font-bold max-w-[160px]">
+            <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
               {stats[2].label}
             </div>
           </div>
@@ -148,11 +148,11 @@ export default function Statistics() {
               <div className="w-3 h-3 bg-white rounded-full mx-auto mb-3"></div>
               <div className="w-1 h-12 bg-white mx-auto"></div>
             </div>
-            <div className="text-5xl font-bold text-white mb-2">
+            <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
               {stats[3].current}
               {stats[3].current === 0 ? '' : stats[3].suffix}
             </div>
-            <div className="text-base text-white font-bold max-w-[160px]">
+            <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
               {stats[3].label}
             </div>
           </div>

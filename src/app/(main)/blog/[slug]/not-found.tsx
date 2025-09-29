@@ -3,9 +3,9 @@ import { ArrowLeft, Search, Home } from 'lucide-react';
 
 export default function BlogPostNotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center">
-      <div className="max-w-2xl mx-auto px-6 lg:px-8 text-center">
-        <div className="bg-white rounded-2xl shadow-lg p-12 border border-orange-100">
+    <div className="min-h-screen bg-gradient-to-br bg-white flex items-center justify-center">
+      <div className="max-w-2xl mx-auto px-0 lg:px-8 text-center">
+        <div className="bg-white rounded-2xl p-6 lg:p-12">
           {/* Icon */}
           <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <Search className="w-12 h-12 text-orange-600" />

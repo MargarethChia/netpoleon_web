@@ -471,8 +471,8 @@ export default function HeroSection({ title, subtitle }: HeroSectionProps) {
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-start overflow-hidden bg-white">
-      <div className="max-w-7xl mx-auto w-full relative flex items-center justify-between px-4 sm:px-6 lg:px-8 gap-12 lg:gap-16 xl:gap-20">
+    <section className="relative min-h-[70vh] lg:min-h-screen flex items-center justify-start overflow-hidden bg-white">
+      <div className="max-w-7xl mx-auto w-full relative flex flex-col-reverse lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 gap-8 lg:gap-16 xl:gap-20">
         {/* Left side - Text content */}
         <div className="flex-1 max-w-2xl lg:max-w-3xl">
           <AnimatePresence>
@@ -524,8 +524,8 @@ export default function HeroSection({ title, subtitle }: HeroSectionProps) {
         </div>
 
         {/* Right side - Globe */}
-        <div className="flex-1 flex justify-center items-center">
-          <div className="relative w-full h-[600px]">
+        <div className="flex-1 w-full flex justify-center items-center mt-10 lg:mt-0">
+          <div className="relative w-full h-72 sm:h-96 lg:h-[600px]">
             <World data={sampleArcs} globeConfig={globeConfig} />
           </div>
         </div>

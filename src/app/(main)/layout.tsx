@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import './main.css';
 import { ToastContainer } from '@/components/ui/toast';
 import Header from '../components/Header';
@@ -35,6 +36,7 @@ export default function RootLayout({
         {children}
         <ToastContainer />
         <Footer />
+        <GoogleAnalytics gaId="G-LV9ZZN2FSG" />
       </body>
     </html>
   );
