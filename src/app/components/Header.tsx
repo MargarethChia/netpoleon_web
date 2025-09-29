@@ -133,7 +133,7 @@ export default function Header() {
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden h-screen absolute top-full left-0 right-0 bg-white shadow-xl border-t border-orange-200/30 backdrop-blur-md">
+          <div className="md:hidden h-screen absolute top-full left-0 right-0 bg-white border-t border-orange-200/30 backdrop-blur-md">
             <nav className="px-6 py-6 space-y-2">
               {[
                 {
