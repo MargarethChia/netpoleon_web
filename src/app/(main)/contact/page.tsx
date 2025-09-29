@@ -124,7 +124,7 @@ export default function ContactUs() {
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
               Contact{' '}
-              <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-700 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">
                 Netpoleon
               </span>
             </h1>
@@ -154,7 +154,7 @@ export default function ContactUs() {
 
         {/* Main Contact Form */}
         <motion.div
-          className="bg-white rounded-2xl shadow-lg border border-orange-100 p-8 mb-12"
+          className="mb-12"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -388,7 +388,7 @@ export default function ContactUs() {
               className={`w-full px-8 py-3 rounded-lg transition-colors ${
                 isSubmitting
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-orange-600 hover:bg-orange-700'
+                  : 'bg-gradient-to-r from-orange-600 via-amber-600 to-orange-600 hover:bg-orange-700'
               } text-white`}
             >
               {isSubmitting ? (
@@ -428,7 +428,6 @@ export default function ContactUs() {
 
         {/* Get in Touch Section */}
         <motion.div
-          className="bg-white rounded-2xl shadow-lg border border-orange-100 p-8"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
