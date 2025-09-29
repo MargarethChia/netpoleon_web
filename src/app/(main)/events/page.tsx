@@ -210,7 +210,7 @@ export default function EventsPage() {
       {/* Main Video Hero Section - Replaces the header */}
       {mainVideoEvent ? (
         <motion.section
-          className="relative h-[600px] overflow-hidden shadow-lg z-50 mb-16"
+          className="relative h-[600px] overflow-hidden shadow-lg z-1 mb-16"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
@@ -343,7 +343,7 @@ export default function EventsPage() {
       ) : (
         // Show featured event information even without video
         <motion.section
-          className="relative h-[500px] overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 shadow-lg z-50 mb-16"
+          className="relative h-[500px] overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 shadow-lg z-1 mb-16"
           style={{
             clipPath:
               'polygon(0 0, 100% 0, 100% 90%, 80% 95%, 50% 100%, 20% 95%, 0 90%)',
@@ -409,7 +409,7 @@ export default function EventsPage() {
                   whileInView="visible"
                   viewport={{ once: true }}
                 >
-                  <div className="text-center text-white px-6 lg:px-8 max-w-4xl relative z-10">
+                  <div className="text-center text-white px-6 lg:px-8 max-w-4xl relative z-1">
                     <motion.div
                       className="flex items-center justify-center gap-3 mb-6"
                       variants={fadeInUp}

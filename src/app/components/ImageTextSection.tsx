@@ -165,7 +165,7 @@ export default function ImageTextSection({
         <div className="grid lg:grid-cols-2 gap-6 mt-8">
           {/* Left Side - Mid-market Card */}
           <motion.div
-            className="relative"
+            className="relative order-2 lg:order-1"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
@@ -209,7 +209,7 @@ export default function ImageTextSection({
 
           {/* Right Side - Data Visualization Cards Only */}
           <motion.div
-            className="relative"
+            className="relative order-1 lg:order-2"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}

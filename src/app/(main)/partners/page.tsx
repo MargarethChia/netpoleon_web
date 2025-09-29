@@ -134,7 +134,7 @@ export default function OurVendors() {
     <div>
       {/* Header - Full Width */}
       <motion.section
-        className="relative h-[500px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg z-50 mb-16"
+        className="relative h-[500px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg z-1 mb-16"
         style={{
           clipPath:
             'polygon(0 0, 100% 0, 100% 90%, 80% 95%, 50% 100%, 20% 95%, 0 90%)',
@@ -145,11 +145,6 @@ export default function OurVendors() {
         variants={fadeInDown}
         transition={{ duration: 0.6 }}
       >
-        {/* Circular overlays at bottom */}
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-white/20 rounded-full transform translate-x-1/2 translate-y-1/2 blur-sm"></div>
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-white/15 rounded-full transform translate-x-1/3 translate-y-1/3 blur-md"></div>
-        <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-white/10 rounded-full transform translate-x-1/4 translate-y-1/4 blur-lg"></div>
-
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-6 lg:px-8 max-w-4xl relative z-10">
             <h1 className="text-4xl lg:text-6xl mb-6 font-bold drop-shadow-lg">
@@ -175,8 +170,8 @@ export default function OurVendors() {
           transition={{ duration: 0.6 }}
         >
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex-1">
                 <h3 className="text-lg mb-2 font-bold">
                   Complete Vendor Portfolio
                 </h3>
@@ -188,7 +183,7 @@ export default function OurVendors() {
               <motion.button
                 onClick={handlePortfolioDownload}
                 disabled={portfolioLoading || !portfolioUrl}
-                className={`px-6 py-3 rounded-lg transition-colors inline-flex items-center font-bold ${
+                className={`px-6 py-3 rounded-lg transition-colors inline-flex items-center justify-center font-bold w-full sm:w-auto ${
                   portfolioLoading || !portfolioUrl
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-blue-600 hover:bg-blue-700 text-white'
