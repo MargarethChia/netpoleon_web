@@ -145,11 +145,6 @@ export default function OurVendors() {
         variants={fadeInDown}
         transition={{ duration: 0.6 }}
       >
-        {/* Circular overlays at bottom */}
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-white/20 rounded-full transform translate-x-1/2 translate-y-1/2 blur-sm"></div>
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-white/15 rounded-full transform translate-x-1/3 translate-y-1/3 blur-md"></div>
-        <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-white/10 rounded-full transform translate-x-1/4 translate-y-1/4 blur-lg"></div>
-
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-6 lg:px-8 max-w-4xl relative z-10">
             <h1 className="text-4xl lg:text-6xl mb-6 font-bold drop-shadow-lg">

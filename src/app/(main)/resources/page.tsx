@@ -19,6 +19,19 @@ export default function ResourcesPage() {
   const [selectedType, setSelectedType] = useState<
     'all' | 'article' | 'blog' | 'news'
   >('all');
+  const [loadingLinks, setLoadingLinks] = useState<Set<number>>(new Set());
+
+  const handleLinkClick = (resourceId: number) => {
+    setLoadingLinks(prev => new Set(prev).add(resourceId));
+  };
+
+  const handleLinkLoad = (resourceId: number) => {
+    setLoadingLinks(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(resourceId);
+      return newSet;
+    });
+  };
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -98,8 +111,15 @@ export default function ResourcesPage() {
 
   // Animation variants
   const fadeInDown = {
-    hidden: { opacity: 0, y: -50 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: -20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: 'easeOut' as const,
+      },
+    },
   };
 
   const staggerContainer = {
@@ -107,21 +127,8 @@ export default function ResourcesPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut' as const,
+        staggerChildren: 0.15,
+        delayChildren: 0.1,
       },
     },
   };
@@ -166,10 +173,10 @@ export default function ResourcesPage() {
   const featuredResourceObjects = getFeaturedResourceObjects();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <motion.section
-        className="relative h-[500px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg z-50 mb-16"
+        className="relative h-[300px] lg:h-[500px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg z-1 mb-16"
         style={{
           clipPath:
             'polygon(0 0, 100% 0, 100% 90%, 80% 95%, 50% 100%, 20% 95%, 0 90%)',
@@ -180,11 +187,6 @@ export default function ResourcesPage() {
         variants={fadeInDown}
         transition={{ duration: 0.6 }}
       >
-        {/* Circular overlays at bottom */}
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-white/20 rounded-full transform translate-x-1/2 translate-y-1/2 blur-sm"></div>
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-white/15 rounded-full transform translate-x-1/3 translate-y-1/3 blur-md"></div>
-        <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-white/10 rounded-full transform translate-x-1/4 translate-y-1/4 blur-lg"></div>
-
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-6 lg:px-8 max-w-4xl relative z-10">
             <h1 className="text-4xl lg:text-6xl mb-6 font-bold drop-shadow-lg">
@@ -194,50 +196,6 @@ export default function ResourcesPage() {
               Discover insights, articles, and resources to help you stay ahead
               in cybersecurity
             </p>
-
-            {/* Search and Filter */}
-            <motion.div
-              className="max-w-4xl mx-auto mt-8"
-              variants={fadeInDown}
-              initial="hidden"
-              animate="visible"
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <div className="flex flex-col md:flex-row gap-4 bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-                {/* Search Input */}
-                <div className="flex-1 relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70 h-5 w-5" />
-                  <input
-                    type="text"
-                    placeholder="Search resources..."
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
-                  />
-                </div>
-
-                {/* Type Filter */}
-                <div className="flex gap-2">
-                  {['all', 'article', 'blog', 'news'].map(type => (
-                    <button
-                      key={type}
-                      onClick={() =>
-                        setSelectedType(
-                          type as 'all' | 'article' | 'blog' | 'news'
-                        )
-                      }
-                      className={`px-6 py-3 rounded-xl font-medium transition-all ${
-                        selectedType === type
-                          ? 'bg-white text-orange-600 shadow-lg'
-                          : 'bg-white/20 text-white hover:bg-white/30'
-                      }`}
-                    >
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
           </div>
         </div>
       </motion.section>
@@ -245,80 +203,170 @@ export default function ResourcesPage() {
       {/* Featured Resources Section */}
       {featuredResourceObjects.length > 0 && (
         <motion.section
-          className="py-20 bg-gradient-to-br"
+          className="py-8 bg-gradient-to-br"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              {featuredResourceObjects.map(resource => (
-                <motion.div
+            <div className="max-w-7xl mx-auto">
+              {featuredResourceObjects.map((resource, index) => (
+                <motion.article
                   key={resource.id}
-                  variants={cardVariants}
-                  className="group relative"
+                  className="bg-white rounded-lg overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-md hover:border-orange-300 hover:-translate-y-1 group flex flex-col lg:flex-row mb-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.8,
+                    delay: index * 0.1,
+                    ease: 'easeOut',
+                  }}
+                  viewport={{ once: true }}
                 >
-                  <div className="flex flex-col lg:flex-row">
-                    {/* Cover Image - Left Side */}
-                    {resource.cover_image_url && (
-                      <div className="relative lg:w-1/2 h-64 lg:h-80 overflow-hidden rounded-2xl">
-                        <Image
-                          src={resource.cover_image_url}
-                          alt={resource.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+                  {resource.article_link ? (
+                    <a
+                      href={resource.article_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => handleLinkClick(resource.id)}
+                      onLoad={() => handleLinkLoad(resource.id)}
+                      className="flex flex-col lg:flex-row w-full"
+                    >
+                      {/* Cover Image - Left Side */}
+                      <div className="relative lg:w-1/2 aspect-video overflow-hidden">
+                        {resource.cover_image_url ? (
+                          <Image
+                            src={resource.cover_image_url}
+                            alt={resource.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
+                            <Image
+                              src="/images/netpoleon.png"
+                              alt="Netpoleon Logo"
+                              width={120}
+                              height={120}
+                              className="object-contain opacity-80"
+                            />
+                          </div>
+                        )}
                       </div>
-                    )}
 
-                    {/* Content Details - Right Side */}
-                    <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center">
-                      <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors">
-                        {resource.title}
-                      </h3>
+                      {/* Content Details - Right Side */}
+                      <div className="lg:w-1/2 p-6 lg:p-8 flex flex-col justify-center">
+                        <div className="flex items-center mb-4 text-sm text-gray-500">
+                          <Calendar className="h-5 w-5 mr-2 text-orange-500" />
+                          <span className="uppercase">{resource.type}</span>
+                        </div>
 
-                      <p className="text-lg text-gray-600 mb-6 leading-relaxed line-clamp-3">
-                        {resource.description
-                          ? resource.description.length > 150
-                            ? `${resource.description.substring(0, 150)}...`
-                            : resource.description
-                          : 'No description available for this resource.'}
-                      </p>
+                        <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                          {resource.title}
+                        </h3>
 
-                      <div className="flex items-center justify-between text-base text-gray-500 mb-6">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-5 w-5" />
-                          {resource.published_at
-                            ? new Date(
-                                resource.published_at
-                              ).toLocaleDateString()
-                            : 'No date'}
+                        <p className="text-lg text-gray-600 mb-6 leading-relaxed flex-1">
+                          {resource.description
+                            ? resource.description.length > 200
+                              ? `${resource.description.substring(0, 200)}...`
+                              : resource.description
+                            : 'No description available for this resource.'}
+                        </p>
+
+                        <div className="mt-auto">
+                          <span
+                            className={`inline-flex items-center font-bold transition-colors duration-300 ${
+                              loadingLinks.has(resource.id)
+                                ? 'text-orange-400 cursor-wait'
+                                : 'text-orange-500 hover:text-orange-600'
+                            }`}
+                          >
+                            <span>
+                              {loadingLinks.has(resource.id)
+                                ? 'Loading...'
+                                : 'Read Full Content'}
+                            </span>
+                            {loadingLinks.has(resource.id) ? (
+                              <div className="ml-2 w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                              <ExternalLink className="ml-2 w-4 h-4" />
+                            )}
+                          </span>
                         </div>
                       </div>
+                    </a>
+                  ) : (
+                    <Link
+                      href={`/blog/${generateSlug(resource.title)}`}
+                      onClick={() => handleLinkClick(resource.id)}
+                      className="flex flex-col lg:flex-row w-full"
+                    >
+                      {/* Cover Image - Left Side */}
+                      <div className="relative lg:w-1/2 aspect-video overflow-hidden">
+                        {resource.cover_image_url ? (
+                          <Image
+                            src={resource.cover_image_url}
+                            alt={resource.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
+                            <Image
+                              src="/images/netpoleon.png"
+                              alt="Netpoleon Logo"
+                              width={120}
+                              height={120}
+                              className="object-contain opacity-80"
+                            />
+                          </div>
+                        )}
+                      </div>
 
-                      {resource.article_link ? (
-                        <a
-                          href={resource.article_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium text-base w-fit"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                          Read Full Content
-                        </a>
-                      ) : (
-                        <Link
-                          href={`/blog/${generateSlug(resource.title)}`}
-                          className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium text-base w-fit"
-                        >
-                          <Eye className="h-4 w-4" />
-                          Read More
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
+                      {/* Content Details - Right Side */}
+                      <div className="lg:w-1/2 p-6 lg:p-8 flex flex-col justify-center">
+                        <div className="flex items-center mb-4 text-sm text-gray-500">
+                          <Calendar className="h-5 w-5 mr-2 text-orange-500" />
+                          <span className="uppercase">{resource.type}</span>
+                        </div>
+
+                        <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                          {resource.title}
+                        </h3>
+
+                        <p className="text-lg text-gray-600 mb-6 leading-relaxed flex-1">
+                          {resource.description
+                            ? resource.description.length > 200
+                              ? `${resource.description.substring(0, 200)}...`
+                              : resource.description
+                            : 'No description available for this resource.'}
+                        </p>
+
+                        <div className="mt-auto">
+                          <span
+                            className={`inline-flex items-center font-bold transition-colors duration-300 ${
+                              loadingLinks.has(resource.id)
+                                ? 'text-orange-400 cursor-wait'
+                                : 'text-orange-500 hover:text-orange-600'
+                            }`}
+                          >
+                            <span>
+                              {loadingLinks.has(resource.id)
+                                ? 'Loading Content...'
+                                : 'Read More'}
+                            </span>
+                            {loadingLinks.has(resource.id) ? (
+                              <div className="ml-2 w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                              <Eye className="ml-2 w-4 h-4" />
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+                </motion.article>
               ))}
             </div>
           </div>
@@ -327,29 +375,62 @@ export default function ResourcesPage() {
 
       {/* All Resources Section */}
       <motion.section
-        key={`resources-${selectedType}-${searchTerm}`}
-        className="py-20 bg-white"
+        className="py-8 bg-white"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div className="text-center mb-16" variants={fadeInDown}>
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              All Resources
-            </h2>
-            <div className="w-24 h-1 bg-orange-500 mx-auto rounded-full mb-6"></div>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              {filteredResources.length}{' '}
-              {filteredResources.length === 1 ? 'resource' : 'resources'} found
-              {searchTerm && ` for "${searchTerm}"`}
-              {selectedType !== 'all' && ` in ${selectedType}s`}
-            </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          {/* Search and Filter */}
+          <div className="max-w-4xl mx-auto mb-8">
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Search Input */}
+              <div className="flex-1 relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <input
+                  type="text"
+                  placeholder="Search resources..."
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
 
-            {/* Active Filters Display */}
-            {(searchTerm || selectedType !== 'all') && (
-              <div className="mt-4 flex flex-wrap justify-center gap-2">
+              {/* Type Filter */}
+              <div className="flex gap-2">
+                {['all', 'article', 'blog', 'news'].map(type => (
+                  <button
+                    key={type}
+                    onClick={() =>
+                      setSelectedType(
+                        type as 'all' | 'article' | 'blog' | 'news'
+                      )
+                    }
+                    className={`px-6 py-3 rounded-xl font-medium transition-all ${
+                      selectedType === type
+                        ? 'bg-orange-500 text-white shadow-lg'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Results Count and Active Filters */}
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600 mb-2">
+                {filteredResources.length}{' '}
+                {filteredResources.length === 1 ? 'resource' : 'resources'}{' '}
+                found
+                {searchTerm && ` for "${searchTerm}"`}
+                {selectedType !== 'all' && ` in ${selectedType}s`}
+              </p>
+
+              {/* Active Filters Display */}
+              <div className="flex flex-wrap justify-center gap-2 min-h-[2rem]">
                 {searchTerm && (
                   <span className="inline-flex items-center gap-2 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">
                     Search: &ldquo;{searchTerm}&rdquo;
@@ -362,19 +443,19 @@ export default function ResourcesPage() {
                   </span>
                 )}
                 {selectedType !== 'all' && (
-                  <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                  <span className="inline-flex items-center gap-2 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">
                     Type: {selectedType}
                     <button
                       onClick={() => setSelectedType('all')}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-orange-600 hover:text-orange-800"
                     >
                       ×
                     </button>
                   </span>
                 )}
               </div>
-            )}
-          </motion.div>
+            </div>
+          </div>
 
           {filteredResources.length === 0 ? (
             <motion.div className="text-center py-16" variants={fadeInDown}>
@@ -400,81 +481,162 @@ export default function ResourcesPage() {
             </motion.div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {filteredResources.map(resource => (
-                <motion.div
+              {filteredResources.map((resource, index) => (
+                <motion.article
                   key={resource.id}
-                  variants={cardVariants}
-                  className="group"
+                  className="bg-white rounded-lg overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-md hover:border-orange-300 hover:-translate-y-1 group flex flex-col cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.8,
+                    delay: index * 0.1,
+                    ease: 'easeOut',
+                  }}
+                  viewport={{ once: true }}
                 >
-                  <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-orange-200 h-96 flex flex-col">
-                    {resource.cover_image_url && (
-                      <div className="relative h-40 overflow-hidden flex-shrink-0">
-                        <Image
-                          src={resource.cover_image_url}
-                          alt={resource.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute top-3 left-3">
+                  {resource.article_link ? (
+                    <a
+                      href={resource.article_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => handleLinkClick(resource.id)}
+                      onLoad={() => handleLinkLoad(resource.id)}
+                      className="flex flex-col h-full"
+                    >
+                      {/* Image */}
+                      <div className="relative aspect-video overflow-hidden">
+                        {resource.cover_image_url ? (
+                          <Image
+                            src={resource.cover_image_url}
+                            alt={resource.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
+                            <Image
+                              src="/images/netpoleon.png"
+                              alt="Netpoleon Logo"
+                              width={120}
+                              height={120}
+                              className="object-contain opacity-80"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-6 flex-1 flex flex-col">
+                        <div className="flex items-center mb-4 text-sm text-gray-500">
+                          <Calendar className="h-5 w-5 mr-2 text-orange-500" />
+                          <span className="uppercase">{resource.type}</span>
+                        </div>
+
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">
+                          {resource.title}
+                        </h3>
+
+                        <p className="text-gray-600 mb-6 flex-1">
+                          {resource.description
+                            ? resource.description.length > 120
+                              ? `${resource.description.substring(0, 120)}...`
+                              : resource.description
+                            : 'No description available for this resource.'}
+                        </p>
+
+                        <div className="mt-auto">
                           <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              resource.type === 'article'
-                                ? 'bg-orange-100 text-orange-800'
-                                : 'bg-blue-100 text-blue-800'
+                            className={`inline-flex items-center font-bold transition-colors duration-300 ${
+                              loadingLinks.has(resource.id)
+                                ? 'text-orange-400 cursor-wait'
+                                : 'text-orange-500 hover:text-orange-600'
                             }`}
                           >
-                            {resource.type}
+                            <span>
+                              {loadingLinks.has(resource.id)
+                                ? 'Loading...'
+                                : 'Read Full Content'}
+                            </span>
+                            {loadingLinks.has(resource.id) ? (
+                              <div className="ml-2 w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                              <ExternalLink className="ml-2 w-4 h-4" />
+                            )}
                           </span>
                         </div>
                       </div>
-                    )}
-
-                    <div className="p-5 flex flex-col h-full">
-                      <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 min-h-[2.5rem]">
-                        {resource.title}
-                      </h3>
-
-                      <p className="text-gray-600 mb-3 text-sm line-clamp-3 flex-grow min-h-[3.75rem]">
-                        {resource.description
-                          ? resource.description.length > 100
-                            ? `${resource.description.substring(0, 100)}...`
-                            : resource.description
-                          : 'No description available for this resource.'}
-                      </p>
-
-                      <div className="flex items-center justify-between text-xs text-gray-500 mb-4 mt-auto">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {resource.published_at
-                            ? new Date(
-                                resource.published_at
-                              ).toLocaleDateString()
-                            : 'No date'}
-                        </div>
+                    </a>
+                  ) : (
+                    <Link
+                      href={`/blog/${generateSlug(resource.title)}`}
+                      onClick={() => handleLinkClick(resource.id)}
+                      className="flex flex-col h-full"
+                    >
+                      {/* Image */}
+                      <div className="relative aspect-video overflow-hidden">
+                        {resource.cover_image_url ? (
+                          <Image
+                            src={resource.cover_image_url}
+                            alt={resource.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
+                            <Image
+                              src="/images/netpoleon.png"
+                              alt="Netpoleon Logo"
+                              width={120}
+                              height={120}
+                              className="object-contain opacity-80"
+                            />
+                          </div>
+                        )}
                       </div>
 
-                      {resource.article_link ? (
-                        <a
-                          href={resource.article_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium self-start mt-auto"
-                        >
-                          <ExternalLink className="h-3 w-3" />
-                          Read Full Content
-                        </a>
-                      ) : (
-                        <Link
-                          href={`/blog/${generateSlug(resource.title)}`}
-                          className="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium self-start mt-auto"
-                        >
-                          <Eye className="h-3 w-3" />
-                          Read More
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
+                      {/* Content */}
+                      <div className="p-6 flex-1 flex flex-col">
+                        <div className="flex items-center mb-4 text-sm text-gray-500">
+                          <Calendar className="h-5 w-5 mr-2 text-orange-500" />
+                          <span className="uppercase">{resource.type}</span>
+                        </div>
+
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">
+                          {resource.title}
+                        </h3>
+
+                        <p className="text-gray-600 mb-6 flex-1">
+                          {resource.description
+                            ? resource.description.length > 120
+                              ? `${resource.description.substring(0, 120)}...`
+                              : resource.description
+                            : 'No description available for this resource.'}
+                        </p>
+
+                        <div className="mt-auto">
+                          <span
+                            className={`inline-flex items-center font-bold transition-colors duration-300 ${
+                              loadingLinks.has(resource.id)
+                                ? 'text-orange-400 cursor-wait'
+                                : 'text-orange-500 hover:text-orange-600'
+                            }`}
+                          >
+                            <span>
+                              {loadingLinks.has(resource.id)
+                                ? 'Loading Content...'
+                                : 'Read More'}
+                            </span>
+                            {loadingLinks.has(resource.id) ? (
+                              <div className="ml-2 w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                              <Eye className="ml-2 w-4 h-4" />
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+                </motion.article>
               ))}
             </div>
           )}
