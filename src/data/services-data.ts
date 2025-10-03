@@ -8,8 +8,6 @@ export interface ServiceData {
   id: string;
   title: string;
   categories: string[];
-  provider: string;
-  duration: string;
   overview: string[];
   whatsIncluded?: string[];
   keyBenefits?: string[];
@@ -23,429 +21,232 @@ export interface ServiceData {
 }
 
 export const servicesData: Record<string, ServiceData> = {
-  'cloud-migration': {
-    id: 'cloud-migration',
-    title: 'Cloud Migration Services',
-    categories: ['IT Services', 'High Complexity'],
-    provider: 'TechFlow Solutions',
-    duration: '2-6 months',
+  nxone: {
+    id: 'nxone',
+    title: 'NXOne - Lead Generation Services',
+    categories: ['Lead Generation', 'Sales Development'],
     overview: [
-      'Our comprehensive cloud migration service helps businesses transition from legacy on-premises infrastructure to modern cloud platforms. We ensure minimal downtime, maximum security, and optimal performance throughout the migration process.',
-      'Our experienced team handles everything from initial assessment and planning to execution and post-migration support. We work with all major cloud providers including AWS, Azure, and Google Cloud Platform.',
+      'NXOne is our dedicated lead generation unit, built to help technology vendors and partners engage the right audiences, generate qualified leads, and accelerate opportunities in the market. We combine our dedicated SDRs, bespoke executive roundtables, and targeted demand generation activities to deliver measurable pipeline outcomes.',
+      "Whether you're looking to expand into new accounts, nurture relationships with decision-makers, or fast-track opportunities, NXOne provides tailored programs designed to connect you with the right people at the right time.",
     ],
     whatsIncluded: [
-      'Pre-migration assessment and planning',
-      'Data migration and synchronization',
-      'Application modernization',
-      'Security configuration and compliance',
-      'Performance optimization',
-      'Staff training and documentation',
-      'Post-migration support',
+      'SDR as a Service - Dedicated sales development representatives',
+      'Bespoke Executive Roundtables - Targeted executive engagement',
+      'End User Conferences - Industry-focused events',
+      'Demand Generation Campaigns - Comprehensive marketing initiatives',
     ],
     keyBenefits: [
-      'Reduced infrastructure costs',
-      'Improved scalability and flexibility',
-      'Enhanced security and compliance',
-      'Better disaster recovery capabilities',
-      'Increased operational efficiency',
-      'Access to advanced cloud services',
+      'Accelerate Pipeline Growth - Generate more qualified meetings and opportunities in less time',
+      'Extensive ANZ Database Access - Leverage our database to reach the right decision makers, influencers and accounts across the IT landscape',
+      'Scalable Services - Tailored services that scale with your campaign needs and budget from high impact events designed for scale to executive discussions',
+      'Measurable ROI - Clear reporting and insights to track campaign performance and pipeline contribution',
     ],
     process: [
       {
         number: 1,
-        title: 'Assessment',
+        title: 'Discovery & Alignment',
         description:
-          'Comprehensive evaluation of current infrastructure and requirements',
+          'Align with Sales and Marketing team to define objectives, messaging and target accounts',
       },
       {
         number: 2,
-        title: 'Planning',
-        description: 'Detailed migration strategy and timeline development',
+        title: 'Campaign Format',
+        description:
+          'SDR outreach, roundtables, conferences or other demand-gen activity type',
       },
       {
         number: 3,
-        title: 'Preparation',
-        description: 'Environment setup and security configuration',
+        title: 'Account Mapping',
+        description: 'Identify and qualify target account list for campaign',
       },
       {
         number: 4,
-        title: 'Migration',
-        description: 'Phased migration execution with minimal downtime',
+        title: 'Engagement & Execution',
+        description:
+          'Outreach, event invitations and follow-ups managed by SDR team',
       },
       {
         number: 5,
-        title: 'Optimization',
-        description: 'Performance tuning and cost optimization',
-      },
-      {
-        number: 6,
-        title: 'Support',
-        description: 'Ongoing monitoring and support services',
+        title: 'Reporting & Handover',
+        description:
+          'Comprehensive reporting on results, insights, and next steps to ensure seamless handover to sales team',
       },
     ],
     ctaSection: {
-      title: 'Ready to Get Started?',
+      title: 'Accelerate Your Pipeline Growth',
       description:
-        'Contact us to discuss your specific requirements and get a customized quote for this service.',
-      primaryButton: 'Request Consultation',
-      secondaryButton: 'View Provider Profile',
-    },
-  },
-  'cybersecurity-assessment': {
-    id: 'cybersecurity-assessment',
-    title: 'Cybersecurity Assessment Services',
-    categories: ['Security', 'Medium Complexity'],
-    provider: 'SecureNet Experts',
-    duration: '2-4 weeks',
-    overview: [
-      'Comprehensive cybersecurity assessment to identify vulnerabilities and strengthen your security posture. Our expert team conducts thorough evaluations of your infrastructure, applications, and security policies.',
-      'We provide detailed reports with actionable recommendations to improve your organization&apos;s security resilience and compliance with industry standards.',
-    ],
-    whatsIncluded: [
-      'Network security assessment',
-      'Application security testing',
-      'Vulnerability scanning',
-      'Penetration testing',
-      'Security policy review',
-      'Compliance assessment',
-      'Risk analysis and reporting',
-    ],
-    keyBenefits: [
-      'Identify security vulnerabilities',
-      'Improve compliance posture',
-      'Reduce security risks',
-      'Enhanced incident response',
-      'Better security awareness',
-    ],
-    ctaSection: {
-      title: 'Secure Your Organization',
-      description:
-        'Get a comprehensive security assessment to protect your business from cyber threats.',
-      primaryButton: 'Schedule Assessment',
-      secondaryButton: 'Learn More',
-    },
-  },
-  'managed-security': {
-    id: 'managed-security',
-    title: 'Managed Security Services',
-    categories: ['Security', 'Ongoing Service'],
-    provider: 'CyberGuard Solutions',
-    duration: 'Ongoing',
-    overview: [
-      '24/7 managed security services providing continuous monitoring, threat detection, and incident response for your organization.',
-      'Our Security Operations Center (SOC) team uses advanced tools and expertise to protect your business around the clock.',
-    ],
-    whatsIncluded: [
-      '24/7 security monitoring',
-      'Threat detection and analysis',
-      'Incident response',
-      'Security event management',
-      'Regular security reports',
-      'Compliance monitoring',
-    ],
-    keyBenefits: [
-      'Round-the-clock protection',
-      'Expert security team',
-      'Rapid incident response',
-      'Cost-effective security',
-      'Compliance assurance',
-    ],
-  },
-  'channel-sales-enablement': {
-    id: 'channel-sales-enablement',
-    title: 'Channel Sales & Enablement',
-    categories: ['Sales', 'Strategic Planning'],
-    provider: 'Netpoleon Partner Network',
-    duration: '3-6 months',
-    overview: [
-      'Comprehensive channel sales strategies and enablement programs to maximize your distribution network effectiveness.',
-      'Our expert team helps you build, optimize, and scale your channel partner relationships for sustained growth and market expansion.',
-    ],
-    whatsIncluded: [
-      'Channel strategy development',
-      'Partner recruitment and onboarding',
-      'Sales training and certification',
-      'Marketing co-op programs',
-      'Performance tracking and analytics',
-      'Channel conflict resolution',
-    ],
-    keyBenefits: [
-      'Increased market reach',
-      'Improved partner performance',
-      'Accelerated revenue growth',
-      'Reduced sales cycle time',
-      'Enhanced partner loyalty',
-    ],
-    ctaSection: {
-      title: 'Scale Your Channel Network',
-      description:
-        'Transform your distribution strategy with our proven channel enablement programs.',
-      primaryButton: 'Discuss Channel Strategy',
-      secondaryButton: 'View Case Studies',
-    },
-  },
-  'operations-logistics': {
-    id: 'operations-logistics',
-    title: 'Operations & Logistics Services',
-    categories: ['Operations', 'Supply Chain'],
-    provider: 'OptiFlow Systems',
-    duration: '2-4 months',
-    overview: [
-      'End-to-end operational excellence and logistics solutions to streamline your business processes.',
-      'We optimize your supply chain, improve operational efficiency, and reduce costs while maintaining high service levels.',
-    ],
-    whatsIncluded: [
-      'Process optimization analysis',
-      'Supply chain management',
-      'Inventory optimization',
-      'Logistics coordination',
-      'Performance metrics implementation',
-      'Continuous improvement programs',
-    ],
-    keyBenefits: [
-      'Reduced operational costs',
-      'Improved delivery times',
-      'Enhanced process efficiency',
-      'Better inventory management',
-      'Increased customer satisfaction',
-    ],
-    ctaSection: {
-      title: 'Optimize Your Operations',
-      description:
-        'Streamline your business processes and improve operational efficiency with our expert team.',
-      primaryButton: 'Schedule Operations Review',
-      secondaryButton: 'Learn More',
-    },
-  },
-  'pre-sales-consultation': {
-    id: 'pre-sales-consultation',
-    title: 'Pre-Sales POV, Consultation & Professional Services',
-    categories: ['Consulting', 'Strategic Planning'],
-    provider: 'Strategic Solutions Group',
-    duration: '1-3 months',
-    overview: [
-      'Strategic pre-sales consultation and professional services to enhance customer engagement and solution design.',
-      'Our consultants work with your team to develop compelling value propositions and winning sales strategies.',
-    ],
-    whatsIncluded: [
-      'Market analysis and positioning',
-      'Solution architecture design',
-      'Value proposition development',
-      'Competitive analysis',
-      'Sales presentation development',
-      'Proposal writing support',
-    ],
-    keyBenefits: [
-      'Higher win rates',
-      'Shorter sales cycles',
-      'Better qualified opportunities',
-      'Improved customer engagement',
-      'Enhanced solution differentiation',
-    ],
-    ctaSection: {
-      title: 'Boost Your Sales Success',
-      description:
-        'Enhance your pre-sales capabilities with strategic consultation and professional services.',
-      primaryButton: 'Get Sales Consultation',
+        'Connect with the right decision makers and generate qualified leads with our proven lead generation services.',
+      primaryButton: 'Start Lead Generation',
       secondaryButton: 'View Success Stories',
     },
   },
-  'post-sales-support': {
-    id: 'post-sales-support',
-    title: 'Post-Sales & Customer Support Services',
-    categories: ['Support', 'Customer Success'],
-    provider: 'CustomerFirst Solutions',
-    duration: 'Ongoing',
+  nable: {
+    id: 'nable',
+    title: 'N.Able - Technology Enablement Services',
+    categories: ['Technology Enablement', 'Training'],
     overview: [
-      'Comprehensive post-sales support and customer service solutions to ensure long-term customer satisfaction.',
-      'We help you build strong customer relationships through exceptional support experiences and proactive success management.',
+      "Netpoleon's N.Able capability is created to educate and assist our partners and end users on vendor solutions. Our team works in tandem with our vendors to maximize the ability of our partner's ability to position technologies within their customer space and possibly build services offerings as part of their portfolio.",
+      "This is achieved through a combination of bespoke enablement sessions, assistance in vendor accreditation, and availing technology platforms to help learn or demonstrate the technology. Netpoleon's objective is to enable both our partners and vendors achieve maximum potential.",
     ],
     whatsIncluded: [
-      '24/7 customer support',
-      'Technical helpdesk services',
-      'Customer success management',
-      'Training and onboarding',
-      'Issue escalation management',
-      'Customer satisfaction monitoring',
+      'Technology and Product Webinars - Educational sessions on vendor solutions',
+      'Bespoke Workshops - Customized training programs',
+      'One-on-One Meetings - Direct engagement with partners and vendors',
+      'Product Demonstrations and PoCs - Hands-on technology showcases',
+      'Enablement Services and Technology Platforms - Comprehensive learning resources',
     ],
     keyBenefits: [
-      'Improved customer retention',
-      'Higher customer satisfaction',
-      'Reduced churn rates',
-      'Increased upsell opportunities',
-      'Enhanced brand reputation',
+      'Contextual Technology Information - Receive relevant industry and technology insights',
+      'Consultative Approach - Expert guidance in identifying, qualifying, and responding to opportunities',
+      'Adaptable Methods - Flexible approaches to enabling partner offerings and go-to-market strategies',
+      'Intimate Business Partnerships - Close collaboration with stakeholders',
+    ],
+    process: [
+      {
+        number: 1,
+        title: 'Discover Portfolio',
+        description: "Explore Netpoleon's entire vendor portfolio",
+      },
+      {
+        number: 2,
+        title: 'Identify Technologies',
+        description: 'Select technologies and vendors of interest',
+      },
+      {
+        number: 3,
+        title: 'Develop Initiatives',
+        description: 'Create enablement initiatives tailored to your needs',
+      },
+      {
+        number: 4,
+        title: 'Commit Resources',
+        description: 'Allocate time and resources for enablement activities',
+      },
+      {
+        number: 5,
+        title: 'Achieve Certification',
+        description: 'Complete certification and capability delivery',
+      },
+      {
+        number: 6,
+        title: 'Schedule Meetings',
+        description: 'Organize and deliver go-to-market and customer meetings',
+      },
     ],
     ctaSection: {
-      title: 'Enhance Customer Success',
+      title: 'Enable Your Technology Success',
       description:
-        'Build lasting customer relationships with our comprehensive post-sales support services.',
-      primaryButton: 'Improve Customer Support',
-      secondaryButton: 'View Support Models',
+        'Maximize your technology potential with our comprehensive enablement and training services.',
+      primaryButton: 'Start Enablement Program',
+      secondaryButton: 'View Training Catalog',
     },
   },
-  'technology-training': {
-    id: 'technology-training',
-    title: 'Technology & Product Training',
-    categories: ['Training', 'Education'],
-    provider: 'TechLearn Academy',
-    duration: '1-2 months',
+  nsure: {
+    id: 'nsure',
+    title: 'N.Sure - Professional Services',
+    categories: ['Professional Services', 'Cybersecurity'],
     overview: [
-      'Specialized training programs for technology products and solutions to maximize user adoption and proficiency.',
-      'Our certified instructors deliver comprehensive training that ensures your team can effectively leverage new technologies.',
+      "Netpoleon's N.Sure Professional Services ensures that our Partner's Customers achieve their Cyber Security objectives through certified and experienced delivery engineers and consultants. Recognizing the complexities of maintaining resources on your organisation's bench ready for deployment, Netpoleon offers certified delivery services for our partners to leverage.",
+      'Backed by our vendors, we work closely with the subject matter experts to ensure a smooth delivery of the solution, and according to best practices.',
     ],
     whatsIncluded: [
-      'Customized training curriculum',
-      'Hands-on lab exercises',
-      'Certification programs',
-      'Online learning platforms',
-      'Progress tracking and assessment',
-      'Ongoing support and resources',
+      'Vendor Certified Resources - Qualified and certified delivery professionals',
+      'Standardized Service Offerings - Consistent, proven service methodologies',
+      'Consulted Scope of Work - Collaborative project scoping and planning',
+      'Flexible Commercial Options - Fixed price, time & materials, or on-demand pricing',
+      'Metropolitan On-Site Delivery - Local delivery with travel and remote options available',
     ],
     keyBenefits: [
-      'Faster technology adoption',
-      'Improved user proficiency',
-      'Reduced support tickets',
-      'Higher ROI on technology investments',
-      'Enhanced team capabilities',
+      'Collaborative Delivery - Work closely with Partners while maintaining Customer intimacy',
+      'Responsive and Flexible - Customer-centric delivery approach',
+      'Readily Available Resources - Immediate access to qualified professionals',
+      'Competitive Pricing - Cost-effective service delivery',
+    ],
+    process: [
+      {
+        number: 1,
+        title: 'Identify Opportunity',
+        description: 'Recognize Professional Services opportunity',
+      },
+      {
+        number: 2,
+        title: 'Contact Channel Team',
+        description:
+          'Reach out to Netpoleon Channel Team for qualification and consultation',
+      },
+      {
+        number: 3,
+        title: 'Define Solution',
+        description:
+          'Determine solution to be delivered and agree on scope to be quoted',
+      },
+      {
+        number: 4,
+        title: 'Release Purchase Order',
+        description: 'Complete Purchase Order and sign Statement of Work (SoW)',
+      },
+      {
+        number: 5,
+        title: 'Project Kick-off',
+        description: 'Initiate the project and define the schedule',
+      },
+      {
+        number: 6,
+        title: 'Project Completion',
+        description: 'Sign off upon completion of the project',
+      },
     ],
     ctaSection: {
-      title: 'Empower Your Team',
+      title: 'Achieve Your Security Objectives',
       description:
-        'Accelerate technology adoption with our comprehensive training and certification programs.',
-      primaryButton: 'Plan Training Program',
-      secondaryButton: 'Browse Courses',
+        'Ensure successful cybersecurity deployments with our certified professional services team.',
+      primaryButton: 'Request Professional Services',
+      secondaryButton: 'View Service Portfolio',
     },
   },
-  'vendor-promotion': {
-    id: 'vendor-promotion',
-    title: 'Vendor Promotion & Augmentation',
-    categories: ['Marketing', 'Vendor Relations'],
-    provider: 'PromoTech Partners',
-    duration: '3-6 months',
+  ncircle: {
+    id: 'ncircle',
+    title: 'N.Circle - Support Services',
+    categories: ['Support Services', 'Customer Success'],
     overview: [
-      'Strategic vendor promotion and augmentation services to enhance market presence and operational capabilities.',
-      'We help vendors increase their market visibility, expand their reach, and optimize their go-to-market strategies.',
+      "Netpoleon's N.Circle service is how we contribute to the success of our vendor product deployments by providing the first line of support. We also ensure that our Partner's Customers maximize their investment into the technologies that they have entrusted to keep their information and enterprises safe by making sure they are aware of all functions and features they have access to.",
     ],
     whatsIncluded: [
-      'Market positioning strategy',
-      'Brand promotion campaigns',
-      'Partner recruitment',
-      'Event marketing support',
-      'Digital marketing initiatives',
-      'Performance analytics and reporting',
+      'Vendor Maintenance and Support Services - Comprehensive technical support',
+      'Customer Success Management - Dedicated customer success initiatives',
+      'Product Health Checks - Proactive technology assessments',
     ],
     keyBenefits: [
-      'Increased brand visibility',
-      'Expanded market reach',
-      'Enhanced partner relationships',
-      'Improved market positioning',
-      'Higher lead generation',
+      'Local Support Resources - Local and within time zone support resources',
+      'Direct Escalation Path - Direct escalation path to vendor Tier 2 support services',
+      'Customer Stickiness - Develops Partner customer stickiness through success initiatives',
+    ],
+    process: [
+      {
+        number: 1,
+        title: 'Support Information Delivery',
+        description:
+          'Support information sheet is sent out with invoice of procured products',
+      },
+      {
+        number: 2,
+        title: 'Strategic Outreach',
+        description:
+          'Customer Success team reaches out to Partners and Customers on a strategic basis',
+      },
+      {
+        number: 3,
+        title: 'Health Check Services',
+        description:
+          'Product Health Checks are offered as a service for existing Customers',
+      },
     ],
     ctaSection: {
-      title: 'Amplify Your Market Presence',
+      title: 'Maximize Your Technology Investment',
       description:
-        'Boost your vendor visibility and market impact with our strategic promotion services.',
-      primaryButton: 'Expand Market Reach',
-      secondaryButton: 'View Promotion Strategies',
-    },
-  },
-  'marketing-business-development': {
-    id: 'marketing-business-development',
-    title: 'Marketing & Business Development Support',
-    categories: ['Marketing', 'Business Development'],
-    provider: 'GrowthMax Solutions',
-    duration: '3-9 months',
-    overview: [
-      'Comprehensive marketing strategies and business development support to drive growth and market expansion.',
-      'Our team combines strategic marketing expertise with business development acumen to accelerate your growth trajectory.',
-    ],
-    whatsIncluded: [
-      'Marketing strategy development',
-      'Lead generation campaigns',
-      'Business development planning',
-      'Partnership identification',
-      'Market research and analysis',
-      'Campaign performance optimization',
-    ],
-    keyBenefits: [
-      'Accelerated business growth',
-      'Improved market position',
-      'Higher quality leads',
-      'Enhanced brand recognition',
-      'Expanded business opportunities',
-    ],
-    ctaSection: {
-      title: 'Accelerate Your Growth',
-      description:
-        'Drive business expansion with our comprehensive marketing and business development support.',
-      primaryButton: 'Plan Growth Strategy',
-      secondaryButton: 'View Growth Solutions',
-    },
-  },
-  'finance-services': {
-    id: 'finance-services',
-    title: 'Finance Services',
-    categories: ['Finance', 'Consulting'],
-    provider: 'FinanceFirst Advisory',
-    duration: '2-6 months',
-    overview: [
-      'Professional financial services and consulting to optimize your business financial performance and strategy.',
-      'Our financial experts help you streamline operations, improve cash flow, and make strategic financial decisions for sustainable growth.',
-    ],
-    whatsIncluded: [
-      'Financial analysis and planning',
-      'Cash flow optimization',
-      'Investment strategy development',
-      'Risk assessment and management',
-      'Financial reporting systems',
-      'Compliance and regulatory support',
-    ],
-    keyBenefits: [
-      'Improved financial performance',
-      'Better cash flow management',
-      'Reduced financial risks',
-      'Enhanced decision making',
-      'Regulatory compliance assurance',
-    ],
-    ctaSection: {
-      title: 'Optimize Your Finances',
-      description:
-        'Enhance your financial performance and strategic planning with our expert financial services.',
-      primaryButton: 'Get Financial Review',
-      secondaryButton: 'View Financial Solutions',
-    },
-  },
-  'marketplace-solutions': {
-    id: 'marketplace-solutions',
-    title: 'Marketplace',
-    categories: ['E-commerce', 'Platform Development'],
-    provider: 'MarketPlace Pro',
-    duration: '4-8 months',
-    overview: [
-      'Digital marketplace solutions and platforms to facilitate commerce and business transactions.',
-      'We build and optimize digital marketplaces that connect buyers and sellers, streamline transactions, and drive business growth.',
-    ],
-    whatsIncluded: [
-      'Marketplace platform development',
-      'Payment system integration',
-      'Vendor onboarding systems',
-      'Order management workflows',
-      'Analytics and reporting tools',
-      'Mobile app development',
-    ],
-    keyBenefits: [
-      'Expanded revenue streams',
-      'Improved transaction efficiency',
-      'Enhanced customer experience',
-      'Scalable business model',
-      'Competitive market advantage',
-    ],
-    ctaSection: {
-      title: 'Build Your Marketplace',
-      description:
-        'Create a thriving digital marketplace that connects your business ecosystem and drives growth.',
-      primaryButton: 'Start Marketplace Project',
-      secondaryButton: 'View Marketplace Examples',
+        'Ensure optimal performance and success of your technology investments with our comprehensive support services.',
+      primaryButton: 'Get Support Services',
+      secondaryButton: 'View Support Options',
     },
   },
 };
