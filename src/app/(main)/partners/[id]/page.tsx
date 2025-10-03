@@ -7,24 +7,12 @@ import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Award } from 'lucide-react';
-
-interface Vendor {
-  id: number;
-  name: string;
-  description: string | null;
-  content: string | null;
-  logo_url: string | null;
-  image_url: string | null;
-  diagram_url: string | null;
-  type: string | null;
-  link: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import { vendorsApi, type Vendor } from '@/lib/api';
+import { createSlug } from '@/lib/slug-utils';
 
 export default function VendorDetailPage() {
   const params = useParams();
-  const vendorId = params.id as string;
+  const vendorSlug = params.id as string;
 
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [loading, setLoading] = useState(true);
@@ -32,25 +20,24 @@ export default function VendorDetailPage() {
 
   useEffect(() => {
     const fetchVendor = async () => {
-      if (!vendorId) return;
+      if (!vendorSlug) return;
 
       try {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/vendors/${vendorId}`);
+        // Fetch all vendors and find the one matching the slug
+        const allVendors = await vendorsApi.getAll();
+        const foundVendor = allVendors.find(
+          v => createSlug(v.name) === vendorSlug
+        );
 
-        if (!response.ok) {
-          if (response.status === 404) {
-            setError('Vendor not found');
-          } else {
-            setError('Failed to fetch vendor details');
-          }
+        if (!foundVendor) {
+          setError('Vendor not found');
           return;
         }
 
-        const vendorData = await response.json();
-        setVendor(vendorData);
+        setVendor(foundVendor);
       } catch (err) {
         console.error('Error fetching vendor:', err);
         setError('Failed to load vendor details');
@@ -60,7 +47,7 @@ export default function VendorDetailPage() {
     };
 
     fetchVendor();
-  }, [vendorId]);
+  }, [vendorSlug]);
 
   if (loading) {
     return (
