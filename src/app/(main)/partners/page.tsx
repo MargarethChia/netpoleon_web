@@ -19,7 +19,9 @@ export default function OurVendors() {
     const fetchVendors = async () => {
       try {
         const data = await vendorsApi.getAll();
-        setVendors(data);
+        // Sort vendors alphabetically by name
+        const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
+        setVendors(sortedData);
       } catch (err) {
         setError('Failed to load vendors');
         console.error('Error fetching vendors:', err);
@@ -242,10 +244,13 @@ export default function OurVendors() {
                   }}
                   className="w-full"
                 >
-                  <Link href={`/partners/${vendor.id}`} className="group block">
-                    <div className="bg-white rounded-lg shadow-sm border overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
+                  <Link
+                    href={`/partners/${vendor.id}`}
+                    className="group block h-full"
+                  >
+                    <div className="bg-white rounded-lg shadow-sm border overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02] h-full flex flex-col">
                       <motion.div
-                        className="aspect-video overflow-hidden bg-white flex items-center justify-center p-8"
+                        className="aspect-video overflow-hidden bg-white flex items-center justify-center p-8 flex-shrink-0"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                       >
@@ -263,15 +268,15 @@ export default function OurVendors() {
                           </span>
                         )}
                       </motion.div>
-                      <div className="p-6">
+                      <div className="p-6 flex flex-col flex-grow">
                         <h3 className="text-xl mb-3 group-hover:text-blue-600 transition-colors font-bold">
                           {vendor.name}
                         </h3>
-                        <p className="text-gray-600 leading-relaxed mb-4 font-normal">
+                        <p className="text-gray-600 leading-relaxed mb-4 font-normal flex-grow">
                           {vendor.description ||
                             'Leading cybersecurity solutions provider with proven enterprise deployment success.'}
                         </p>
-                        <div className="flex items-center justify-right text-sm text-gray-500">
+                        <div className="flex items-center justify-right text-sm text-gray-500 mt-auto">
                           <motion.span
                             className="group-hover:text-blue-600 transition-colors font-normal"
                             whileHover={{ x: 5 }}
