@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getAllServiceIds, getServiceData } from '@/data/services-data';
 
 const whatWeDo = [
   {
@@ -35,80 +36,36 @@ const whatWeDo = [
   },
 ];
 
-const services = [
-  {
-    id: 1,
-    slug: 'channel-sales-enablement',
-    title: 'Channel Sales & Enablement',
-    description:
-      'Comprehensive channel sales strategies and enablement programs to maximize your distribution network effectiveness.',
-    icon: '/icons/Channel Sales & Enablement.png',
-  },
-  {
-    id: 2,
-    slug: 'operations-logistics',
-    title: 'Operations & Logistics Services',
-    description:
-      'End-to-end operational excellence and logistics solutions to streamline your business processes.',
-    icon: '/icons/Operations & Logistics Services.png',
-  },
-  {
-    id: 3,
-    slug: 'pre-sales-consultation',
-    title: 'Pre-Sales POV, Consultation & Professional Services',
-    description:
-      'Strategic pre-sales consultation and professional services to enhance customer engagement and solution design.',
-    icon: '/icons/Pre-Sales POV, Consultation & Professional Services.png',
-  },
-  {
-    id: 4,
-    slug: 'post-sales-support',
-    title: 'Post-Sales & Customer Support Services',
-    description:
-      'Comprehensive post-sales support and customer service solutions to ensure long-term customer satisfaction.',
-    icon: '/icons/Post Sales & Customer Support Services.png',
-  },
-  {
-    id: 5,
-    slug: 'technology-training',
-    title: 'Technology & Product Training',
-    description:
-      'Specialized training programs for technology products and solutions to maximize user adoption and proficiency.',
-    icon: '/icons/Technology & Product Training.png',
-  },
-  {
-    id: 6,
-    slug: 'vendor-promotion',
-    title: 'Vendor Promotion & Augmentation',
-    description:
-      'Strategic vendor promotion and augmentation services to enhance market presence and operational capabilities.',
-    icon: '/icons/Vendor Promotion & Augmentation.png',
-  },
-  {
-    id: 7,
-    slug: 'marketing-business-development',
-    title: 'Marketing & Business Development Support',
-    description:
-      'Comprehensive marketing strategies and business development support to drive growth and market expansion.',
-    icon: '/icons/Marketing & Business Development Support.png',
-  },
-  {
-    id: 8,
-    slug: 'finance-services',
-    title: 'Finance Services',
-    description:
-      'Professional financial services and consulting to optimize your business financial performance and strategy.',
-    icon: '/icons/Financial Services.png',
-  },
-  {
-    id: 9,
-    slug: 'marketplace-solutions',
-    title: 'Marketplace',
-    description:
-      'Digital marketplace solutions and platforms to facilitate commerce and business transactions.',
-    icon: '/icons/Marketplace.png',
-  },
-];
+// Get services dynamically from services data
+const getServices = () => {
+  const serviceIds = getAllServiceIds();
+  return serviceIds
+    .map((id, index) => {
+      const serviceData = getServiceData(id);
+      if (!serviceData) return null;
+
+      // Map service IDs to appropriate icons
+      const iconMap: Record<string, string> = {
+        nxone: '/icons/Channel Sales & Enablement.png',
+        nable: '/icons/Technology & Product Training.png',
+        nsure: '/icons/Pre-Sales POV, Consultation & Professional Services.png',
+        ncircle: '/icons/Post Sales & Customer Support Services.png',
+      };
+
+      return {
+        id: index + 1,
+        slug: id,
+        title: serviceData.title,
+        description: serviceData.overview[0], // Use first paragraph of overview
+        icon: iconMap[id] || '/icons/Dashboard.png',
+      };
+    })
+    .filter(
+      (service): service is NonNullable<typeof service> => service !== null
+    );
+};
+
+const services = getServices();
 
 export default function ServicesPage() {
   const [activeService, setActiveService] = useState(0);
