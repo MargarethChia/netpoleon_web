@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { vendorsApi, type Vendor } from '@/lib/api';
 import { getVendorPortfolioUrl } from '@/lib/storage';
+import { createSlug } from '@/lib/slug-utils';
 
 export default function OurVendors() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
@@ -245,7 +246,7 @@ export default function OurVendors() {
                   className="w-full"
                 >
                   <Link
-                    href={`/partners/${vendor.id}`}
+                    href={`/partners/${createSlug(vendor.name)}`}
                     className="group block h-full"
                   >
                     <div className="bg-white rounded-lg shadow-sm border overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02] h-full flex flex-col">
