@@ -52,10 +52,7 @@ export default function ServicePage({ params }: ServicePageProps) {
               {serviceData.title}
             </motion.h1>
 
-            <motion.div
-              className="flex flex-wrap gap-2 mb-4"
-              variants={fadeInUp}
-            >
+            <motion.div className="flex flex-wrap gap-2" variants={fadeInUp}>
               {serviceData.categories.map((category, index) => (
                 <Badge
                   key={index}
@@ -69,28 +66,6 @@ export default function ServicePage({ params }: ServicePageProps) {
                   {category}
                 </Badge>
               ))}
-            </motion.div>
-
-            <motion.div
-              className="grid md:grid-cols-2 gap-6"
-              variants={fadeInUp}
-            >
-              <div>
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
-                  Service Provider
-                </h3>
-                <p className="text-lg font-semibold text-orange-600">
-                  {serviceData.provider}
-                </p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
-                  Typical Duration
-                </h3>
-                <p className="text-lg font-semibold text-gray-900">
-                  {serviceData.duration}
-                </p>
-              </div>
             </motion.div>
           </motion.div>
         </div>
