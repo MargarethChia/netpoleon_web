@@ -12,7 +12,6 @@ export default function OurVendors() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [displayedVendors, setDisplayedVendors] = useState<number>(8);
   const [portfolioUrl, setPortfolioUrl] = useState<string>('');
   const [portfolioLoading, setPortfolioLoading] = useState(false);
 
@@ -46,14 +45,6 @@ export default function OurVendors() {
     fetchVendors();
     fetchPortfolioUrl();
   }, []);
-
-  // Load more vendors
-  const loadMore = () => {
-    setDisplayedVendors(prev => {
-      const newCount = Math.min(prev + 8, vendors.length);
-      return newCount;
-    });
-  };
 
   // Handle portfolio download
   const handlePortfolioDownload = () => {
@@ -129,9 +120,7 @@ export default function OurVendors() {
     );
   }
 
-  // Calculate these values inside the render function so they update properly
-  const vendorsToShow = vendors.slice(0, displayedVendors);
-  const hasMoreVendors = displayedVendors < vendors.length;
+  const vendorsToShow = vendors;
 
   return (
     <div>
@@ -311,46 +300,6 @@ export default function OurVendors() {
               </p>
             </div>
           </motion.section>
-        )}
-
-        {hasMoreVendors && (
-          <motion.div
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <motion.button
-              onClick={loadMore}
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center font-bold"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Load More Partners
-              <span className="ml-2">→</span>
-            </motion.button>
-          </motion.div>
-        )}
-
-        {!hasMoreVendors && vendors.length > 8 && (
-          <motion.div
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <motion.button
-              onClick={() => setDisplayedVendors(8)}
-              className="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors inline-flex items-center font-bold"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Show Less
-              <span className="ml-2">←</span>
-            </motion.button>
-          </motion.div>
         )}
       </div>
 
