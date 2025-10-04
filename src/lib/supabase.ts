@@ -65,5 +65,13 @@ export interface FeaturedEvent {
   featured_at: string;
 }
 
+export interface TeamMember {
+  id: number;
+  name: string;
+  role: string;
+  photo: string | null;
+  created_at: string;
+}
+
 // Note: Database operations are now handled by API routes in /app/api/
 // This file only contains the Supabase client and type definitions
