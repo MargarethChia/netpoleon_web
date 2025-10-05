@@ -269,8 +269,8 @@ export default function CreateResourcePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="title">Title *</Label>
                     <Input
                       id="title"
@@ -280,7 +280,22 @@ export default function CreateResourcePage() {
                       required
                     />
                   </div>
+                </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Input
+                    id="description"
+                    value={formData.description}
+                    onChange={e =>
+                      handleInputChange('description', e.target.value)
+                    }
+                    placeholder="Enter a brief description of the resource"
+                  />
+                </div>
+
+                {/* Type and Content Mode */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="type">Type *</Label>
                     <Select
@@ -297,42 +312,28 @@ export default function CreateResourcePage() {
                       </SelectContent>
                     </Select>
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Input
-                    id="description"
-                    value={formData.description}
-                    onChange={e =>
-                      handleInputChange('description', e.target.value)
-                    }
-                    placeholder="Enter a brief description of the resource"
-                  />
-                </div>
-
-                {/* Content Mode Selection */}
-                <div className="space-y-2">
-                  <Label>Content Mode</Label>
-                  <div className="flex gap-2">
-                    <Button
-                      type="button"
-                      variant={
-                        contentMode === 'content' ? 'default' : 'outline'
-                      }
-                      size="sm"
-                      onClick={() => handleContentModeChange('content')}
-                    >
-                      Create Content
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={contentMode === 'link' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => handleContentModeChange('link')}
-                    >
-                      Use External Link
-                    </Button>
+                  <div className="space-y-2">
+                    <Label>Content Mode</Label>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant={
+                          contentMode === 'content' ? 'default' : 'outline'
+                        }
+                        size="sm"
+                        onClick={() => handleContentModeChange('content')}
+                      >
+                        Create Content
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={contentMode === 'link' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handleContentModeChange('link')}
+                      >
+                        Use External Link
+                      </Button>
+                    </div>
                   </div>
                 </div>
 

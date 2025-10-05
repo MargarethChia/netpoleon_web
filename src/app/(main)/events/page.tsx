@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, ExternalLink, Play } from 'lucide-react';
+import Image from 'next/image';
 import { eventsApi, type Event, type FeaturedEvent } from '@/lib/api';
 
 export default function EventsPage() {
@@ -191,155 +192,287 @@ export default function EventsPage() {
     return isUpcoming && !isFeatured; // Show upcoming events but exclude featured ones
   });
 
-  // Get the main video event - only the featured event
-  const getMainVideoEvent = () => {
+  // Get the main featured event - with either video or image
+  const getMainFeaturedEvent = () => {
     if (featuredEvents.length > 0) {
       const featured = featuredEvents[0];
       const event = events.find(e => e.id === featured.event_id);
-      if (event && event.video) return event;
+      if (event && (event.video || event.image_url)) return event;
     }
 
     // No fallback - only show featured event
     return null;
   };
 
-  const mainVideoEvent = getMainVideoEvent();
+  const mainFeaturedEvent = getMainFeaturedEvent();
 
   return (
     <div className="min-h-screen">
-      {/* Main Video Hero Section - Replaces the header */}
-      {mainVideoEvent ? (
-        <motion.section
-          className="relative h-[600px] overflow-hidden shadow-lg z-1 mb-16"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-        >
-          <div className="relative h-full w-full">
-            {/* Video Background */}
-            <motion.iframe
-              src={`https://www.youtube.com/embed/${mainVideoEvent.video!.match(/[?&]v=([^&]+)/)?.[1]}?autoplay=1&mute=1&modestbranding=1&controls=0&rel=0&showinfo=0&iv_load_policy=3&cc_load_policy=0&fs=0`}
-              title={`${mainVideoEvent.title} - Featured Event Video`}
-              className="absolute inset-0 w-full h-full"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              initial={{ scale: 1.1, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
-            />
-            {/* Video Overlay */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            />
-          </div>
-
-          {/* Content Overlay */}
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 p-8 text-white"
-            variants={staggerContainer}
+      {/* Main Featured Event Hero Section */}
+      {mainFeaturedEvent ? (
+        mainFeaturedEvent.video ? (
+          // Video Hero Section
+          <motion.section
+            className="relative h-[600px] overflow-hidden shadow-lg z-1 mb-16"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
           >
+            <div className="relative h-full w-full">
+              {/* Video Background */}
+              <motion.iframe
+                src={`https://www.youtube.com/embed/${mainFeaturedEvent.video!.match(/[?&]v=([^&]+)/)?.[1]}?autoplay=1&mute=1&modestbranding=1&controls=0&rel=0&showinfo=0&iv_load_policy=3&cc_load_policy=0&fs=0`}
+                title={`${mainFeaturedEvent.title} - Featured Event Video`}
+                className="absolute inset-0 w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                initial={{ scale: 1.1, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 1.2, ease: 'easeOut' }}
+              />
+              {/* Video Overlay */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+              />
+            </div>
+
+            {/* Content Overlay */}
             <motion.div
-              className="flex items-center gap-3 mb-4"
-              variants={fadeInLeft}
+              className="absolute bottom-0 left-0 right-0 p-8 text-white"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
             >
               <motion.div
-                className="text-sm text-blue-200 font-semibold"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                {new Date(mainVideoEvent.event_date).toLocaleDateString(
-                  'en-US',
-                  {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  }
-                )}
-              </motion.div>
-            </motion.div>
-
-            <motion.h1
-              className="text-2xl lg:text-4xl mb-4 font-bold drop-shadow-lg"
-              variants={fadeInLeft}
-            >
-              {mainVideoEvent.title}
-            </motion.h1>
-
-            {mainVideoEvent.description && (
-              <motion.p
-                className="text-xl text-blue-100 mb-6 font-normal max-w-3xl drop-shadow-md"
+                className="flex items-center gap-3 mb-4"
                 variants={fadeInLeft}
               >
-                {mainVideoEvent.description}
-              </motion.p>
-            )}
-
-            <motion.div
-              className="flex flex-wrap items-center gap-4 mb-6"
-              variants={fadeInLeft}
-            >
-              {mainVideoEvent.location && (
                 <motion.div
-                  className="flex items-center text-blue-200"
-                  whileHover={{ scale: 1.05, x: 5 }}
+                  className="text-sm text-blue-200 font-semibold"
+                  whileHover={{ scale: 1.05 }}
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <MapPin className="w-5 h-5 mr-2" />
-                  <span className="font-medium">{mainVideoEvent.location}</span>
+                  {new Date(mainFeaturedEvent.event_date).toLocaleDateString(
+                    'en-US',
+                    {
+                      weekday: 'long',
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    }
+                  )}
                 </motion.div>
-              )}
-            </motion.div>
+              </motion.div>
 
-            <motion.div className="flex flex-wrap gap-4" variants={fadeInLeft}>
-              {mainVideoEvent.link && (
+              <motion.h1
+                className="text-2xl lg:text-4xl mb-4 font-bold drop-shadow-lg"
+                variants={fadeInLeft}
+              >
+                {mainFeaturedEvent.title}
+              </motion.h1>
+
+              {mainFeaturedEvent.description && (
+                <motion.p
+                  className="text-xl text-blue-100 mb-6 font-normal max-w-3xl drop-shadow-md"
+                  variants={fadeInLeft}
+                >
+                  {mainFeaturedEvent.description}
+                </motion.p>
+              )}
+
+              <motion.div
+                className="flex flex-wrap items-center gap-4 mb-6"
+                variants={fadeInLeft}
+              >
+                {mainFeaturedEvent.location && (
+                  <motion.div
+                    className="flex items-center text-blue-200"
+                    whileHover={{ scale: 1.05, x: 5 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <MapPin className="w-5 h-5 mr-2" />
+                    <span className="font-medium">
+                      {mainFeaturedEvent.location}
+                    </span>
+                  </motion.div>
+                )}
+              </motion.div>
+
+              <motion.div
+                className="flex flex-wrap gap-4"
+                variants={fadeInLeft}
+              >
+                {mainFeaturedEvent.link && (
+                  <motion.button
+                    onClick={() =>
+                      mainFeaturedEvent.link &&
+                      window.open(
+                        mainFeaturedEvent.link,
+                        '_blank',
+                        'noopener,noreferrer'
+                      )
+                    }
+                    className="bg-white text-blue-900 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center font-bold shadow-lg"
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    <ExternalLink className="w-5 h-5 mr-2" />
+                    View Event
+                  </motion.button>
+                )}
                 <motion.button
                   onClick={() =>
-                    mainVideoEvent.link &&
+                    mainFeaturedEvent.video &&
                     window.open(
-                      mainVideoEvent.link,
+                      mainFeaturedEvent.video,
                       '_blank',
                       'noopener,noreferrer'
                     )
                   }
-                  className="bg-white text-blue-900 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center font-bold shadow-lg"
+                  className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors inline-flex items-center font-bold shadow-lg"
                   variants={buttonVariants}
                   whileHover="hover"
                   whileTap="tap"
                 >
-                  <ExternalLink className="w-5 h-5 mr-2" />
-                  View Event
+                  <Play className="w-5 h-5 mr-2" />
+                  Watch Full Video
                 </motion.button>
-              )}
-              <motion.button
-                onClick={() =>
-                  mainVideoEvent.video &&
-                  window.open(
-                    mainVideoEvent.video,
-                    '_blank',
-                    'noopener,noreferrer'
-                  )
-                }
-                className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors inline-flex items-center font-bold shadow-lg"
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Watch Full Video
-              </motion.button>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        </motion.section>
+          </motion.section>
+        ) : (
+          // Image Hero Section
+          <motion.section
+            className="relative h-[600px] overflow-hidden shadow-lg z-1 mb-16"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          >
+            <div className="relative h-full w-full">
+              {/* Image Background */}
+              <motion.div
+                className="absolute inset-0 w-full h-full"
+                initial={{ scale: 1.1, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 1.2, ease: 'easeOut' }}
+              >
+                <Image
+                  src={mainFeaturedEvent.image_url!}
+                  alt={mainFeaturedEvent.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </motion.div>
+              {/* Image Overlay */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+              />
+            </div>
+
+            {/* Content Overlay */}
+            <motion.div
+              className="absolute bottom-0 left-0 right-0 p-8 text-white"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <motion.div
+                className="flex items-center gap-3 mb-4"
+                variants={fadeInLeft}
+              >
+                <motion.div
+                  className="text-sm text-blue-200 font-semibold"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                >
+                  {new Date(mainFeaturedEvent.event_date).toLocaleDateString(
+                    'en-US',
+                    {
+                      weekday: 'long',
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    }
+                  )}
+                </motion.div>
+              </motion.div>
+
+              <motion.h1
+                className="text-2xl lg:text-4xl mb-4 font-bold drop-shadow-lg"
+                variants={fadeInLeft}
+              >
+                {mainFeaturedEvent.title}
+              </motion.h1>
+
+              {mainFeaturedEvent.description && (
+                <motion.p
+                  className="text-xl text-blue-100 mb-6 font-normal max-w-3xl drop-shadow-md"
+                  variants={fadeInLeft}
+                >
+                  {mainFeaturedEvent.description}
+                </motion.p>
+              )}
+
+              <motion.div
+                className="flex flex-wrap items-center gap-4 mb-6"
+                variants={fadeInLeft}
+              >
+                {mainFeaturedEvent.location && (
+                  <motion.div
+                    className="flex items-center text-blue-200"
+                    whileHover={{ scale: 1.05, x: 5 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <MapPin className="w-5 h-5 mr-2" />
+                    <span className="font-medium">
+                      {mainFeaturedEvent.location}
+                    </span>
+                  </motion.div>
+                )}
+              </motion.div>
+
+              <motion.div
+                className="flex flex-wrap gap-4"
+                variants={fadeInLeft}
+              >
+                {mainFeaturedEvent.link && (
+                  <motion.button
+                    onClick={() =>
+                      mainFeaturedEvent.link &&
+                      window.open(
+                        mainFeaturedEvent.link,
+                        '_blank',
+                        'noopener,noreferrer'
+                      )
+                    }
+                    className="bg-white text-blue-900 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center font-bold shadow-lg"
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    <ExternalLink className="w-5 h-5 mr-2" />
+                    View Event Details
+                  </motion.button>
+                )}
+              </motion.div>
+            </motion.div>
+          </motion.section>
+        )
       ) : (
         // Show featured event information even without video
         <motion.section
@@ -565,17 +698,36 @@ export default function EventsPage() {
                   className="w-full h-full"
                 >
                   <div className="bg-white rounded-xl shadow-lg border-0 overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col group">
+                    {/* Event Image */}
+                    {event.image_url && (
+                      <motion.div
+                        className="relative h-48 w-full overflow-hidden"
+                        initial={{ opacity: 0, scale: 1.1 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.1, duration: 0.6 }}
+                      >
+                        <Image
+                          src={event.image_url}
+                          alt={event.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </motion.div>
+                    )}
+
                     {/* Clean Header */}
                     <motion.div
-                      className="bg-gradient-to-r from-orange-500 to-amber-600 p-4 text-white"
+                      className={`${event.image_url ? 'bg-white text-gray-900' : 'bg-gradient-to-r from-orange-500 to-amber-600 text-white'} p-4`}
                       whileHover={{
-                        background: 'linear-gradient(90deg, #f97316, #ea580c)',
+                        background: event.image_url
+                          ? 'linear-gradient(90deg, #f9fafb, #f3f4f6)'
+                          : 'linear-gradient(90deg, #f97316, #ea580c)',
                       }}
                       transition={{ duration: 0.3 }}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <motion.span
-                          className="text-xs font-medium text-orange-100"
+                          className={`text-xs font-medium ${event.image_url ? 'text-gray-500' : 'text-orange-100'}`}
                           whileHover={{ scale: 1.05 }}
                           transition={{ type: 'spring', stiffness: 300 }}
                         >
@@ -589,7 +741,9 @@ export default function EventsPage() {
                           )}
                         </motion.span>
                       </div>
-                      <h3 className="text-lg font-bold leading-tight line-clamp-2">
+                      <h3
+                        className={`text-lg font-bold leading-tight line-clamp-2 ${event.image_url ? 'text-gray-900' : 'text-white'}`}
+                      >
                         {event.title}
                       </h3>
                     </motion.div>

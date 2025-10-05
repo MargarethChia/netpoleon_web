@@ -9,7 +9,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Calendar, MapPin, ExternalLink, FileText } from 'lucide-react';
+import {
+  Calendar,
+  MapPin,
+  ExternalLink,
+  FileText,
+  Image as ImageIcon,
+} from 'lucide-react';
+import Image from 'next/image';
 
 interface ViewEventDialogProps {
   isOpen: boolean;
@@ -75,6 +82,27 @@ export default function ViewEventDialog({
                   Description
                 </h4>
                 <p className="text-base leading-relaxed">{event.description}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Event Image */}
+          {event.image_url && (
+            <div className="flex items-start gap-3">
+              <ImageIcon className="h-5 w-5 text-muted-foreground mt-0.5" />
+              <div>
+                <h4 className="font-medium text-sm text-muted-foreground">
+                  Event Image
+                </h4>
+                <div className="mt-2">
+                  <Image
+                    src={event.image_url}
+                    alt={event.title}
+                    width={400}
+                    height={200}
+                    className="rounded-md border max-w-full h-auto"
+                  />
+                </div>
               </div>
             </div>
           )}
