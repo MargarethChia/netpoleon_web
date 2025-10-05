@@ -2,7 +2,7 @@ import HeroSection from '../components/HeroSection';
 import ImageTextSection from '../components/ImageTextSection';
 import VendorCarousel from '../components/VendorCarousel';
 //import Statistics from '../components/Statistics';
-import NewsSection from '../components/CardsSection';
+import LatestResources from '../components/LatestResources';
 import GraphSection from '../components/GraphSection';
 import Statistics from '../components/Statistics';
 
@@ -68,46 +68,6 @@ export default function Home() {
   //   imageAlt: "Netpoleon team working on innovative solutions",
   // };
 
-  const news = {
-    title: 'Latest News & Insights',
-    subtitle: 'Stay updated with the latest trends and insights from our team',
-    posts: [
-      {
-        id: 1,
-        title:
-          'Use Slack to make your SMB organisation more efficient and productive',
-        excerpt:
-          'Learn how Slack can help make your organisation more efficient and increase the impact of your sales, service and marketing teams.',
-        type: 'On-demand',
-        image: '/images/news/news-1.jpg',
-      },
-      {
-        id: 2,
-        title: 'Slack for HR, Onboarding and People & Culture teams',
-        excerpt:
-          "Join this interactive session to learn from Slack's Customer Success team how to create an exceptional onboarding experience for your new employees.",
-        type: 'On-demand',
-        image: '/images/news/news-2.jpg',
-      },
-      {
-        id: 3,
-        title: 'Workshop 101: Learn the basics',
-        excerpt:
-          'Learn the Slack basics and participate in interactive activities at this on-demand training session led by our customer success experts.',
-        type: 'On-demand',
-        image: '/images/news/news-3.webp',
-      },
-      {
-        id: 4,
-        title: 'What is Slack?',
-        excerpt:
-          'Discover the new ways of working that power business results with Slack.',
-        type: 'On-demand',
-        image: '/images/news/news-4.png',
-      },
-    ],
-  };
-
   return (
     <div>
       <HeroSection {...hero} />
@@ -117,7 +77,7 @@ export default function Home() {
       ))}
       <Statistics />
       <GraphSection />
-      <NewsSection {...news} />
+      <LatestResources />
     </div>
   );
 }

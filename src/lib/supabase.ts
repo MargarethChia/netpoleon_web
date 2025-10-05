@@ -21,6 +21,7 @@ export interface Event {
   description: string | null;
   link: string | null;
   video: string | null;
+  image_url: string | null;
   created_at: string;
   updated_at: string;
 }
