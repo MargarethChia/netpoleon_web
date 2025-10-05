@@ -34,6 +34,7 @@ import {
   MapPin,
   ExternalLink,
   Star,
+  Image as ImageIcon,
 } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
 import EventForm from './components/EventForm';
@@ -157,6 +158,30 @@ export default function EventsPage() {
           type: 'success',
         });
       } else {
+        // Check if event has either image or video before making it featured
+        const event = events.find(e => e.id === eventId);
+        if (!event) {
+          showToast({
+            title: 'Error',
+            message: 'Event not found',
+            type: 'error',
+          });
+          return;
+        }
+
+        const hasImage = event.image_url && event.image_url.trim().length > 0;
+        const hasVideo = event.video && event.video.trim().length > 0;
+
+        if (!hasImage && !hasVideo) {
+          showToast({
+            title: 'Cannot Feature Event',
+            message:
+              'Featured events must have either an image or a video. Please add media to this event first.',
+            type: 'error',
+          });
+          return;
+        }
+
         // Add to featured (this will automatically remove any existing featured event)
         await eventsApi.addFeatured(eventId);
         showToast({
@@ -276,6 +301,11 @@ export default function EventsPage() {
                   ).length
                 }{' '}
                 upcoming
+                <br />
+                <span className="text-xs text-muted-foreground">
+                  Note: Featured events must have either an image or video.
+                  Images and videos only display for featured events.
+                </span>
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -293,6 +323,7 @@ export default function EventsPage() {
                       <TableHead>Date</TableHead>
                       <TableHead>Location</TableHead>
                       <TableHead>Status</TableHead>
+                      <TableHead>Image</TableHead>
                       <TableHead>Video</TableHead>
                       <TableHead>Link</TableHead>
                       <TableHead className="text-center">Featured</TableHead>
@@ -328,6 +359,20 @@ export default function EventsPage() {
                             <Badge variant={status.variant}>
                               {status.status}
                             </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {event.image_url ? (
+                              <div className="flex items-center gap-2">
+                                <ImageIcon className="h-4 w-4 text-green-600" />
+                                <span className="text-sm text-green-600">
+                                  Has Image
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground text-sm">
+                                No Image
+                              </span>
+                            )}
                           </TableCell>
                           <TableCell>
                             {event.video ? (
@@ -367,9 +412,29 @@ export default function EventsPage() {
                               size="sm"
                               onClick={() => handleToggleFeatured(event.id)}
                               className="mx-auto"
+                              disabled={
+                                !isFeatured(event.id) &&
+                                !event.image_url &&
+                                !event.video
+                              }
+                              title={
+                                !isFeatured(event.id) &&
+                                !event.image_url &&
+                                !event.video
+                                  ? 'Add an image or video to feature this event'
+                                  : isFeatured(event.id)
+                                    ? 'Click to remove from featured'
+                                    : 'Click to feature this event'
+                              }
                             >
                               <Star
-                                className={`h-4 w-4 ${isFeatured(event.id) ? 'text-yellow-500' : ''}`}
+                                className={`h-4 w-4 ${
+                                  isFeatured(event.id)
+                                    ? 'text-yellow-500'
+                                    : !event.image_url && !event.video
+                                      ? 'text-muted-foreground'
+                                      : ''
+                                }`}
                               />
                             </Button>
                           </TableCell>
