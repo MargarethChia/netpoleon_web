@@ -31,6 +31,24 @@ vi.mock('@/lib/storage', () => ({
   uploadImage: vi
     .fn()
     .mockResolvedValue({ success: true, url: 'https://example.com/img.png' }),
+  uploadVendorPortfolio: vi
+    .fn()
+    .mockResolvedValue({
+      success: true,
+      url: 'https://example.com/portfolio.pdf',
+    }),
+  getVendorPortfolioUrl: vi
+    .fn()
+    .mockReturnValue('https://example.com/portfolio.pdf'),
+  uploadVendorRegistrationForm: vi
+    .fn()
+    .mockResolvedValue({
+      success: true,
+      url: 'https://example.com/registration.pdf',
+    }),
+  getVendorRegistrationFormUrl: vi
+    .fn()
+    .mockReturnValue('https://example.com/registration.pdf'),
 }));
 
 // Import after mocks so they apply to module graph
@@ -64,7 +82,10 @@ describe('Admin Vendors Page', () => {
         name: 'Acme Security',
         description: 'EDR vendor',
         logo_url: '',
+        image_url: '',
+        diagram_url: '',
         link: 'https://acme.test',
+        type: 'Endpoint Security',
         created_at: '2099-02-01',
       },
       {
@@ -72,7 +93,10 @@ describe('Admin Vendors Page', () => {
         name: 'Shield Corp',
         description: 'IAM solutions',
         logo_url: '',
+        image_url: '',
+        diagram_url: '',
         link: '',
+        type: 'Identity & Access',
         created_at: '2099-03-01',
       },
     ]);
@@ -91,7 +115,7 @@ describe('Admin Vendors Page', () => {
     seed();
     render(<VendorsPage />);
     await screen.findByText(/all vendors/i);
-    fireEvent.change(screen.getByPlaceholderText(/search vendors/i), {
+    fireEvent.change(screen.getByPlaceholderText(/search vendors\.\.\./i), {
       target: { value: 'Acme' },
     });
     expect(screen.getByText(/1 vendors total/i)).toBeInTheDocument();
@@ -144,7 +168,9 @@ describe('Admin Vendors Page', () => {
     // Required field should block and show toast; creation not called
     expect(create).not.toHaveBeenCalled();
     // Input is required
-    const nameInput = screen.getByLabelText(/vendor name/i) as HTMLInputElement;
+    const nameInput = screen.getByLabelText(
+      /vendor name \*/i
+    ) as HTMLInputElement;
     expect(nameInput).toBeRequired();
     expect(nameInput.checkValidity()).toBe(false);
     // Toast called with validation message
@@ -163,7 +189,7 @@ describe('Admin Vendors Page', () => {
 
     render(<CreateVendorPage />);
     const user = userEvent.setup();
-    await user.type(screen.getByLabelText(/vendor name/i), 'New Vendor');
+    await user.type(screen.getByLabelText(/vendor name \*/i), 'New Vendor');
     await user.click(screen.getByRole('button', { name: /create vendor/i }));
 
     await waitFor(() => expect(create).toHaveBeenCalled());
@@ -190,7 +216,9 @@ describe('Admin Vendors Page', () => {
       description: '',
       logo_url: '',
       image_url: '',
+      diagram_url: '',
       link: '',
+      type: '',
       created_at: '2099-01-01',
       updated_at: '2099-01-01',
     });
@@ -217,7 +245,9 @@ describe('Admin Vendors Page', () => {
       description: 'EDR vendor',
       logo_url: 'https://cdn.test/logo.png',
       image_url: 'https://cdn.test/feat.jpg',
+      diagram_url: 'https://cdn.test/diagram.png',
       link: 'https://acme.test',
+      type: 'Endpoint Security',
       created_at: '2099-01-01',
       updated_at: '2099-01-01',
     });
@@ -237,6 +267,78 @@ describe('Admin Vendors Page', () => {
     const removeButtons2 = screen.getAllByRole('button', { name: /remove/i });
     await user.click(removeButtons2[0]);
     expect(screen.queryByAltText(/image preview/i)).not.toBeInTheDocument();
+  });
+
+  it('displays portfolio upload section', async () => {
+    seed();
+    render(<VendorsPage />);
+    await screen.findByText(/all vendors/i);
+    expect(
+      screen.getByText(/vendor portfolio management/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/upload portfolio/i)).toBeInTheDocument();
+  });
+
+  it('displays registration form upload section', async () => {
+    seed();
+    render(<VendorsPage />);
+    await screen.findByText(/all vendors/i);
+    expect(
+      screen.getByText(/vendor registration form management/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/upload registration form/i)).toBeInTheDocument();
+  });
+
+  it('displays stats cards with correct counts', async () => {
+    seed();
+    render(<VendorsPage />);
+    await screen.findByText(/all vendors/i);
+
+    // Check total vendors count
+    expect(screen.getByText(/total vendors/i)).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument(); // Total count
+
+    // Check with logos count
+    expect(screen.getByText(/with logos/i)).toBeInTheDocument();
+    expect(screen.getByText('0')).toBeInTheDocument(); // No logos in seed data
+
+    // Check with websites count
+    expect(screen.getByText(/with websites/i)).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument(); // One vendor has a link
+  });
+
+  it('shows vendor types in table', async () => {
+    seed();
+    render(<VendorsPage />);
+    await screen.findByText(/all vendors/i);
+
+    // Check that vendor types are displayed
+    expect(screen.getByText(/endpoint security/i)).toBeInTheDocument();
+    expect(screen.getByText(/identity & access/i)).toBeInTheDocument();
+  });
+
+  it('shows diagram badges when diagram_url is present', async () => {
+    const vendorsWithDiagram = [
+      {
+        id: 1,
+        name: 'Test Vendor',
+        description: 'Test description',
+        logo_url: '',
+        image_url: '',
+        diagram_url: 'https://example.com/diagram.png',
+        link: '',
+        type: 'Test Type',
+        created_at: '2099-01-01',
+      },
+    ];
+    getAll.mockResolvedValue(vendorsWithDiagram);
+
+    render(<VendorsPage />);
+    await screen.findByText(/all vendors/i);
+
+    // Check for diagram badge specifically in the table
+    const diagramBadges = screen.getAllByText(/diagram/i);
+    expect(diagramBadges.length).toBeGreaterThan(0);
   });
 });
 

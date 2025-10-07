@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 import {
   Card,
@@ -45,8 +45,11 @@ const VENDOR_TYPES = [
   'Data Security',
 ];
 
-export default function CreateVendorPage() {
+export default function EditVendorPage() {
   const router = useRouter();
+  const params = useParams();
+  const vendorId = params?.id as string;
+
   const [isLoading, setIsLoading] = useState(false);
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
@@ -61,6 +64,36 @@ export default function CreateVendorPage() {
     types: [] as string[],
     diagram_url: '',
   });
+
+  // Load vendor data on mount
+  useEffect(() => {
+    const loadVendor = async () => {
+      if (!vendorId) return;
+
+      try {
+        const vendor = await vendorsApi.getById(parseInt(vendorId));
+        setFormData({
+          name: vendor.name || '',
+          description: vendor.description || '',
+          content: vendor.content || '',
+          logo_url: vendor.logo_url || '',
+          image_url: vendor.image_url || '',
+          link: vendor.link || '',
+          types: vendor.type ? vendor.type.split(', ').filter(Boolean) : [],
+          diagram_url: vendor.diagram_url || '',
+        });
+      } catch (error) {
+        console.error('Error loading vendor:', error);
+        showToast({
+          title: 'Error',
+          message: 'Failed to load vendor data',
+          type: 'error',
+        });
+      }
+    };
+
+    loadVendor();
+  }, [vendorId]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -218,27 +251,36 @@ export default function CreateVendorPage() {
       return;
     }
 
+    if (!vendorId) {
+      showToast({
+        title: 'Error',
+        message: 'Vendor ID not found',
+        type: 'error',
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      await vendorsApi.create({
+      await vendorsApi.update(parseInt(vendorId), {
         ...formData,
         type: formData.types.join(', '), // Convert array to comma-separated string for DB
       });
 
       showToast({
         title: 'Success',
-        message: 'Vendor created successfully!',
+        message: 'Vendor updated successfully!',
         type: 'success',
       });
 
       router.push('/admin/vendors');
     } catch (error) {
-      console.error('Error creating vendor:', error);
+      console.error('Error updating vendor:', error);
       showToast({
         title: 'Error',
         message:
-          error instanceof Error ? error.message : 'Failed to create vendor',
+          error instanceof Error ? error.message : 'Failed to update vendor',
         type: 'error',
       });
     } finally {
@@ -248,9 +290,9 @@ export default function CreateVendorPage() {
 
   return (
     <AdminLayout
-      title="Create New Vendor"
-      description="Add a new partner vendor to your network"
-      currentPage="/admin/vendors/create"
+      title="Edit Vendor"
+      description="Update vendor information"
+      currentPage="/admin/vendors/edit"
     >
       <div className="space-y-4">
         {/* Header with Back Button */}
@@ -270,7 +312,7 @@ export default function CreateVendorPage() {
               className="flex items-center gap-2"
             >
               <Send className="h-4 w-4" />
-              {isLoading ? 'Creating...' : 'Create Vendor'}
+              {isLoading ? 'Updating...' : 'Update Vendor'}
             </Button>
           </div>
         </div>
