@@ -15,8 +15,8 @@ interface LatestResourcesProps {
 }
 
 export default function LatestResources({
-  title = 'Latest News & Resources',
-  subtitle = 'Stay updated with the latest trends and insights from our team',
+  title = 'Upcoming Events & Latest Insights',
+  subtitle = 'Stay updated with our activities and cyber news.',
   limit = 4,
 }: LatestResourcesProps) {
   const [resources, setResources] = useState<Resource[]>([]);
