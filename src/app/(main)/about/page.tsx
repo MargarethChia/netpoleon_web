@@ -1,11 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Timeline } from '@/components/ui/timeline';
 import Image from 'next/image';
 import Link from 'next/link';
+import { TeamMember } from '@/lib/supabase';
 
 export default function AboutUs() {
   const timelineData = [
@@ -222,6 +224,36 @@ export default function AboutUs() {
     hidden: {},
     visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
   };
+
+  const [team_members, set_team_members] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetch_team_members = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch('/api/members');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        set_team_members(data);
+      } catch (err) {
+        console.error('Error fetching team members:', err);
+        setError(
+          err instanceof Error ? err.message : 'Failed to fetch team members'
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetch_team_members();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -537,6 +569,98 @@ export default function AboutUs() {
               </p>
             </motion.div>
           </div>
+        </div>
+      </motion.section>
+
+      {/* Team Members Section */}
+      <motion.section
+        className="py-24 bg-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={staggerContainer}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <motion.div variants={fadeInUp} className="space-y-6">
+              <Badge
+                variant="outline"
+                className="text-orange-600 border-orange-600 px-4 py-2"
+              >
+                Our Team
+              </Badge>
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">
+                Meet Our Experts
+              </h2>
+            </motion.div>
+          </div>
+
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-600 mb-4">
+                Error loading team members: {error}
+              </p>
+              <Button
+                onClick={() => window.location.reload()}
+                variant="outline"
+                className="border-orange-600 text-orange-600 hover:bg-orange-50"
+              >
+                Try Again
+              </Button>
+            </div>
+          ) : team_members.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">No team members found.</p>
+            </div>
+          ) : (
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12"
+              variants={staggerContainer}
+            >
+              {team_members.map(member => (
+                <motion.div
+                  key={member.id}
+                  variants={fadeInUp}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                >
+                  <div className="text-center space-y-6">
+                    <div className="w-40 h-40 mx-auto rounded-lg overflow-hidden bg-orange-500">
+                      {member.photo ? (
+                        <Image
+                          src={member.photo}
+                          alt={member.name}
+                          width={160}
+                          height={160}
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Image
+                            src="/icons/User.png"
+                            alt="Default avatar"
+                            width={80}
+                            height={80}
+                            className="opacity-80"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-s font-bold text-gray-900">
+                        {member.name}
+                      </h3>
+                      <p className="text-gray-600 text-base">{member.role}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </motion.section>
 
