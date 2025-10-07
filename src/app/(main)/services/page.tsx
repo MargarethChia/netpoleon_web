@@ -162,7 +162,7 @@ export default function ServicesPage() {
       {/* Navigation Bar - Hidden on mobile */}
       <nav className="hidden lg:block sticky top-0 z-50 bg-white border-b border-gray-200 shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="flex justify-center gap-0 relative">
+          <div className="flex justify-between w-full relative">
             {/* Progress Bar Background */}
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-100 rounded-sm"></div>
 
@@ -177,10 +177,10 @@ export default function ServicesPage() {
             {whatWeDo.map((service, index) => (
               <button
                 key={service.id}
-                className={`text-sm font-semibold transition-all duration-300 px-6 py-3 border-none cursor-pointer bg-transparent relative uppercase tracking-wide ${
+                className={`text-sm font-semibold transition-all duration-300 px-4 py-3 border-none cursor-pointer bg-transparent relative uppercase tracking-wide flex-1 ${
                   index === activeService
                     ? 'text-amber-700 bg-amber-50 border-b-2 border-amber-600 pb-2'
-                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                    : 'text-gray-400 hover:text-amber-600 hover:bg-orange-50 hover:border-b-2 hover:border-orange-300 hover:pb-2'
                 }`}
                 onClick={() => {
                   const element = document.getElementById(`service-${index}`);
@@ -197,7 +197,7 @@ export default function ServicesPage() {
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row min-h-screen">
         {/* Left Side - Fixed Icon (Hidden on mobile, shown on desktop) */}
-        <div className="hidden lg:flex lg:w-[30%] items-center justify-center top-20 h-screen sticky bg-amber-100">
+        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-20 h-screen sticky bg-orange-200">
           <div className="text-center">
             {/* Icon Container with Fade Effect */}
             <div className="relative w-full h-full">
@@ -207,7 +207,7 @@ export default function ServicesPage() {
         </div>
 
         {/* Right Side - Scrolling Content */}
-        <div className="w-full lg:w-[70%]">
+        <div className="w-full lg:w-[60%]">
           <div ref={containerRef} className="relative">
             {whatWeDo.map((service, index) => (
               <div
@@ -224,7 +224,7 @@ export default function ServicesPage() {
                 >
                   {/* Mobile Icon - Only shown on mobile */}
                   <div className="lg:hidden flex justify-center mb-6">
-                    <div className="w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center">
+                    <div className="w-24 h-24 bg-orange-200 rounded-full flex items-center justify-center">
                       <Image
                         src={service.icon}
                         alt={service.title}
@@ -271,11 +271,10 @@ export default function ServicesPage() {
             }`}
           >
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Our Services
+              Professional Services
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
-              Comprehensive solutions designed to accelerate your business
-              growth and operational excellence
+              Find our tailored services to ease and enhance your business
             </p>
           </div>
 
@@ -297,7 +296,7 @@ export default function ServicesPage() {
                 <div className="flex items-start space-x-4 sm:space-x-6">
                   {/* Service Icon */}
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-amber-100 rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-amber-200 hover:scale-110 hover:rotate-3">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-200 rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-orange-200 hover:scale-110 hover:rotate-3">
                       <Image
                         src={service.icon}
                         alt={service.title}
@@ -310,7 +309,7 @@ export default function ServicesPage() {
 
                   {/* Service Content */}
                   <div className="flex-1">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3 transition-colors duration-200 hover:text-amber-700">
+                    <h3 className="text-lg sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 transition-colors duration-200 hover:text-amber-700">
                       {service.title}
                     </h3>
                     <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
