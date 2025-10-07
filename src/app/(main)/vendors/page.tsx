@@ -143,9 +143,8 @@ export default function OurVendors() {
               Our Cybersecurity Partners
             </h1>
             <p className="text-xl lg:text-2xl text-orange-100 max-w-3xl mx-auto font-normal drop-shadow-md">
-              Discover our carefully curated portfolio of leading cybersecurity
-              vendors, each vetted for innovation, reliability, and proven
-              enterprise deployment success.
+              Discover our broad portfolio of leading cybersecurity vendors to
+              vet for all your needs.
             </p>
           </div>
         </div>
@@ -169,7 +168,7 @@ export default function OurVendors() {
                 </h3>
                 <p className="text-gray-600 text-sm font-normal">
                   Download our comprehensive vendor portfolio with detailed
-                  specifications, comparisons, and implementation guides.
+                  description.
                 </p>
               </div>
               <motion.button
@@ -235,7 +234,7 @@ export default function OurVendors() {
                   className="w-full"
                 >
                   <Link
-                    href={`/partners/${createSlug(vendor.name)}`}
+                    href={`/vendors/${createSlug(vendor.name)}`}
                     className="group block h-full"
                   >
                     <div className="bg-white rounded-lg shadow-sm border overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02] h-full flex flex-col">
