@@ -1,5 +1,5 @@
 'use client';
-import { useScroll, useTransform, motion } from 'motion/react';
+import { useScroll, useTransform, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface TimelineEntry {
@@ -21,7 +21,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start 10%', 'end 50%'],
+    offset: ['start 5%', 'end end'],
   });
 
   const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height]);
@@ -37,8 +37,8 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
           Our Story
         </h2>
         <p className="text-neutral-700 dark:text-neutral-300 text-sm md:text-base max-w-sm">
-          We&apos;ve been building cybersecurity solutions since 2018.
-          Here&apos;s our timeline of growth and innovation.
+          We&apos;ve been building cybersecurity solutions since 2019.
+          Here&apos;s our timeline of growth and innovation across five years.
         </p>
       </div>
 

@@ -1,42 +1,42 @@
 // components/Statistics.tsx
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
+import { AnimatedNumber } from '@/components/ui/animated-number';
+
+const STATS_DATA = [
+  {
+    id: 1,
+    value: 50,
+    suffix: '+',
+    label: 'years since founded in Japan',
+  },
+  {
+    id: 2,
+    value: 4700,
+    suffix: '+',
+    label: 'employees worldwide',
+  },
+  {
+    id: 3,
+    value: 11,
+    suffix: 'T',
+    label: 'Sales Revenue (¥11 Trillion ~USD 76B)',
+  },
+  {
+    id: 4,
+    value: 25,
+    suffix: '+',
+    label: 'years since listed in Tokyo Stock Exchange',
+  },
+];
 
 export default function Statistics() {
-  const [stats, setStats] = useState([
-    {
-      id: 1,
-      target: 60,
-      current: 0,
-      suffix: '+',
-      label: 'cloud services available globally',
-    },
-    {
-      id: 2,
-      target: 190,
-      current: 0,
-      suffix: 'B',
-      label: 'cyber threats blocked each day',
-    },
-    {
-      id: 3,
-      target: 20,
-      current: 0,
-      suffix: '%',
-      label: 'of all websites are protected by Netpoleon',
-    },
-    {
-      id: 4,
-      target: 330,
-      current: 0,
-      suffix: '+',
-      label: 'cities in 125+ countries, including mainland China',
-    },
-  ]);
-
   const [animationStarted, setAnimationStarted] = useState(false);
+  const [animatedValues, setAnimatedValues] = useState([0, 0, 0, 0]);
   const ref = useRef(null);
+
+  const stats = useMemo(() => STATS_DATA, []);
 
   // Custom intersection observer for more reliable detection
   useEffect(() => {
@@ -48,7 +48,8 @@ export default function Statistics() {
           if (entry.isIntersecting && !animationStarted) {
             console.log('Statistics section in view, starting animation...');
             setAnimationStarted(true);
-            startAnimation();
+            // Set the target values to trigger animation
+            setAnimatedValues(stats.map(stat => stat.value));
           }
         });
       },
@@ -60,105 +61,45 @@ export default function Statistics() {
 
     observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [animationStarted]);
-
-  // Remove fallback timer - animation only starts when in view
-
-  const startAnimation = () => {
-    const duration = 4000; // 4 seconds (increased from 2 seconds)
-    const interval = 100; // Update every 100ms (increased from 50ms for smoother counting)
-    const steps = duration / interval;
-
-    const timer = setInterval(() => {
-      setStats(prevStats =>
-        prevStats.map(stat => {
-          const increment = stat.target / steps;
-          const newCurrent = Math.min(stat.current + increment, stat.target);
-
-          return {
-            ...stat,
-            current: Math.round(newCurrent),
-          };
-        })
-      );
-    }, interval);
-
-    // Cleanup timer after animation completes
-    setTimeout(() => {
-      clearInterval(timer);
-    }, duration + 100);
-  };
+  }, [animationStarted, stats]);
 
   return (
     <div
       ref={ref}
-      className="relative w-full h-auto py-12 sm:py-16 lg:py-0 lg:h-[400px] bg-gradient-to-r from-orange-600 via-amber-600 to-orange-600"
+      className="relative w-full h-auto py-12 sm:py-16 lg:py-0 lg:h-[500px] bg-gradient-to-r from-orange-600 via-amber-600 to-orange-600"
     >
       {/* Statistics Overlay */}
-      <div className="relative lg:absolute lg:inset-0 flex items-center justify-center lg:items-center lg:justify-center z-10">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 px-4 sm:px-6 lg:px-8">
-          {/* Stat 1 */}
-          <div className="text-center">
-            <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
-              {stats[0].current}
-              {stats[0].current === 0 ? '' : stats[0].suffix}
-            </div>
-            <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
-              {stats[0].label}
-            </div>
+      <div className="relative lg:absolute lg:inset-0 flex items-center justify-center z-10">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Company subtitle */}
+          <div className="text-center mb-12 lg:mb-24">
+            <h2 className="text-2xl lg:text-3xl font-bold text-white mb-6">
+              A company of Macnica
+            </h2>
+            <div className="w-16 h-1 bg-white mx-auto rounded-full"></div>
           </div>
 
-          {/* Stat 2 */}
-          <div className="text-center">
-            <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
-              {stats[1].current}
-              {stats[1].current === 0 ? '' : stats[1].suffix}
-            </div>
-            <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
-              {stats[1].label}
-            </div>
-          </div>
-
-          {/* Stat 3 */}
-          <div className="text-center">
-            <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
-              {stats[2].current}
-              {stats[2].current === 0 ? '' : stats[2].suffix}
-            </div>
-            <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
-              {stats[2].label}
-            </div>
-          </div>
-
-          {/* Stat 4 */}
-          <div className="text-center">
-            <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
-              {stats[3].current}
-              {stats[3].current === 0 ? '' : stats[3].suffix}
-            </div>
-            <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
-              {stats[3].label}
-            </div>
+          {/* Statistics */}
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 justify-center items-start">
+            {stats.map((stat, index) => (
+              <div key={stat.id} className="text-center">
+                <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
+                  <AnimatedNumber
+                    value={animatedValues[index]}
+                    format={num => num.toLocaleString()}
+                    mass={0.8}
+                    stiffness={75}
+                    damping={15}
+                  />
+                  {animationStarted && stat.suffix}
+                </div>
+                <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* Manual test button */}
-        {/*<button 
-          onClick={() => {
-            console.log('Manual button clicked');
-            setAnimationStarted(false);
-            setStats(stats.map(stat => ({ ...stat, current: 0 })));
-            // Start animation immediately after reset
-            setTimeout(() => {
-              setAnimationStarted(true);
-              startAnimation();
-            }, 100);
-          }}
-          className="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded text-sm"
-        >
-          Reset Animation
-        </button>
-        */}
       </div>
     </div>
   );

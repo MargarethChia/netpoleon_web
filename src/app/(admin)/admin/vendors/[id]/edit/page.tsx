@@ -17,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   Upload,
   Eye,
-  Save,
+  Send,
   ArrowLeft,
   Building2,
   X,
@@ -28,7 +28,6 @@ import { vendorsApi } from '@/lib/api';
 import { showToast } from '../../../../../../components/ui/toast';
 import AdminLayout from '../../../../components/AdminLayout';
 import { uploadImage } from '../../../../../../lib/storage';
-import { Vendor } from '@/lib/api';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,14 +48,12 @@ const VENDOR_TYPES = [
 export default function EditVendorPage() {
   const router = useRouter();
   const params = useParams();
-  const vendorId = parseInt(params.id as string);
+  const vendorId = params?.id as string;
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isUploadingDiagram, setIsUploadingDiagram] = useState(false);
-  const [vendor, setVendor] = useState<Vendor | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -68,39 +65,35 @@ export default function EditVendorPage() {
     diagram_url: '',
   });
 
-  // Fetch vendor data on component mount
+  // Load vendor data on mount
   useEffect(() => {
-    const fetchVendor = async () => {
+    const loadVendor = async () => {
+      if (!vendorId) return;
+
       try {
-        const data = await vendorsApi.getById(vendorId);
-        setVendor(data);
+        const vendor = await vendorsApi.getById(parseInt(vendorId));
         setFormData({
-          name: data.name,
-          description: data.description || '',
-          content: data.content || '',
-          logo_url: data.logo_url || '',
-          image_url: data.image_url || '',
-          link: data.link || '',
-          types: data.type ? data.type.split(', ').filter(Boolean) : [],
-          diagram_url: data.diagram_url || '',
+          name: vendor.name || '',
+          description: vendor.description || '',
+          content: vendor.content || '',
+          logo_url: vendor.logo_url || '',
+          image_url: vendor.image_url || '',
+          link: vendor.link || '',
+          types: vendor.type ? vendor.type.split(', ').filter(Boolean) : [],
+          diagram_url: vendor.diagram_url || '',
         });
       } catch (error) {
-        console.error('Error fetching vendor:', error);
+        console.error('Error loading vendor:', error);
         showToast({
           title: 'Error',
-          message: 'Failed to load vendor',
+          message: 'Failed to load vendor data',
           type: 'error',
         });
-        router.push('/admin/vendors');
-      } finally {
-        setIsLoading(false);
       }
     };
 
-    if (vendorId) {
-      fetchVendor();
-    }
-  }, [vendorId, router]);
+    loadVendor();
+  }, [vendorId]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -258,10 +251,19 @@ export default function EditVendorPage() {
       return;
     }
 
-    setIsSaving(true);
+    if (!vendorId) {
+      showToast({
+        title: 'Error',
+        message: 'Vendor ID not found',
+        type: 'error',
+      });
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
-      await vendorsApi.update(vendorId, {
+      await vendorsApi.update(parseInt(vendorId), {
         ...formData,
         type: formData.types.join(', '), // Convert array to comma-separated string for DB
       });
@@ -282,48 +284,15 @@ export default function EditVendorPage() {
         type: 'error',
       });
     } finally {
-      setIsSaving(false);
+      setIsLoading(false);
     }
   };
-
-  if (isLoading) {
-    return (
-      <AdminLayout
-        title="Edit Vendor"
-        description="Loading vendor..."
-        currentPage="/admin/vendors"
-      >
-        <div className="flex items-center justify-center h-64">
-          <div className="text-lg">Loading vendor...</div>
-        </div>
-      </AdminLayout>
-    );
-  }
-
-  if (!vendor) {
-    return (
-      <AdminLayout
-        title="Vendor Not Found"
-        description="The requested vendor could not be found"
-        currentPage="/admin/vendors"
-      >
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="text-lg mb-4">Vendor not found</div>
-            <Button onClick={() => router.push('/admin/vendors')}>
-              Back to Vendors
-            </Button>
-          </div>
-        </div>
-      </AdminLayout>
-    );
-  }
 
   return (
     <AdminLayout
       title="Edit Vendor"
       description="Update vendor information"
-      currentPage="/admin/vendors"
+      currentPage="/admin/vendors/edit"
     >
       <div className="space-y-4">
         {/* Header with Back Button */}
@@ -339,11 +308,11 @@ export default function EditVendorPage() {
           <div className="flex gap-2">
             <Button
               onClick={handleSubmit}
-              disabled={isSaving}
+              disabled={isLoading}
               className="flex items-center gap-2"
             >
-              <Save className="h-4 w-4" />
-              {isSaving ? 'Saving...' : 'Update Vendor'}
+              <Send className="h-4 w-4" />
+              {isLoading ? 'Updating...' : 'Update Vendor'}
             </Button>
           </div>
         </div>
@@ -355,7 +324,9 @@ export default function EditVendorPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Vendor Details</CardTitle>
-                <CardDescription>Update vendor information</CardDescription>
+                <CardDescription>
+                  Basic information about the vendor
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -368,6 +339,7 @@ export default function EditVendorPage() {
                     required
                   />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
                   <Textarea
@@ -380,6 +352,7 @@ export default function EditVendorPage() {
                     className="h-24 resize-none"
                   />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="types">Vendor Types</Label>
                   <DropdownMenu>
@@ -430,6 +403,7 @@ export default function EditVendorPage() {
                     </div>
                   )}
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="content">Content</Label>
                   <Textarea
@@ -443,7 +417,8 @@ export default function EditVendorPage() {
                     This field supports HTML content and will be displayed on
                     the vendor detail page.
                   </p>
-                </div>{' '}
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="link">Website URL</Label>
                   <div className="relative">
@@ -464,7 +439,7 @@ export default function EditVendorPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Logo</CardTitle>
-                <CardDescription>Update the vendor&apos;s logo</CardDescription>
+                <CardDescription>Upload the vendor&apos;s logo</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
@@ -523,7 +498,7 @@ export default function EditVendorPage() {
               <CardHeader>
                 <CardTitle>Featured Image</CardTitle>
                 <CardDescription>
-                  Update the featured image for the vendor
+                  Upload a featured image for the vendor
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -579,7 +554,7 @@ export default function EditVendorPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="mb-4">
               <CardHeader>
                 <CardTitle>Diagram</CardTitle>
                 <CardDescription>
@@ -643,7 +618,7 @@ export default function EditVendorPage() {
           </div>
 
           {/* Right Side - Preview */}
-          <div className="space-y-4">
+          <div className="space-y-4 mb-4">
             <Card className="h-full">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

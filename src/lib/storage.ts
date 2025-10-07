@@ -274,3 +274,107 @@ export const getVendorPortfolioUrl = (): string => {
 
   return data.publicUrl;
 };
+
+// Vendor Registration Form upload function
+export const uploadVendorRegistrationForm = async (
+  file: File
+): Promise<UploadResult> => {
+  try {
+    console.log(
+      'Starting Registration Form upload for file:',
+      file.name,
+      'Size:',
+      file.size,
+      'Type:',
+      file.type
+    );
+
+    // Check if user is authenticated
+    const {
+      data: { session },
+    } = await supabaseClient.auth.getSession();
+    if (!session) {
+      return {
+        success: false,
+        error: 'Authentication required. Please log in to upload files.',
+      };
+    }
+
+    console.log('User authenticated:', session.user.email);
+
+    // Validate file type
+    if (file.type !== 'application/pdf') {
+      console.log('File type validation failed:', file.type);
+      return {
+        success: false,
+        error: 'File must be a PDF',
+      };
+    }
+
+    // Validate file size (max 10MB for PDFs)
+    if (file.size > 10 * 1024 * 1024) {
+      console.log('File size validation failed:', file.size);
+      return {
+        success: false,
+        error: 'File size must be less than 10MB',
+      };
+    }
+
+    // Use fixed filename for vendor registration form
+    const fileName = 'Netpoleon ANZ Vendor Registration Form.pdf';
+    const fullPath = `public/${fileName}`;
+
+    console.log('Uploading Registration Form to path:', fullPath);
+    console.log('Files bucket: files');
+    console.log('Using authenticated client');
+
+    // Upload to Supabase storage in the files bucket
+    const { data, error } = await supabaseClient.storage
+      .from('files')
+      .upload(fullPath, file, {
+        cacheControl: '3600',
+        upsert: true, // This will replace the file if it exists
+      });
+
+    if (error) {
+      console.error('Registration Form upload error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        name: error.name,
+      });
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+
+    console.log('Registration Form upload successful, data:', data);
+
+    // Get public URL
+    const { data: urlData } = supabaseClient.storage
+      .from('files')
+      .getPublicUrl(fullPath);
+
+    console.log('Public URL data:', urlData);
+
+    return {
+      success: true,
+      url: urlData.publicUrl,
+    };
+  } catch (error) {
+    console.error('Unexpected error during Registration Form upload:', error);
+    return {
+      success: false,
+      error: 'Failed to upload Registration Form',
+    };
+  }
+};
+
+// Get vendor registration form URL
+export const getVendorRegistrationFormUrl = (): string => {
+  const { data } = supabaseClient.storage
+    .from('files')
+    .getPublicUrl('public/Netpoleon ANZ Vendor Registration Form.pdf');
+
+  return data.publicUrl;
+};

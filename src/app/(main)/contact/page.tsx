@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
+import { getVendorRegistrationFormUrl } from '@/lib/storage';
 
 export default function ContactUs() {
   const [subject, setSubject] = useState('');
@@ -22,16 +23,14 @@ export default function ContactUs() {
 
   const subjectOptions = [
     'General Inquiry',
-    'Vendor Partnership',
     'Service Request',
     'Technical Support',
-    'Apply for Partner',
-    'Event Partnership',
-    'Media Inquiry',
+    'Deal Registration',
+    'Apply for Partnership',
     'Other',
   ];
 
-  const isPartnerApplication = subject === 'Apply for Partner';
+  const isPartnerApplication = subject === 'Apply for Partnership';
   const isVendorPartnership = subject === 'Vendor Partnership';
 
   const handleInputChange = (
@@ -314,19 +313,21 @@ export default function ContactUs() {
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                       <h4 className="mb-3">Partnership Application</h4>
                       <p className="text-gray-600 text-sm mb-4">
-                        Download our partner application template to get
-                        started.
+                        Download our vendor registration form to get started.
+                        Please send an email to au.sales@netpoleons.com to
+                        complete your partnership application.
                       </p>
                       <button
                         type="button"
                         onClick={() => {
-                          // Create a mock PDF download
-                          const link = document.createElement('a');
-                          link.href =
-                            'data:application/pdf;base64,JVBERi0xLjQKJdPr6eEKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovUGFnZXMgMiAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFszIDAgUl0KL0NvdW50IDEKPD4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA2MTIgNzkyXQovQ29udGVudHMgNCAwIFIKPj4KZW5kb2JqCjQgMCBvYmoKPDwKL0xlbmd0aCA0NAo+PgpzdHJlYW0KQlQKL0YxIDEyIFRmCjEwMCA3MDAgVGQKKE5ldHBvbGVvbiBQYXJ0bmVyIEFwcGxpY2F0aW9uIFRlbXBsYXRlKSBUagpFVApzdHJlYW0KZW5kb2JqCnhyZWYKMCA1CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAowMDAwMDAwMDU4IDAwMDAwIG4gCjAwMDAwMDAxMTUgMDAwMDAgbiAKMDAwMDAwMDIwNCAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9TaXplIDUKL1Jvb3QgMSAwIFIKPj4Kc3RhcnR4cmVmCjI5OAolJUVPRgo=';
-                          link.download =
-                            'Netpoleon-Partner-Application-Template.pdf';
-                          link.click();
+                          // Download the real Vendor Registration Form
+                          const registrationFormUrl =
+                            getVendorRegistrationFormUrl();
+                          window.open(
+                            registrationFormUrl,
+                            '_blank',
+                            'noopener,noreferrer'
+                          );
                         }}
                         className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center mb-4"
                       >
@@ -384,9 +385,9 @@ export default function ContactUs() {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isPartnerApplication}
               className={`w-full px-8 py-3 rounded-lg transition-colors ${
-                isSubmitting
+                isSubmitting || isPartnerApplication
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-orange-600 via-amber-600 to-orange-600 hover:bg-orange-700'
               } text-white`}
@@ -416,7 +417,7 @@ export default function ContactUs() {
                   Sending...
                 </span>
               ) : isPartnerApplication ? (
-                'Submit Application'
+                'Download Application and Submit to au.sales@netpoleons.com'
               ) : isVendorPartnership ? (
                 'Submit Vendor Inquiry'
               ) : (
@@ -436,26 +437,21 @@ export default function ContactUs() {
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <h4 className="mb-2">Email</h4>
-              <p className="text-gray-600">info@netpoleon.com</p>
+              <p className="text-gray-600">au.sales@netpoleons.com</p>
             </div>
             <div>
               <h4 className="mb-2">Address</h4>
-              <p className="text-gray-600">
-                123 Business Avenue
-                <br />
-                Suite 456
-                <br />
-                San Francisco, CA 94105
+              <p className="text-gray-600 pb-4">
+                1514/401 Docklands Drive, Docklands, VIC 3008
               </p>
+              <p className="text-gray-600">9/70 Pitt St, Sydney, NSW 2000</p>
             </div>
             <div>
               <h4 className="mb-2">Business Hours</h4>
               <p className="text-gray-600">
-                Monday - Friday: 9:00 AM - 6:00 PM PST
+                Monday – Friday: 9:00 – 5:00 pm
                 <br />
-                Saturday: 10:00 AM - 4:00 PM PST
-                <br />
-                Sunday: Closed
+                24/7 Technical On-call
               </p>
             </div>
           </div>
@@ -473,7 +469,7 @@ export default function ContactUs() {
             href="tel:+1-555-123-4567"
             className="text-2xl font-bold text-orange-600 hover:text-orange-700 transition-colors"
           >
-            +1 (555) 123-4567
+            1300 193 170
           </a>
         </motion.div>
       </div>

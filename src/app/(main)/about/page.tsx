@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Timeline } from '@/components/ui/timeline';
 import Image from 'next/image';
@@ -11,74 +10,46 @@ import Link from 'next/link';
 export default function AboutUs() {
   const timelineData = [
     {
-      title: '2018',
+      title: '2019',
       content: (
         <div>
-          <p className="mb-4 text-sm font-normal text-gray-800 dark:text-neutral-200">
-            Foundation - Netpoleon was founded with the vision to democratize
-            enterprise cybersecurity solutions for organizations of all sizes.
+          <p className="mb-4 text-md font-normal text-gray-800 dark:text-neutral-200">
+            Entry into Australia - In late 2019, Netpoleon Solutions expanded
+            beyond Asia, establishing its first branch in Australia to serve the
+            Pacific region.
           </p>
-          <div className="grid grid-cols-1 gap-4">
-            <div className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-lg border border-gray-200">
-              <div className="flex items-center mb-4">
-                <Image
-                  src="/icons/User.png"
-                  alt="Foundation"
-                  width={24}
-                  height={24}
-                  className="mr-3"
-                />
-                <span className="font-semibold text-gray-900">
-                  Company Founded
-                </span>
-              </div>
-              <p className="text-sm text-gray-700 mb-4">
-                Started with a small team of cybersecurity experts dedicated to
-                making enterprise-grade security accessible to all
-                organizations.
-              </p>
-              <div className="text-xs text-gray-600">
-                <strong>Mission:</strong> Democratize enterprise cybersecurity
-                solutions
-              </div>
-            </div>
-          </div>
         </div>
       ),
     },
     {
-      title: '2020',
+      title: '2021',
       content: (
         <div>
-          <p className="mb-4 text-sm font-normal text-gray-800 dark:text-neutral-200">
-            Growth phase - Expanded our vendor network to 50+ partners and
-            established our first enterprise client relationships across the
-            region.
+          <p className="mb-4 text-md font-normal text-gray-800 dark:text-neutral-200">
+            Expansion into New Zealand - Following its success in Australia,
+            Netpoleon opened its second Pacific branch in New Zealand in 2021,
+            formally launching Netpoleon ANZ.
           </p>
           <div className="mb-8">
-            <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+            <div className="flex items-center gap-2 text-md text-gray-700 mb-2">
               <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-              50+ Strategic vendor partnerships established
+              New Zealand branch established
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+            <div className="flex items-center gap-2 text-md text-gray-700 mb-2">
               <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-              First enterprise client relationships
+              Netpoleon ANZ formally launched
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+            <div className="flex items-center gap-2 text-md text-gray-700 mb-2">
               <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-              Regional expansion into Asia-Pacific
-            </div>
-            <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
-              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-              Professional services team established
+              Pacific region coverage completed
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4">
             <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-lg text-white">
-              <h4 className="font-semibold mb-2">Key Achievement</h4>
-              <p className="text-sm opacity-90">
-                Successfully onboarded first 100 enterprise clients with 99.8%
-                customer satisfaction rate
+              <h4 className="font-semibold mb-2">Key Milestone</h4>
+              <p className="text-md opacity-90">
+                Successfully established presence across both Australia and New
+                Zealand markets
               </p>
             </div>
           </div>
@@ -89,44 +60,44 @@ export default function AboutUs() {
       title: '2022',
       content: (
         <div>
-          <p className="mb-8 text-sm font-normal text-gray-800 dark:text-neutral-200">
-            Innovation milestone - Launched our managed security services
-            division and achieved SOC 2 Type II certification, establishing
-            ourselves as a trusted security partner.
+          <p className="mb-8 text-md font-normal text-gray-800 dark:text-neutral-200">
+            Foundation for Growth - Across 2022 and 2023, Netpoleon ANZ
+            strengthened its vendor portfolio, invested in technical expertise,
+            and built a strong foundation for continued regional growth.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
               <div className="flex items-center mb-4">
                 <Image
-                  src="/icons/Post Sales & Customer Support Services.png"
-                  alt="Managed Services"
+                  src="/icons/Marketing & Business Development Support.png"
+                  alt="Vendor Portfolio"
                   width={24}
                   height={24}
                   className="mr-3"
                 />
                 <span className="font-semibold text-gray-900">
-                  Managed Services
+                  Vendor Portfolio
                 </span>
               </div>
-              <p className="text-sm text-gray-700">
-                24/7 security monitoring and management
+              <p className="text-md text-gray-700">
+                Strengthened partnerships and expanded vendor network
               </p>
             </div>
-            <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-lg border border-blue-100">
+            <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
               <div className="flex items-center mb-4">
                 <Image
-                  src="/icons/Settings.png"
-                  alt="SOC 2"
+                  src="/icons/Technology & Product Training.png"
+                  alt="Technical Expertise"
                   width={24}
                   height={24}
                   className="mr-3"
                 />
                 <span className="font-semibold text-gray-900">
-                  SOC 2 Type II
+                  Technical Expertise
                 </span>
               </div>
-              <p className="text-sm text-gray-700">
-                Security compliance certification
+              <p className="text-md text-gray-700">
+                Invested in team capabilities and knowledge
               </p>
             </div>
           </div>
@@ -137,118 +108,104 @@ export default function AboutUs() {
       title: '2024',
       content: (
         <div>
-          <p className="mb-8 text-sm font-normal text-gray-800 dark:text-neutral-200">
-            Leadership position achieved - Now serving 200+ vendors and 500+
-            implementations, recognized as a leading cybersecurity value-added
-            distributor in the Asia-Pacific region.
+          <p className="mb-8 text-md font-normal text-gray-800 dark:text-neutral-200">
+            Introduction of Professional Services - In 2024, Netpoleon ANZ
+            expanded its role as a value-added distributor with the launch of
+            its comprehensive service suite: N.XONE, N.Able, N.Sure, and
+            N.Circle. These services enhanced its capabilities to support
+            partners across lead generation, enablement, deployment, and ongoing
+            support.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
               <div className="flex items-center mb-4">
                 <Image
                   src="/icons/Marketing & Business Development Support.png"
-                  alt="Partners"
+                  alt="N.XONE"
                   width={24}
                   height={24}
                   className="mr-3"
                 />
                 <span className="font-semibold text-gray-900">
-                  200+ Vendors
+                  N.XONE - Lead Generation
                 </span>
               </div>
-              <p className="text-sm text-gray-700">
-                Comprehensive partner network
+              <p className="text-md text-gray-700">
+                SDR as a Service, executive roundtables, and demand generation
+                campaigns to accelerate pipeline growth
               </p>
             </div>
             <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-lg border border-blue-100">
               <div className="flex items-center mb-4">
                 <Image
-                  src="/icons/Dashboard.png"
-                  alt="Implementations"
+                  src="/icons/Technology & Product Training.png"
+                  alt="N.Able"
                   width={24}
                   height={24}
                   className="mr-3"
                 />
                 <span className="font-semibold text-gray-900">
-                  500+ Deployments
+                  N.Able - Technology Enablement
                 </span>
               </div>
-              <p className="text-sm text-gray-700">
-                Successful implementations
+              <p className="text-md text-gray-700">
+                Educational sessions, workshops, and technology enablement
+                services to maximize partner potential
               </p>
             </div>
             <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-lg border border-green-100">
               <div className="flex items-center mb-4">
                 <Image
-                  src="/icons/Lock.png"
-                  alt="Security"
+                  src="/icons/Post Sales & Customer Support Services.png"
+                  alt="N.Sure"
                   width={24}
                   height={24}
                   className="mr-3"
                 />
                 <span className="font-semibold text-gray-900">
-                  Enterprise Grade
+                  N.Sure - Professional Services
                 </span>
               </div>
-              <p className="text-sm text-gray-700">Security solutions</p>
+              <p className="text-md text-gray-700">
+                Certified delivery engineers and consultants for cybersecurity
+                deployments
+              </p>
             </div>
             <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-lg border border-purple-100">
               <div className="flex items-center mb-4">
                 <Image
-                  src="/icons/Technology & Product Training.png"
-                  alt="Training"
+                  src="/icons/Lock.png"
+                  alt="N.Circle"
                   width={24}
                   height={24}
                   className="mr-3"
                 />
                 <span className="font-semibold text-gray-900">
-                  Expert Training
+                  N.Circle - Support Services
                 </span>
               </div>
-              <p className="text-sm text-gray-700">Comprehensive programs</p>
+              <p className="text-md text-gray-700">
+                First-line support and customer success management for
+                technology investments
+              </p>
             </div>
           </div>
         </div>
       ),
     },
-  ];
-
-  const services = [
     {
-      title: 'Vendor Partner Management',
-      icon: '/icons/Marketing & Business Development Support.png',
-      desc: 'Strategic cybersecurity vendor relationship management and partnership optimization',
-      highlight: 'Enterprise Focus',
-    },
-    {
-      title: 'Solution Architecture',
-      icon: '/icons/Dashboard.png',
-      desc: 'Custom security architecture design, planning, and implementation roadmaps',
-      highlight: 'Custom Design',
-    },
-    {
-      title: 'Implementation Services',
-      icon: '/icons/Module.png',
-      desc: 'End-to-end deployment, integration, and configuration support',
-      highlight: 'Full Service',
-    },
-    {
-      title: 'Training & Certification',
-      icon: '/icons/Technology & Product Training.png',
-      desc: 'Comprehensive security awareness and technical certification programs',
-      highlight: 'Expert Training',
-    },
-    {
-      title: 'Managed Security Services',
-      icon: '/icons/Lock.png',
-      desc: 'Continuous monitoring, management, and optimization of security solutions',
-      highlight: '24/7 Monitoring',
-    },
-    {
-      title: 'Security Support',
-      icon: '/icons/Post Sales & Customer Support Services.png',
-      desc: 'Round-the-clock incident response, troubleshooting, and technical support',
-      highlight: 'Always Available',
+      title: '2025',
+      content: (
+        <div>
+          <p className="mb-8 text-md font-normal text-gray-800 dark:text-neutral-200">
+            Five-Year Milestone - In 2025, Netpoleon ANZ marks five years of
+            operations. From its initial startup presence, the business has
+            grown into a team of 32 professionals, led by 7 team leaders, and
+            now partners with more than five times the number of vendors since
+            its inception.
+          </p>
+        </div>
+      ),
     },
   ];
 
@@ -270,7 +227,7 @@ export default function AboutUs() {
     <div className="min-h-screen bg-white">
       {/* Simple Animated Hero Section */}
       <motion.section
-        className="relative py-24 bg-gradient-to-br from-orange-50 to-white overflow-hidden"
+        className="relative py-24"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
@@ -301,7 +258,7 @@ export default function AboutUs() {
                 variant="outline"
                 className="text-orange-600 border-orange-600 px-4 py-2 text-sm font-medium"
               >
-                Trusted Cybersecurity Partner Since 2018
+                Trusted Cybersecurity Partner Since 2019
               </Badge>
             </motion.div>
 
@@ -311,9 +268,8 @@ export default function AboutUs() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              About{' '}
               <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">
-                Netpoleon
+                About Netpoleon
               </span>
             </motion.h1>
 
@@ -323,9 +279,8 @@ export default function AboutUs() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              Leading cybersecurity value-added distributor, empowering
-              organizations with cutting-edge security technologies and expert
-              implementation services.
+              ANZ Trusted Partner for Next Generation Cyber Security Solutions
+              and Value-Added Services
             </motion.p>
 
             <motion.div
@@ -356,7 +311,7 @@ export default function AboutUs() {
         </div>
       </motion.section>
 
-      {/* Hero Message Section - Inspired by Cloudflare */}
+      {/* Hero Message Section */}
       <motion.section
         className="py-20 bg-white"
         initial="hidden"
@@ -427,10 +382,15 @@ export default function AboutUs() {
                   About Netpoleon
                 </h3>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                  Originally founded in 2000, Netpoleon Group has become a
+                  leading provider of integrated security, networking solutions
+                  and value-added services throughout the APAC region. And,
+                  thanks to our equity partnership with Macnica, a leading
+                  value-added distributor of Network Security solutions to the
+                  worldwide market, Netpoleon has been elevated to the global
+                  arena and can now engage global clients in the market. Amid
+                  all our success Netpoleon ANZ was established covering bases
+                  in both Australia and New Zealand.
                 </p>
               </div>
 
@@ -460,6 +420,90 @@ export default function AboutUs() {
         </div>
       </motion.section>
 
+      {/* Vision & Mission Section */}
+      <motion.section
+        className="py-24"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={staggerContainer}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <motion.div variants={fadeInUp} className="space-y-6">
+              <Badge
+                variant="outline"
+                className="text-orange-600 border-orange-600 px-4 py-2"
+              >
+                Our Foundation
+              </Badge>
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">
+                Vision & Mission
+              </h2>
+              <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+                Guiding principles that drive our commitment to excellence in
+                cybersecurity distribution
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Vision Card */}
+            <motion.div
+              variants={fadeInUp}
+              className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
+            >
+              <div className="flex items-center mb-6">
+                <h3 className="text-2xl font-bold text-gray-900">Our Vision</h3>
+              </div>
+              <div className="space-y-4">
+                <p className="text-gray-700 leading-relaxed">
+                  To be the regional leader in sourcing and distributing
+                  world-class IT Security solutions as we create winning
+                  partnerships with our employees and customers.
+                </p>
+                <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                  <p className="text-gray-700 font-medium">
+                    We aim to be an employer of choice as we grow with our
+                    people and to align with our clients to meet their varying
+                    technology demands.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Mission Card */}
+            <motion.div
+              variants={fadeInUp}
+              className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
+            >
+              <div className="flex items-center mb-6">
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Our Mission
+                </h3>
+              </div>
+              <div className="space-y-4">
+                <p className="text-gray-700 leading-relaxed">
+                  To be the leading ANZ distributor and lead the sourcing of
+                  emerging technologies and to provide in-depth product
+                  knowledge, technical expertise and excellent customer service
+                  to our channel partners to address current and new business
+                  opportunities.
+                </p>
+                <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-500">
+                  <div className="flex items-start space-x-3">
+                    <p className="text-gray-700 font-medium">
+                      Focused on emerging technologies and channel partner
+                      success
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </motion.section>
+
       {/* Our Story Section with Timeline */}
       <section className="bg-gray-50">
         <div className="relative w-full overflow-clip">
@@ -467,7 +511,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Our Team Section */}
       <motion.section
         className="py-24 bg-white"
         initial="hidden"
@@ -482,65 +526,23 @@ export default function AboutUs() {
                 variant="outline"
                 className="text-orange-600 border-orange-600 px-4 py-2"
               >
-                What We Do
+                Meet Our People
               </Badge>
               <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">
-                Our Services
+                Our Team
               </h2>
               <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-                Comprehensive cybersecurity distribution and support services
-                tailored to your organization&apos;s needs.
+                Coming soon - Meet the talented professionals who make Netpoleon
+                ANZ a trusted cybersecurity partner.
               </p>
             </motion.div>
           </div>
-
-          <motion.div
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-            variants={staggerContainer}
-          >
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                whileHover={{ y: -8, scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              >
-                <Card className="p-6 h-full border border-gray-200 hover:border-orange-300 hover:shadow-lg transition-all duration-300 bg-white">
-                  <CardContent className="p-0 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                        <Image
-                          src={service.icon}
-                          alt={service.title}
-                          width={32}
-                          height={32}
-                          className="w-8 h-8"
-                        />
-                      </div>
-                      <Badge
-                        variant="outline"
-                        className="text-xs text-orange-600 border-orange-600"
-                      >
-                        {service.highlight}
-                      </Badge>
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-700 leading-relaxed">
-                      {service.desc}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
         </div>
       </motion.section>
 
       {/* Call to Action Section */}
       <motion.section
-        className="py-24 bg-gradient-to-r from-orange-600 to-orange-500 text-white relative overflow-hidden"
+        className="py-24 bg-gradient-to-r from-orange-600 to-amber-600 text-white relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -555,10 +557,10 @@ export default function AboutUs() {
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div variants={fadeInUp} className="space-y-8">
-            <h2 className="text-4xl lg:text-6xl font-bold">
+            <h2 className="text-2xl lg:text-4xl font-bold">
               Ready to Strengthen Your Security Posture?
             </h2>
-            <p className="text-xl lg:text-2xl opacity-90 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg lg:text-xl opacity-90 max-w-3xl mx-auto leading-relaxed">
               Partner with Netpoleon to access enterprise-grade cybersecurity
               solutions and expert implementation services tailored to your
               organization.

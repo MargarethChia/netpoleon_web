@@ -44,7 +44,12 @@ import { Vendor, vendorsApi } from '@/lib/api';
 import { ConfirmDialog } from '../../../../components/ui/confirm-dialog';
 import { showToast } from '../../../../components/ui/toast';
 import { useRouter } from 'next/navigation';
-import { uploadVendorPortfolio, getVendorPortfolioUrl } from '@/lib/storage';
+import {
+  uploadVendorPortfolio,
+  getVendorPortfolioUrl,
+  uploadVendorRegistrationForm,
+  getVendorRegistrationFormUrl,
+} from '@/lib/storage';
 
 export default function VendorsPage() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
@@ -54,6 +59,11 @@ export default function VendorsPage() {
   const [vendorToDelete, setVendorToDelete] = useState<Vendor | null>(null);
   const [isUploadingPortfolio, setIsUploadingPortfolio] = useState(false);
   const [portfolioUrl, setPortfolioUrl] = useState<string | null>(null);
+  const [isUploadingRegistrationForm, setIsUploadingRegistrationForm] =
+    useState(false);
+  const [registrationFormUrl, setRegistrationFormUrl] = useState<string | null>(
+    null
+  );
 
   const router = useRouter();
 
@@ -81,9 +91,21 @@ export default function VendorsPage() {
     }
   };
 
+  // Get current registration form URL
+  const fetchRegistrationFormUrl = () => {
+    try {
+      const url = getVendorRegistrationFormUrl();
+      console.log('Registration Form URL:', url);
+      setRegistrationFormUrl(url);
+    } catch (error) {
+      console.error('Error getting registration form URL:', error);
+    }
+  };
+
   useEffect(() => {
     fetchVendors();
     fetchPortfolioUrl();
+    fetchRegistrationFormUrl();
   }, []);
 
   const handleAddVendor = () => {
@@ -151,6 +173,51 @@ export default function VendorsPage() {
     }
   };
 
+  const handleRegistrationFormUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingRegistrationForm(true);
+
+    try {
+      const result = await uploadVendorRegistrationForm(file);
+
+      if (result.success && result.url) {
+        setRegistrationFormUrl(result.url);
+        showToast({
+          title: 'Success',
+          message: 'Vendor registration form updated successfully!',
+          type: 'success',
+        });
+        // Refresh the registration form URL
+        fetchRegistrationFormUrl();
+      } else {
+        showToast({
+          title: 'Upload Failed',
+          message: result.error || 'Failed to upload registration form',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.error('Registration form upload error:', error);
+      showToast({
+        title: 'Upload Failed',
+        message: 'An unexpected error occurred',
+        type: 'error',
+      });
+    } finally {
+      setIsUploadingRegistrationForm(false);
+    }
+  };
+
+  const handleDownloadRegistrationForm = () => {
+    if (registrationFormUrl) {
+      window.open(registrationFormUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   // Filter vendors based on search term
   const filteredVendors = vendors.filter(
     vendor =>
@@ -179,6 +246,17 @@ export default function VendorsPage() {
             </CardHeader>
             <CardContent>
               <div className="h-10 w-32 bg-muted rounded transition-all duration-300 ease-out"></div>
+            </CardContent>
+          </Card>
+
+          {/* Registration Form Upload Loading */}
+          <Card className="animate-pulse fade-in-0 slide-in-from-bottom-2 duration-500">
+            <CardHeader>
+              <div className="h-6 w-56 bg-muted rounded mb-2 transition-all duration-300 ease-out"></div>
+              <div className="h-4 w-72 bg-muted rounded transition-all duration-300 ease-out"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-10 w-40 bg-muted rounded transition-all duration-300 ease-out"></div>
             </CardContent>
           </Card>
 
@@ -294,6 +372,73 @@ export default function VendorsPage() {
             <p className="text-xs text-muted-foreground mt-2">
               Upload a PDF file to replace the existing vendor portfolio.
               Maximum file size: 10MB.
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Registration Form Upload */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Vendor Registration Form Management
+            </CardTitle>
+            <CardDescription>
+              Upload and manage the Netpoleon ANZ Vendor Registration Form PDF
+              document
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-4">
+              <div className="flex gap-2">
+                <input
+                  id="registration-form-upload"
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleRegistrationFormUpload}
+                  className="hidden"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    document.getElementById('registration-form-upload')?.click()
+                  }
+                  disabled={isUploadingRegistrationForm}
+                  className="flex items-center gap-2"
+                >
+                  <Upload className="h-4 w-4" />
+                  {isUploadingRegistrationForm
+                    ? 'Uploading...'
+                    : 'Upload Registration Form'}
+                </Button>
+                {registrationFormUrl && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDownloadRegistrationForm}
+                    className="flex items-center gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    View Registration Form
+                  </Button>
+                )}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {registrationFormUrl ? (
+                  <span className="text-green-600">
+                    ✓ Registration form available
+                  </span>
+                ) : (
+                  <span className="text-amber-600">
+                    No registration form uploaded
+                  </span>
+                )}
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Upload a PDF file to replace the existing vendor registration
+              form. Maximum file size: 10MB.
             </p>
           </CardContent>
         </Card>
