@@ -31,21 +31,17 @@ vi.mock('@/lib/storage', () => ({
   uploadImage: vi
     .fn()
     .mockResolvedValue({ success: true, url: 'https://example.com/img.png' }),
-  uploadVendorPortfolio: vi
-    .fn()
-    .mockResolvedValue({
-      success: true,
-      url: 'https://example.com/portfolio.pdf',
-    }),
+  uploadVendorPortfolio: vi.fn().mockResolvedValue({
+    success: true,
+    url: 'https://example.com/portfolio.pdf',
+  }),
   getVendorPortfolioUrl: vi
     .fn()
     .mockReturnValue('https://example.com/portfolio.pdf'),
-  uploadVendorRegistrationForm: vi
-    .fn()
-    .mockResolvedValue({
-      success: true,
-      url: 'https://example.com/registration.pdf',
-    }),
+  uploadVendorRegistrationForm: vi.fn().mockResolvedValue({
+    success: true,
+    url: 'https://example.com/registration.pdf',
+  }),
   getVendorRegistrationFormUrl: vi
     .fn()
     .mockReturnValue('https://example.com/registration.pdf'),
