@@ -67,7 +67,7 @@ export default function Header() {
           <nav className="hidden md:flex space-x-10">
             {[
               { href: '/about', text: 'About' },
-              { href: '/partners', text: 'Cybersecurity Vendors' },
+              { href: '/vendors', text: 'Vendors' },
               { href: '/services', text: 'Services' },
               { href: '/events', text: 'Events' },
               { href: '/resources', text: 'Resources' },
