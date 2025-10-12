@@ -85,7 +85,7 @@ export default function GraphSection() {
                     return (
                       <Link
                         key={vendor.id}
-                        href={`/partners/${createSlug(vendor.name)}`}
+                        href={`/vendors/${createSlug(vendor.name)}`}
                         className={`flex items-center justify-center p-2 bg-gray-50 rounded-lg border hover:shadow-md transition-all duration-300 cursor-pointer ${
                           isSelected ? 'opacity-100' : 'opacity-10 grayscale'
                         }`}
