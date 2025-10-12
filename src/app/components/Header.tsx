@@ -3,8 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -43,7 +46,11 @@ export default function Header() {
   };
   return (
     <header
-      className={`bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg sticky top-0 z-50 transition-transform duration-300 ease-in-out ${
+      className={`${
+        isHomePage
+          ? 'bg-transparent'
+          : 'bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg'
+      } sticky top-0 z-50 transition-transform duration-300 ease-in-out ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
       onMouseEnter={handleMouseEnter}
@@ -54,7 +61,11 @@ export default function Header() {
           <div className="flex-shrink-0">
             <Link href="/">
               <Image
-                src="/images/netpoleon.png"
+                src={
+                  isHomePage
+                    ? '/logos/Netpoleon ANZ White.png'
+                    : '/images/netpoleon.png'
+                }
                 alt="Netpoleon"
                 width={120}
                 height={80}
@@ -76,11 +87,25 @@ export default function Header() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-white/90 hover:text-white transition-colors font-medium relative group"
+                className={`${
+                  isHomePage
+                    ? 'text-white/90 hover:text-white'
+                    : 'text-gray-700 hover:text-orange-600'
+                } transition-colors ${
+                  link.href === '/contact' ? 'font-bold' : 'font-medium'
+                } relative group`}
               >
                 {link.text}
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white rounded-full group-hover:w-full transition-all duration-300" />
-                <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-white rounded-full opacity-0 group-hover:opacity-20 transition-all duration-300" />
+                <div
+                  className={`absolute -bottom-1 left-0 w-0 h-0.5 ${
+                    isHomePage ? 'bg-orange-600' : 'bg-white'
+                  } rounded-full group-hover:w-full transition-all duration-300`}
+                />
+                <div
+                  className={`absolute -bottom-1 left-0 w-full h-0.5 ${
+                    isHomePage ? 'bg-orange-600' : 'bg-white'
+                  } rounded-full opacity-0 group-hover:opacity-20 transition-all duration-300`}
+                />
               </a>
             ))}
           </nav>
@@ -89,7 +114,11 @@ export default function Header() {
           <div className="md:hidden">
             <button
               onClick={toggleMobileMenu}
-              className="relative text-white hover:text-white/90 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group"
+              className={`relative ${
+                isHomePage
+                  ? 'text-gray-700 hover:text-orange-600 hover:bg-orange-50'
+                  : 'text-white hover:text-white/90 hover:bg-white/10'
+              } p-3 rounded-xl transition-all duration-300 group`}
             >
               <div className="relative w-6 h-6">
                 <svg
@@ -293,7 +322,7 @@ export default function Header() {
               <div className="mt-6 pt-4 border-t border-gray-200">
                 <a
                   href="/contact"
-                  className="block w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white text-center font-semibold py-3 px-6 rounded-xl hover:from-orange-700 hover:to-amber-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="block w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white text-center font-bold py-3 px-6 rounded-xl hover:from-orange-700 hover:to-amber-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Get Started Today

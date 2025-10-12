@@ -471,7 +471,7 @@ export default function HeroSection({ title, subtitle }: HeroSectionProps) {
   ];
 
   return (
-    <section className="relative min-h-[70vh] lg:min-h-screen flex items-center justify-start overflow-hidden bg-white">
+    <section className="relative min-h-[70vh] lg:min-h-screen flex items-center justify-start overflow-hidden bg-black -mt-[112px] pt-[112px]">
       <div className="max-w-7xl mx-auto w-full relative flex flex-col-reverse lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 gap-8 lg:gap-16 xl:gap-20">
         {/* Left side - Text content */}
         <div className="flex-1 max-w-2xl lg:max-w-3xl">
