@@ -538,6 +538,28 @@ export const announcementBarApi = {
   },
 };
 
+// Public Announcement Bar API (for frontend use)
+export const publicAnnouncementBarApi = {
+  // Get active announcement bar (public endpoint)
+  get: async (): Promise<{
+    text: string;
+    link: string | null;
+    link_text: string | null;
+  } | null> => {
+    try {
+      const response = await fetch('/api/public/announcement-bar');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch announcement bar');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching announcement bar:', error);
+      throw error;
+    }
+  },
+};
+
 // Slide Gallery API
 export const slideGalleryApi = {
   // Get all slides
