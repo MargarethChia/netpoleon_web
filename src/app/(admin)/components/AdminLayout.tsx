@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Plus,
@@ -9,8 +10,11 @@ import {
   Calendar,
   FileText,
   Building2,
-  TrendingUp,
   LogOut,
+  Users,
+  Image,
+  ChevronDown,
+  ChevronRight,
 } from 'lucide-react';
 import { supabaseClient } from '@/lib/supabase-client';
 
@@ -34,6 +38,7 @@ export default function AdminLayout({
   onAddClick,
 }: AdminLayoutProps) {
   const router = useRouter();
+  const [isContentExpanded, setIsContentExpanded] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -75,13 +80,23 @@ export default function AdminLayout({
       icon: <Building2 className="w-4 h-4" />,
       disabled: false,
     },
+  ];
+
+  const contentSubItems = [
     {
-      href: '/admin/analytics',
-      label: 'Analytics',
-      icon: <TrendingUp className="w-4 h-4" />,
-      disabled: false,
+      href: '/admin/content/team',
+      label: 'Team',
+      icon: <Users className="w-4 h-4" />,
+    },
+    {
+      href: '/admin/content/banner',
+      label: 'Banner',
+      icon: <Image className="w-4 h-4" />,
     },
   ];
+
+  // Check if current page is under content section
+  const isContentPage = currentPage.startsWith('/admin/content');
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -98,7 +113,7 @@ export default function AdminLayout({
             {navItems.map(item => (
               <li key={item.href}>
                 {item.disabled ? (
-                  <div className="flex items-center px-3 py-2 text-sidebar-foreground/50 rounded-md border-l-2 border-transparent cursor-not-allowed text-sm">
+                  <div className="flex items-center px-3 py-2 text-sidebar-foreground/50 rounded-md border-transparent cursor-not-allowed text-sm">
                     <span className="mr-2 text-sidebar-foreground/50">
                       {item.icon}
                     </span>
@@ -107,7 +122,7 @@ export default function AdminLayout({
                 ) : (
                   <Link
                     href={item.href}
-                    className={`flex items-center px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-colors border-l-2 text-sm ${
+                    className={`flex items-center px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-colors text-sm ${
                       currentPage === item.href
                         ? 'border-sidebar-primary bg-sidebar-accent'
                         : 'border-transparent hover:border-sidebar-primary'
@@ -119,6 +134,43 @@ export default function AdminLayout({
                 )}
               </li>
             ))}
+
+            {/* Content Section */}
+            <li>
+              <button
+                onClick={() => setIsContentExpanded(!isContentExpanded)}
+                className={`flex items-center w-full px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-colors text-sm ${
+                  isContentPage ? 'bg-sidebar-accent' : ''
+                }`}
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                Content
+                {isContentExpanded ? (
+                  <ChevronDown className="ml-auto h-4 w-4" />
+                ) : (
+                  <ChevronRight className="ml-auto h-4 w-4" />
+                )}
+              </button>
+              {isContentExpanded && (
+                <ul className="ml-4 mt-1 space-y-1">
+                  {contentSubItems.map(item => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={`flex items-center px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-colors text-sm ${
+                          currentPage === item.href
+                            ? 'border-sidebar-primary bg-sidebar-accent'
+                            : 'border-transparent hover:border-sidebar-primary'
+                        }`}
+                      >
+                        <span className="mr-2">{item.icon}</span>
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
 
             {/* Logout Button */}
             <li className="mt-auto pt-4 border-t border-sidebar-border">

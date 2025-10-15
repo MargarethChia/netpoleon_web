@@ -401,6 +401,102 @@ export const vendorsApi = {
   },
 };
 
+// Team Members API
+export const teamMembersApi = {
+  // Get all team members
+  getAll: async (): Promise<TeamMember[]> => {
+    try {
+      const response = await fetch('/api/team-members');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch team members');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching team members:', error);
+      throw error;
+    }
+  },
+
+  // Get single team member
+  getById: async (id: number): Promise<TeamMember> => {
+    try {
+      const response = await fetch(`/api/team-members/${id}`);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch team member');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching team member:', error);
+      throw error;
+    }
+  },
+
+  // Create new team member
+  create: async (
+    teamMemberData: Omit<TeamMember, 'id' | 'created_at' | 'updated_at'>
+  ): Promise<TeamMember> => {
+    try {
+      const response = await fetch('/api/team-members', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(teamMemberData),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create team member');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating team member:', error);
+      throw error;
+    }
+  },
+
+  // Update team member
+  update: async (
+    id: number,
+    teamMemberData: Partial<TeamMember>
+  ): Promise<TeamMember> => {
+    try {
+      const response = await fetch(`/api/team-members/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(teamMemberData),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update team member');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating team member:', error);
+      throw error;
+    }
+  },
+
+  // Delete team member
+  delete: async (id: number): Promise<void> => {
+    try {
+      const response = await fetch(`/api/team-members/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to delete team member');
+      }
+    } catch (error) {
+      console.error('Error deleting team member:', error);
+      throw error;
+    }
+  },
+};
+
 // Import types from supabase
 import type {
   Event,
@@ -408,7 +504,15 @@ import type {
   Vendor,
   FeaturedResource,
   FeaturedEvent,
+  TeamMember,
 } from './supabase';
 
 // Re-export types for use in components
-export type { Event, Resource, Vendor, FeaturedResource, FeaturedEvent };
+export type {
+  Event,
+  Resource,
+  Vendor,
+  FeaturedResource,
+  FeaturedEvent,
+  TeamMember,
+};

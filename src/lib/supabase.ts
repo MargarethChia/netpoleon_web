@@ -72,6 +72,7 @@ export interface TeamMember {
   role: string;
   photo: string | null;
   created_at: string;
+  updated_at: string;
 }
 
 // Note: Database operations are now handled by API routes in /app/api/
