@@ -497,6 +497,143 @@ export const teamMembersApi = {
   },
 };
 
+// Announcement Bar API
+export const announcementBarApi = {
+  // Get announcement bar
+  get: async (): Promise<AnnouncementBar> => {
+    try {
+      const response = await fetch('/api/announcement-bar');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch announcement bar');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching announcement bar:', error);
+      throw error;
+    }
+  },
+
+  // Create or update announcement bar
+  save: async (
+    announcementData: Omit<AnnouncementBar, 'id' | 'created_at' | 'updated_at'>
+  ): Promise<AnnouncementBar> => {
+    try {
+      const response = await fetch('/api/announcement-bar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(announcementData),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save announcement bar');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error saving announcement bar:', error);
+      throw error;
+    }
+  },
+};
+
+// Slide Gallery API
+export const slideGalleryApi = {
+  // Get all slides
+  getAll: async (): Promise<SlideGallery[]> => {
+    try {
+      const response = await fetch('/api/slide-gallery');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch slides');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching slides:', error);
+      throw error;
+    }
+  },
+
+  // Get single slide
+  getById: async (id: number): Promise<SlideGallery> => {
+    try {
+      const response = await fetch(`/api/slide-gallery/${id}`);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch slide');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching slide:', error);
+      throw error;
+    }
+  },
+
+  // Create new slide
+  create: async (
+    slideData: Omit<SlideGallery, 'id' | 'created_at' | 'updated_at'>
+  ): Promise<SlideGallery> => {
+    try {
+      const response = await fetch('/api/slide-gallery', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(slideData),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create slide');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating slide:', error);
+      throw error;
+    }
+  },
+
+  // Update slide
+  update: async (
+    id: number,
+    slideData: Partial<SlideGallery>
+  ): Promise<SlideGallery> => {
+    try {
+      const response = await fetch(`/api/slide-gallery/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(slideData),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update slide');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating slide:', error);
+      throw error;
+    }
+  },
+
+  // Delete slide
+  delete: async (id: number): Promise<void> => {
+    try {
+      const response = await fetch(`/api/slide-gallery/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to delete slide');
+      }
+    } catch (error) {
+      console.error('Error deleting slide:', error);
+      throw error;
+    }
+  },
+};
+
 // Import types from supabase
 import type {
   Event,
@@ -505,6 +642,8 @@ import type {
   FeaturedResource,
   FeaturedEvent,
   TeamMember,
+  AnnouncementBar,
+  SlideGallery,
 } from './supabase';
 
 // Re-export types for use in components
@@ -515,4 +654,6 @@ export type {
   FeaturedResource,
   FeaturedEvent,
   TeamMember,
+  AnnouncementBar,
+  SlideGallery,
 };

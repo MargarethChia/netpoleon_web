@@ -95,7 +95,7 @@ export default function AdminLayout({
 
   const contentSubItems = [
     {
-      href: '/admin/content/banner',
+      href: '/admin/content/home-page',
       label: 'Home Page',
       icon: <Home className="w-4 h-4" />,
     },

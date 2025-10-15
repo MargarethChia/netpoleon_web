@@ -75,5 +75,28 @@ export interface TeamMember {
   updated_at: string;
 }
 
+export interface AnnouncementBar {
+  id: number;
+  text: string;
+  is_active: boolean;
+  link: string | null;
+  link_text: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SlideGallery {
+  id: number;
+  title: string;
+  subtitle: string | null;
+  description: string | null;
+  button_text: string | null;
+  button_link: string | null;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 // Note: Database operations are now handled by API routes in /app/api/
 // This file only contains the Supabase client and type definitions
