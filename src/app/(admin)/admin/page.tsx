@@ -23,26 +23,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  MoreHorizontal,
-  Plus,
-  Calendar,
-  FileText,
-  Users,
-  Star,
-  Eye,
-  Edit,
-  Trash2,
-} from 'lucide-react';
+import { MoreHorizontal, Plus, Eye, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AdminLayout from '../components/AdminLayout';
 import {
   Event,
   Resource,
   Vendor,
-  FeaturedResource,
-  FeaturedEvent,
-  TeamMember,
   eventsApi,
   resourcesApi,
   vendorsApi,
@@ -53,11 +40,6 @@ export default function AdminPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
   const [vendors, setVendors] = useState<Vendor[]>([]);
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [featuredResources, setFeaturedResources] = useState<
-    FeaturedResource[]
-  >([]);
-  const [featuredEvents, setFeaturedEvents] = useState<FeaturedEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -67,14 +49,7 @@ export default function AdminPage() {
       setIsLoading(true);
       setError(null);
 
-      const [
-        eventsData,
-        resourcesData,
-        vendorsData,
-        teamMembersData,
-        featuredResourcesData,
-        featuredEventsData,
-      ] = await Promise.all([
+      const [eventsData, resourcesData, vendorsData] = await Promise.all([
         eventsApi.getAll(),
         resourcesApi.getAll(),
         vendorsApi.getAll(),
@@ -86,9 +61,6 @@ export default function AdminPage() {
       setEvents(eventsData);
       setResources(resourcesData);
       setVendors(vendorsData);
-      setTeamMembers(teamMembersData);
-      setFeaturedResources(featuredResourcesData);
-      setFeaturedEvents(featuredEventsData);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
       setError(
@@ -239,107 +211,6 @@ export default function AdminPage() {
       currentPage="/admin"
     >
       <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Events
-              </CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">
-                {events.length}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                +2 from last month
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Published Resources
-              </CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">
-                {resources.filter((r: Resource) => r.is_published).length}
-              </div>
-              <p className="text-xs text-muted-foreground">+1 from last week</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Active Vendors
-              </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">
-                {vendors.length}
-              </div>
-              <p className="text-xs text-muted-foreground">+1 new vendor</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Featured Resources
-              </CardTitle>
-              <Star className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">
-                {featuredResources.length}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Currently featured
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Featured Events
-              </CardTitle>
-              <Star className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">
-                {featuredEvents.length}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Currently featured
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Team Members
-              </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-card-foreground">
-                {teamMembers.length}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Total team members
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Tables Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Events Table */}
