@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 import {
   Card,
@@ -19,12 +19,9 @@ import { teamMembersApi, TeamMember } from '@/lib/api';
 import { showToast } from '@/components/ui/toast';
 import { uploadImage } from '@/lib/storage';
 
-export default function EditTeamMemberPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function EditTeamMemberPage() {
   const router = useRouter();
+  const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);

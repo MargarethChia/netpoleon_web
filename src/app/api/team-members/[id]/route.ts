@@ -4,12 +4,13 @@ import { supabase } from '@/lib/supabase';
 // GET /api/team-members/[id] - Fetch single team member
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const teamMemberId = parseInt(id);
 
-    if (isNaN(id)) {
+    if (isNaN(teamMemberId)) {
       return NextResponse.json(
         { error: 'Invalid team member ID' },
         { status: 400 }
@@ -19,7 +20,7 @@ export async function GET(
     const { data, error } = await supabase
       .from('team_members')
       .select('*')
-      .eq('id', id)
+      .eq('id', teamMemberId)
       .single();
 
     if (error) {
@@ -50,12 +51,13 @@ export async function GET(
 // PUT /api/team-members/[id] - Update team member
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const teamMemberId = parseInt(id);
 
-    if (isNaN(id)) {
+    if (isNaN(teamMemberId)) {
       return NextResponse.json(
         { error: 'Invalid team member ID' },
         { status: 400 }
@@ -80,7 +82,7 @@ export async function PUT(
         photo: body.photo || null,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', id)
+      .eq('id', teamMemberId)
       .select()
       .single();
 
@@ -112,19 +114,23 @@ export async function PUT(
 // DELETE /api/team-members/[id] - Delete team member
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const teamMemberId = parseInt(id);
 
-    if (isNaN(id)) {
+    if (isNaN(teamMemberId)) {
       return NextResponse.json(
         { error: 'Invalid team member ID' },
         { status: 400 }
       );
     }
 
-    const { error } = await supabase.from('team_members').delete().eq('id', id);
+    const { error } = await supabase
+      .from('team_members')
+      .delete()
+      .eq('id', teamMemberId);
 
     if (error) {
       console.error('Database error:', error);
