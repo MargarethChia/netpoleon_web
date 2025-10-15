@@ -47,3 +47,13 @@ created_at timestamp without time zone DEFAULT now(),
 updated_at timestamp without time zone DEFAULT now(),
 CONSTRAINT vendors_pkey PRIMARY KEY (id)
 );
+
+CREATE TABLE public.team_members (
+id integer NOT NULL DEFAULT nextval('team_members_id_seq'::regclass),
+name text NOT NULL,
+role text NOT NULL,
+photo text,
+created_at timestamp without time zone DEFAULT now(),
+updated_at timestamp without time zone DEFAULT now(),
+CONSTRAINT team_members_pkey PRIMARY KEY (id)
+);
