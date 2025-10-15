@@ -19,15 +19,11 @@ import { teamMembersApi, TeamMember } from '@/lib/api';
 import { showToast } from '@/components/ui/toast';
 import { uploadImage } from '@/lib/storage';
 
-interface EditTeamMemberPageProps {
-  params: {
-    id: string;
-  };
-}
-
 export default function EditTeamMemberPage({
   params,
-}: EditTeamMemberPageProps) {
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -44,7 +40,7 @@ export default function EditTeamMemberPage({
     const fetchTeamMember = async () => {
       try {
         setIsLoadingData(true);
-        const memberId = parseInt(params.id);
+        const memberId = parseInt(params.id as string);
         const data = await teamMembersApi.getById(memberId);
         setTeamMember(data);
         setFormData({
