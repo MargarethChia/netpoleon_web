@@ -1,5 +1,4 @@
 import HeroSection from '../components/HeroSection';
-import ImageTextSection from '../components/ImageTextSection';
 import VendorCarousel from '../components/VendorCarousel';
 //import Statistics from '../components/Statistics';
 import LatestResources from '../components/LatestResources';
@@ -12,9 +11,9 @@ import Statistics from '../components/Statistics';
 export default function Home() {
   // Home Page
   const hero = {
-    title: 'Secure, defend, and thrive everywhere',
+    title: "MAKING CYBER\nEVERYONE'S BUSINESS",
     subtitle:
-      'We safeguard your data, systems, and networks with cutting-edge cybersecurity solutions. Our platform empowers businesses to stay resilient, compliant, and ready for the future.',
+      'Leading the way into the next generation of cyber security solutions',
     primaryButtonText: 'Get Started Today',
     secondaryButtonText: 'Learn More',
     heroImage: '/images/hero/hero-main.jpg',
@@ -29,18 +28,18 @@ export default function Home() {
   //     "We are a team of passionate innovators dedicated to helping businesses thrive in the digital age. Our mission is to deliver exceptional solutions that drive growth and create lasting impact.",
   // };
 
-  const imageTextSections = [
-    {
-      title: 'Innovative Web Solutions',
-      description:
-        "We create cutting-edge web applications that help businesses scale and succeed in today's competitive market. Our team of experts delivers solutions that are both beautiful and functional.",
-      imageSrc: '/images/web-development.jpg',
-      imageAlt: 'Web Development',
-      layout: 'left' as const,
-      ctaText: 'Explore Our Work',
-      ctaLink: '#',
-    },
-  ];
+  // const imageTextSections = [
+  //   {
+  //     title: 'Innovative Web Solutions',
+  //     description:
+  //       "We create cutting-edge web applications that help businesses scale and succeed in today's competitive market. Our team of experts delivers solutions that are both beautiful and functional.",
+  //     imageSrc: '/images/web-development.jpg',
+  //     imageAlt: 'Web Development',
+  //     layout: 'left' as const,
+  //     ctaText: 'Explore Our Work',
+  //     ctaLink: '#',
+  //   },
+  // ];
 
   // const info = {
   //   title: "Why Choose Netpoleon?",
@@ -72,11 +71,15 @@ export default function Home() {
     <div>
       <HeroSection {...hero} />
       <VendorCarousel title="Trusted by 10,000+ customers, from startup to enterprise " />
+      <GraphSection />
+      <Statistics />
+
+      {/*
       {imageTextSections.map((section, idx) => (
         <ImageTextSection key={idx} {...section} />
       ))}
-      <Statistics />
-      <GraphSection />
+      */}
+
       <LatestResources />
     </div>
   );

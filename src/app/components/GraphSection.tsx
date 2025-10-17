@@ -1,6 +1,6 @@
 'use client';
 
-import ForceBasedGraph from './ForceBasedGraph';
+import SunburstGraph from './SunburstGraph';
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -62,66 +62,72 @@ export default function GraphSection() {
         </div>
 
         {/* Desktop/Tablet: interactive graph + vendor list */}
-        <div className="hidden md:flex flex-col lg:flex-row items-center lg:items-center justify-between gap-12">
-          {/* Left side - Graph */}
-          <div className="lg:w-2/3 h-[720px]">
-            <ForceBasedGraph onVendorsChange={handleVendorsChange} />
-          </div>
+        <div className="hidden md:block">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            Vendor Solutions
+          </h1>
 
-          {/* Right side - Vendor Images */}
-          <div className="lg:w-1/3 text-left">
-            {loading ? (
-              <div className="flex justify-center items-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-              </div>
-            ) : vendors.length > 0 ? (
-              <div>
-                {/* Vendor Grid */}
-                <div className="grid grid-cols-2 gap-3">
-                  {vendors.map(vendor => {
-                    const isSelected = filteredVendors.some(
-                      fv => fv.id === vendor.id
-                    );
-                    return (
-                      <Link
-                        key={vendor.id}
-                        href={`/vendors/${createSlug(vendor.name)}`}
-                        className={`flex items-center justify-center p-2 bg-gray-50 rounded-lg border hover:shadow-md transition-all duration-300 cursor-pointer ${
-                          isSelected ? 'opacity-100' : 'opacity-10 grayscale'
-                        }`}
-                      >
-                        {vendor.logo_url ? (
-                          <Image
-                            src={vendor.logo_url}
-                            alt={vendor.name}
-                            width={80}
-                            height={60}
-                            className="h-8 object-contain"
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center h-8 w-full">
-                            <span className="text-xs text-gray-600 font-medium text-center px-2">
-                              {vendor.name}
-                            </span>
-                          </div>
-                        )}
-                      </Link>
-                    );
-                  })}
+          <div className="flex gap-8 lg:gap-12">
+            {/* Left side - Graph */}
+            <div className="lg:w-2/3 h-[720px]">
+              <SunburstGraph onVendorsChange={handleVendorsChange} />
+            </div>
+
+            {/* Right side - Vendor Images */}
+            <div className="lg:w-1/3 text-left">
+              {loading ? (
+                <div className="flex justify-center items-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                 </div>
-              </div>
-            ) : (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  No Vendors Found
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {isNodeClicked
-                    ? 'No vendors found for the selected category'
-                    : 'No vendor logos available'}
-                </p>
-              </div>
-            )}
+              ) : vendors.length > 0 ? (
+                <div>
+                  {/* Vendor Grid */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {vendors.map(vendor => {
+                      const isSelected = filteredVendors.some(
+                        fv => fv.id === vendor.id
+                      );
+                      return (
+                        <Link
+                          key={vendor.id}
+                          href={`/vendors/${createSlug(vendor.name)}`}
+                          className={`flex items-center justify-center p-2 bg-gray-50 rounded-lg border hover:shadow-md transition-all duration-300 cursor-pointer ${
+                            isSelected ? 'opacity-100' : 'opacity-10 grayscale'
+                          }`}
+                        >
+                          {vendor.logo_url ? (
+                            <Image
+                              src={vendor.logo_url}
+                              alt={vendor.name}
+                              width={80}
+                              height={60}
+                              className="h-8 object-contain"
+                            />
+                          ) : (
+                            <div className="flex items-center justify-center h-8 w-full">
+                              <span className="text-xs text-gray-600 font-medium text-center px-2">
+                                {vendor.name}
+                              </span>
+                            </div>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    No Vendors Found
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {isNodeClicked
+                      ? 'No vendors found for the selected category'
+                      : 'No vendor logos available'}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

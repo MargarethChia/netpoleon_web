@@ -17,7 +17,7 @@ extend({ ThreeGlobe: ThreeGlobe });
 
 const RING_PROPAGATION_SPEED = 3;
 const aspect = 1.2;
-const cameraZ = 300;
+const cameraZ = 350;
 
 type Position = {
   order: number;
@@ -70,12 +70,12 @@ export function Globe({ globeConfig, data }: WorldProps) {
   const [isInitialized, setIsInitialized] = useState(false);
 
   const defaultProps = {
-    pointSize: 2,
+    pointSize: 4,
     atmosphereColor: '#ffffff',
     showAtmosphere: true,
-    atmosphereAltitude: 0.1,
-    polygonColor: '#ffffff', // Changed to orange to match globe
-    globeColor: '#ffffff',
+    atmosphereAltitude: 0.2,
+    polygonColor: '#ff6600', // Brighter orange continents
+    globeColor: '#000000', // Black globe
     emissive: '#000000',
     emissiveIntensity: 0.1,
     shininess: 1.5,
@@ -151,52 +151,45 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .showAtmosphere(defaultProps.showAtmosphere)
       .atmosphereColor(defaultProps.atmosphereColor)
       .atmosphereAltitude(defaultProps.atmosphereAltitude)
-      .hexPolygonColor((d: unknown) => {
-        // Check if this is Australia and make it brighter
-        const country = d as { properties?: { name?: string } };
-        if (country.properties?.name === 'Australia') {
-          return 'rgba(255, 255, 255, 1.0)'; // Full white for Australia
-        }
+      .hexPolygonColor(() => {
+        // Use the configured polygon color for all countries including Australia
         return defaultProps.polygonColor;
       });
 
-    globeRef.current
-      .arcsData(data)
-      .arcStartLat(d => (d as { startLat: number }).startLat * 1)
-      .arcStartLng(d => (d as { startLng: number }).startLng * 1)
-      .arcEndLat(d => (d as { endLat: number }).endLat * 1)
-      .arcEndLng(d => (d as { endLng: number }).endLng * 1)
-      .arcColor(() => '#f97316')
-      .arcAltitude(e => (e as { arcAlt: number }).arcAlt * 1)
-      .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
-      .arcDashLength(defaultProps.arcLength)
-      .arcDashInitialGap(e => (e as { order: number }).order * 1)
-      .arcDashGap(15)
-      .arcDashAnimateTime(() => defaultProps.arcTime);
+    // Arcs removed - no arc animations
 
-    // Add white points at specific branch locations
+    // Add orange points for Australian cities with labels
     const branchPoints = [
-      { lat: -33.8688, lng: 151.2093, size: defaultProps.pointSize }, // Australia, Sydney
-      { lat: -37.8136, lng: 144.9631, size: defaultProps.pointSize }, // Australia, Melbourne
-      { lat: -27.4698, lng: 153.0251, size: defaultProps.pointSize }, // Australia, Brisbane
-      { lat: 12.5657, lng: 104.991, size: defaultProps.pointSize }, // Cambodia
-      { lat: 20.5937, lng: 78.9629, size: defaultProps.pointSize }, // India
-      { lat: -0.7893, lng: 113.9213, size: defaultProps.pointSize }, // Indonesia
-      { lat: 4.2105, lng: 101.9758, size: defaultProps.pointSize }, // Malaysia
-      { lat: 21.9162, lng: 95.956, size: defaultProps.pointSize }, // Myanmar
-      { lat: -40.9006, lng: 174.886, size: defaultProps.pointSize }, // New Zealand
-      { lat: 12.8797, lng: 121.774, size: defaultProps.pointSize }, // Philippines
-      { lat: 15.87, lng: 100.9925, size: defaultProps.pointSize }, // Thailand
-      { lat: 14.0583, lng: 108.2772, size: defaultProps.pointSize }, // Vietnam
+      {
+        lat: -33.8688,
+        lng: 151.2093,
+        size: defaultProps.pointSize,
+        city: 'Sydney',
+      }, // Australia, Sydney
+      {
+        lat: -37.8136,
+        lng: 144.9631,
+        size: defaultProps.pointSize,
+        city: 'Melbourne',
+      }, // Australia, Melbourne
+      {
+        lat: -27.4698,
+        lng: 153.0251,
+        size: defaultProps.pointSize,
+        city: 'Brisbane',
+      }, // Australia, Brisbane
     ];
 
     // Only show branch points
     globeRef.current
       .pointsData(branchPoints)
-      .pointColor(() => '#ffffff')
+      .pointColor(() => '#ff6600')
       .pointsMerge(true)
       .pointAltitude(0.0)
-      .pointRadius(2);
+      .pointRadius(1);
+
+    // Note: ThreeGlobe doesn't have built-in hover methods
+    // City labels would need to be implemented with custom tooltip system
 
     globeRef.current
       .ringsData([])
@@ -224,36 +217,24 @@ export function Globe({ globeConfig, data }: WorldProps) {
   useEffect(() => {
     if (!globeRef.current || !isInitialized) return;
 
-    // Define branch points for ring animations
+    // Define branch points for ring animations - only Australia
     const branchPointsForRings = [
       { lat: -33.8688, lng: 151.2093 }, // Australia, Sydney
       { lat: -37.8136, lng: 144.9631 }, // Australia, Melbourne
       { lat: -27.4698, lng: 153.0251 }, // Australia, Brisbane
-      { lat: 12.5657, lng: 104.991 }, // Cambodia
-      { lat: 20.5937, lng: 78.9629 }, // India
-      { lat: -0.7893, lng: 113.9213 }, // Indonesia
-      { lat: 4.2105, lng: 101.9758 }, // Malaysia
-      { lat: 21.9162, lng: 95.956 }, // Myanmar
-      { lat: -40.9006, lng: 174.886 }, // New Zealand
-      { lat: 12.8797, lng: 121.774 }, // Philippines
-      { lat: 15.87, lng: 100.9925 }, // Thailand
-      { lat: 14.0583, lng: 108.2772 }, // Vietnam
     ];
 
     const interval = setInterval(() => {
       if (!globeRef.current) return;
 
-      // Randomly select 6-8 branch points to animate rings at a time
-      const numRingsToShow = Math.floor(Math.random() * 3) + 6; // 6-8 rings
-      const shuffled = [...branchPointsForRings].sort(
-        () => 0.5 - Math.random()
-      );
-      const selectedRings = shuffled.slice(0, numRingsToShow);
+      // Show rings for all Australian cities (since we only have 3)
+      const numRingsToShow = Math.min(3, branchPointsForRings.length); // Show all 3 Australian cities
+      const selectedRings = branchPointsForRings.slice(0, numRingsToShow);
 
       const ringsData = selectedRings.map(point => ({
         lat: point.lat,
         lng: point.lng,
-        color: '#ffffff', // White rings to match the points
+        color: '#ff6600', // Bright orange rings to match the points
       }));
 
       globeRef.current.ringsData(ringsData);
@@ -279,13 +260,51 @@ export function WebGLRendererConfig() {
   return null;
 }
 
+function CameraController({ globeConfig }: { globeConfig: GlobeConfig }) {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    if (globeConfig.initialPosition) {
+      const { lat, lng } = globeConfig.initialPosition;
+      const phi = (90 - lat) * (Math.PI / 180);
+      const theta = (lng + 180) * (Math.PI / 180);
+      const radius = cameraZ;
+
+      // Position camera to look at the specified lat/lng
+      camera.position.set(
+        -(radius * Math.sin(phi) * Math.cos(theta)),
+        radius * Math.cos(phi),
+        radius * Math.sin(phi) * Math.sin(theta)
+      );
+
+      camera.lookAt(0, 0, 0);
+      camera.updateProjectionMatrix();
+    }
+  }, [globeConfig.initialPosition, camera]);
+
+  return null;
+}
+
 export function World(props: WorldProps) {
   const { globeConfig } = props;
   const scene = new Scene();
   scene.fog = new Fog(0xffffff, 400, 2000);
+
+  // Convert lat/lng to 3D coordinates for camera positioning
+  // const convertLatLngToVector3 = (lat: number, lng: number, radius: number = 200) => {
+  //   const phi = (90 - lat) * (Math.PI / 180);
+  //   const theta = (lng + 180) * (Math.PI / 180);
+  //
+  //   return new Vector3(
+  //     -(radius * Math.sin(phi) * Math.cos(theta)),
+  //     radius * Math.cos(phi),
+  //     radius * Math.sin(phi) * Math.sin(theta)
+  //   );
+  // };
   return (
     <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
       <WebGLRendererConfig />
+      <CameraController globeConfig={globeConfig} />
       <ambientLight color={globeConfig.ambientLight} intensity={1.0} />
       <directionalLight
         color={globeConfig.directionalLeftLight}
@@ -326,10 +345,11 @@ export function World(props: WorldProps) {
       <OrbitControls
         enablePan={false}
         enableZoom={false}
+        enableRotate={false}
         minDistance={cameraZ}
         maxDistance={cameraZ}
-        autoRotateSpeed={1}
-        autoRotate={true}
+        autoRotateSpeed={0}
+        autoRotate={false}
         minPolarAngle={Math.PI / 3.5}
         maxPolarAngle={Math.PI - Math.PI / 3}
       />
