@@ -1,18 +1,67 @@
+'use client';
+
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { publicAnnouncementBarApi } from '@/lib/api';
+
+interface AnnouncementData {
+  text: string;
+  link: string | null;
+  link_text: string | null;
+}
 
 export default function Banner() {
-  console.log('Banner component rendering');
+  const [announcement, setAnnouncement] = useState<AnnouncementData | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnnouncement = async () => {
+      try {
+        const data = await publicAnnouncementBarApi.get();
+        setAnnouncement(data);
+      } catch (error) {
+        console.error('Error fetching announcement:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAnnouncement();
+  }, []);
+
+  // Don't render banner if no active announcement
+  if (isLoading || !announcement) {
+    return null;
+  }
 
   return (
     <div className="bg-gradient-to-r from-orange-600 to-amber-600 text-white py-4 px-4 relative z-40">
       <div className="max-w-7xl mx-auto flex items-center justify-center">
         {/* Centered - Announcement text */}
         <div className="flex items-center space-x-4 text-sm font-medium">
-          <span>ANNOUNCEMENT</span>
-          <div className="w-px h-4 bg-white/50"></div>
-          <span>NEWS ALERT</span>
-          <div className="w-px h-4 bg-white/50"></div>
-          <span>ETC</span>
+          {announcement.link ? (
+            <Link
+              href={announcement.link}
+              className="hover:underline transition-colors"
+            >
+              {announcement.text}
+            </Link>
+          ) : (
+            <span>{announcement.text}</span>
+          )}
+          {announcement.link_text && announcement.link && (
+            <>
+              <div className="w-px h-4 bg-white/50"></div>
+              <Link
+                href={announcement.link}
+                className="hover:underline transition-colors"
+              >
+                {announcement.link_text}
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Social media icons positioned absolutely to the right */}
