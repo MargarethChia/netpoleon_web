@@ -504,6 +504,37 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     onVendorsChange(filteredVendors);
   };
 
+  getRelatedSegments = (segmentId: string): string[] => {
+    const relatedIds = new Set<string>();
+
+    // Add the segment itself
+    relatedIds.add(segmentId);
+
+    const segment = cybersecurityData.find(item => item.id === segmentId);
+    if (!segment) return Array.from(relatedIds);
+
+    if (segment.parent) {
+      // If this is a child segment (2nd or 3rd layer), include parent and all siblings
+      relatedIds.add(segment.parent);
+
+      // Find all siblings (children of the same parent)
+      cybersecurityData.forEach(item => {
+        if (item.parent === segment.parent) {
+          relatedIds.add(item.id);
+        }
+      });
+    } else {
+      // If this is a root segment (1st layer), include ONLY direct children
+      cybersecurityData.forEach(item => {
+        if (item.parent === segmentId) {
+          relatedIds.add(item.id);
+        }
+      });
+    }
+
+    return Array.from(relatedIds);
+  };
+
   createChart = () => {
     const { onVendorsChange } = this.props;
 

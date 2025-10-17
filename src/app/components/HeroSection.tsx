@@ -35,7 +35,7 @@ const StaticGlobe = React.memo(() => {
       arcLength: 0.9,
       rings: 1,
       maxRings: 3,
-      initialPosition: { lat: -15.0, lng: 20.0 },
+      initialPosition: { lat: -15.0, lng: 30.0 },
       autoRotate: false,
       autoRotateSpeed: 0,
     }),
@@ -544,6 +544,7 @@ interface Slide {
 export default function HeroSection({ slides }: HeroSectionProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const currentSlide = slides[currentSlideIndex] || slides[0];
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (slides.length <= 1) return;
@@ -552,18 +553,31 @@ export default function HeroSection({ slides }: HeroSectionProps) {
       setCurrentSlideIndex(prevIndex => (prevIndex + 1) % slides.length);
     }, 10000);
 
+    setIntervalId(interval);
     return () => clearInterval(interval);
   }, [slides.length]);
 
   const handleDotClick = (index: number) => {
     setCurrentSlideIndex(index);
+
+    // Reset the timer
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+
+    // Start new timer
+    const newInterval = setInterval(() => {
+      setCurrentSlideIndex(prevIndex => (prevIndex + 1) % slides.length);
+    }, 10000);
+
+    setIntervalId(newInterval);
   };
 
   return (
-    <section className="relative min-h-[70vh] lg:min-h-screen flex items-center justify-start bg-black pt-[112px]">
+    <section className="relative min-h-[70vh] lg:min-h-screen flex items-center justify-start bg-black pt-[112px] overflow-hidden">
       {/* Globe Background - Static, loads only once */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-visible">
-        <div className="absolute -top-220 -left-300 w-[200%] h-[200%] scale-125">
+        <div className="absolute -top-220 -left-310 w-[200%] h-[200%] scale-125">
           <StaticGlobe />
         </div>
       </div>
@@ -596,6 +610,16 @@ export default function HeroSection({ slides }: HeroSectionProps) {
           <div className="absolute top-0 left-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
             <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-2 rounded text-sm font-bold whitespace-nowrap">
               Brisbane
+            </div>
+          </div>
+        </div>
+
+        {/* Auckland */}
+        <div className="absolute w-12 h-12 top-[55%] left-[85%] group cursor-pointer">
+          <div className="w-full h-full bg-transparent hover:bg-orange-500/20 rounded-full transition-colors duration-200"></div>
+          <div className="absolute top-0 left-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-2 rounded text-sm font-bold whitespace-nowrap">
+              Auckland
             </div>
           </div>
         </div>
