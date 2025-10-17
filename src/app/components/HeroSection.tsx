@@ -647,7 +647,7 @@ export default function HeroSection({ slides }: HeroSectionProps) {
           </AnimatePresence>
 
           {slides.length > 1 && (
-            <div
+            <motion.div
               className="flex gap-5 mt-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -665,7 +665,7 @@ export default function HeroSection({ slides }: HeroSectionProps) {
                   aria-label={`Go to slide ${index + 1}`}
                 />
               ))}
-            </div>
+            </motion.div>
           )}
         </div>
       </div>
