@@ -13,6 +13,7 @@ interface SunburstGraphProps {
 interface SunburstGraphState {
   chart: unknown;
   vendors: Vendor[];
+  selectedSegment: string | null;
 }
 
 // Mapping between sunburst segment IDs and vendor types - copied from ForceBasedGraph
@@ -408,6 +409,7 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     this.state = {
       chart: null,
       vendors: [],
+      selectedSegment: null,
     };
   }
 
@@ -435,8 +437,75 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     }
   };
 
+  // Handle segment click to filter vendors only (no chart drill-down)
+  handleSegmentClick = (
+    segmentId: string,
+    onVendorsChange?: (vendors: Vendor[]) => void
+  ) => {
+    console.log('Handling segment click for:', segmentId);
+
+    // If clicking the same segment, reset to show all vendors
+    if (this.state.selectedSegment === segmentId) {
+      this.setState(
+        {
+          selectedSegment: null,
+        },
+        () => {
+          // Show all vendors
+          if (onVendorsChange) {
+            onVendorsChange(this.state.vendors);
+          }
+        }
+      );
+      return;
+    }
+
+    // Update selected segment but don't change the chart display
+    this.setState(
+      {
+        selectedSegment: segmentId,
+      },
+      () => {
+        // Filter vendors based on the selected segment
+        if (onVendorsChange) {
+          this.filterVendorsForSegment(segmentId, onVendorsChange);
+        }
+      }
+    );
+  };
+
+  // Filter vendors based on selected segment
+  filterVendorsForSegment = (
+    segmentId: string,
+    onVendorsChange: (vendors: Vendor[]) => void
+  ) => {
+    const { vendors } = this.state;
+
+    // Find the segment data to get its tag
+    const segmentData = cybersecurityData.find(item => item.id === segmentId);
+    if (!segmentData || !segmentData.tag) {
+      console.warn('No segment data found for:', segmentId);
+      onVendorsChange(vendors);
+      return;
+    }
+
+    const categoryTag = segmentData.tag;
+    console.log('Filtering vendors for category:', categoryTag);
+
+    // Filter vendors based on the category tag
+    const filteredVendors = vendors.filter(vendor => {
+      if (!vendor.type) return false;
+      // Split comma-separated types and check if any match the clicked tag
+      const vendorTypes = vendor.type.split(',').map(type => type.trim());
+      return vendorTypes.includes(categoryTag);
+    });
+
+    console.log('Filtered vendors count:', filteredVendors.length);
+    onVendorsChange(filteredVendors);
+  };
+
   createChart = () => {
-    // const { onVendorsChange } = this.props;
+    const { onVendorsChange } = this.props;
 
     // Check if container exists
     const container = document.getElementById('sunburst-container');
@@ -450,8 +519,11 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
       (this.state.chart as { dispose: () => void }).dispose();
     }
 
+    // Always use full data - no drill-down
+    const dataToUse = cybersecurityData;
+
     // Create data tree
-    const dataTree = anychart.data.tree(cybersecurityData, 'as-table');
+    const dataTree = anychart.data.tree(dataToUse, 'as-table');
 
     // Create chart
     const chart = anychart.sunburst(dataTree);
@@ -483,94 +555,103 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     chart.labels().fontColor('#ffffff');
     chart.labels().fontWeight('bold');
     chart.labels().position('center');
-    //chart.labels().rotation(45); // Horizontal text
+    chart.interactivity().selectionMode('none');
+
     // Hide tooltip
     chart.tooltip(false);
 
     // Hide legend
     chart.legend(false);
 
-    // Handle click events NEED HELP HERE
-    /*
-    chart.listen('pointClick', (e: any) => {
-      console.log('Click event received:', e);
-      console.log('Event target:', e.target);
-      
-      // The target is the AnyChart dataPoint object
-      const clickedData = e.target;
-      
-      // Extract data from AnyChart dataPoint object using its methods
-      if (clickedData) {
-        try {
-          console.log('Attempting to extract data from AnyChart object...');
-          console.log('Available methods on clickedData:', Object.getOwnPropertyNames(Object.getPrototypeOf(clickedData)));
-          console.log('clickedData keys:', Object.keys(clickedData));
-          
-          // Try different ways to access the data
-          let actualData: any = {};
-          
-          // Method 1: Try direct property access
-          if (clickedData.id) {
-            actualData.id = clickedData.id;
+    // Handle click events for segment selection using pointclick event
+    chart.listen('pointclick', (e: unknown) => {
+      console.log('PointClick event received:', e);
+
+      // Extract the event data with pointIndex
+      const eventData = e as {
+        pointIndex?: number;
+        target?: unknown;
+        series?: unknown;
+        point?: unknown;
+        originalEvent?: unknown;
+      };
+
+      console.log('Event data:', eventData);
+      console.log('PointIndex:', eventData.pointIndex);
+
+      // Use pointIndex to get the clicked segment data
+      if (typeof eventData.pointIndex === 'number') {
+        const pointIndex = eventData.pointIndex;
+        console.log('Clicked pointIndex:', pointIndex);
+
+        // Get the clicked point data using chart.ce(pointIndex)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const clickedPoint = (chart as any).ce(pointIndex);
+        console.log('Clicked point data:', clickedPoint);
+
+        if (clickedPoint) {
+          // Extract segment ID from the clicked point
+          let segmentId = '';
+
+          // Try to get ID from the point data
+          if (clickedPoint.get && typeof clickedPoint.get === 'function') {
+            segmentId = clickedPoint.get('id') || '';
+            console.log('Got ID from point.get("id"):', segmentId);
           }
-          if (clickedData.name) {
-            actualData.name = clickedData.name;
+
+          // If no ID found, try other methods
+          if (!segmentId) {
+            // Try direct property access
+            if (clickedPoint.id) {
+              segmentId =
+                typeof clickedPoint.id === 'function'
+                  ? clickedPoint.id()
+                  : String(clickedPoint.id);
+              console.log('Got ID from direct property:', segmentId);
+            } else if (clickedPoint.key) {
+              segmentId =
+                typeof clickedPoint.key === 'function'
+                  ? clickedPoint.key()
+                  : String(clickedPoint.key);
+              console.log('Got ID from key property:', segmentId);
+            } else if (clickedPoint.name) {
+              // Try to match by name as fallback
+              const name =
+                typeof clickedPoint.name === 'function'
+                  ? clickedPoint.name()
+                  : String(clickedPoint.name);
+              const matchingItem = cybersecurityData.find(
+                item =>
+                  item.name.toLowerCase().replace(/\s+/g, '') ===
+                  name.toLowerCase().replace(/\s+/g, '')
+              );
+              if (matchingItem) {
+                segmentId = matchingItem.id;
+                console.log('Matched ID by name:', segmentId);
+              }
+            }
           }
-          if (clickedData.tag) {
-            actualData.tag = clickedData.tag;
-          }
-          
-          // Method 2: Try calling methods if they exist
-          if (typeof clickedData.id === 'function') {
-            actualData.id = clickedData.id();
-          }
-          if (typeof clickedData.name === 'function') {
-            actualData.name = clickedData.name();
-          }
-          if (typeof clickedData.tag === 'function') {
-            actualData.tag = clickedData.tag();
-          }
-          
-          // Method 3: Try accessing internal properties
-          if (clickedData.data) {
-            actualData = { ...actualData, ...clickedData.data };
-          }
-          
-          // Method 4: Try accessing properties with different names
-          if (clickedData.key) {
-            actualData.id = clickedData.key;
-          }
-          if (clickedData.label) {
-            actualData.name = clickedData.label;
-          }
-          if (clickedData.category) {
-            actualData.tag = clickedData.category;
-          }
-          
-          console.log('Extracted actual data:', actualData);
-          
-          // Check if we got any useful data
-          if (actualData.id || actualData.name) {
-            this.handleDataPointClick(actualData, onVendorsChange);
+
+          console.log('Final extracted segment ID:', segmentId);
+
+          if (segmentId) {
+            this.handleSegmentClick(segmentId, onVendorsChange);
           } else {
-            console.warn('No useful data extracted, trying to find data in internal properties...');
-            // Try to find data in internal AnyChart properties
-            console.log('Full clickedData object:', clickedData);
-            this.handleDataPointClick(clickedData, onVendorsChange);
+            console.warn('Could not extract segment ID from point data');
+            console.log('Point data structure:', clickedPoint);
+            console.log(
+              'Available methods:',
+              Object.getOwnPropertyNames(clickedPoint)
+            );
           }
-        } catch (error) {
-          console.error('Error extracting data from AnyChart object:', error);
-          // Fallback: pass the raw object
-          this.handleDataPointClick(clickedData, onVendorsChange);
+        } else {
+          console.warn('Could not get point data for index:', pointIndex);
         }
       } else {
-        console.warn('No clickedData found');
-        // Fallback: try other event properties
-        const fallbackData = e.dataPoint || e.data || e.target || e;
-        this.handleDataPointClick(fallbackData, onVendorsChange);
+        console.warn('No pointIndex found in event data');
+        console.log('Full event object:', e);
       }
     });
-    */
 
     // Set container and draw chart
     chart.container('sunburst-container');
@@ -580,201 +661,6 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     this.setState({ chart });
   };
 
-  /*
-
-  handleDataPointClick = (
-    dataPoint: unknown,
-    onVendorsChange?: (vendors: Vendor[]) => void
-  ) => {
-    if (!onVendorsChange) return;
-
-    const { vendors } = this.state;
-    
-    // Check if dataPoint exists
-    if (!dataPoint) {
-      console.warn('dataPoint is undefined or null');
-      onVendorsChange(vendors);
-      return;
-    }
-    
-    // Debug: log the dataPoint structure to understand it
-    console.log('Clicked dataPoint:', dataPoint);
-    
-    // Extract data from the clicked segment
-    const clickedData = dataPoint as any;
-    let categoryTag = '';
-    let categoryId = '';
-    
-    console.log('ClickedData:', clickedData);
-    console.log('ClickedData type:', typeof clickedData);
-    console.log('ClickedData keys:', Object.keys(clickedData));
-    
-    // Check if clickedData exists and has the properties we need
-    if (clickedData && typeof clickedData === 'object') {
-      // Try direct property access (should work now since we extracted it properly)
-      if (clickedData.id && typeof clickedData.id === 'string') {
-        categoryId = clickedData.id;
-        console.log('Got ID via direct access:', categoryId);
-      } else if (typeof clickedData.id === 'function') {
-        try {
-          categoryId = clickedData.id();
-          console.log('Got ID via function call:', categoryId);
-        } catch (error) {
-          console.error('Error calling id() function:', error);
-        }
-      }
-      
-      if (clickedData.tag && typeof clickedData.tag === 'string') {
-        categoryTag = clickedData.tag;
-        console.log('Got tag via direct access:', categoryTag);
-      } else if (typeof clickedData.tag === 'function') {
-        try {
-          categoryTag = clickedData.tag();
-          console.log('Got tag via function call:', categoryTag);
-        } catch (error) {
-          console.error('Error calling tag() function:', error);
-        }
-      }
-      
-      // Look up the tag from our cybersecurityData using the ID if we don't have it
-      if (!categoryTag && categoryId) {
-        const segmentData = cybersecurityData.find(item => item.id === categoryId);
-        if (segmentData && segmentData.tag) {
-          categoryTag = segmentData.tag;
-          console.log('Found tag via lookup:', categoryTag);
-        }
-      }
-      
-      // If we still don't have a tag, try to extract it from the name
-      if (!categoryTag && clickedData.name) {
-        const name = typeof clickedData.name === 'function' ? clickedData.name() : clickedData.name;
-        console.log('Trying to extract tag from name:', name);
-        // Try to match the name to our data
-        const segmentData = cybersecurityData.find(item => 
-          item.name.toLowerCase().includes(name.toLowerCase()) || 
-          name.toLowerCase().includes(item.name.toLowerCase())
-        );
-        if (segmentData && segmentData.tag) {
-          categoryTag = segmentData.tag;
-          console.log('Found tag via name matching:', categoryTag);
-        }
-      }
-    }
-    
-    if (!categoryTag) {
-      console.warn('No category tag found in dataPoint:', dataPoint);
-      console.warn('ClickedData:', clickedData);
-      console.warn('CategoryId:', categoryId);
-      // Fallback: show all vendors if we can't determine the category
-      onVendorsChange(vendors);
-      return;
-    }
-
-    console.log('Extracted categoryTag:', categoryTag);
-    console.log('Total vendors:', vendors.length);
-
-    // Use tag-based filtering directly from the clicked segment
-    let filteredVendors: Vendor[] = [];
-    
-    if (categoryTag) {
-      // Filter vendors based on the extracted tag
-      filteredVendors = vendors.filter(vendor => {
-        if (!vendor.type) return false;
-        // Split comma-separated types and check if any match the clicked tag
-        const vendorTypes = vendor.type.split(',').map(type => type.trim());
-        const matches = vendorTypes.includes(categoryTag);
-        if (matches) {
-          console.log('Matching vendor:', vendor.name, 'types:', vendorTypes);
-        }
-        return matches;
-      });
-      
-      console.log('Filtered vendors count:', filteredVendors.length);
-    } else {
-      // Fallback to keyword-based filtering for sub-categories
-      const categoryToKeywords: Record<string, string[]> = {
-        // Application & Cloud Security
-        'app-cloud': ['application', 'cloud', 'appsec', 'api', 'devsecops', 'dast', 'sast', 'sca', 'cwpp', 'cspm', 'kspm', 'ddos', 'bot', 'rasp', 'waf', 'container', 'cnapp', 'sspm'],
-        'app-dev-group': ['dast', 'sast', 'sca', 'appsec', 'api', 'devsecops'],
-        'app-appsec-api': ['appsec', 'api', 'devsecops'],
-        'app-cloud-group': ['cwpp', 'cspm', 'kspm'],
-        'app-ddos-bot': ['ddos', 'bot', 'protection'],
-        'app-runtime-group': ['cnapp', 'sspm'],
-        'app-rasp-waf': ['rasp', 'waf', 'container', 'security'],
-
-        // Identity & Access
-        'identity-access': ['identity', 'access', 'iam', 'iga', 'ciam', 'ispm', 'sso', 'mfa', 'pam'],
-        'identity-auth-group': ['sso', 'mfa', 'authentication'],
-        'identity-access-group': ['iam', 'iga', 'ciam', 'ispm'],
-        'identity-priv-group': ['pam', 'privileged'],
-
-        // Security Operations
-        'security-operations': ['security', 'operations', 'xdr', 'mdr', 'siem', 'soar', 'ubea', 'soc', 'tprm', 'grc', 'backup', 'disaster', 'recovery', 'incident', 'response', 'forensics'],
-        'secops-detection-group': ['xdr', 'mdr'],
-        'secops-siem-soar': ['siem', 'soar', 'ubea', 'soc'],
-        'secops-gov-group': ['tprm', 'grc'],
-        'secops-backup-dr': ['backup', 'disaster', 'recovery'],
-        'secops-incident-group': ['incident', 'response', 'forensics'],
-
-        // Emerging Security
-        'emerging-security': ['emerging', 'automation', 'tip', 'awareness', 'training', 'ai', 'security', 'aipm', 'ctem', 'caasm', 'bas', 'offensive'],
-        'emerging-ai-group': ['automation', 'tip'],
-        'emerging-awareness-training': ['awareness', 'training'],
-        'emerging-training-group': ['ai', 'security', 'aipm'],
-        'emerging-ctem-caasm': ['ctem', 'caasm', 'bas'],
-        'emerging-advanced-group': ['offensive', 'security'],
-
-        // Network & Perimeter Security
-        'network-perimeter': ['network', 'perimeter', 'ids', 'inr', 'sse', 'sase', 'swg', 'ngfw', 'vpn', 'ztna', 'visibility', 'nspm', 'ot', 'iot', 'microsegmentation'],
-        'network-core-group': ['ids', 'inr'],
-        'network-swg-vpn': ['sse', 'sase', 'swg', 'ngfw'],
-        'network-detection-group': ['swg', 'vpn', 'ztna'],
-        'network-ids-ndr': ['visibility', 'nspm'],
-        'network-specialized-group': ['ot', 'iot'],
-        'network-microseg': ['microsegmentation'],
-
-        // Endpoint Security
-        'endpoint-security': ['endpoint', 'protection', 'edr', 'casb', 'web', 'security', 'email', 'sdp', 'dns', 'browser', 'isolation'],
-        'endpoint-core-group': ['browser', 'isolation'],
-        'endpoint-casb-web': ['casb', 'web', 'security'],
-        'endpoint-comm-group': ['email', 'security'],
-        'endpoint-protection-edr': ['endpoint', 'protection', 'edr'],
-        'endpoint-browser-group': ['sdp', 'dns'],
-
-        // Data Security
-        'data-security': ['data', 'security', 'encryption', 'tokenization', 'dlp', 'dspm', 'discovery', 'classification', 'pki', 'secret', 'management'],
-        'data-protection-group': ['data', 'encryption', 'tokenization'],
-        'data-encryption-group': ['dlp', 'dspm', 'discovery', 'classification'],
-      };
-
-      // Get keywords for the clicked category
-      const keywords = categoryToKeywords[categoryId] || [];
-      
-      // If no specific keywords found, try to extract from category name
-      if (keywords.length === 0) {
-        const nameWords = categoryTag.toLowerCase().split(/[\s&,\n]+/).filter((word: string) => word.length > 2);
-        keywords.push(...nameWords);
-      }
-
-      // Filter vendors based on keywords
-      filteredVendors = vendors.filter((vendor: Vendor) => {
-        const vendorName = vendor.name.toLowerCase();
-        const description = vendor.description?.toLowerCase() || '';
-        const vendorType = vendor.type?.toLowerCase() || '';
-
-        // Check if any keyword matches vendor name, description, or type
-        return keywords.some(keyword => 
-          vendorName.includes(keyword) || 
-          description.includes(keyword) ||
-          vendorType.includes(keyword)
-        );
-      });
-    }
-
-    // If no vendors found with specific filtering, show all vendors
-    onVendorsChange(filteredVendors.length > 0 ? filteredVendors : vendors);
-  };
-  */
   render() {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center p-8">
