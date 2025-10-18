@@ -13,14 +13,15 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Calculate trigger point for background change
-  const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
-  const triggerPoint = windowHeight * 0.75;
+  const [triggerPoint, setTriggerPoint] = useState(0);
 
   useEffect(() => {
+    // Set trigger point on mount
+    const windowHeight = window.innerHeight;
+    setTriggerPoint(windowHeight * 0.75); // 75% of window height
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const triggerPoint = windowHeight; // 75% of window height
 
       // Show header when at the top
       if (currentScrollY < triggerPoint) {
@@ -39,8 +40,19 @@ export default function Header() {
     // Add scroll event listener
     window.addEventListener('scroll', handleScroll, { passive: true });
 
+    // Handle window resize
+    const handleResize = () => {
+      const windowHeight = window.innerHeight;
+      setTriggerPoint(windowHeight * 0.75);
+    };
+
+    window.addEventListener('resize', handleResize);
+
     // Cleanup
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, [lastScrollY]);
 
   const handleMouseEnter = () => {
@@ -57,9 +69,7 @@ export default function Header() {
           ? lastScrollY < triggerPoint
             ? 'bg-transparent top-16'
             : 'bg-white'
-          : lastScrollY < triggerPoint
-            ? 'bg-transparent top-16'
-            : 'bg-white'
+          : 'bg-white'
       } fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
@@ -76,9 +86,7 @@ export default function Header() {
                     ? lastScrollY < triggerPoint
                       ? '/logos/Netpoleon ANZ White.png'
                       : '/logos/Netpoleon ANZ Orange Black .png'
-                    : lastScrollY < triggerPoint
-                      ? '/logos/Netpoleon ANZ White.png'
-                      : '/logos/Netpoleon ANZ Orange Black .png'
+                    : '/logos/Netpoleon ANZ Orange Black .png'
                 }
                 alt="Netpoleon"
                 width={120}
@@ -102,8 +110,10 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 className={`${
-                  lastScrollY < triggerPoint
-                    ? 'text-white/90 hover:text-white'
+                  isHomePage
+                    ? lastScrollY < triggerPoint
+                      ? 'text-white/90 hover:text-white'
+                      : 'text-gray-700 hover:text-orange-600'
                     : 'text-gray-700 hover:text-orange-600'
                 } transition-colors ${
                   link.href === '/contact' ? 'font-bold' : 'font-medium'
@@ -112,17 +122,15 @@ export default function Header() {
                 {link.text}
                 <div
                   className={`absolute -bottom-1 left-0 w-0 h-0.5 ${
-                    lastScrollY < triggerPoint
-                      ? 'bg-orange-600'
+                    isHomePage
+                      ? lastScrollY < triggerPoint
+                        ? 'bg-orange-600'
+                        : 'bg-orange-600'
                       : 'bg-orange-600'
                   } rounded-full group-hover:w-full transition-all duration-300`}
                 />
                 <div
-                  className={`absolute -bottom-1 left-0 w-full h-0.5 ${
-                    lastScrollY < triggerPoint
-                      ? 'bg-orange-600'
-                      : 'bg-orange-600'
-                  } rounded-full opacity-0 group-hover:opacity-20 transition-all duration-300`}
+                  className={`absolute -bottom-1 left-0 w-full h-0.5 bg-orange-600 rounded-full opacity-0 group-hover:opacity-20 transition-all duration-300`}
                 />
               </a>
             ))}
@@ -133,8 +141,10 @@ export default function Header() {
             <button
               onClick={toggleMobileMenu}
               className={`relative ${
-                lastScrollY < triggerPoint
-                  ? 'text-white hover:text-white/90 hover:bg-white/10'
+                isHomePage
+                  ? lastScrollY < triggerPoint
+                    ? 'text-white hover:text-white/90 hover:bg-white/10'
+                    : 'text-gray-700 hover:text-orange-600 hover:bg-orange-50'
                   : 'text-gray-700 hover:text-orange-600 hover:bg-orange-50'
               } p-3 rounded-xl transition-all duration-300 group`}
             >
