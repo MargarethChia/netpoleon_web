@@ -577,7 +577,7 @@ export default function HeroSection({ slides }: HeroSectionProps) {
     <section className="relative min-h-[70vh] lg:min-h-screen flex items-center justify-start bg-black pt-[112px] overflow-hidden">
       {/* Globe Background - Static, loads only once */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-visible">
-        <div className="absolute -top-220 -left-310 w-[200%] h-[200%] scale-125">
+        <div className="absolute -top-250 -left-310 w-[200%] h-[200%] scale-125">
           <StaticGlobe />
         </div>
       </div>
@@ -638,7 +638,7 @@ export default function HeroSection({ slides }: HeroSectionProps) {
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
               {/* Title */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-inter font-bold font-weight-700 text-white leading-tight mb-3">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-rubikOne font-bold text-white leading-tight mb-3">
                 {currentSlide.title.split('\n').map((line, index) => (
                   <span key={index}>
                     {line}
