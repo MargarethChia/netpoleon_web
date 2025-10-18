@@ -462,7 +462,7 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
 
         return {
           ...item,
-          fill: shouldKeepOriginalColor ? item.fill : '#808080',
+          fill: shouldKeepOriginalColor ? item.fill : '#D0D0D0',
         };
       });
 
