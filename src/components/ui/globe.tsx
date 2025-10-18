@@ -178,6 +178,12 @@ export function Globe({ globeConfig, data }: WorldProps) {
         size: defaultProps.pointSize,
         city: 'Brisbane',
       }, // Australia, Brisbane
+      {
+        lat: -36.8485,
+        lng: 174.7633,
+        size: defaultProps.pointSize,
+        city: 'Auckland',
+      }, // New Zealand, Auckland
     ];
 
     // Only show branch points
@@ -217,18 +223,19 @@ export function Globe({ globeConfig, data }: WorldProps) {
   useEffect(() => {
     if (!globeRef.current || !isInitialized) return;
 
-    // Define branch points for ring animations - only Australia
+    // Define branch points for ring animations - Australia and New Zealand
     const branchPointsForRings = [
       { lat: -33.8688, lng: 151.2093 }, // Australia, Sydney
       { lat: -37.8136, lng: 144.9631 }, // Australia, Melbourne
       { lat: -27.4698, lng: 153.0251 }, // Australia, Brisbane
+      { lat: -36.8485, lng: 174.7633 }, // New Zealand, Auckland
     ];
 
     const interval = setInterval(() => {
       if (!globeRef.current) return;
 
-      // Show rings for all Australian cities (since we only have 3)
-      const numRingsToShow = Math.min(3, branchPointsForRings.length); // Show all 3 Australian cities
+      // Show rings for all cities (3 Australian + 1 New Zealand)
+      const numRingsToShow = Math.min(4, branchPointsForRings.length); // Show all 4 cities
       const selectedRings = branchPointsForRings.slice(0, numRingsToShow);
 
       const ringsData = selectedRings.map(point => ({

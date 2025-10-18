@@ -80,7 +80,7 @@ export default function Statistics() {
           </div>
 
           {/* Statistics */}
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 justify-center items-start">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 justify-center items-center">
             {stats.map((stat, index) => (
               <div key={stat.id} className="text-center">
                 <div className="text-4xl sm:text-5xl font-bold text-white mb-2">

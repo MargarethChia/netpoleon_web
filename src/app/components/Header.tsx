@@ -48,7 +48,7 @@ export default function Header() {
     <header
       className={`${
         isHomePage
-          ? 'bg-transparent'
+          ? 'bg-black'
           : 'bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg'
       } sticky top-0 z-50 transition-transform duration-300 ease-in-out ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
@@ -82,7 +82,7 @@ export default function Header() {
               { href: '/services', text: 'Services' },
               { href: '/events', text: 'Events' },
               { href: '/resources', text: 'Resources' },
-              { href: '/contact', text: 'Contact Us' },
+              { href: '/contact', text: 'Contact' },
             ].map(link => (
               <a
                 key={link.href}
