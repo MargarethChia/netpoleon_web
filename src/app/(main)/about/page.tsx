@@ -221,8 +221,11 @@ export default function AboutUs() {
   };
 
   const staggerContainer = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.12, delayChildren: 0.08 },
+    },
   };
 
   const [team_members, set_team_members] = useState<TeamMember[]>([]);
@@ -257,263 +260,98 @@ export default function AboutUs() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Simple Animated Hero Section */}
-      <motion.section
-        className="relative py-24"
-        initial="hidden"
-        animate="visible"
-        variants={staggerContainer}
-      >
-        {/* Simple background elements */}
-        <div className="absolute inset-0">
-          <motion.div
-            className="absolute top-32 right-32 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="absolute bottom-32 left-32 w-48 h-48 bg-orange-400/8 rounded-full blur-2xl"
-            animate={{ scale: [1.1, 1, 1.1] }}
-            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div className="space-y-8" variants={fadeInUp}>
-            <motion.div
-              className="inline-block"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <Badge
-                variant="outline"
-                className="text-orange-600 border-orange-600 px-4 py-2 text-sm font-medium"
-              >
+      {/* Hero Section */}
+      <section className="pt-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="space-y-8">
+            {/* Orange Badge */}
+            <div className="inline-block">
+              <div className="border border-orange-600 text-orange-600 px-6 py-3 rounded-lg text-sm font-medium">
                 Trusted Cybersecurity Partner Since 2019
-              </Badge>
-            </motion.div>
-
-            <motion.h1
-              className="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">
-                About Netpoleon
-              </span>
-            </motion.h1>
-
-            <motion.p
-              className="text-xl lg:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              ANZ Trusted Partner for Next Generation Cyber Security Solutions
-              and Value-Added Services
-            </motion.p>
-
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 text-lg"
-                >
-                  Partner With Us
-                </Button>
-              </Link>
-              <Link href="/services">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-orange-600 text-orange-600 hover:bg-orange-50 px-8 py-3 text-lg"
-                >
-                  View Our Solutions
-                </Button>
-              </Link>
-            </motion.div>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Hero Message Section */}
-      <motion.section
-        className="py-20 bg-white"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={staggerContainer}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Image Section */}
-          <motion.div
-            className="relative h-64 bg-gradient-to-r from-orange-100 via-orange-50 to-blue-50 rounded-2xl overflow-hidden mb-16"
-            variants={fadeInUp}
-          >
-            {/* Animated Security Icons */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="grid grid-cols-8 gap-4 opacity-60">
-                {Array.from({ length: 24 }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="w-12 h-16 bg-gradient-to-b from-orange-400 to-orange-600 rounded-t-full rounded-b-sm"
-                    style={{
-                      background: `linear-gradient(to bottom, 
-                        ${
-                          i % 4 === 0
-                            ? '#f97316, #ea580c'
-                            : i % 4 === 1
-                              ? '#3b82f6, #1d4ed8'
-                              : i % 4 === 2
-                                ? '#10b981, #059669'
-                                : '#8b5cf6, #7c3aed'
-                        })`,
-                    }}
-                    animate={{
-                      scale: [1, 1.1, 1],
-                      opacity: [0.6, 0.8, 0.6],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      delay: i * 0.1,
-                      ease: 'easeInOut',
-                    }}
-                  />
-                ))}
               </div>
             </div>
 
-            {/* Overlay pattern */}
-            <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
-          </motion.div>
+            {/* Main Title */}
+            <h1 className="text-4xl lg:text-6xl font-bold text-gray-900">
+              Netpoleon ANZ
+            </h1>
 
-          {/* Two Column Content */}
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Column - Main Message */}
-            <motion.div variants={fadeInUp}>
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-8">
-                Building a more{' '}
-                <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">
-                  secure Internet
-                </span>
-              </h2>
-            </motion.div>
-
-            {/* Right Column - Description */}
-            <motion.div variants={fadeInUp} className="space-y-6">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  About Netpoleon
-                </h3>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  Originally founded in 2000, Netpoleon Group has become a
-                  leading provider of integrated security, networking solutions
-                  and value-added services throughout the APAC region. And,
-                  thanks to our equity partnership with Macnica, a leading
-                  value-added distributor of Network Security solutions to the
-                  worldwide market, Netpoleon has been elevated to the global
-                  arena and can now engage global clients in the market. Amid
-                  all our success Netpoleon ANZ was established covering bases
-                  in both Australia and New Zealand.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-3"></div>
-                  <p className="text-gray-700">
-                    Protecting organizations across the Asia-Pacific region
-                  </p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-3"></div>
-                  <p className="text-gray-700">
-                    Democratizing enterprise-grade security for businesses of
-                    all sizes
-                  </p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-3"></div>
-                  <p className="text-gray-700">
-                    Building the future of cybersecurity distribution
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+            {/* Tagline */}
+            <p className="text-lg lg:text-xl text-gray-700 max-w-4xl mx-auto">
+              ANZ Trusted Partner for Next Generation Cyber Security Solutions
+              and Value-Added Services
+            </p>
           </div>
         </div>
-      </motion.section>
+      </section>
+
+      {/* About Us Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column - About Us Text */}
+            <div>
+              <h2 className="text-4xl lg:text-5xl font-bold text-orange-600 mb-6">
+                About us
+              </h2>
+              <p className="text-base text-gray-700 leading-relaxed">
+                Originally founded in 2000, Netpoleon Group has become a leading
+                provider of integrated security, networking solutions and
+                value-added services throughout the APAC region. And, thanks to
+                our equity partnership with Macnica, a leading value-added
+                distributor of Network Security solutions to the worldwide
+                market, Netpoleon has been elevated to the global arena and can
+                now engage global clients in the market. Amid all our success
+                Netpoleon ANZ was established covering bases in both Australia
+                and New Zealand.
+              </p>
+            </div>
+
+            {/* Right Column - Team Photo */}
+            <div className="flex justify-center">
+              <div className="w-full h-96 rounded-lg overflow-hidden shadow-xl">
+                <Image
+                  src="/images/netpoleon-about-us.png"
+                  alt="Netpoleon ANZ Team at Sydney Motor Sport Park"
+                  width={600}
+                  height={400}
+                  className="w-full h-full object-cover"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Vision & Mission Section */}
-      <motion.section
-        className="py-24"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={staggerContainer}
-      >
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <motion.div variants={fadeInUp} className="space-y-6">
-              <Badge
-                variant="outline"
-                className="text-orange-600 border-orange-600 px-4 py-2"
-              >
-                Our Foundation
-              </Badge>
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">
-                Vision & Mission
-              </h2>
-              <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-                Guiding principles that drive our commitment to excellence in
-                cybersecurity distribution
-              </p>
-            </motion.div>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Vision Card */}
-            <motion.div
-              variants={fadeInUp}
-              className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
-            >
-              <div className="flex items-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">Our Vision</h3>
-              </div>
+          <div className="grid lg:grid-cols-2 gap-16">
+            {/* Vision Section */}
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                Our Vision
+              </h3>
               <div className="space-y-4">
                 <p className="text-gray-700 leading-relaxed">
                   To be the regional leader in sourcing and distributing
                   world-class IT Security solutions as we create winning
                   partnerships with our employees and customers.
                 </p>
-                <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
-                  <p className="text-gray-700 font-medium">
-                    We aim to be an employer of choice as we grow with our
-                    people and to align with our clients to meet their varying
-                    technology demands.
-                  </p>
-                </div>
+                <p className="text-gray-700 leading-relaxed">
+                  We aim to be an employer of choice as we grow with our people
+                  and to align with our clients to meet their varying technology
+                  demands.
+                </p>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Mission Card */}
-            <motion.div
-              variants={fadeInUp}
-              className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
-            >
-              <div className="flex items-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">
-                  Our Mission
-                </h3>
-              </div>
+            {/* Mission Section */}
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                Our Mission
+              </h3>
               <div className="space-y-4">
                 <p className="text-gray-700 leading-relaxed">
                   To be the leading ANZ distributor and lead the sourcing of
@@ -522,19 +360,11 @@ export default function AboutUs() {
                   to our channel partners to address current and new business
                   opportunities.
                 </p>
-                <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-500">
-                  <div className="flex items-start space-x-3">
-                    <p className="text-gray-700 font-medium">
-                      Focused on emerging technologies and channel partner
-                      success
-                    </p>
-                  </div>
-                </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Our Story Section with Timeline */}
       <section className="bg-gray-50">
@@ -542,35 +372,6 @@ export default function AboutUs() {
           <Timeline data={timelineData} />
         </div>
       </section>
-
-      {/* Our Team Section */}
-      <motion.section
-        className="py-24 bg-white"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={staggerContainer}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <motion.div variants={fadeInUp} className="space-y-6">
-              <Badge
-                variant="outline"
-                className="text-orange-600 border-orange-600 px-4 py-2"
-              >
-                Meet Our People
-              </Badge>
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">
-                Our Team
-              </h2>
-              <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-                Coming soon - Meet the talented professionals who make Netpoleon
-                ANZ a trusted cybersecurity partner.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </motion.section>
 
       {/* Team Members Section */}
       <motion.section
@@ -666,7 +467,7 @@ export default function AboutUs() {
 
       {/* Call to Action Section */}
       <motion.section
-        className="py-24 bg-gradient-to-r from-orange-600 to-amber-600 text-white relative overflow-hidden"
+        className="py-24 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 text-white relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -692,16 +493,17 @@ export default function AboutUs() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center pt-6">
               <Button
                 size="lg"
-                className="bg-white text-orange-600 hover:bg-gray-50 text-lg px-8 py-4 font-semibold"
+                className="text-lg px-10 py-6 bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700 font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 rounded-xl border-2 border-white/20"
+                asChild
               >
-                Schedule Consultation
+                <Link href="/contact">Schedule Consultation</Link>
               </Button>
               <Button
                 size="lg"
-                variant="outline"
-                className="text-lg px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-orange-600 bg-transparent font-semibold"
+                className="text-lg px-10 py-6 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white hover:bg-white/20 hover:border-white/50 font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 rounded-xl"
+                asChild
               >
-                View Our Solutions
+                <Link href="/services">View Our Solutions</Link>
               </Button>
             </div>
           </motion.div>

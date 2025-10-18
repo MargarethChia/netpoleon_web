@@ -22,15 +22,21 @@ export default function Header() {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const scrollThreshold = 100; // Minimum scroll distance before hiding
 
-      // Show header when at the top
-      if (currentScrollY < triggerPoint) {
+      // Always show header when at the very top
+      if (currentScrollY <= 10) {
         setIsVisible(true);
       }
-      // Hide header when scrolling down, show when scrolling up
-      else if (currentScrollY > lastScrollY && currentScrollY > triggerPoint) {
+      // Hide header when scrolling down past threshold
+      else if (
+        currentScrollY > lastScrollY &&
+        currentScrollY > scrollThreshold
+      ) {
         setIsVisible(false);
-      } else if (currentScrollY < lastScrollY) {
+      }
+      // Show header when scrolling up
+      else if (currentScrollY < lastScrollY) {
         setIsVisible(true);
       }
 
