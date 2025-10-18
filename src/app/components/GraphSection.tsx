@@ -49,6 +49,9 @@ export default function GraphSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Mobile: show static full diagram only */}
         <div className="lg:hidden">
+          <h1 className="text-2xl font-bold text-gray-900 mb-16 text-center">
+            Vendor Solutions
+          </h1>
           <div className="w-full">
             <Image
               src={`https://wdhsptkchoptjguliwyq.supabase.co/storage/v1/object/public/images/public/full_diagram2.png`}

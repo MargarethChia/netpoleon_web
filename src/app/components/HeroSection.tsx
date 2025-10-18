@@ -638,7 +638,7 @@ export default function HeroSection({ slides }: HeroSectionProps) {
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
               {/* Title */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-rubikOne font-bold text-white leading-tight mb-3">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-rubikOne font-bold text-white leading-tight mt-36 lg:mt-48 mb-3">
                 {currentSlide.title.split('\n').map((line, index) => (
                   <span key={index}>
                     {line}

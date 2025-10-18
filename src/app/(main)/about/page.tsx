@@ -272,7 +272,7 @@ export default function AboutUs() {
             </div>
 
             {/* Main Title */}
-            <h1 className="text-4xl lg:text-6xl font-bold text-gray-900">
+            <h1 className="text-4xl font-bold lg:text-6xl text-gray-900">
               Netpoleon ANZ
             </h1>
 
@@ -291,7 +291,7 @@ export default function AboutUs() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - About Us Text */}
             <div>
-              <h2 className="text-4xl lg:text-5xl font-bold text-orange-600 mb-6">
+              <h2 className="text-4xl lg:text-5xl text-orange-600 mb-6">
                 About us
               </h2>
               <p className="text-base text-gray-700 leading-relaxed">
@@ -330,7 +330,7 @@ export default function AboutUs() {
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Vision Section */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+              <h3 className="text-2xl font-bold text-orange-600 mb-6">
                 Our Vision
               </h3>
               <div className="space-y-4">
@@ -349,7 +349,7 @@ export default function AboutUs() {
 
             {/* Mission Section */}
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+              <h3 className="text-2xl font-bold text-orange-600 mb-6">
                 Our Mission
               </h3>
               <div className="space-y-4">
