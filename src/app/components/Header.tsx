@@ -12,16 +12,22 @@ export default function Header() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Calculate trigger point for background change
+  const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
+  const triggerPoint = windowHeight * 0.75;
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const triggerPoint = windowHeight; // 75% of window height
 
       // Show header when at the top
-      if (currentScrollY < 10) {
+      if (currentScrollY < triggerPoint) {
         setIsVisible(true);
       }
       // Hide header when scrolling down, show when scrolling up
-      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      else if (currentScrollY > lastScrollY && currentScrollY > triggerPoint) {
         setIsVisible(false);
       } else if (currentScrollY < lastScrollY) {
         setIsVisible(true);
@@ -48,9 +54,13 @@ export default function Header() {
     <header
       className={`${
         isHomePage
-          ? 'bg-black'
-          : 'bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg'
-      } sticky top-0 z-50 transition-transform duration-300 ease-in-out ${
+          ? lastScrollY < triggerPoint
+            ? 'bg-transparent top-16'
+            : 'bg-white'
+          : lastScrollY < triggerPoint
+            ? 'bg-transparent top-16'
+            : 'bg-white'
+      } fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
       onMouseEnter={handleMouseEnter}
@@ -63,8 +73,12 @@ export default function Header() {
               <Image
                 src={
                   isHomePage
-                    ? '/logos/Netpoleon ANZ White.png'
-                    : '/images/netpoleon.png'
+                    ? lastScrollY < triggerPoint
+                      ? '/logos/Netpoleon ANZ White.png'
+                      : '/logos/Netpoleon ANZ Orange Black .png'
+                    : lastScrollY < triggerPoint
+                      ? '/logos/Netpoleon ANZ White.png'
+                      : '/logos/Netpoleon ANZ Orange Black .png'
                 }
                 alt="Netpoleon"
                 width={120}
@@ -88,7 +102,7 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 className={`${
-                  isHomePage
+                  lastScrollY < triggerPoint
                     ? 'text-white/90 hover:text-white'
                     : 'text-gray-700 hover:text-orange-600'
                 } transition-colors ${
@@ -98,12 +112,16 @@ export default function Header() {
                 {link.text}
                 <div
                   className={`absolute -bottom-1 left-0 w-0 h-0.5 ${
-                    isHomePage ? 'bg-orange-600' : 'bg-white'
+                    lastScrollY < triggerPoint
+                      ? 'bg-orange-600'
+                      : 'bg-orange-600'
                   } rounded-full group-hover:w-full transition-all duration-300`}
                 />
                 <div
                   className={`absolute -bottom-1 left-0 w-full h-0.5 ${
-                    isHomePage ? 'bg-orange-600' : 'bg-white'
+                    lastScrollY < triggerPoint
+                      ? 'bg-orange-600'
+                      : 'bg-orange-600'
                   } rounded-full opacity-0 group-hover:opacity-20 transition-all duration-300`}
                 />
               </a>
@@ -115,9 +133,9 @@ export default function Header() {
             <button
               onClick={toggleMobileMenu}
               className={`relative ${
-                isHomePage
-                  ? 'text-gray-700 hover:text-orange-600 hover:bg-orange-50'
-                  : 'text-white hover:text-white/90 hover:bg-white/10'
+                lastScrollY < triggerPoint
+                  ? 'text-white hover:text-white/90 hover:bg-white/10'
+                  : 'text-gray-700 hover:text-orange-600 hover:bg-orange-50'
               } p-3 rounded-xl transition-all duration-300 group`}
             >
               <div className="relative w-6 h-6">
@@ -162,7 +180,7 @@ export default function Header() {
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden h-screen absolute top-full left-0 right-0 bg-white border-t border-orange-200/30 backdrop-blur-md">
+          <div className="md:hidden h-screen absolute top-full left-0 right-0 bg-white border-t border-gray-200/30 backdrop-blur-md">
             <nav className="px-6 py-6 space-y-2">
               {[
                 {
