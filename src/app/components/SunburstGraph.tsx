@@ -597,7 +597,24 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     const segment = cybersecurityData.find(item => item.id === segmentId);
     if (!segment) return Array.from(relatedIds);
 
-    // Recursive function to find all descendants
+    // Find the root ancestor (parent is "cybersecurity")
+    const findRootAncestor = (currentId: string): string => {
+      const current = cybersecurityData.find(item => item.id === currentId);
+      if (!current) return currentId;
+
+      if (current.parent === 'cybersecurity') {
+        return currentId; // This is the root ancestor
+      }
+
+      return findRootAncestor(current.parent); // Go up the hierarchy
+    };
+
+    const rootAncestorId = findRootAncestor(segmentId);
+
+    // Add the root ancestor itself
+    relatedIds.add(rootAncestorId);
+
+    // Add all descendants of the root ancestor
     const findDescendants = (parentId: string) => {
       cybersecurityData.forEach(item => {
         if (item.parent === parentId) {
@@ -607,20 +624,7 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
       });
     };
 
-    if (segment.parent === 'cybersecurity') {
-      // First layer: include all descendants (children, grandchildren, etc.)
-      findDescendants(segmentId);
-    } else {
-      // Second or third layer: include parent and all siblings
-      relatedIds.add(segment.parent);
-
-      // Find all siblings (children of the same parent)
-      cybersecurityData.forEach(item => {
-        if (item.parent === segment.parent) {
-          relatedIds.add(item.id);
-        }
-      });
-    }
+    findDescendants(rootAncestorId);
 
     return Array.from(relatedIds);
   };
