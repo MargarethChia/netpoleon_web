@@ -684,6 +684,9 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     // Hide legend
     chart.legend(false);
 
+    // Hide Contect Menu
+    chart.contextMenu(false);
+
     // Handle click events for segment selection using pointclick event
     chart.listen('pointclick', (e: unknown) => {
       console.log('PointClick event received:', e);
