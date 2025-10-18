@@ -82,7 +82,7 @@ export default function Header() {
               { href: '/services', text: 'Services' },
               { href: '/events', text: 'Events' },
               { href: '/resources', text: 'Resources' },
-              { href: '/contact', text: 'Contact Us' },
+              { href: '/contact', text: 'Contact' },
             ].map(link => (
               <a
                 key={link.href}

@@ -577,7 +577,7 @@ export default function HeroSection({ slides }: HeroSectionProps) {
     <section className="relative min-h-[70vh] lg:min-h-screen flex items-center justify-start bg-black pt-[112px] overflow-hidden">
       {/* Globe Background - Static, loads only once */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-visible">
-        <div className="absolute -top-250 -left-310 w-[200%] h-[200%] scale-125">
+        <div className="absolute -top-90 -left-90 md:-top-140 md:-left-140 lg:-top-250 lg:-left-310 w-[200%] h-[200%] scale-100 md:scale-110 lg:scale-125">
           <StaticGlobe />
         </div>
       </div>

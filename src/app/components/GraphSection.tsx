@@ -51,7 +51,7 @@ export default function GraphSection() {
         <div className="md:hidden">
           <div className="w-full">
             <Image
-              src="/images/full-diagram/full_diagram.png"
+              src={`/images/full-diagram/full_diagram.png?v=${Date.now()}`}
               alt="Full Security Diagram"
               width={1200}
               height={900}
