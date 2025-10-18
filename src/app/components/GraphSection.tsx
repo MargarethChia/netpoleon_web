@@ -48,7 +48,7 @@ export default function GraphSection() {
     <section className="bg-white relative overflow-hidden py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Mobile: show static full diagram only */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <div className="w-full">
             <Image
               src={`/images/full-diagram/full_diagram.png?v=${Date.now()}`}
@@ -62,7 +62,7 @@ export default function GraphSection() {
         </div>
 
         {/* Desktop/Tablet: interactive graph + vendor list */}
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
             Vendor Solutions
           </h1>
