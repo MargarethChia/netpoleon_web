@@ -37,10 +37,10 @@ export default function Banner() {
   }
 
   return (
-    <div className="bg-gradient-to-r from-orange-600 to-amber-600 text-white py-4 px-4 relative z-40">
+    <div className="bg-gradient-to-r from-orange-600 to-amber-600 text-white py-4 px-4 relative z-40 overflow-hidden">
       <div className="max-w-7xl mx-auto flex items-center justify-center">
-        {/* Centered - Announcement text */}
-        <div className="flex items-center space-x-4 text-sm font-medium">
+        {/* Desktop - Centered Announcement text */}
+        <div className="hidden md:flex items-center space-x-4 text-sm font-medium">
           {announcement.link ? (
             <Link
               href={announcement.link}
@@ -64,8 +64,56 @@ export default function Banner() {
           )}
         </div>
 
+        {/* Mobile - Marquee Announcement text */}
+        <div className="md:hidden w-full">
+          <div className="flex items-center space-x-8 text-sm font-medium whitespace-nowrap animate-marquee">
+            {announcement.link ? (
+              <Link
+                href={announcement.link}
+                className="hover:underline transition-colors"
+              >
+                {announcement.text}
+              </Link>
+            ) : (
+              <span>{announcement.text}</span>
+            )}
+            {announcement.link_text && announcement.link && (
+              <>
+                <Link
+                  href={announcement.link}
+                  className="hover:underline transition-colors"
+                >
+                  {announcement.link_text}
+                </Link>
+              </>
+            )}
+            {/* Duplicate content for seamless loop */}
+            {announcement.link ? (
+              <Link
+                href={announcement.link}
+                className="hover:underline transition-colors"
+              >
+                {announcement.text}
+              </Link>
+            ) : (
+              <span>{announcement.text}</span>
+            )}
+            {announcement.link_text && announcement.link && (
+              <>
+                <div className="w-px h-4 bg-white/50"></div>
+                <Link
+                  href={announcement.link}
+                  className="hover:underline transition-colors"
+                >
+                  {announcement.link_text}
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+
         {/* Social media icons positioned absolutely to the right */}
-        <div className="absolute right-32 flex items-center space-x-4">
+        <div className="hidden md:flex absolute right-32 items-center space-x-4">
           {/* Instagram */}
           <Link
             href="https://www.instagram.com/netpoleon.anz/"

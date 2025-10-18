@@ -156,12 +156,9 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Mobile Header - Only shown on mobile */}
-      <div className="lg:hidden h-[20vh] w-full" />
-
-      {/* Navigation Bar - Hidden on mobile */}
-      <nav className="hidden lg:block sticky top-0 z-50 bg-white border-b border-gray-200 shadow-lg">
-        <div className="max-w-6xl mx-auto px-4 py-6">
+      {/* Progress Navigation Bar - Becomes sticky when it reaches the top */}
+      <nav className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-2 pb-3">
           <div className="flex justify-between w-full relative">
             {/* Progress Bar Background */}
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-100 rounded-sm"></div>
@@ -197,7 +194,7 @@ export default function ServicesPage() {
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row min-h-screen">
         {/* Left Side - Fixed Icon (Hidden on mobile, shown on desktop) */}
-        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-20 h-screen sticky bg-orange-200">
+        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-16 h-screen sticky bg-orange-200">
           <div className="text-center">
             {/* Icon Container with Fade Effect */}
             <div className="relative w-full h-full">
