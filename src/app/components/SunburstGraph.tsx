@@ -437,12 +437,64 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     }
   };
 
-  // Handle segment click to filter vendors only (no chart drill-down)
+  // Update chart colors based on selected segment
+  updateChartColors = (selectedId: string | null) => {
+    const { chart } = this.state;
+    if (!chart) return;
+
+    console.log('Updating chart colors for selectedId:', selectedId);
+
+    try {
+      const chartInstance = chart as unknown;
+
+      // Method: Modify the data directly and recreate chart
+      const modifiedData = cybersecurityData.map(item => {
+        let shouldKeepOriginalColor = false;
+
+        if (selectedId) {
+          // Get all related segments (parent, children, descendants)
+          const relatedSegments = this.getRelatedSegments(selectedId);
+          shouldKeepOriginalColor = relatedSegments.includes(item.id);
+        } else {
+          // If selectedId is null, all segments should keep their original colors
+          shouldKeepOriginalColor = true;
+        }
+
+        return {
+          ...item,
+          fill: shouldKeepOriginalColor ? item.fill : '#808080',
+        };
+      });
+
+      console.log('Modified data for color update:', modifiedData.slice(0, 3));
+      console.log(
+        'Related segments for',
+        selectedId,
+        ':',
+        selectedId ? this.getRelatedSegments(selectedId) : 'all segments'
+      );
+
+      // Create new data tree with modified colors
+      const dataTree = anychart.data.tree(modifiedData, 'as-table');
+
+      // Update chart data
+      (chartInstance as { data: (tree: unknown) => void }).data(dataTree);
+
+      // Redraw chart
+      (chartInstance as { draw: () => void }).draw();
+      console.log('Chart redrawn with updated colors');
+    } catch (error) {
+      console.error('Error updating chart colors:', error);
+    }
+  };
+
+  // Handle segment click to filter vendors and update colors
   handleSegmentClick = (
     segmentId: string,
     onVendorsChange?: (vendors: Vendor[]) => void
   ) => {
     console.log('Handling segment click for:', segmentId);
+    console.log('Currently selected segment:', this.state.selectedSegment);
 
     // If clicking the same segment, reset to show all vendors
     if (this.state.selectedSegment === segmentId) {
@@ -451,6 +503,8 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
           selectedSegment: null,
         },
         () => {
+          // Reset chart colors
+          this.updateChartColors(null);
           // Show all vendors
           if (onVendorsChange) {
             onVendorsChange(this.state.vendors);
@@ -460,12 +514,36 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
       return;
     }
 
-    // Update selected segment but don't change the chart display
+    // If clicking on a related segment (parent, child, or sibling), reset to show all vendors
+    if (
+      this.state.selectedSegment &&
+      this.areSegmentsRelated(this.state.selectedSegment, segmentId)
+    ) {
+      console.log('Clicked on related segment, resetting all colors');
+      this.setState(
+        {
+          selectedSegment: null,
+        },
+        () => {
+          // Reset chart colors
+          this.updateChartColors(null);
+          // Show all vendors
+          if (onVendorsChange) {
+            onVendorsChange(this.state.vendors);
+          }
+        }
+      );
+      return;
+    }
+
+    // Update selected segment and chart colors
     this.setState(
       {
         selectedSegment: segmentId,
       },
       () => {
+        // Update chart colors
+        this.updateChartColors(segmentId);
         // Filter vendors based on the selected segment
         if (onVendorsChange) {
           this.filterVendorsForSegment(segmentId, onVendorsChange);
@@ -504,6 +582,12 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     onVendorsChange(filteredVendors);
   };
 
+  // Check if two segments are related (parent-child relationship)
+  areSegmentsRelated = (segmentId1: string, segmentId2: string): boolean => {
+    const relatedSegments1 = this.getRelatedSegments(segmentId1);
+    return relatedSegments1.includes(segmentId2);
+  };
+
   getRelatedSegments = (segmentId: string): string[] => {
     const relatedIds = new Set<string>();
 
@@ -513,20 +597,26 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     const segment = cybersecurityData.find(item => item.id === segmentId);
     if (!segment) return Array.from(relatedIds);
 
-    if (segment.parent) {
-      // If this is a child segment (2nd or 3rd layer), include parent and all siblings
+    // Recursive function to find all descendants
+    const findDescendants = (parentId: string) => {
+      cybersecurityData.forEach(item => {
+        if (item.parent === parentId) {
+          relatedIds.add(item.id);
+          findDescendants(item.id); // Recursively find children of children
+        }
+      });
+    };
+
+    if (segment.parent === 'cybersecurity') {
+      // First layer: include all descendants (children, grandchildren, etc.)
+      findDescendants(segmentId);
+    } else {
+      // Second or third layer: include parent and all siblings
       relatedIds.add(segment.parent);
 
       // Find all siblings (children of the same parent)
       cybersecurityData.forEach(item => {
         if (item.parent === segment.parent) {
-          relatedIds.add(item.id);
-        }
-      });
-    } else {
-      // If this is a root segment (1st layer), include ONLY direct children
-      cybersecurityData.forEach(item => {
-        if (item.parent === segmentId) {
           relatedIds.add(item.id);
         }
       });
