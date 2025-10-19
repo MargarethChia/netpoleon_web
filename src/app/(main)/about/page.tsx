@@ -67,7 +67,7 @@ export default function AboutUs() {
             strengthened its vendor portfolio, invested in technical expertise,
             and built a strong foundation for continued regional growth.
           </p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
               <div className="flex items-center mb-4">
                 <Image
@@ -118,7 +118,7 @@ export default function AboutUs() {
             partners across lead generation, enablement, deployment, and ongoing
             support.
           </p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
               <div className="flex items-center mb-4">
                 <Image
@@ -286,11 +286,11 @@ export default function AboutUs() {
       </section>
 
       {/* About Us Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - About Us Text */}
-            <div>
+            <div className="order-2 lg:order-1">
               <h2 className="text-4xl lg:text-5xl text-orange-600 mb-6">
                 About us
               </h2>
@@ -308,7 +308,7 @@ export default function AboutUs() {
             </div>
 
             {/* Right Column - Team Photo */}
-            <div className="flex justify-center">
+            <div className="flex justify-center order-1 lg:order-2">
               <div className="w-full h-96 rounded-lg overflow-hidden shadow-xl">
                 <Image
                   src="/images/netpoleon-about-us.png"
@@ -325,7 +325,7 @@ export default function AboutUs() {
       </section>
 
       {/* Vision & Mission Section */}
-      <section className="py-20 bg-white">
+      <section className="md:pt-12 pb-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Vision Section */}
