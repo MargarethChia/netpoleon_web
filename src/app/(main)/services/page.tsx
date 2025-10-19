@@ -84,12 +84,20 @@ export default function ServicesPage() {
       const windowHeight = window.innerHeight;
       const isMobile = window.innerWidth < 1024; // lg breakpoint
 
+      // Get the actual container element to calculate proper scroll positions
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const containerTop = containerRect.top + scrollTop;
+
       // Calculate section height based on screen size
       const sectionHeight = isMobile ? windowHeight * 0.45 : windowHeight; // 45vh on mobile, full height on desktop
 
-      // Calculate which service should be active based on scroll position
+      // Calculate which service should be active based on scroll position relative to container
+      const relativeScrollTop = scrollTop - containerTop;
       const mainSectionHeight = whatWeDo.length * sectionHeight;
-      const scrollProgress = Math.min(scrollTop / mainSectionHeight, 1);
+      const scrollProgress = Math.min(
+        Math.max(relativeScrollTop, 0) / mainSectionHeight,
+        1
+      );
       const serviceIndex = scrollProgress * whatWeDo.length;
       const clampedIndex = Math.max(
         0,
@@ -104,7 +112,8 @@ export default function ServicesPage() {
         const sectionEnd = (index + 1) * sectionHeight;
 
         // Check if current scroll position is within this section
-        const isInSection = scrollTop >= sectionStart && scrollTop < sectionEnd;
+        const isInSection =
+          relativeScrollTop >= sectionStart && relativeScrollTop < sectionEnd;
 
         // Binary focus: either 100% (in focus) or 10% (not in focus)
         return isInSection ? 1 : 0.1;
@@ -158,7 +167,7 @@ export default function ServicesPage() {
     <div className="min-h-screen bg-white">
       {/* Progress Navigation Bar - Becomes sticky when it reaches the top */}
       <nav className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-2 pb-3">
+        <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 pb-3">
           <div className="flex justify-between w-full relative">
             {/* Progress Bar Background */}
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-100 rounded-sm"></div>
@@ -174,17 +183,28 @@ export default function ServicesPage() {
             {whatWeDo.map((service, index) => (
               <button
                 key={service.id}
-                className={`text-sm font-semibold transition-all duration-300 px-4 py-3 border-none cursor-pointer bg-transparent relative uppercase tracking-wide flex-1 ${
+                className={`text-xs sm:text-sm font-semibold transition-all duration-300 px-1 sm:px-4 py-2 sm:py-3 border-none cursor-pointer bg-transparent relative uppercase tracking-wide flex-1 ${
                   index === activeService
-                    ? 'text-amber-700 bg-amber-50 border-b-2 border-amber-600 pb-2'
-                    : 'text-gray-400 hover:text-amber-600 hover:bg-orange-50 hover:border-b-2 hover:border-orange-300 hover:pb-2'
+                    ? 'text-amber-700 bg-amber-50 border-b-2 border-amber-600 pb-1 sm:pb-2'
+                    : 'text-gray-400 hover:text-amber-600 hover:bg-orange-50 hover:border-b-2 hover:border-orange-300 hover:pb-1 sm:hover:pb-2'
                 }`}
                 onClick={() => {
                   const element = document.getElementById(`service-${index}`);
-                  element?.scrollIntoView({ behavior: 'smooth' });
+                  if (element) {
+                    // Calculate offset to account for sticky navbar
+                    const navbarHeight = 60; // Approximate navbar height
+                    const elementPosition = element.offsetTop - navbarHeight;
+                    window.scrollTo({
+                      top: elementPosition,
+                      behavior: 'smooth',
+                    });
+                  }
                 }}
               >
-                {service.shortTitle}
+                <span className="hidden sm:inline">{service.shortTitle}</span>
+                <span className="sm:hidden">
+                  {service.shortTitle.charAt(0)}
+                </span>
               </button>
             ))}
           </div>
@@ -204,13 +224,13 @@ export default function ServicesPage() {
         </div>
 
         {/* Right Side - Scrolling Content */}
-        <div className="w-full lg:w-[60%]">
+        <div className="w-full lg:w-[60%] mb-20 md:mb-0">
           <div ref={containerRef} className="relative">
             {whatWeDo.map((service, index) => (
               <div
                 key={service.id}
                 id={`service-${index}`}
-                className="min-h-[45vh] lg:min-h-screen flex items-center px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-20"
+                className="min-h-[45vh] lg:min-h-screen flex items-center px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-20 pt-[20vh] lg:pt-6"
               >
                 <div
                   className="max-w-md mx-auto lg:mx-0"
