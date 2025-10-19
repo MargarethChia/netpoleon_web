@@ -1,82 +1,82 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import HeroSection from '../components/HeroSection';
-import ImageTextSection from '../components/ImageTextSection';
 import VendorCarousel from '../components/VendorCarousel';
-//import Statistics from '../components/Statistics';
 import LatestResources from '../components/LatestResources';
 import GraphSection from '../components/GraphSection';
 import Statistics from '../components/Statistics';
+import { slideGalleryApi } from '@/lib/api';
 
-// import AboutSection from "../components/AboutSection";
-// import InfoSection from "../components/InfoSection";
+interface Slide {
+  id: number;
+  title: string;
+  subtitle: string | null;
+  description: string | null;
+  button_text: string | null;
+  button_link: string | null;
+  is_active: boolean;
+  display_order: number;
+}
 
 export default function Home() {
-  // Home Page
-  const hero = {
-    title: 'Secure, defend, and thrive everywhere',
-    subtitle:
-      'We safeguard your data, systems, and networks with cutting-edge cybersecurity solutions. Our platform empowers businesses to stay resilient, compliant, and ready for the future.',
-    primaryButtonText: 'Get Started Today',
-    secondaryButtonText: 'Learn More',
-    heroImage: '/images/hero/hero-main.jpg',
-    heroImageAlt: 'Netpoleon - Innovative Technology Solutions',
-  };
+  const [slides, setSlides] = useState<Slide[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  console.log('Home page rendering with hero props:', hero);
+  useEffect(() => {
+    const fetchSlides = async () => {
+      try {
+        const data = await slideGalleryApi.getAll();
+        // Filter only active slides and sort by display_order
+        const activeSlides = data
+          .filter(slide => slide.is_active)
+          .sort((a, b) => a.display_order - b.display_order);
+        setSlides(activeSlides);
+      } catch (error) {
+        console.error('Error fetching slides:', error);
+        // Fallback to default slide if API fails
+        setSlides([
+          {
+            id: 0,
+            title: "MAKING CYBER\nEVERYONE'S BUSINESS",
+            subtitle:
+              'Leading the way into the next generation of cyber security solutions',
+            description: null,
+            button_text: 'Learn More',
+            button_link: null,
+            is_active: true,
+            display_order: 1,
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // const about = {
-  //   title: "About Netpoleon",
-  //   description:
-  //     "We are a team of passionate innovators dedicated to helping businesses thrive in the digital age. Our mission is to deliver exceptional solutions that drive growth and create lasting impact.",
-  // };
+    fetchSlides();
+  }, []);
 
-  const imageTextSections = [
-    {
-      title: 'Innovative Web Solutions',
-      description:
-        "We create cutting-edge web applications that help businesses scale and succeed in today's competitive market. Our team of experts delivers solutions that are both beautiful and functional.",
-      imageSrc: '/images/web-development.jpg',
-      imageAlt: 'Web Development',
-      layout: 'left' as const,
-      ctaText: 'Explore Our Work',
-      ctaLink: '#',
-    },
-  ];
-
-  // const info = {
-  //   title: "Why Choose Netpoleon?",
-  //   points: [
-  //     {
-  //       id: 1,
-  //       title: "Expert Team",
-  //       description:
-  //         "Our experienced developers and designers deliver exceptional results.",
-  //     },
-  //     {
-  //       id: 2,
-  //       title: "Quality Assurance",
-  //       description:
-  //         "Rigorous testing ensures your project meets the highest standards.",
-  //     },
-  //     {
-  //       id: 3,
-  //       title: "Ongoing Support",
-  //       description:
-  //         "We provide continuous support and maintenance for all our projects.",
-  //     },
-  //   ],
-  //   image: "/images/why-choose-us.webp",
-  //   imageAlt: "Netpoleon team working on innovative solutions",
-  // };
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <HeroSection {...hero} />
+      <HeroSection slides={slides} />
       <VendorCarousel title="Trusted by 10,000+ customers, from startup to enterprise " />
+      <GraphSection />
+      <Statistics />
+
+      {/*
       {imageTextSections.map((section, idx) => (
         <ImageTextSection key={idx} {...section} />
       ))}
-      <Statistics />
-      <GraphSection />
+      */}
+
       <LatestResources />
     </div>
   );

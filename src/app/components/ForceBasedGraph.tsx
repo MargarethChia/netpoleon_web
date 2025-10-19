@@ -767,8 +767,6 @@ export default function ForceBasedGraph({
           style={{ display: 'block' }}
           onClick={handleBackgroundClick}
         >
-          {/* Removed connection lines */}
-
           {/* Subcategory nodes */}
           <AnimatePresence>
             {(clickedNode

@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Plus,
@@ -9,8 +9,11 @@ import {
   Calendar,
   FileText,
   Building2,
-  TrendingUp,
   LogOut,
+  Users,
+  Home,
+  ChevronDown,
+  ChevronRight,
 } from 'lucide-react';
 import { supabaseClient } from '@/lib/supabase-client';
 
@@ -34,9 +37,20 @@ export default function AdminLayout({
   onAddClick,
 }: AdminLayoutProps) {
   const router = useRouter();
+  const [isContentExpanded, setIsContentExpanded] = useState(false);
+  const [loadingItem, setLoadingItem] = useState<string | null>(null);
+
+  const handleNavigation = (href: string) => {
+    if (href === currentPage) return;
+    setLoadingItem(href);
+    router.push(href);
+    // Reset loading state after navigation
+    setTimeout(() => setLoadingItem(null), 1000);
+  };
 
   const handleSignOut = async () => {
     try {
+      setLoadingItem('logout');
       const { error } = await supabaseClient.auth.signOut();
       console.log('Signing out', error);
       if (error) {
@@ -47,6 +61,8 @@ export default function AdminLayout({
       console.error('Error signing out:', error);
       // Still redirect even if there's an error
       router.push('/login');
+    } finally {
+      setLoadingItem(null);
     }
   };
 
@@ -75,13 +91,23 @@ export default function AdminLayout({
       icon: <Building2 className="w-4 h-4" />,
       disabled: false,
     },
+  ];
+
+  const contentSubItems = [
     {
-      href: '/admin/analytics',
-      label: 'Analytics',
-      icon: <TrendingUp className="w-4 h-4" />,
-      disabled: false,
+      href: '/admin/content/home-page',
+      label: 'Home Page',
+      icon: <Home className="w-4 h-4" />,
+    },
+    {
+      href: '/admin/content/team',
+      label: 'Team',
+      icon: <Users className="w-4 h-4" />,
     },
   ];
+
+  // Check if current page is under content section
+  const isContentPage = currentPage.startsWith('/admin/content');
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -98,36 +124,137 @@ export default function AdminLayout({
             {navItems.map(item => (
               <li key={item.href}>
                 {item.disabled ? (
-                  <div className="flex items-center px-3 py-2 text-sidebar-foreground/50 rounded-md border-l-2 border-transparent cursor-not-allowed text-sm">
+                  <div className="flex items-center px-3 py-2 text-sidebar-foreground/50 rounded-md border-transparent cursor-not-allowed text-sm">
                     <span className="mr-2 text-sidebar-foreground/50">
                       {item.icon}
                     </span>
                     {item.label}
                   </div>
                 ) : (
-                  <Link
-                    href={item.href}
-                    className={`flex items-center px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-colors border-l-2 text-sm ${
+                  <button
+                    onClick={() => handleNavigation(item.href)}
+                    disabled={loadingItem === item.href}
+                    className={`flex items-center w-full px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-all duration-200 text-sm ${
                       currentPage === item.href
                         ? 'border-sidebar-primary bg-sidebar-accent'
                         : 'border-transparent hover:border-sidebar-primary'
-                    }`}
+                    } ${loadingItem === item.href ? 'opacity-70 cursor-wait' : ''}`}
                   >
-                    <span className="mr-2">{item.icon}</span>
-                    {item.label}
-                  </Link>
+                    <span
+                      className={`mr-2 transition-transform duration-200 ${loadingItem === item.href ? 'animate-pulse' : ''}`}
+                    >
+                      {item.icon}
+                    </span>
+                    <span
+                      className={`transition-all duration-200 ${loadingItem === item.href ? 'animate-pulse' : ''}`}
+                    >
+                      {item.label}
+                    </span>
+                    {loadingItem === item.href && (
+                      <div className="ml-auto">
+                        <div className="w-4 h-4 border-2 border-sidebar-foreground/30 border-t-sidebar-foreground rounded-full animate-spin"></div>
+                      </div>
+                    )}
+                  </button>
                 )}
               </li>
             ))}
+
+            {/* Content Section */}
+            <li>
+              <button
+                onClick={() => setIsContentExpanded(!isContentExpanded)}
+                className={`flex items-center w-full px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-all duration-200 text-sm ${
+                  isContentPage ? 'bg-sidebar-accent' : ''
+                }`}
+              >
+                <FileText className="mr-2 h-4 w-4 transition-transform duration-200" />
+                Content
+                <div className="ml-auto transition-transform duration-200">
+                  {isContentExpanded ? (
+                    <ChevronDown className="h-4 w-4 rotate-0" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4 rotate-0" />
+                  )}
+                </div>
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                  isContentExpanded
+                    ? 'max-h-32 opacity-100'
+                    : 'max-h-0 opacity-0'
+                }`}
+              >
+                <ul className="ml-4 mt-1 space-y-1">
+                  {contentSubItems.map((item, index) => (
+                    <li
+                      key={item.href}
+                      className={`transform transition-all duration-200 ${
+                        isContentExpanded
+                          ? 'translate-x-0 opacity-100'
+                          : 'translate-x-2 opacity-0'
+                      }`}
+                      style={{
+                        transitionDelay: isContentExpanded
+                          ? `${index * 50}ms`
+                          : '0ms',
+                      }}
+                    >
+                      <button
+                        onClick={() => handleNavigation(item.href)}
+                        disabled={loadingItem === item.href}
+                        className={`flex items-center w-full px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-all duration-200 text-sm ${
+                          currentPage === item.href
+                            ? 'border-sidebar-primary bg-sidebar-accent'
+                            : 'border-transparent hover:border-sidebar-primary'
+                        } ${loadingItem === item.href ? 'opacity-70 cursor-wait' : ''}`}
+                      >
+                        <span
+                          className={`mr-2 transition-transform duration-200 ${loadingItem === item.href ? 'animate-pulse' : ''}`}
+                        >
+                          {item.icon}
+                        </span>
+                        <span
+                          className={`transition-all duration-200 ${loadingItem === item.href ? 'animate-pulse' : ''}`}
+                        >
+                          {item.label}
+                        </span>
+                        {loadingItem === item.href && (
+                          <div className="ml-auto">
+                            <div className="w-3 h-3 border-2 border-sidebar-foreground/30 border-t-sidebar-foreground rounded-full animate-spin"></div>
+                          </div>
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
 
             {/* Logout Button */}
             <li className="mt-auto pt-4 border-t border-sidebar-border">
               <button
                 onClick={handleSignOut}
-                className="flex items-center w-full px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-colors text-sm"
+                disabled={loadingItem === 'logout'}
+                className={`flex items-center w-full px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-all duration-200 text-sm ${
+                  loadingItem === 'logout' ? 'opacity-70 cursor-wait' : ''
+                }`}
               >
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign Out
+                <span
+                  className={`mr-2 transition-transform duration-200 ${loadingItem === 'logout' ? 'animate-pulse' : ''}`}
+                >
+                  <LogOut className="h-4 w-4" />
+                </span>
+                <span
+                  className={`transition-all duration-200 ${loadingItem === 'logout' ? 'animate-pulse' : ''}`}
+                >
+                  Sign Out
+                </span>
+                {loadingItem === 'logout' && (
+                  <div className="ml-auto">
+                    <div className="w-4 h-4 border-2 border-sidebar-foreground/30 border-t-sidebar-foreground rounded-full animate-spin"></div>
+                  </div>
+                )}
               </button>
             </li>
           </ul>

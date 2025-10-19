@@ -3,24 +3,40 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Calculate trigger point for background change
+  const [triggerPoint, setTriggerPoint] = useState(0);
+
   useEffect(() => {
+    // Set trigger point on mount
+    const windowHeight = window.innerHeight;
+    setTriggerPoint(windowHeight * 0.75); // 75% of window height
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const scrollThreshold = 100; // Minimum scroll distance before hiding
 
-      // Show header when at the top
-      if (currentScrollY < 10) {
+      // Always show header when at the very top
+      if (currentScrollY <= 10) {
         setIsVisible(true);
       }
-      // Hide header when scrolling down, show when scrolling up
-      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      // Hide header when scrolling down past threshold
+      else if (
+        currentScrollY > lastScrollY &&
+        currentScrollY > scrollThreshold
+      ) {
         setIsVisible(false);
-      } else if (currentScrollY < lastScrollY) {
+      }
+      // Show header when scrolling up
+      else if (currentScrollY < lastScrollY) {
         setIsVisible(true);
       }
 
@@ -30,8 +46,19 @@ export default function Header() {
     // Add scroll event listener
     window.addEventListener('scroll', handleScroll, { passive: true });
 
+    // Handle window resize
+    const handleResize = () => {
+      const windowHeight = window.innerHeight;
+      setTriggerPoint(windowHeight * 0.75);
+    };
+
+    window.addEventListener('resize', handleResize);
+
     // Cleanup
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, [lastScrollY]);
 
   const handleMouseEnter = () => {
@@ -43,7 +70,13 @@ export default function Header() {
   };
   return (
     <header
-      className={`bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg sticky top-0 z-50 transition-transform duration-300 ease-in-out ${
+      className={`${
+        isHomePage
+          ? lastScrollY < triggerPoint && !isMobileMenuOpen
+            ? 'bg-transparent top-16'
+            : 'bg-white'
+          : 'bg-white'
+      } fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
       onMouseEnter={handleMouseEnter}
@@ -54,7 +87,13 @@ export default function Header() {
           <div className="flex-shrink-0">
             <Link href="/">
               <Image
-                src="/images/netpoleon.png"
+                src={
+                  isHomePage
+                    ? lastScrollY < triggerPoint && !isMobileMenuOpen
+                      ? '/logos/Netpoleon ANZ White.png'
+                      : '/logos/Netpoleon ANZ Orange Black .png'
+                    : '/logos/Netpoleon ANZ Orange Black .png'
+                }
                 alt="Netpoleon"
                 width={120}
                 height={80}
@@ -71,16 +110,34 @@ export default function Header() {
               { href: '/services', text: 'Services' },
               { href: '/events', text: 'Events' },
               { href: '/resources', text: 'Resources' },
-              { href: '/contact', text: 'Contact Us' },
+              { href: '/contact', text: 'Contact' },
             ].map(link => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-white/90 hover:text-white transition-colors font-medium relative group"
+                className={`${
+                  isHomePage
+                    ? lastScrollY < triggerPoint && !isMobileMenuOpen
+                      ? 'text-white/90 hover:text-white'
+                      : 'text-gray-700 hover:text-orange-600'
+                    : 'text-gray-700 hover:text-orange-600'
+                } transition-colors ${
+                  link.href === '/contact' ? 'font-bold' : 'font-medium'
+                } relative group`}
               >
                 {link.text}
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white rounded-full group-hover:w-full transition-all duration-300" />
-                <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-white rounded-full opacity-0 group-hover:opacity-20 transition-all duration-300" />
+                <div
+                  className={`absolute -bottom-1 left-0 w-0 h-0.5 ${
+                    isHomePage
+                      ? lastScrollY < triggerPoint && !isMobileMenuOpen
+                        ? 'bg-orange-600'
+                        : 'bg-orange-600'
+                      : 'bg-orange-600'
+                  } rounded-full group-hover:w-full transition-all duration-300`}
+                />
+                <div
+                  className={`absolute -bottom-1 left-0 w-full h-0.5 bg-orange-600 rounded-full opacity-0 group-hover:opacity-20 transition-all duration-300`}
+                />
               </a>
             ))}
           </nav>
@@ -89,7 +146,13 @@ export default function Header() {
           <div className="md:hidden">
             <button
               onClick={toggleMobileMenu}
-              className="relative text-white hover:text-white/90 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group"
+              className={`relative ${
+                isHomePage
+                  ? lastScrollY < triggerPoint && !isMobileMenuOpen
+                    ? 'text-white hover:text-white/90 hover:bg-white/10'
+                    : 'text-gray-700 hover:text-orange-600 hover:bg-orange-50'
+                  : 'text-gray-700 hover:text-orange-600 hover:bg-orange-50'
+              } p-3 rounded-xl transition-all duration-300 group`}
             >
               <div className="relative w-6 h-6">
                 <svg
@@ -133,15 +196,15 @@ export default function Header() {
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden h-screen absolute top-full left-0 right-0 bg-white border-t border-orange-200/30 backdrop-blur-md">
-            <nav className="px-6 py-6 space-y-2">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+            <nav className="px-6 py-6 space-y-3">
               {[
                 {
                   href: '/about',
                   text: 'About',
                   icon: (
                     <svg
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -156,11 +219,11 @@ export default function Header() {
                   ),
                 },
                 {
-                  href: '/partners',
+                  href: '/vendors',
                   text: 'Cybersecurity Vendors',
                   icon: (
                     <svg
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -179,7 +242,7 @@ export default function Header() {
                   text: 'Services',
                   icon: (
                     <svg
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -204,7 +267,7 @@ export default function Header() {
                   text: 'Events',
                   icon: (
                     <svg
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -223,7 +286,7 @@ export default function Header() {
                   text: 'Resources',
                   icon: (
                     <svg
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -242,7 +305,7 @@ export default function Header() {
                   text: 'Contact Us',
                   icon: (
                     <svg
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -256,25 +319,19 @@ export default function Header() {
                     </svg>
                   ),
                 },
-              ].map((link, index) => (
-                <a
+              ].map(link => (
+                <Link
                   key={link.href}
                   href={link.href}
-                  className="group flex items-center space-x-3 text-gray-700 hover:text-orange-600 transition-all duration-300 font-medium py-3 px-4 rounded-xl hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:shadow-sm"
+                  className="group flex items-center space-x-4 text-gray-700 hover:text-orange-600 transition-all duration-300 font-medium py-4 px-4 rounded-xl hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:shadow-sm"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  style={{
-                    animationDelay: `${index * 50}ms`,
-                    animation: 'slideInFromTop 0.3s ease-out forwards',
-                    opacity: 0,
-                    transform: 'translateY(-10px)',
-                  }}
                 >
                   <div className="text-orange-600 group-hover:scale-110 transition-transform duration-300">
                     {link.icon}
                   </div>
-                  <span className="text-base">{link.text}</span>
+                  <span className="text-lg font-semibold">{link.text}</span>
                   <svg
-                    className="ml-auto w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                    className="ml-auto w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -286,18 +343,18 @@ export default function Header() {
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </a>
+                </Link>
               ))}
 
               {/* Contact CTA */}
               <div className="mt-6 pt-4 border-t border-gray-200">
-                <a
+                <Link
                   href="/contact"
-                  className="block w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white text-center font-semibold py-3 px-6 rounded-xl hover:from-orange-700 hover:to-amber-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="block w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white text-center font-bold py-3 px-6 rounded-xl hover:from-orange-700 hover:to-amber-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Get Started Today
-                </a>
+                </Link>
               </div>
             </nav>
           </div>

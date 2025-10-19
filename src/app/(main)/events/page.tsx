@@ -213,7 +213,7 @@ export default function EventsPage() {
         mainFeaturedEvent.video ? (
           // Video Hero Section
           <motion.section
-            className="relative h-[600px] overflow-hidden shadow-lg z-1 mb-16"
+            className="md:mt-16 relative h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden shadow-lg z-1 mb-16"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
@@ -280,7 +280,7 @@ export default function EventsPage() {
 
               {mainFeaturedEvent.description && (
                 <motion.p
-                  className="text-xl text-blue-100 mb-6 font-normal max-w-3xl drop-shadow-md"
+                  className="text-md text-blue-100 mb-6 font-normal max-w-3xl drop-shadow-md"
                   variants={fadeInLeft}
                 >
                   {mainFeaturedEvent.description}
@@ -288,7 +288,7 @@ export default function EventsPage() {
               )}
 
               <motion.div
-                className="flex flex-wrap items-center gap-4 mb-6"
+                className="flex flex-wrap items-center gap-4 mb-2 md:mb-6"
                 variants={fadeInLeft}
               >
                 {mainFeaturedEvent.location && (
@@ -319,7 +319,7 @@ export default function EventsPage() {
                         'noopener,noreferrer'
                       )
                     }
-                    className="bg-white text-blue-900 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center font-bold shadow-lg"
+                    className="bg-white text-blue-900 px-8 py-2 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center font-bold shadow-lg"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
@@ -328,23 +328,6 @@ export default function EventsPage() {
                     View Event
                   </motion.button>
                 )}
-                <motion.button
-                  onClick={() =>
-                    mainFeaturedEvent.video &&
-                    window.open(
-                      mainFeaturedEvent.video,
-                      '_blank',
-                      'noopener,noreferrer'
-                    )
-                  }
-                  className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors inline-flex items-center font-bold shadow-lg"
-                  variants={buttonVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Watch Full Video
-                </motion.button>
               </motion.div>
             </motion.div>
           </motion.section>
