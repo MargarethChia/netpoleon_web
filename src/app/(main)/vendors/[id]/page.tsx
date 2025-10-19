@@ -103,8 +103,8 @@ export default function VendorDetailPage() {
           className="bg-white rounded-2xl shadow-lg overflow-hidden"
         >
           {/* Featured Image Banner */}
-          {vendor.image_url && (
-            <div className="relative h-64 w-full overflow-hidden">
+          <div className="relative h-64 w-full overflow-hidden">
+            {vendor.image_url ? (
               <Image
                 src={vendor.image_url}
                 alt={`${vendor.name} featured image`}
@@ -112,8 +112,10 @@ export default function VendorDetailPage() {
                 height={600}
                 className="w-full h-full object-cover"
               />
-            </div>
-          )}
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center"></div>
+            )}
+          </div>
 
           {/* Profile Section */}
           <div className="relative px-8 pb-8">

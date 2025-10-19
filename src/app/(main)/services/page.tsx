@@ -84,15 +84,11 @@ export default function ServicesPage() {
       const windowHeight = window.innerHeight;
       const isMobile = window.innerWidth < 1024; // lg breakpoint
 
-      // Get the actual container element to calculate proper scroll positions
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const containerTop = containerRect.top + scrollTop;
-
       // Calculate section height based on screen size
       const sectionHeight = isMobile ? windowHeight * 0.45 : windowHeight; // 45vh on mobile, full height on desktop
 
       // Calculate which service should be active based on scroll position relative to container
-      const relativeScrollTop = scrollTop - containerTop;
+      const relativeScrollTop = scrollTop;
       const mainSectionHeight = whatWeDo.length * sectionHeight;
       const scrollProgress = Math.min(
         Math.max(relativeScrollTop, 0) / mainSectionHeight,
