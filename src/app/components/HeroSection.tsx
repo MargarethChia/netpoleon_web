@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import React from 'react';
+import Link from 'next/link';
 
 const World = dynamic(
   () => import('../../components/ui/globe').then(m => m.World),
@@ -655,16 +656,21 @@ export default function HeroSection({ slides }: HeroSectionProps) {
               </p>
 
               {/* Call to Action */}
-              <motion.div
-                className="flex flex-col sm:flex-row gap-4 mb-16"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
-              >
-                <button className="px-12 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-all duration-300 text-lg">
-                  {currentSlide.button_text || 'Learn More'} →
-                </button>
-              </motion.div>
+              {currentSlide.button_link && (
+                <motion.div
+                  className="flex flex-col sm:flex-row gap-4 mb-16"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
+                >
+                  <Link
+                    href={currentSlide.button_link}
+                    className="inline-block px-12 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-all duration-300 text-lg text-center"
+                  >
+                    {currentSlide.button_text || 'Learn More'} →
+                  </Link>
+                </motion.div>
+              )}
 
               {/* Pagination Dots */}
             </motion.div>
