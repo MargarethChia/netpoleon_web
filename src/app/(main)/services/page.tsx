@@ -10,7 +10,8 @@ const whatWeDo = [
     id: 1,
     title: 'Professional Installation',
     shortTitle: 'Installation',
-    description: 'Certified engineers handle deployment',
+    description:
+      'From planning to deployment, our certified engineers ensure a smooth, standards-driven installation process',
     icon: '/icons/Module.png',
   },
   {
@@ -210,7 +211,7 @@ export default function ServicesPage() {
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row min-h-screen">
         {/* Left Side - Fixed Icon (Hidden on mobile, shown on desktop) */}
-        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-16 h-screen sticky bg-orange-200">
+        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-16 h-screen sticky bg-orange-500">
           <div className="text-center">
             {/* Icon Container with Fade Effect */}
             <div className="relative w-full h-full">

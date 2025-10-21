@@ -15,8 +15,8 @@ interface LatestResourcesProps {
 }
 
 export default function LatestResources({
-  title = 'Upcoming Events & Latest Insights',
-  subtitle = 'Stay updated with our activities and cyber news.',
+  title = 'Latest News & Insights',
+  subtitle = 'Stay updated with the latest trends and insights from our team.',
   limit = 4,
 }: LatestResourcesProps) {
   const [resources, setResources] = useState<Resource[]>([]);
@@ -162,7 +162,6 @@ export default function LatestResources({
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               {title}
             </h2>
-            <div className="w-20 h-1 bg-primary mx-auto rounded-full"></div>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               {subtitle}
             </p>
