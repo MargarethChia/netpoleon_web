@@ -186,7 +186,7 @@ const cybersecurityData = [
   {
     id: 'secops-siem-soar',
     parent: 'secops-detection-group',
-    name: 'SIEM, \n SOAR, \n UBEA, \n SOC',
+    name: 'SIEM, \n SOAR, \n UEBA, \n SOC',
     value: 22.5,
     fill: '#67ABC2',
     tag: 'Security Operations',

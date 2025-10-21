@@ -50,7 +50,7 @@ export default function GraphSection() {
         {/* Mobile: show static full diagram only */}
         <div className="lg:hidden">
           <h1 className="text-2xl font-bold text-gray-900 mb-16 text-center">
-            Vendor Solutions
+            Powered by Proven Solutions
           </h1>
           <div className="w-full">
             <Image
@@ -66,9 +66,12 @@ export default function GraphSection() {
 
         {/* Desktop/Tablet: interactive graph + vendor list */}
         <div className="hidden lg:block">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Vendor Solutions
+          <h1 className="text-4xl font-bold text-gray-900 mb-2 text-center">
+            Powered by Proven Solutions
           </h1>
+          <p className="text-md text-gray-900 mb-8 text-center">
+            Discover trusted techologies driving real-world impact
+          </p>
 
           <div className="flex gap-8 lg:gap-12">
             {/* Left side - Graph */}
@@ -85,7 +88,7 @@ export default function GraphSection() {
               ) : vendors.length > 0 ? (
                 <div>
                   {/* Vendor Grid */}
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-3 gap-2">
                     {vendors.map(vendor => {
                       const isSelected = filteredVendors.some(
                         fv => fv.id === vendor.id
@@ -94,7 +97,7 @@ export default function GraphSection() {
                         <Link
                           key={vendor.id}
                           href={`/vendors/${createSlug(vendor.name)}`}
-                          className={`flex items-center justify-center p-2 bg-gray-50 rounded-lg border hover:shadow-md transition-all duration-300 cursor-pointer ${
+                          className={`flex items-center justify-center p-1.5 bg-gray-50 rounded-md border hover:shadow-md transition-all duration-300 cursor-pointer ${
                             isSelected ? 'opacity-100' : 'opacity-10 grayscale'
                           }`}
                         >
@@ -102,13 +105,13 @@ export default function GraphSection() {
                             <Image
                               src={vendor.logo_url}
                               alt={vendor.name}
-                              width={80}
-                              height={60}
-                              className="h-8 object-contain"
+                              width={60}
+                              height={45}
+                              className="h-6 object-contain"
                             />
                           ) : (
-                            <div className="flex items-center justify-center h-8 w-full">
-                              <span className="text-xs text-gray-600 font-medium text-center px-2">
+                            <div className="flex items-center justify-center h-6 w-full">
+                              <span className="text-xs text-gray-600 font-medium text-center px-1">
                                 {vendor.name}
                               </span>
                             </div>

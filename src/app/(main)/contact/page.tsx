@@ -122,10 +122,7 @@ export default function ContactUs() {
               Get in Touch
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-              Contact{' '}
-              <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">
-                Netpoleon
-              </span>
+              Contact us
             </h1>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto">
               Ready to strengthen your cybersecurity posture? Get in touch with

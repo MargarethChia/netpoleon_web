@@ -126,7 +126,7 @@ export default function OurVendors() {
     <div>
       {/* Header - Full Width */}
       <motion.section
-        className="relative h-[500px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg z-1 mb-16"
+        className="relative h-[500px] overflow-hidden bg-orange-500 shadow-lg z-1 mb-16"
         style={{
           clipPath:
             'polygon(0 0, 100% 0, 100% 90%, 80% 95%, 50% 100%, 20% 95%, 0 90%)',
@@ -304,7 +304,7 @@ export default function OurVendors() {
 
       {/* CTA Section */}
       <motion.section
-        className="text-center mt-16 mb-0 relative h-[300px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600"
+        className="text-center mt-16 mb-0 relative h-[300px] overflow-hidden bg-orange-500 -mb-1"
         style={{
           clipPath:
             'polygon(0 10%, 20% 5%, 50% 0, 80% 5%, 100% 10%, 100% 100%, 0 100%)',
