@@ -25,6 +25,11 @@ interface AdminLayoutProps {
   showAddButton?: boolean;
   addButtonText?: string;
   onAddClick?: () => void;
+  secondaryButton?: {
+    text: string;
+    onClick: () => void;
+    icon?: React.ReactNode;
+  };
 }
 
 export default function AdminLayout({
@@ -35,6 +40,7 @@ export default function AdminLayout({
   showAddButton = false,
   addButtonText = 'Add New',
   onAddClick,
+  secondaryButton,
 }: AdminLayoutProps) {
   const router = useRouter();
   const [isContentExpanded, setIsContentExpanded] = useState(false);
@@ -270,6 +276,14 @@ export default function AdminLayout({
             <p className="text-muted-foreground text-sm">{description}</p>
           </div>
           <div className="flex gap-3">
+            {secondaryButton && (
+              <Button onClick={secondaryButton.onClick}>
+                {secondaryButton.icon && (
+                  <span className="mr-2">{secondaryButton.icon}</span>
+                )}
+                {secondaryButton.text}
+              </Button>
+            )}
             {showAddButton && (
               <Button onClick={onAddClick}>
                 <Plus className="w-4 h-4 mr-2" />

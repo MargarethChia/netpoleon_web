@@ -35,20 +35,32 @@ import {
   ExternalLink,
   Star,
   Image as ImageIcon,
+  Video,
 } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
 import EventForm from './components/EventForm';
+import FeaturedVideoForm from './components/FeaturedVideoForm';
 import ViewEventDialog from './components/ViewEventDialog';
-import { Event, FeaturedEvent, eventsApi } from '@/lib/api';
+import {
+  Event,
+  FeaturedEvent,
+  FeaturedEventVideo,
+  eventsApi,
+  featuredVideoApi,
+} from '@/lib/api';
 import { showToast } from '@/components/ui/toast';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [featuredEvents, setFeaturedEvents] = useState<FeaturedEvent[]>([]);
+  const [featuredVideo, setFeaturedVideo] = useState<FeaturedEventVideo | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFeaturedVideoFormOpen, setIsFeaturedVideoFormOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [deleteEventId, setDeleteEventId] = useState<number | null>(null);
   const [viewingEvent, setViewingEvent] = useState<Event | null>(null);
@@ -57,12 +69,14 @@ export default function EventsPage() {
   const fetchEvents = async () => {
     try {
       setIsLoading(true);
-      const [eventsData, featuredData] = await Promise.all([
+      const [eventsData, featuredData, videoData] = await Promise.all([
         eventsApi.getAll(),
         eventsApi.getFeatured(),
+        featuredVideoApi.get(),
       ]);
       setEvents(eventsData);
       setFeaturedEvents(featuredData);
+      setFeaturedVideo(videoData);
     } catch (error) {
       console.error('Error fetching events:', error);
       showToast({
@@ -121,6 +135,10 @@ export default function EventsPage() {
     fetchEvents(); // Refresh the list after successful operation
   };
 
+  const handleManageFeaturedVideo = () => {
+    setIsFeaturedVideoFormOpen(true);
+  };
+
   const getEventStatus = (eventDate: string) => {
     const today = new Date();
     const eventDateObj = new Date(eventDate);
@@ -170,13 +188,12 @@ export default function EventsPage() {
         }
 
         const hasImage = event.image_url && event.image_url.trim().length > 0;
-        const hasVideo = event.video && event.video.trim().length > 0;
 
-        if (!hasImage && !hasVideo) {
+        if (!hasImage) {
           showToast({
             title: 'Cannot Feature Event',
             message:
-              'Featured events must have either an image or a video. Please add media to this event first.',
+              'Featured events must have an image. Please add an image to this event first.',
             type: 'error',
           });
           return;
@@ -266,6 +283,11 @@ export default function EventsPage() {
         showAddButton={true}
         addButtonText="Add Event"
         onAddClick={handleAddEvent}
+        secondaryButton={{
+          text: featuredVideo ? 'Edit Featured Video' : 'Set Featured Video',
+          onClick: handleManageFeaturedVideo,
+          icon: <Video className="h-4 w-4" />,
+        }}
       >
         <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
           {/* Search */}
@@ -303,8 +325,8 @@ export default function EventsPage() {
                 upcoming
                 <br />
                 <span className="text-xs text-muted-foreground">
-                  Note: Featured events must have either an image or video.
-                  Images and videos only display for featured events.
+                  Note: Featured events must have an image. Images only display
+                  for featured events.
                 </span>
               </CardDescription>
             </CardHeader>
@@ -324,7 +346,6 @@ export default function EventsPage() {
                       <TableHead>Location</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Image</TableHead>
-                      <TableHead>Video</TableHead>
                       <TableHead>Link</TableHead>
                       <TableHead className="text-center">Featured</TableHead>
                       <TableHead className="w-[50px]"></TableHead>
@@ -375,23 +396,6 @@ export default function EventsPage() {
                             )}
                           </TableCell>
                           <TableCell>
-                            {event.video ? (
-                              <Button variant="ghost" size="sm" asChild>
-                                <a
-                                  href={event.video}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <ExternalLink className="h-4 w-4" />
-                                </a>
-                              </Button>
-                            ) : (
-                              <span className="text-muted-foreground text-sm">
-                                N/A
-                              </span>
-                            )}
-                          </TableCell>
-                          <TableCell>
                             {event.link && (
                               <Button variant="ghost" size="sm" asChild>
                                 <a
@@ -413,15 +417,11 @@ export default function EventsPage() {
                               onClick={() => handleToggleFeatured(event.id)}
                               className="mx-auto"
                               disabled={
-                                !isFeatured(event.id) &&
-                                !event.image_url &&
-                                !event.video
+                                !isFeatured(event.id) && !event.image_url
                               }
                               title={
-                                !isFeatured(event.id) &&
-                                !event.image_url &&
-                                !event.video
-                                  ? 'Add an image or video to feature this event'
+                                !isFeatured(event.id) && !event.image_url
+                                  ? 'Add an image to feature this event'
                                   : isFeatured(event.id)
                                     ? 'Click to remove from featured'
                                     : 'Click to feature this event'
@@ -431,7 +431,7 @@ export default function EventsPage() {
                                 className={`h-4 w-4 ${
                                   isFeatured(event.id)
                                     ? 'text-yellow-500'
-                                    : !event.image_url && !event.video
+                                    : !event.image_url
                                       ? 'text-muted-foreground'
                                       : ''
                                 }`}
@@ -561,6 +561,14 @@ export default function EventsPage() {
           setEditingEvent(null);
         }}
         event={editingEvent}
+        onSuccess={handleFormSuccess}
+      />
+
+      {/* Featured Video Form Dialog */}
+      <FeaturedVideoForm
+        isOpen={isFeaturedVideoFormOpen}
+        onClose={() => setIsFeaturedVideoFormOpen(false)}
+        featuredVideo={featuredVideo}
         onSuccess={handleFormSuccess}
       />
 
