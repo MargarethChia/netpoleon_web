@@ -156,6 +156,83 @@ export const eventsApi = {
   },
 };
 
+// Featured Event Video API
+export const featuredVideoApi = {
+  // Get featured event video
+  get: async (): Promise<FeaturedEventVideo | null> => {
+    try {
+      const response = await fetch('/api/events/featured-video');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch featured event video');
+      }
+      const result = await response.json();
+      return result.data;
+    } catch (error) {
+      console.error('Error fetching featured event video:', error);
+      throw error;
+    }
+  },
+
+  // Set featured event video
+  set: async (videoUrl: string): Promise<FeaturedEventVideo> => {
+    try {
+      const response = await fetch('/api/events/featured-video', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ video_url: videoUrl }),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to set featured event video');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error setting featured event video:', error);
+      throw error;
+    }
+  },
+
+  // Update featured event video
+  update: async (videoUrl: string): Promise<FeaturedEventVideo> => {
+    try {
+      const response = await fetch('/api/events/featured-video', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ video_url: videoUrl }),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update featured event video');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating featured event video:', error);
+      throw error;
+    }
+  },
+
+  // Remove featured event video
+  remove: async (): Promise<void> => {
+    try {
+      const response = await fetch('/api/events/featured-video', {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to remove featured event video');
+      }
+    } catch (error) {
+      console.error('Error removing featured event video:', error);
+      throw error;
+    }
+  },
+};
+
 // Resources API
 export const resourcesApi = {
   // Get all resources
@@ -663,6 +740,7 @@ import type {
   Vendor,
   FeaturedResource,
   FeaturedEvent,
+  FeaturedEventVideo,
   TeamMember,
   AnnouncementBar,
   SlideGallery,
@@ -675,6 +753,7 @@ export type {
   Vendor,
   FeaturedResource,
   FeaturedEvent,
+  FeaturedEventVideo,
   TeamMember,
   AnnouncementBar,
   SlideGallery,

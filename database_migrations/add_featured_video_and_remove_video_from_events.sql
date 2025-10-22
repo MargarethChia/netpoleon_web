@@ -16,11 +16,12 @@ CREATE TABLE IF NOT EXISTS public.featured_event_video (
 );
 
 
--- 4. Create featured_event table (if it doesn't exist)
+-- 4. Create featured_event table (if it doesn't exist) - Updated to allow multiple featured events
 CREATE TABLE IF NOT EXISTS public.featured_event (
   id SERIAL PRIMARY KEY,
   event_id integer NOT NULL,
   featured_at timestamp without time zone DEFAULT now(),
+  display_order integer DEFAULT 0,
   CONSTRAINT featured_event_pkey PRIMARY KEY (id),
   CONSTRAINT featured_event_event_id_fkey FOREIGN KEY (event_id) REFERENCES public.events(id) ON DELETE CASCADE
 );

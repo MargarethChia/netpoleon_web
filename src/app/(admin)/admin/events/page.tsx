@@ -199,7 +199,7 @@ export default function EventsPage() {
           return;
         }
 
-        // Add to featured (this will automatically remove any existing featured event)
+        // Add to featured (this will add to the list of featured events)
         await eventsApi.addFeatured(eventId);
         showToast({
           title: 'Success',
@@ -325,8 +325,8 @@ export default function EventsPage() {
                 upcoming
                 <br />
                 <span className="text-xs text-muted-foreground">
-                  Note: Featured events must have an image. Images only display
-                  for featured events.
+                  Note: Featured events must have an image. Multiple events can
+                  be featured. Images only display for featured events.
                 </span>
               </CardDescription>
             </CardHeader>
