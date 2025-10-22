@@ -12,7 +12,7 @@ export async function GET() {
         events (*)
       `
       )
-      .order('featured_at', { ascending: false });
+      .order('display_order', { ascending: true });
 
     if (error) {
       console.error('Database error:', error);
@@ -61,19 +61,37 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Event not found' }, { status: 404 });
     }
 
-    // Remove any existing featured event first (single selection behavior)
-    const { error: deleteError } = await supabase
+    // Check if event is already featured
+    const { data: existingFeatured, error: checkError } = await supabase
       .from('featured_event')
-      .delete()
-      .neq('id', 0); // Delete all existing featured events
+      .select('id')
+      .eq('event_id', eventId)
+      .single();
 
-    if (deleteError) {
-      console.error('Database error deleting existing featured:', deleteError);
+    if (checkError && checkError.code !== 'PGRST116') {
+      console.error('Database error checking existing featured:', checkError);
       return NextResponse.json(
-        { error: 'Failed to remove existing featured event' },
+        { error: 'Failed to check existing featured event' },
         { status: 500 }
       );
     }
+
+    if (existingFeatured) {
+      return NextResponse.json(
+        { error: 'Event is already featured' },
+        { status: 400 }
+      );
+    }
+
+    // Get the next display order
+    const { data: maxOrder } = await supabase
+      .from('featured_event')
+      .select('display_order')
+      .order('display_order', { ascending: false })
+      .limit(1)
+      .single();
+
+    const nextOrder = maxOrder ? (maxOrder.display_order || 0) + 1 : 1;
 
     const { data, error } = await supabase
       .from('featured_event')
@@ -81,6 +99,7 @@ export async function POST(request: NextRequest) {
         {
           event_id: eventId,
           featured_at: new Date().toISOString(),
+          display_order: nextOrder,
         },
       ])
       .select()
