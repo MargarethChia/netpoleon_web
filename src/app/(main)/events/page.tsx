@@ -235,7 +235,9 @@ export default function EventsPage() {
 
   const getEmbedUrl = (url: string) => {
     const videoId = extractVideoId(url);
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+    return videoId
+      ? `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&loop=1&playlist=${videoId}`
+      : null;
   };
 
   return (
@@ -244,7 +246,7 @@ export default function EventsPage() {
         {/* Featured Video Section */}
         {featuredVideo && (
           <motion.section
-            className="relative overflow-hidden mb-20 mx-[20%] border border-gray-300 rounded-lg"
+            className="relative overflow-hidden mb-20 mx-0 lg:mx-[20%] border border-gray-300 rounded-lg"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
@@ -283,7 +285,7 @@ export default function EventsPage() {
               Upcoming Events
             </motion.h2>
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 md:px-0"
               variants={staggerContainer}
             >
               {upcomingEvents.map((event, index) => (
@@ -393,7 +395,7 @@ export default function EventsPage() {
               Event Highlights
             </motion.h2>
 
-            <div className="relative flex items-center justify-center">
+            <div className="relative flex items-center justify-center px-4 md:px-0">
               {/* Featured Event Slideshow Card */}
               <motion.div
                 key={currentFeaturedIndex}
@@ -410,34 +412,6 @@ export default function EventsPage() {
 
                   return (
                     <div className="flex flex-col">
-                      {/* Event Name and Date Header */}
-                      <div className="bg-gradient-to-r from-orange-500 to-amber-600 text-white p-6">
-                        <div className="flex items-center justify-between">
-                          <motion.div
-                            className="text-lg font-bold leading-tight"
-                            whileHover={{ scale: 1.02 }}
-                            transition={{ type: 'spring', stiffness: 300 }}
-                          >
-                            {event.title}
-                          </motion.div>
-                          <motion.span
-                            className="text-lg text-orange-100 font-medium"
-                            whileHover={{ scale: 1.05 }}
-                            transition={{ type: 'spring', stiffness: 300 }}
-                          >
-                            {new Date(event.event_date).toLocaleDateString(
-                              'en-US',
-                              {
-                                weekday: 'long',
-                                month: 'long',
-                                day: 'numeric',
-                                year: 'numeric',
-                              }
-                            )}
-                          </motion.span>
-                        </div>
-                      </div>
-
                       {/* Event Image */}
                       <div className="w-full aspect-video relative">
                         {event.image_url ? (
@@ -458,18 +432,74 @@ export default function EventsPage() {
                             </div>
                           </div>
                         )}
+
+                        {/* Event Name and Date Overlay - Desktop Only */}
+                        <div className="hidden md:block absolute bottom-0 left-0 right-0 bg-transparent p-6">
+                          <div className="flex items-center justify-between">
+                            <motion.div
+                              className="text-lg font-bold leading-tight text-black"
+                              whileHover={{ scale: 1.02 }}
+                              transition={{ type: 'spring', stiffness: 300 }}
+                            >
+                              {event.title}
+                            </motion.div>
+                            <motion.span
+                              className="text-lg font-medium text-black"
+                              whileHover={{ scale: 1.05 }}
+                              transition={{ type: 'spring', stiffness: 300 }}
+                            >
+                              {new Date(event.event_date).toLocaleDateString(
+                                'en-US',
+                                {
+                                  weekday: 'long',
+                                  month: 'long',
+                                  day: 'numeric',
+                                  year: 'numeric',
+                                }
+                              )}
+                            </motion.span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Event Name and Date Below Image - Mobile Only */}
+                      <div className="md:hidden bg-white p-4">
+                        <div className="flex flex-col gap-2">
+                          <motion.div
+                            className="text-lg font-bold leading-tight text-black"
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ type: 'spring', stiffness: 300 }}
+                          >
+                            {event.title}
+                          </motion.div>
+                          <motion.span
+                            className="text-sm font-medium text-gray-600"
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ type: 'spring', stiffness: 300 }}
+                          >
+                            {new Date(event.event_date).toLocaleDateString(
+                              'en-US',
+                              {
+                                weekday: 'long',
+                                month: 'long',
+                                day: 'numeric',
+                                year: 'numeric',
+                              }
+                            )}
+                          </motion.span>
+                        </div>
                       </div>
                     </div>
                   );
                 })()}
               </motion.div>
 
-              {/* Navigation Arrows */}
+              {/* Navigation Arrows - Desktop only (on sides) */}
               {featuredEventsWithData.length > 1 && (
                 <>
                   <motion.button
                     onClick={prevFeatured}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-orange-500 text-white p-3 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
+                    className="hidden md:block absolute left-4 top-1/2 transform -translate-y-1/2 bg-orange-500 text-white p-3 rounded-full shadow-lg hover:bg-orange-600 transition-colors z-10"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
@@ -478,7 +508,7 @@ export default function EventsPage() {
                   </motion.button>
                   <motion.button
                     onClick={nextFeatured}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-orange-500 text-white p-3 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
+                    className="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2 bg-orange-500 text-white p-3 rounded-full shadow-lg hover:bg-orange-600 transition-colors z-10"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
@@ -488,9 +518,9 @@ export default function EventsPage() {
                 </>
               )}
 
-              {/* Dots Indicator */}
+              {/* Dots Indicator - Desktop: overlay on image, Mobile: below card */}
               {featuredEventsWithData.length > 1 && (
-                <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2">
+                <div className="hidden md:flex absolute bottom-6 left-0 right-0 justify-center gap-2 z-10">
                   {featuredEventsWithData.map((_, index) => (
                     <button
                       key={index}
@@ -505,6 +535,45 @@ export default function EventsPage() {
                 </div>
               )}
             </div>
+
+            {/* Mobile Navigation - Below card */}
+            {featuredEventsWithData.length > 1 && (
+              <div className="md:hidden flex items-center justify-center gap-4 mt-4">
+                <motion.button
+                  onClick={prevFeatured}
+                  className="bg-orange-500 text-white p-2 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </motion.button>
+
+                <div className="flex justify-center gap-2">
+                  {featuredEventsWithData.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentFeaturedIndex(index)}
+                      className={`w-3 h-3 rounded-full transition-colors ${
+                        index === currentFeaturedIndex
+                          ? 'bg-orange-500'
+                          : 'bg-gray-300 hover:bg-gray-400'
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <motion.button
+                  onClick={nextFeatured}
+                  className="bg-orange-500 text-white p-2 rounded-full shadow-lg hover:bg-orange-600 transition-colors"
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </motion.button>
+              </div>
+            )}
           </motion.section>
         )}
 
