@@ -246,7 +246,7 @@ export default function EventsPage() {
         {/* Featured Video Section */}
         {featuredVideo && (
           <motion.section
-            className="relative overflow-hidden mb-20 mx-0 lg:mx-[20%] border border-gray-300 rounded-lg"
+            className="relative overflow-hidden mb-20 mx-0 lg:mx-[5%] lg:mt-6 border border-gray-300 rounded-lg"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
