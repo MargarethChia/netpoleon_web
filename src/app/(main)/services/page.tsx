@@ -327,7 +327,7 @@ export default function ServicesPage() {
 
                   {/* Service Content */}
                   <div className="flex-1">
-                    <h3 className="text-lg sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 transition-colors duration-200 hover:text-amber-700">
+                    <h3 className="text-lg sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 transition-colors duration-200 hover:text-amber-700">
                       {service.title}
                     </h3>
                     <p className="text-sm sm:text-base text-gray-600 leading-relaxed">

@@ -194,7 +194,7 @@ export default function ResourcesPage() {
             </h1>
             <p className="text-xl lg:text-2xl text-orange-100 max-w-3xl mx-auto font-normal drop-shadow-md">
               Discover insights, articles, and resources to help you stay ahead
-              in cybersecurity
+              in the cyber landscape
             </p>
           </div>
         </div>

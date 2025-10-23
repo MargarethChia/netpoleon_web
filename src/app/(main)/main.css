@@ -98,6 +98,7 @@
 body {
   background: #ffffff;
   transition: background-color 0.3s ease;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -158,6 +159,11 @@ html {
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  }
+  html {
+    font-family:
+      var(--font-inter), ui-sans-serif, system-ui, sans-serif !important;
   }
 }
 
