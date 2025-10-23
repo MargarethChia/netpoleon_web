@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Timeline } from '@/components/ui/timeline';
 import Image from 'next/image';
-import Link from 'next/link';
 import { TeamMember } from '@/lib/supabase';
 
 export default function AboutUs() {
@@ -291,7 +290,7 @@ export default function AboutUs() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - About Us Text */}
             <div className="order-2 lg:order-1">
-              <h2 className="text-4xl lg:text-5xl text-orange-600 mb-6">
+              <h2 className="text-4xl lg:text-5xl text-black font-bold mb-6">
                 About us
               </h2>
               <p className="text-base text-gray-700 leading-relaxed">
@@ -327,39 +326,68 @@ export default function AboutUs() {
       {/* Vision & Mission Section */}
       <section className="md:pt-12 pb-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* Vision Section */}
-            <div>
-              <h3 className="text-2xl font-bold text-orange-600 mb-6">
-                Our Vision
-              </h3>
-              <div className="space-y-4">
-                <p className="text-gray-700 leading-relaxed">
-                  To be the regional leader in sourcing and distributing
-                  world-class IT Security solutions as we create winning
-                  partnerships with our employees and customers.
-                </p>
-                <p className="text-gray-700 leading-relaxed">
-                  We aim to be an employer of choice as we grow with our people
-                  and to align with our clients to meet their varying technology
-                  demands.
-                </p>
+          <div className="space-y-12">
+            {/* Vision Card */}
+            <div className="flex items-center gap-8">
+              {/* Vision Icon */}
+              <div className="flex-shrink-0 mb-4">
+                <div className="w-28 h-28 bg-orange-400 rounded-full flex items-center justify-center shadow-lg">
+                  <Image
+                    src="/icons/Vision White.png"
+                    alt="Vision"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+              </div>
+
+              {/* Vision Content */}
+              <div className="flex-1 flex items-center">
+                <div className="flex-1">
+                  <h3 className="text-5xl font-bold text-black mb-4">
+                    Our Vision
+                  </h3>
+                </div>
+                <div className="flex-2">
+                  <p className="text-gray-700 leading-relaxed mb-4 text-lg">
+                    To be the leading ANZ distributor of emerging technologies
+                    and world-class IT security solutions, delivering in-depth
+                    product knowledge, technical expertise, and exceptional
+                    customer service to our channel partners.
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Mission Section */}
-            <div>
-              <h3 className="text-2xl font-bold text-orange-600 mb-6">
-                Our Mission
-              </h3>
-              <div className="space-y-4">
-                <p className="text-gray-700 leading-relaxed">
-                  To be the leading ANZ distributor and lead the sourcing of
-                  emerging technologies and to provide in-depth product
-                  knowledge, technical expertise and excellent customer service
-                  to our channel partners to address current and new business
-                  opportunities.
-                </p>
+            {/* Mission Card */}
+            <div className="flex items-center gap-8">
+              {/* Mission Icon */}
+              <div className="flex-shrink-0 mb-4">
+                <div className="w-28 h-28 bg-orange-400 rounded-full flex items-center justify-center shadow-lg">
+                  <Image
+                    src="/icons/Mission White.png"
+                    alt="Mission"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+              </div>
+
+              {/* Vision Content */}
+              <div className="flex-1 flex items-center">
+                <div className="flex-1">
+                  <h3 className="text-5xl font-bold text-black mb-4">
+                    Our Mission
+                  </h3>
+                </div>
+                <div className="flex-2">
+                  <p className="text-gray-700 leading-relaxed mb-4 text-lg">
+                    We strive to create winning partnerships with our employees
+                    and clients, aligning with their evolving technology needs,
+                    while fostering a culture that makes us an employer of
+                    choice as we grow together.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -426,21 +454,41 @@ export default function AboutUs() {
                 <motion.div
                   key={member.id}
                   variants={fadeInUp}
-                  whileHover={{ y: -8, scale: 1.02 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
                   <div className="text-center space-y-6">
-                    <div className="w-40 h-40 mx-auto rounded-lg overflow-hidden bg-orange-500">
+                    <div className="w-60 h-60 mx-auto overflow-hidden bg-white relative group">
                       {member.photo ? (
                         <Image
                           src={member.photo}
                           alt={member.name}
-                          width={160}
-                          height={160}
-                          className="w-full h-full object-cover rounded-md"
+                          width={250}
+                          height={250}
+                          className="w-full h-full object-cover group-hover:opacity-0"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-full h-full flex items-center justify-center group-hover:opacity-0">
+                          <Image
+                            src="/icons/User.png"
+                            alt="Default avatar"
+                            width={250}
+                            height={250}
+                            className="opacity-80"
+                          />
+                        </div>
+                      )}
+
+                      {/* Secondary Photo Overlay */}
+                      {member.secondary_photo ? (
+                        <Image
+                          src={member.secondary_photo}
+                          alt={`${member.name} secondary`}
+                          width={192}
+                          height={192}
+                          className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 w-full h-full flex items-center justify-center opacity-0 group-hover:opacity-100">
                           <Image
                             src="/icons/User.png"
                             alt="Default avatar"
@@ -467,7 +515,7 @@ export default function AboutUs() {
 
       {/* Call to Action Section */}
       <motion.section
-        className="py-24 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 text-white relative overflow-hidden"
+        className="py-24 bg-orange-500 text-white relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -483,29 +531,9 @@ export default function AboutUs() {
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div variants={fadeInUp} className="space-y-8">
             <h2 className="text-2xl lg:text-4xl font-bold">
-              Ready to Strengthen Your Security Posture?
+              Delivering next-generation cybersecurity solutions and value-added
+              services across Australia and New Zealand
             </h2>
-            <p className="text-lg lg:text-xl opacity-90 max-w-3xl mx-auto leading-relaxed">
-              Partner with Netpoleon to access enterprise-grade cybersecurity
-              solutions and expert implementation services tailored to your
-              organization.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center pt-6">
-              <Button
-                size="lg"
-                className="text-lg px-10 py-6 bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700 font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 rounded-xl border-2 border-white/20"
-                asChild
-              >
-                <Link href="/contact">Schedule Consultation</Link>
-              </Button>
-              <Button
-                size="lg"
-                className="text-lg px-10 py-6 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white hover:bg-white/20 hover:border-white/50 font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 rounded-xl"
-                asChild
-              >
-                <Link href="/services">View Our Solutions</Link>
-              </Button>
-            </div>
           </motion.div>
         </div>
       </motion.section>

@@ -12,28 +12,31 @@ const whatWeDo = [
     shortTitle: 'Installation',
     description:
       'From planning to deployment, our certified engineers ensure a smooth, standards-driven installation process',
-    icon: '/icons/Module.png',
+    icon: '/icons/Module White.png',
   },
   {
     id: 2,
     title: 'Training & Certification',
     shortTitle: 'Training',
-    description: 'Comprehensive user and admin training',
-    icon: '/icons/Technology & Product Training.png',
+    description:
+      'Empowering your team through expert-led user and admin training, complete with tools and industry best practices.',
+    icon: '/icons/Technology & Product Training White.png',
   },
   {
     id: 3,
     title: 'Custom Configuration',
     shortTitle: 'Configuration',
-    description: 'Tailored to your security requirements',
-    icon: '/icons/Dashboard.png',
+    description:
+      'Tailoring solutions to meet your unique security needs, ensuring optimal protection and operational efficiency.',
+    icon: '/icons/Dashboard White.png',
   },
   {
     id: 4,
     title: 'Ongoing Support',
     shortTitle: 'Support',
-    description: '24/7 monitoring and maintenance',
-    icon: '/icons/Marketing & Business Development Support.png',
+    description:
+      'Providing 24/7 support to maintain performance and protect your infrastructure for uninterrupted operations.',
+    icon: '/icons/Marketing & Business Development Support White.png',
   },
 ];
 
@@ -47,10 +50,11 @@ const getServices = () => {
 
       // Map service IDs to appropriate icons
       const iconMap: Record<string, string> = {
-        nxone: '/icons/Channel Sales & Enablement.png',
-        nable: '/icons/Technology & Product Training.png',
-        nsure: '/icons/Pre-Sales POV, Consultation & Professional Services.png',
-        ncircle: '/icons/Post Sales & Customer Support Services.png',
+        nxone: '/icons/Channel Sales & Enablement White.png',
+        nable: '/icons/Technology & Product Training White.png',
+        nsure:
+          '/icons/Pre-Sales POV, Consultation & Professional Services White.png',
+        ncircle: '/icons/Post Sales & Customer Support Services White.png',
       };
 
       return {
@@ -58,7 +62,7 @@ const getServices = () => {
         slug: id,
         title: serviceData.title,
         description: serviceData.overview[0], // Use first paragraph of overview
-        icon: iconMap[id] || '/icons/Dashboard.png',
+        icon: iconMap[id] || '/icons/Dashboard White.png',
       };
     })
     .filter(
@@ -238,7 +242,7 @@ export default function ServicesPage() {
                 >
                   {/* Mobile Icon - Only shown on mobile */}
                   <div className="lg:hidden flex justify-center mb-6">
-                    <div className="w-24 h-24 bg-orange-200 rounded-full flex items-center justify-center">
+                    <div className="w-24 h-24 bg-orange-500 rounded-full flex items-center justify-center">
                       <Image
                         src={service.icon}
                         alt={service.title}
@@ -310,7 +314,7 @@ export default function ServicesPage() {
                 <div className="flex items-start space-x-4 sm:space-x-6">
                   {/* Service Icon */}
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-200 rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-orange-200 hover:scale-110 hover:rotate-3">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-500 rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-orange-500 hover:scale-110 hover:rotate-3">
                       <Image
                         src={service.icon}
                         alt={service.title}

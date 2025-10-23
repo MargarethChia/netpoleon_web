@@ -79,6 +79,7 @@ export interface TeamMember {
   name: string;
   role: string;
   photo: string | null;
+  secondary_photo: string | null;
   created_at: string;
   updated_at: string;
 }
