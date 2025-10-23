@@ -8,9 +8,28 @@ event_date date NOT NULL,
 location text,
 description text,
 link text,
+image_url text,
 created_at timestamp without time zone DEFAULT now(),
 updated_at timestamp without time zone DEFAULT now(),
 CONSTRAINT events_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE public.featured_event (
+id SERIAL PRIMARY KEY,
+event_id integer NOT NULL,
+featured_at timestamp without time zone DEFAULT now(),
+display_order integer DEFAULT 0,
+CONSTRAINT featured_event_pkey PRIMARY KEY (id),
+CONSTRAINT featured_event_event_id_fkey FOREIGN KEY (event_id) REFERENCES public.events(id) ON DELETE CASCADE
+);
+
+CREATE TABLE public.featured_event_video (
+id SERIAL PRIMARY KEY,
+video_url text NOT NULL,
+created_at timestamp without time zone DEFAULT now(),
+updated_at timestamp without time zone DEFAULT now(),
+CONSTRAINT featured_event_video_pkey PRIMARY KEY (id),
+CONSTRAINT check_video_url_not_empty CHECK (video_url IS NOT NULL AND length(trim(video_url)) > 0)
 );
 
 CREATE TABLE public.featured_resource (

@@ -72,7 +72,6 @@ export async function PUT(
         location: body.location || null,
         description: body.description || null,
         link: body.link || null,
-        video: body.video || null,
         image_url: body.image_url || null,
         updated_at: new Date().toISOString(),
       })

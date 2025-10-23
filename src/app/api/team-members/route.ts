@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
           name: body.name,
           role: body.role,
           photo: body.photo || null,
+          secondary_photo: body.secondary_photo || null,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },

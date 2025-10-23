@@ -188,7 +188,8 @@ export default function TeamPage() {
                   <TableRow>
                     <TableHead>Member</TableHead>
                     <TableHead>Role</TableHead>
-                    <TableHead>Photo</TableHead>
+                    <TableHead>Primary Photo</TableHead>
+                    <TableHead>Secondary Photo</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead className="w-[50px]"></TableHead>
                   </TableRow>
@@ -223,8 +224,31 @@ export default function TeamPage() {
                       </TableCell>
                       <TableCell>
                         {member.photo ? (
-                          <div className="w-8 h-8 bg-muted rounded flex items-center justify-center">
-                            <span className="text-xs">Photo</span>
+                          <div className="w-8 h-8 bg-muted rounded flex items-center justify-center overflow-hidden">
+                            <Image
+                              src={member.photo}
+                              alt={`${member.name} primary photo`}
+                              width={32}
+                              height={32}
+                              className="object-cover rounded"
+                            />
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground text-sm">
+                            No photo
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {member.secondary_photo ? (
+                          <div className="w-8 h-8 bg-muted rounded flex items-center justify-center overflow-hidden">
+                            <Image
+                              src={member.secondary_photo}
+                              alt={`${member.name} secondary photo`}
+                              width={32}
+                              height={32}
+                              className="object-cover rounded"
+                            />
                           </div>
                         ) : (
                           <span className="text-muted-foreground text-sm">
@@ -268,7 +292,7 @@ export default function TeamPage() {
         </Card>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -287,7 +311,7 @@ export default function TeamPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                With Photos
+                With Primary Photos
               </CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -296,7 +320,24 @@ export default function TeamPage() {
                 {teamMembers.filter(m => m.photo).length}
               </div>
               <p className="text-xs text-muted-foreground">
-                Have profile photos
+                Have primary photos
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                With Secondary Photos
+              </CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-card-foreground">
+                {teamMembers.filter(m => m.secondary_photo).length}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Have secondary photos
               </p>
             </CardContent>
           </Card>

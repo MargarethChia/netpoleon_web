@@ -11,10 +11,10 @@ export async function GET() {
 }
 // Create a new team member
 export async function POST(request: NextRequest) {
-  const { name, role, photo } = await request.json();
+  const { name, role, photo, secondary_photo } = await request.json();
   const { data, error } = await supabase
     .from('team_members')
-    .insert({ name, photo, role });
+    .insert({ name, photo, role, secondary_photo });
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

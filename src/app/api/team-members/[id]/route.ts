@@ -80,6 +80,7 @@ export async function PUT(
         name: body.name,
         role: body.role,
         photo: body.photo || null,
+        secondary_photo: body.secondary_photo || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', teamMemberId)
