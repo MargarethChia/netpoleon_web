@@ -9,25 +9,25 @@ const STATS_DATA = [
     id: 1,
     value: 50,
     suffix: '+',
-    label: 'years since founded in Japan',
+    label: 'Years since \n founded in Japan',
   },
   {
     id: 2,
     value: 4700,
     suffix: '+',
-    label: 'employees worldwide',
+    label: 'Employees \n Worldwide',
   },
   {
     id: 3,
     value: 11,
     suffix: 'T',
-    label: 'Sales Revenue (¥11 Trillion ~USD 76B)',
+    label: 'Sales Revenue (¥11 \n Trillion ~ USD 76B)',
   },
   {
     id: 4,
     value: 25,
     suffix: '+',
-    label: 'years since listed in Tokyo Stock Exchange',
+    label: 'years since listed in \n Tokyo Stock Exchange',
   },
 ];
 
@@ -66,17 +66,17 @@ export default function Statistics() {
   return (
     <div
       ref={ref}
-      className="relative w-full h-auto py-12 sm:py-16 lg:py-0 lg:h-[500px] bg-gradient-to-r from-orange-600 via-amber-600 to-orange-600"
+      className="relative w-full h-auto py-12 sm:py-16 lg:py-0 lg:h-[500px] bg-orange-500"
     >
       {/* Statistics Overlay */}
       <div className="relative lg:absolute lg:inset-0 flex items-center justify-center z-10">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Company subtitle */}
           <div className="text-center mb-12 lg:mb-24">
-            <h2 className="text-2xl lg:text-3xl font-bold text-white mb-6">
-              A company of Macnica
+            <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2">
+              A Company of Macnica
             </h2>
-            <div className="w-16 h-1 bg-white mx-auto rounded-full"></div>
+            <p className="text-white ">Global Expertise. Local Impact.</p>
           </div>
 
           {/* Statistics */}
@@ -93,7 +93,7 @@ export default function Statistics() {
                   />
                   {animationStarted && stat.suffix}
                 </div>
-                <div className="text-sm sm:text-base text-white font-bold max-w-[220px] mx-auto">
+                <div className="text-sm sm:text-base text-white max-w-[220px] mx-auto whitespace-pre-line">
                   {stat.label}
                 </div>
               </div>

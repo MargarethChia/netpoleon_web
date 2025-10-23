@@ -1,16 +1,11 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import './main.css';
 import LayoutWrapper from './components/LayoutWrapper';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
 });
 
@@ -27,9 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
-      >
+      <body className={`${inter.variable} font-inter antialiased bg-white`}>
         <LayoutWrapper>{children}</LayoutWrapper>
         <GoogleAnalytics gaId="G-LV9ZZN2FSG" />
       </body>
