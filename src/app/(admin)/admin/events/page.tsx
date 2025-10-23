@@ -40,7 +40,6 @@ import {
 import AdminLayout from '../../components/AdminLayout';
 import EventForm from './components/EventForm';
 import FeaturedVideoForm from './components/FeaturedVideoForm';
-import ViewEventDialog from './components/ViewEventDialog';
 import {
   Event,
   FeaturedEvent,
@@ -63,7 +62,6 @@ export default function EventsPage() {
   const [isFeaturedVideoFormOpen, setIsFeaturedVideoFormOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [deleteEventId, setDeleteEventId] = useState<number | null>(null);
-  const [viewingEvent, setViewingEvent] = useState<Event | null>(null);
 
   // Fetch events from API
   const fetchEvents = async () => {
@@ -570,13 +568,6 @@ export default function EventsPage() {
         onClose={() => setIsFeaturedVideoFormOpen(false)}
         featuredVideo={featuredVideo}
         onSuccess={handleFormSuccess}
-      />
-
-      {/* View Event Dialog */}
-      <ViewEventDialog
-        isOpen={viewingEvent !== null}
-        onClose={() => setViewingEvent(null)}
-        event={viewingEvent}
       />
 
       {/* Confirm Delete Dialog */}

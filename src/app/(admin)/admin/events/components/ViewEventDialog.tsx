@@ -107,28 +107,6 @@ export default function ViewEventDialog({
             </div>
           )}
 
-          {/* Video */}
-          {event.video && (
-            <div className="flex items-start gap-3">
-              <ExternalLink className="h-5 w-5 text-muted-foreground mt-0.5" />
-              <div>
-                <h4 className="font-medium text-sm text-muted-foreground">
-                  Video
-                </h4>
-                <Button variant="outline" size="sm" asChild className="mt-1">
-                  <a
-                    href={event.video}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Watch Video
-                  </a>
-                </Button>
-              </div>
-            </div>
-          )}
-
           {/* Event Link */}
           {event.link && (
             <div className="flex items-start gap-3">
