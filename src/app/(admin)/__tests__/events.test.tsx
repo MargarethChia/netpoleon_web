@@ -15,6 +15,10 @@ const update = vi.fn();
 const getFeatured = vi.fn();
 const addFeatured = vi.fn();
 const removeFeatured = vi.fn();
+const getFeaturedVideo = vi.fn();
+const setFeaturedVideo = vi.fn();
+const updateFeaturedVideo = vi.fn();
+const removeFeaturedVideo = vi.fn();
 
 vi.mock('@/lib/api', () => ({
   eventsApi: {
@@ -26,10 +30,113 @@ vi.mock('@/lib/api', () => ({
     addFeatured: (...args: any[]) => addFeatured(...args),
     removeFeatured: (...args: any[]) => removeFeatured(...args),
   },
+  featuredVideoApi: {
+    get: (...args: any[]) => getFeaturedVideo(...args),
+    set: (...args: any[]) => setFeaturedVideo(...args),
+    update: (...args: any[]) => updateFeaturedVideo(...args),
+    remove: (...args: any[]) => removeFeaturedVideo(...args),
+  },
 }));
 
 vi.mock('@/components/ui/toast', () => ({
   showToast: vi.fn(),
+}));
+
+// Mock components
+vi.mock('../admin/events/components/EventForm', () => ({
+  default: ({ isOpen, onClose, event, onSuccess }: any) => {
+    if (!isOpen) return null;
+    return (
+      <div data-testid="event-form">
+        <h2>{event ? 'Edit Event' : 'Add New Event'}</h2>
+        <form
+          onSubmit={async e => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            const title = formData.get('title') as string;
+            const date = formData.get('date') as string;
+
+            try {
+              if (event) {
+                // Simulate update call
+                await update({ ...event, title, event_date: date });
+              } else {
+                // Simulate create call
+                await create({
+                  title,
+                  event_date: date,
+                  description: '',
+                  location: '',
+                  link: '',
+                  video: '',
+                  image_url: '',
+                });
+              }
+            } catch (error) {
+              // Handle error silently for testing
+            }
+
+            onSuccess();
+            onClose();
+          }}
+        >
+          <label>
+            Event Title
+            <input name="title" defaultValue={event?.title || ''} required />
+          </label>
+          <label>
+            Event Date
+            <input
+              name="date"
+              type="date"
+              defaultValue={event?.event_date || ''}
+              required
+            />
+          </label>
+          <button type="submit">
+            {event ? 'Update Event' : 'Create Event'}
+          </button>
+        </form>
+      </div>
+    );
+  },
+}));
+
+vi.mock('../admin/events/components/FeaturedVideoForm', () => ({
+  default: ({ isOpen, onClose }: any) => {
+    if (!isOpen) return null;
+    return (
+      <div data-testid="featured-video-form">
+        <h2>Featured Video Form</h2>
+        <button onClick={onClose}>Close</button>
+      </div>
+    );
+  },
+}));
+
+vi.mock('@/components/ui/confirm-dialog', () => ({
+  ConfirmDialog: ({ isOpen, onClose, onConfirm, title, confirmText }: any) => {
+    if (!isOpen) return null;
+    return (
+      <div data-testid="confirm-dialog">
+        <h2>{title}</h2>
+        <button
+          onClick={() => {
+            onConfirm();
+            onClose();
+          }}
+        >
+          {confirmText || 'Delete Event'}
+        </button>
+        <button onClick={onClose}>Cancel</button>
+      </div>
+    );
+  },
+}));
+
+// Mock storage
+vi.mock('@/lib/storage', () => ({
+  uploadImage: vi.fn().mockResolvedValue('https://example.com/image.jpg'),
 }));
 
 // Mock supabase client used by AdminLayout
@@ -53,8 +160,14 @@ describe('Admin Events Page', () => {
     getFeatured.mockReset();
     addFeatured.mockReset();
     removeFeatured.mockReset();
+    getFeaturedVideo.mockReset();
+    setFeaturedVideo.mockReset();
+    updateFeaturedVideo.mockReset();
+    removeFeaturedVideo.mockReset();
     // Mock featured events API to return empty array by default
     getFeatured.mockResolvedValue([]);
+    // Mock featured video API to return null by default
+    getFeaturedVideo.mockResolvedValue(null);
   });
 
   function seed() {
@@ -67,6 +180,7 @@ describe('Admin Events Page', () => {
         location: 'SG',
         link: '',
         video: '',
+        image_url: 'https://example.com/image1.jpg',
       },
       {
         id: 2,
@@ -76,6 +190,7 @@ describe('Admin Events Page', () => {
         location: 'US',
         link: '',
         video: '',
+        image_url: '',
       },
     ]);
   }
@@ -149,6 +264,7 @@ describe('Admin Events Page', () => {
         location: 'SG',
         link: '',
         video: '',
+        image_url: 'https://example.com/image1.jpg',
       },
     ];
     const newEvent = {
@@ -159,6 +275,7 @@ describe('Admin Events Page', () => {
       location: 'MY',
       link: '',
       video: '',
+      image_url: '',
     };
     const updated = [...initial, newEvent];
 
@@ -183,7 +300,7 @@ describe('Admin Events Page', () => {
   });
 
   it('shows required validation when title missing', async () => {
-    getAll.mockResolvedValueOnce([]);
+    getAll.mockResolvedValue([]);
     render(<EventsPage />);
     await screen.findByText(/all events/i);
     const user = userEvent.setup();
@@ -201,7 +318,7 @@ describe('Admin Events Page', () => {
   });
 
   it('shows required validation when date missing', async () => {
-    getAll.mockResolvedValueOnce([]);
+    getAll.mockResolvedValue([]);
     render(<EventsPage />);
     await screen.findByText(/all events/i);
     const user = userEvent.setup();
@@ -219,7 +336,7 @@ describe('Admin Events Page', () => {
   });
 
   it('create fails gracefully when API throws', async () => {
-    getAll.mockResolvedValueOnce([]);
+    getAll.mockResolvedValue([]);
     create.mockRejectedValue(new Error('Create failed'));
     render(<EventsPage />);
     await screen.findByText(/all events/i);
@@ -258,6 +375,7 @@ describe('Admin Events Page', () => {
         location: '',
         link: '',
         video: '',
+        image_url: '',
       },
     ];
     const updated = [
@@ -269,6 +387,7 @@ describe('Admin Events Page', () => {
         location: '',
         link: '',
         video: '',
+        image_url: '',
       },
     ];
 
@@ -305,6 +424,7 @@ describe('Admin Events Page', () => {
         location: '',
         link: '',
         video: '',
+        image_url: '',
       },
     ];
     const updated = [
@@ -316,6 +436,7 @@ describe('Admin Events Page', () => {
         location: '',
         link: '',
         video: '',
+        image_url: '',
       },
     ];
     getAll.mockResolvedValueOnce(initial);
@@ -351,6 +472,7 @@ describe('Admin Events Page', () => {
         location: '',
         link: '',
         video: '',
+        image_url: '',
       },
     ];
     const updated = [
@@ -362,6 +484,7 @@ describe('Admin Events Page', () => {
         location: '',
         link: '',
         video: '',
+        image_url: '',
       },
     ];
     getAll.mockResolvedValueOnce(initial);

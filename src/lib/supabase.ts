@@ -20,8 +20,14 @@ export interface Event {
   location: string | null;
   description: string | null;
   link: string | null;
-  video: string | null;
   image_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FeaturedEventVideo {
+  id: number;
+  video_url: string;
   created_at: string;
   updated_at: string;
 }
@@ -64,6 +70,8 @@ export interface FeaturedEvent {
   id: number;
   event_id: number;
   featured_at: string;
+  display_order: number;
+  events?: Event;
 }
 
 export interface TeamMember {
@@ -71,6 +79,7 @@ export interface TeamMember {
   name: string;
   role: string;
   photo: string | null;
+  secondary_photo: string | null;
   created_at: string;
   updated_at: string;
 }

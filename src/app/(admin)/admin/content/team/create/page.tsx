@@ -27,6 +27,7 @@ export default function CreateTeamMemberPage() {
     name: '',
     role: '',
     photo: '',
+    secondary_photo: '',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +38,10 @@ export default function CreateTeamMemberPage() {
     }));
   };
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async (
+    file: File,
+    field: 'photo' | 'secondary_photo'
+  ) => {
     console.log('handleFileUpload called with file:', file);
     setIsUploading(true);
 
@@ -48,7 +52,7 @@ export default function CreateTeamMemberPage() {
 
       if (result.success && result.url) {
         console.log('Upload successful, setting URL:', result.url);
-        setFormData(prev => ({ ...prev, photo: result.url! }));
+        setFormData(prev => ({ ...prev, [field]: result.url! }));
         showToast({
           title: 'Success',
           message: 'Image uploaded successfully!',
@@ -74,15 +78,18 @@ export default function CreateTeamMemberPage() {
     }
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: 'photo' | 'secondary_photo'
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
-      handleFileUpload(file);
+      handleFileUpload(file, field);
     }
   };
 
-  const removeImage = () => {
-    setFormData(prev => ({ ...prev, photo: '' }));
+  const removeImage = (field: 'photo' | 'secondary_photo') => {
+    setFormData(prev => ({ ...prev, [field]: '' }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,6 +110,7 @@ export default function CreateTeamMemberPage() {
         name: formData.name.trim(),
         role: formData.role.trim(),
         photo: formData.photo.trim() || null,
+        secondary_photo: formData.secondary_photo.trim() || null,
       });
 
       showToast({
@@ -181,56 +189,116 @@ export default function CreateTeamMemberPage() {
                 </div>
               </div>
 
-              {/* Photo Upload */}
-              <div className="space-y-2">
-                <Label htmlFor="photo">Photo</Label>
-                <div className="space-y-3">
-                  {/* File Upload */}
-                  <div className="flex gap-2">
-                    <input
-                      id="photo"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => document.getElementById('photo')?.click()}
-                      disabled={isUploading}
-                      className="flex items-center gap-2"
-                    >
-                      <Upload className="h-4 w-4" />
-                      {isUploading ? 'Uploading...' : 'Upload Photo'}
-                    </Button>
-                    {formData.photo && (
+              {/* Photo Uploads */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Primary Photo */}
+                <div className="space-y-2">
+                  <Label htmlFor="photo">Primary Photo</Label>
+                  <div className="space-y-3">
+                    {/* File Upload */}
+                    <div className="flex gap-2">
+                      <input
+                        id="photo"
+                        type="file"
+                        accept="image/*"
+                        onChange={e => handleFileSelect(e, 'photo')}
+                        className="hidden"
+                      />
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={removeImage}
+                        onClick={() =>
+                          document.getElementById('photo')?.click()
+                        }
+                        disabled={isUploading}
                         className="flex items-center gap-2"
                       >
-                        <X className="h-4 w-4" />
-                        Remove
+                        <Upload className="h-4 w-4" />
+                        {isUploading ? 'Uploading...' : 'Upload Photo'}
                       </Button>
+                      {formData.photo && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => removeImage('photo')}
+                          className="flex items-center gap-2"
+                        >
+                          <X className="h-4 w-4" />
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+
+                    {/* Image Preview */}
+                    {formData.photo && (
+                      <div className="w-32 h-32 bg-muted rounded-full flex items-center justify-center overflow-hidden">
+                        <Image
+                          src={formData.photo}
+                          alt="Primary photo preview"
+                          width={128}
+                          height={128}
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      </div>
                     )}
                   </div>
+                </div>
 
-                  {/* Image Preview */}
-                  {formData.photo && (
-                    <div className="w-32 h-32 bg-muted rounded-full flex items-center justify-center overflow-hidden">
-                      <Image
-                        src={formData.photo}
-                        alt="Photo preview"
-                        width={128}
-                        height={128}
-                        className="w-full h-full object-cover rounded-full"
+                {/* Secondary Photo */}
+                <div className="space-y-2">
+                  <Label htmlFor="secondary_photo">Secondary Photo</Label>
+                  <div className="space-y-3">
+                    {/* File Upload */}
+                    <div className="flex gap-2">
+                      <input
+                        id="secondary_photo"
+                        type="file"
+                        accept="image/*"
+                        onChange={e => handleFileSelect(e, 'secondary_photo')}
+                        className="hidden"
                       />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          document.getElementById('secondary_photo')?.click()
+                        }
+                        disabled={isUploading}
+                        className="flex items-center gap-2"
+                      >
+                        <Upload className="h-4 w-4" />
+                        {isUploading ? 'Uploading...' : 'Upload Photo'}
+                      </Button>
+                      {formData.secondary_photo && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => removeImage('secondary_photo')}
+                          className="flex items-center gap-2"
+                        >
+                          <X className="h-4 w-4" />
+                          Remove
+                        </Button>
+                      )}
                     </div>
-                  )}
+
+                    {/* Image Preview */}
+                    {formData.secondary_photo && (
+                      <div className="w-32 h-32 bg-muted rounded-full flex items-center justify-center overflow-hidden">
+                        <Image
+                          src={formData.secondary_photo}
+                          alt="Secondary photo preview"
+                          width={128}
+                          height={128}
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
