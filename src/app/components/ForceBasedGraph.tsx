@@ -752,6 +752,7 @@ export default function ForceBasedGraph({
       {showFullDiagram ? (
         <div className="w-full h-full flex items-center justify-center bg-transparent">
           <Image
+            unoptimized
             src="/images/full-diagram/full_diagram.png"
             alt="Full Security Diagram"
             width={800}

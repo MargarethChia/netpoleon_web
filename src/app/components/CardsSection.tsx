@@ -60,6 +60,7 @@ export default function CardsSection({
               <div className="relative aspect-video overflow-hidden">
                 {post.image ? (
                   <Image
+                    unoptimized
                     src={post.image}
                     alt={post.title}
                     fill

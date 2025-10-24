@@ -819,6 +819,7 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
                 alt="Netpoleon ANZ Logo"
                 width={100}
                 height={100}
+                unoptimized
                 className="object-contain"
               />
             </div>

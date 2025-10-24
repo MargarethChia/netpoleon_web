@@ -393,6 +393,7 @@ export default function CreateResourcePage() {
                     {formData.cover_image_url && (
                       <div className="relative">
                         <Image
+                          unoptimized
                           src={formData.cover_image_url}
                           alt="Cover preview"
                           width={400}

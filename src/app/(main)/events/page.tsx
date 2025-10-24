@@ -416,6 +416,7 @@ export default function EventsPage() {
                       <div className="w-full aspect-video relative">
                         {event.image_url ? (
                           <Image
+                            unoptimized
                             src={event.image_url}
                             alt={event.title}
                             fill

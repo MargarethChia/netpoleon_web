@@ -156,6 +156,7 @@ export default function ServicesPage() {
               alt={service.title}
               width={256}
               height={256}
+              unoptimized
               className="object-contain drop-shadow-lg mb-16"
             />
           </div>
@@ -248,6 +249,7 @@ export default function ServicesPage() {
                         alt={service.title}
                         width={64}
                         height={64}
+                        unoptimized
                         className="object-contain"
                       />
                     </div>
@@ -320,6 +322,7 @@ export default function ServicesPage() {
                         alt={service.title}
                         width={40}
                         height={40}
+                        unoptimized
                         className="object-contain transition-transform duration-200 hover:scale-110"
                       />
                     </div>

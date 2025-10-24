@@ -202,6 +202,7 @@ export default function TeamPage() {
                           {member.photo ? (
                             <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center overflow-hidden">
                               <Image
+                                unoptimized
                                 src={member.photo}
                                 alt={`${member.name} photo`}
                                 width={48}
@@ -226,6 +227,7 @@ export default function TeamPage() {
                         {member.photo ? (
                           <div className="w-8 h-8 bg-muted rounded flex items-center justify-center overflow-hidden">
                             <Image
+                              unoptimized
                               src={member.photo}
                               alt={`${member.name} primary photo`}
                               width={32}
@@ -243,6 +245,7 @@ export default function TeamPage() {
                         {member.secondary_photo ? (
                           <div className="w-8 h-8 bg-muted rounded flex items-center justify-center overflow-hidden">
                             <Image
+                              unoptimized
                               src={member.secondary_photo}
                               alt={`${member.name} secondary photo`}
                               width={32}
