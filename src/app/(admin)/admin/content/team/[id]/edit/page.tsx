@@ -327,6 +327,7 @@ export default function EditTeamMemberPage() {
                     {formData.photo && (
                       <div className="w-32 h-32 bg-muted rounded-full flex items-center justify-center overflow-hidden">
                         <Image
+                          unoptimized
                           src={formData.photo}
                           alt="Primary photo preview"
                           width={128}
@@ -382,6 +383,7 @@ export default function EditTeamMemberPage() {
                     {formData.secondary_photo && (
                       <div className="w-32 h-32 bg-muted rounded-full flex items-center justify-center overflow-hidden">
                         <Image
+                          unoptimized
                           src={formData.secondary_photo}
                           alt="Secondary photo preview"
                           width={128}

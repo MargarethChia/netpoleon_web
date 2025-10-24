@@ -96,6 +96,7 @@ export default function ViewEventDialog({
                 </h4>
                 <div className="mt-2">
                   <Image
+                    unoptimized
                     src={event.image_url}
                     alt={event.title}
                     width={400}

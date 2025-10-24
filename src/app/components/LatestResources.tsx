@@ -217,6 +217,7 @@ export default function LatestResources({
                           src={resource.cover_image_url}
                           alt={resource.title}
                           fill
+                          unoptimized
                           className="object-cover"
                         />
                       ) : (
@@ -226,6 +227,7 @@ export default function LatestResources({
                             alt="Netpoleon Logo"
                             width={120}
                             height={120}
+                            unoptimized
                             className="object-contain opacity-80"
                           />
                         </div>
@@ -286,6 +288,7 @@ export default function LatestResources({
                           src={resource.cover_image_url}
                           alt={resource.title}
                           fill
+                          unoptimized
                           className="object-cover"
                         />
                       ) : (
@@ -295,6 +298,7 @@ export default function LatestResources({
                             alt="Netpoleon Logo"
                             width={120}
                             height={120}
+                            unoptimized
                             className="object-contain opacity-80"
                           />
                         </div>

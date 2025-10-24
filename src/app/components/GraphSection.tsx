@@ -58,6 +58,7 @@ export default function GraphSection() {
               alt="Full Security Diagram"
               width={1200}
               height={900}
+              unoptimized
               className="w-full h-auto object-contain"
               priority
             />
@@ -107,6 +108,7 @@ export default function GraphSection() {
                               alt={vendor.name}
                               width={60}
                               height={45}
+                              unoptimized
                               className="h-6 object-contain"
                             />
                           ) : (

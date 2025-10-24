@@ -237,6 +237,7 @@ export default function ResourcesPage() {
                       <div className="relative lg:w-1/2 aspect-video overflow-hidden">
                         {resource.cover_image_url ? (
                           <Image
+                            unoptimized
                             src={resource.cover_image_url}
                             alt={resource.title}
                             fill
@@ -245,6 +246,7 @@ export default function ResourcesPage() {
                         ) : (
                           <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
                             <Image
+                              unoptimized
                               src="/images/netpoleon.png"
                               alt="Netpoleon Logo"
                               width={120}
@@ -306,6 +308,7 @@ export default function ResourcesPage() {
                       <div className="relative lg:w-1/2 aspect-video overflow-hidden">
                         {resource.cover_image_url ? (
                           <Image
+                            unoptimized
                             src={resource.cover_image_url}
                             alt={resource.title}
                             fill
@@ -314,6 +317,7 @@ export default function ResourcesPage() {
                         ) : (
                           <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
                             <Image
+                              unoptimized
                               src="/images/netpoleon.png"
                               alt="Netpoleon Logo"
                               width={120}
@@ -507,6 +511,7 @@ export default function ResourcesPage() {
                       <div className="relative aspect-video overflow-hidden">
                         {resource.cover_image_url ? (
                           <Image
+                            unoptimized
                             src={resource.cover_image_url}
                             alt={resource.title}
                             fill
@@ -515,6 +520,7 @@ export default function ResourcesPage() {
                         ) : (
                           <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
                             <Image
+                              unoptimized
                               src="/images/netpoleon.png"
                               alt="Netpoleon Logo"
                               width={120}
@@ -576,6 +582,7 @@ export default function ResourcesPage() {
                       <div className="relative aspect-video overflow-hidden">
                         {resource.cover_image_url ? (
                           <Image
+                            unoptimized
                             src={resource.cover_image_url}
                             alt={resource.title}
                             fill
@@ -584,6 +591,7 @@ export default function ResourcesPage() {
                         ) : (
                           <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
                             <Image
+                              unoptimized
                               src="/images/netpoleon.png"
                               alt="Netpoleon Logo"
                               width={120}

@@ -106,6 +106,7 @@ export default function VendorDetailPage() {
           <div className="relative h-64 w-full overflow-hidden">
             {vendor.image_url ? (
               <Image
+                unoptimized
                 src={vendor.image_url}
                 alt={`${vendor.name} featured image`}
                 width={800}
@@ -123,6 +124,7 @@ export default function VendorDetailPage() {
             <div className="absolute -top-16 left-8 w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
               {vendor.logo_url ? (
                 <Image
+                  unoptimized
                   src={vendor.logo_url}
                   alt={`${vendor.name} logo`}
                   width={96}
@@ -208,6 +210,7 @@ export default function VendorDetailPage() {
             <div className="px-8 pb-8">
               <div className="bg-stone-200 rounded-lg p-8 w-full h-80 flex items-center justify-center">
                 <Image
+                  unoptimized
                   src={vendor.diagram_url}
                   alt={`${vendor.name} diagram`}
                   width={600}

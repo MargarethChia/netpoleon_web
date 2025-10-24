@@ -289,6 +289,7 @@ export default function ResourcesPage() {
                           {resource.cover_image_url && (
                             <div className="w-12 h-12 bg-muted rounded flex items-center justify-center">
                               <Image
+                                unoptimized
                                 src={resource.cover_image_url}
                                 alt={`${resource.title} cover image`}
                                 width={24}

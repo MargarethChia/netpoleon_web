@@ -249,6 +249,7 @@ export default function OurVendors() {
                             alt={`${vendor.name} logo`}
                             width={400}
                             height={225}
+                            unoptimized
                             className="w-full h-full object-contain"
                           />
                         ) : (

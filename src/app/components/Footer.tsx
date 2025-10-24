@@ -18,6 +18,7 @@ export default function Footer() {
               alt="Netpoleon Logo"
               width={150}
               height={80}
+              unoptimized
               className="h-16 w-auto"
             />
             <p className="text-xl text-white font-bold leading-relaxed whitespace-pre-line">
