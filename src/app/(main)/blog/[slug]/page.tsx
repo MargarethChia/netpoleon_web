@@ -67,6 +67,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="mb-8">
             <div className="relative aspect-video overflow-hidden bg-gray-100 lg:max-w-4xl lg:mx-auto lg:rounded-lg">
               <Image
+                unoptimized
                 src={resource.cover_image_url}
                 alt={resource.title}
                 fill

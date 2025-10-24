@@ -70,6 +70,7 @@ export default function AboutUs() {
             <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
               <div className="flex items-center mb-4">
                 <Image
+                  unoptimized
                   src="/icons/Marketing & Business Development Support.png"
                   alt="Vendor Portfolio"
                   width={24}
@@ -87,6 +88,7 @@ export default function AboutUs() {
             <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
               <div className="flex items-center mb-4">
                 <Image
+                  unoptimized
                   src="/icons/Technology & Product Training.png"
                   alt="Technical Expertise"
                   width={24}
@@ -121,6 +123,7 @@ export default function AboutUs() {
             <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg border border-orange-100">
               <div className="flex items-center mb-4">
                 <Image
+                  unoptimized
                   src="/icons/Marketing & Business Development Support.png"
                   alt="N.XONE"
                   width={24}
@@ -139,6 +142,7 @@ export default function AboutUs() {
             <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-lg border border-blue-100">
               <div className="flex items-center mb-4">
                 <Image
+                  unoptimized
                   src="/icons/Technology & Product Training.png"
                   alt="N.Able"
                   width={24}
@@ -157,6 +161,7 @@ export default function AboutUs() {
             <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-lg border border-green-100">
               <div className="flex items-center mb-4">
                 <Image
+                  unoptimized
                   src="/icons/Post Sales & Customer Support Services.png"
                   alt="N.Sure"
                   width={24}
@@ -175,6 +180,7 @@ export default function AboutUs() {
             <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-lg border border-purple-100">
               <div className="flex items-center mb-4">
                 <Image
+                  unoptimized
                   src="/icons/Lock.png"
                   alt="N.Circle"
                   width={24}
@@ -310,6 +316,7 @@ export default function AboutUs() {
             <div className="flex justify-center order-1 lg:order-2">
               <div className="w-full h-96 rounded-lg overflow-hidden shadow-xl">
                 <Image
+                  unoptimized
                   src="/images/netpoleon-about-us.png"
                   alt="Netpoleon ANZ Team at Sydney Motor Sport Park"
                   width={600}
@@ -333,6 +340,7 @@ export default function AboutUs() {
               <div className="flex-shrink-0 mb-4">
                 <div className="w-28 h-28 bg-orange-400 rounded-full flex items-center justify-center shadow-lg">
                   <Image
+                    unoptimized
                     src="/icons/Vision White.png"
                     alt="Vision"
                     width={80}
@@ -365,6 +373,7 @@ export default function AboutUs() {
               <div className="flex-shrink-0 mb-4">
                 <div className="w-28 h-28 bg-orange-400 rounded-full flex items-center justify-center shadow-lg">
                   <Image
+                    unoptimized
                     src="/icons/Mission White.png"
                     alt="Mission"
                     width={80}
@@ -460,6 +469,7 @@ export default function AboutUs() {
                     <div className="w-60 h-60 mx-auto overflow-hidden bg-white relative group">
                       {member.photo ? (
                         <Image
+                          unoptimized
                           src={member.photo}
                           alt={member.name}
                           width={250}
@@ -469,6 +479,7 @@ export default function AboutUs() {
                       ) : (
                         <div className="w-full h-full flex items-center justify-center group-hover:opacity-0">
                           <Image
+                            unoptimized
                             src="/icons/User.png"
                             alt="Default avatar"
                             width={250}
@@ -481,6 +492,7 @@ export default function AboutUs() {
                       {/* Secondary Photo Overlay */}
                       {member.secondary_photo ? (
                         <Image
+                          unoptimized
                           src={member.secondary_photo}
                           alt={`${member.name} secondary`}
                           width={192}
@@ -490,6 +502,7 @@ export default function AboutUs() {
                       ) : (
                         <div className="absolute inset-0 w-full h-full flex items-center justify-center opacity-0 group-hover:opacity-100">
                           <Image
+                            unoptimized
                             src="/icons/User.png"
                             alt="Default avatar"
                             width={80}

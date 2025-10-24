@@ -274,6 +274,7 @@ export default function EventForm({
               {formData.image_url && (
                 <div className="relative">
                   <Image
+                    unoptimized
                     src={formData.image_url}
                     alt="Event preview"
                     width={400}

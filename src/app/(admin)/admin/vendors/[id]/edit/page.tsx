@@ -479,6 +479,7 @@ export default function EditVendorPage() {
                   {formData.logo_url && (
                     <div className="relative">
                       <Image
+                        unoptimized
                         src={formData.logo_url}
                         alt="Logo preview"
                         width={96}
@@ -539,6 +540,7 @@ export default function EditVendorPage() {
                   {formData.image_url && (
                     <div className="relative">
                       <Image
+                        unoptimized
                         src={formData.image_url}
                         alt="Image preview"
                         width={400}
@@ -601,6 +603,7 @@ export default function EditVendorPage() {
                   {formData.diagram_url && (
                     <div className="relative">
                       <Image
+                        unoptimized
                         src={formData.diagram_url}
                         alt="Diagram preview"
                         width={400}
@@ -641,6 +644,7 @@ export default function EditVendorPage() {
                       {formData.logo_url && (
                         <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
                           <Image
+                            unoptimized
                             src={formData.logo_url}
                             alt="Logo"
                             width={48}
@@ -686,6 +690,7 @@ export default function EditVendorPage() {
                     {formData.image_url && (
                       <div className="w-full">
                         <Image
+                          unoptimized
                           src={formData.image_url}
                           alt="Featured"
                           width={400}

@@ -78,6 +78,7 @@ export default function InfoSection({
           >
             {image ? (
               <Image
+                unoptimized
                 src={image}
                 alt={imageAlt || 'Info section image'}
                 width={400}

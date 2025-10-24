@@ -140,6 +140,7 @@ export default function VendorCarousel({ title }: VendorCarouselProps) {
                     alt={vendor.name}
                     width={160}
                     height={160}
+                    unoptimized
                     className="h-24 object-contain"
                   />
                 ) : (

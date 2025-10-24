@@ -87,6 +87,7 @@ export default function Header() {
           <div className="flex-shrink-0">
             <Link href="/">
               <Image
+                unoptimized
                 src={
                   isHomePage
                     ? lastScrollY < triggerPoint && !isMobileMenuOpen
