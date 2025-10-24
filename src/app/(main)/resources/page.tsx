@@ -176,7 +176,7 @@ export default function ResourcesPage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <motion.section
-        className="relative h-[300px] lg:h-[500px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600 shadow-lg z-1 mb-16"
+        className="relative h-[300px] lg:h-[500px] overflow-hidden bg-orange-500 shadow-lg z-1 mb-16"
         style={{
           clipPath:
             'polygon(0 0, 100% 0, 100% 90%, 80% 95%, 50% 100%, 20% 95%, 0 90%)',
@@ -188,7 +188,7 @@ export default function ResourcesPage() {
         transition={{ duration: 0.6 }}
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-6 lg:px-8 max-w-4xl relative z-10">
+          <div className="text-center text-white px-6 lg:px-8 lg:pt-12 max-w-4xl relative z-10">
             <h1 className="text-4xl lg:text-6xl mb-6 font-bold drop-shadow-lg">
               Knowledge Hub
             </h1>
@@ -244,7 +244,7 @@ export default function ResourcesPage() {
                             className="object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
+                          <div className="w-full h-full bg-orange-500 flex items-center justify-center">
                             <Image
                               unoptimized
                               src="/images/netpoleon.png"
@@ -315,7 +315,7 @@ export default function ResourcesPage() {
                             className="object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
+                          <div className="w-full h-full bg-orange-500 flex items-center justify-center">
                             <Image
                               unoptimized
                               src="/images/netpoleon.png"
@@ -518,7 +518,7 @@ export default function ResourcesPage() {
                             className="object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
+                          <div className="w-full h-full bg-orange-500 flex items-center justify-center">
                             <Image
                               unoptimized
                               src="/images/netpoleon.png"
@@ -589,7 +589,7 @@ export default function ResourcesPage() {
                             className="object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-orange-600 to-amber-600 flex items-center justify-center">
+                          <div className="w-full h-full bg-orange-500 flex items-center justify-center">
                             <Image
                               unoptimized
                               src="/images/netpoleon.png"

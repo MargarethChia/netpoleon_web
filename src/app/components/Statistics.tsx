@@ -73,7 +73,7 @@ export default function Statistics() {
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Company subtitle */}
           <div className="text-center mb-12 lg:mb-24">
-            <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2">
+            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-2">
               A Company of Macnica
             </h2>
             <p className="text-white ">Global Expertise. Local Impact.</p>

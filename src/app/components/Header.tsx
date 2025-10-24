@@ -122,9 +122,7 @@ export default function Header() {
                       ? 'text-white/90 hover:text-white'
                       : 'text-gray-700 hover:text-orange-600'
                     : 'text-gray-700 hover:text-orange-600'
-                } transition-colors ${
-                  link.href === '/contact' ? 'font-bold' : 'font-medium'
-                } relative group`}
+                } transition-colors font-medium relative group`}
               >
                 {link.text}
                 <div

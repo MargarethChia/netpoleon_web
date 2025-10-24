@@ -114,7 +114,7 @@ export default function VendorDetailPage() {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center"></div>
+              <div className="w-full h-full bg-orange-500 flex items-center justify-center"></div>
             )}
           </div>
 

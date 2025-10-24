@@ -174,7 +174,7 @@ export default function ContactUs() {
                       value={formData.firstName}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       placeholder="John"
                     />
                   </div>
@@ -189,7 +189,7 @@ export default function ContactUs() {
                       value={formData.lastName}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       placeholder="Doe"
                     />
                   </div>
@@ -206,7 +206,7 @@ export default function ContactUs() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                     placeholder="john.doe@company.com"
                   />
                 </div>
@@ -221,7 +221,7 @@ export default function ContactUs() {
                     name="company"
                     value={formData.company}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                     placeholder="Company Name"
                   />
                 </div>
@@ -236,7 +236,7 @@ export default function ContactUs() {
                     value={subject}
                     onChange={e => setSubject(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 bg-white"
+                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
                   >
                     <option value="">Select a subject...</option>
                     {subjectOptions.map(option => (
@@ -299,7 +299,7 @@ export default function ContactUs() {
                         value={formData.message}
                         onChange={handleInputChange}
                         rows={6}
-                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                         placeholder="Tell us about your vendor partnership interest..."
                       ></textarea>
                     </div>
@@ -355,7 +355,7 @@ export default function ContactUs() {
                         value={formData.message}
                         onChange={handleInputChange}
                         rows={6}
-                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                         placeholder="Tell us about your partnership goals..."
                       ></textarea>
                     </div>
@@ -372,7 +372,7 @@ export default function ContactUs() {
                       onChange={handleInputChange}
                       required
                       rows={12}
-                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       placeholder="Tell us about your project or inquiry..."
                     ></textarea>
                   </div>
@@ -386,7 +386,7 @@ export default function ContactUs() {
               className={`w-full px-8 py-3 rounded-lg transition-colors ${
                 isSubmitting || isPartnerApplication
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-orange-600 via-amber-600 to-orange-600 hover:bg-orange-700'
+                  : 'bg-orange-500 hover:bg-orange-600'
               } text-white`}
             >
               {isSubmitting ? (
