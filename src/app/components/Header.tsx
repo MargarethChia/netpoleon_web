@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { publicAnnouncementBarApi } from '@/lib/api';
 
 export default function Header() {
   const pathname = usePathname();
@@ -11,9 +12,25 @@ export default function Header() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hasAnnouncementBar, setHasAnnouncementBar] = useState(false);
 
   // Calculate trigger point for background change
   const [triggerPoint, setTriggerPoint] = useState(0);
+
+  // Check for announcement bar status
+  useEffect(() => {
+    const checkAnnouncementBar = async () => {
+      try {
+        const announcement = await publicAnnouncementBarApi.get();
+        setHasAnnouncementBar(!!announcement);
+      } catch (error) {
+        console.error('Error checking announcement bar:', error);
+        setHasAnnouncementBar(false);
+      }
+    };
+
+    checkAnnouncementBar();
+  }, []);
 
   useEffect(() => {
     // Set trigger point on mount
@@ -73,7 +90,7 @@ export default function Header() {
       className={`${
         isHomePage
           ? lastScrollY < triggerPoint && !isMobileMenuOpen
-            ? 'bg-transparent top-16'
+            ? `bg-transparent ${hasAnnouncementBar ? 'top-16' : ''}`
             : 'bg-white'
           : 'bg-white'
       } fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
