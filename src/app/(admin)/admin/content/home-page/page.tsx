@@ -213,11 +213,43 @@ export default function HomePageManagement() {
               <Switch
                 id="announcement-active"
                 checked={announcementBar?.is_active || false}
-                onCheckedChange={checked =>
-                  setAnnouncementBar(prev =>
-                    prev ? { ...prev, is_active: checked } : null
-                  )
-                }
+                onCheckedChange={async checked => {
+                  const updatedAnnouncement = announcementBar
+                    ? { ...announcementBar, is_active: checked }
+                    : null;
+
+                  setAnnouncementBar(updatedAnnouncement);
+
+                  // Auto-save when disabling the announcement bar
+                  if (!checked && updatedAnnouncement) {
+                    setIsSaving(true);
+                    try {
+                      const savedAnnouncement = await announcementBarApi.save({
+                        text: updatedAnnouncement.text,
+                        is_active: updatedAnnouncement.is_active,
+                        link: updatedAnnouncement.link,
+                        link_text: updatedAnnouncement.link_text,
+                      });
+                      setAnnouncementBar(savedAnnouncement);
+                      showToast({
+                        title: 'Success',
+                        message: 'Announcement bar disabled successfully',
+                        type: 'success',
+                      });
+                    } catch (error) {
+                      console.error('Error disabling announcement bar:', error);
+                      showToast({
+                        title: 'Error',
+                        message: 'Failed to disable announcement bar',
+                        type: 'error',
+                      });
+                      // Revert the state on error
+                      setAnnouncementBar(announcementBar);
+                    } finally {
+                      setIsSaving(false);
+                    }
+                  }
+                }}
               />
               <Label htmlFor="announcement-active">
                 Enable announcement bar

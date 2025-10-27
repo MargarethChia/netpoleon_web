@@ -575,11 +575,13 @@ export default function HeroSection({ slides }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative min-h-[70vh] lg:min-h-screen flex items-center justify-start bg-black pt-[64px] overflow-hidden">
+    <section className="relative min-h-[60vh] lg:min-h-screen flex items-center justify-start bg-black pt-[64px] overflow-hidden">
       {/* Globe Background - Static, loads only once */}
-      <div className="absolute inset-0 w-full h-full z-0 overflow-visible">
-        <div className="absolute -top-90 -left-90 md:-top-120 md:-left-150 lg:-top-200 lg:-left-200 xl:-top-200 xl:-left-350 2xl:-top-200 2xl:-left-500 w-[200%] h-[200%] scale-100 md:scale-105 lg:scale-100 xl:scale-120 2xl:scale-130">
-          <StaticGlobe />
+      <div className="fixed inset-0 w-full h-full z-0 overflow-visible">
+        <div className="fixed w-[200%] h-[200%] bottom-0 right-0 lg:bottom-[-50%] lg:right-[-50%]">
+          <div className="w-full h-full">
+            <StaticGlobe />
+          </div>
         </div>
       </div>
 
@@ -678,7 +680,7 @@ export default function HeroSection({ slides }: HeroSectionProps) {
 
           {slides.length > 1 && (
             <motion.div
-              className="flex gap-5 mt-4"
+              className="flex gap-5 my-12"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}

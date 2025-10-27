@@ -89,16 +89,19 @@ export default function GraphSection() {
               ) : vendors.length > 0 ? (
                 <div>
                   {/* Vendor Grid */}
-                  <div className="grid grid-cols-3 gap-2">
+                  <div
+                    className={`grid gap-2 ${vendors.length <= 26 ? 'grid-cols-2' : 'grid-cols-3'}`}
+                  >
                     {vendors.map(vendor => {
                       const isSelected = filteredVendors.some(
                         fv => fv.id === vendor.id
                       );
+                      const isTwoColumn = vendors.length <= 26;
                       return (
                         <Link
                           key={vendor.id}
                           href={`/vendors/${createSlug(vendor.name)}`}
-                          className={`flex items-center justify-center p-1.5 bg-gray-50 rounded-md border hover:shadow-md transition-all duration-300 cursor-pointer ${
+                          className={`flex items-center justify-center bg-gray-50 rounded-md border hover:shadow-md transition-all duration-300 cursor-pointer p-1.5 ${
                             isSelected ? 'opacity-100' : 'opacity-10 grayscale'
                           }`}
                         >
@@ -106,14 +109,22 @@ export default function GraphSection() {
                             <Image
                               src={vendor.logo_url}
                               alt={vendor.name}
-                              width={60}
-                              height={45}
+                              width={isTwoColumn ? 75 : 65}
+                              height={isTwoColumn ? 55 : 55}
                               unoptimized
-                              className="h-6 object-contain"
+                              className={`object-contain ${isTwoColumn ? 'h-8' : 'h-7'}`}
                             />
                           ) : (
-                            <div className="flex items-center justify-center h-6 w-full">
-                              <span className="text-xs text-gray-600 font-medium text-center px-1">
+                            <div
+                              className={`flex items-center justify-center w-full ${
+                                isTwoColumn ? 'h-10' : 'h-6'
+                              }`}
+                            >
+                              <span
+                                className={`text-gray-600 font-medium text-center px-1 ${
+                                  isTwoColumn ? 'text-sm' : 'text-xs'
+                                }`}
+                              >
                                 {vendor.name}
                               </span>
                             </div>
