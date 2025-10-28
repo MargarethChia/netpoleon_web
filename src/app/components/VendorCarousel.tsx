@@ -103,7 +103,7 @@ export default function VendorCarousel({ title }: VendorCarouselProps) {
   }
 
   return (
-    <section className="pt-50 pb-16 bg-white relative overflow-hidden">
+    <section className="pt-24 pb-12 bg-white relative overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="text-center mb-8"

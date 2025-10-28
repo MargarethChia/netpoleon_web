@@ -138,7 +138,7 @@ export default function OurVendors() {
         transition={{ duration: 0.6 }}
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-6 lg:px-8 max-w-4xl relative z-10">
+          <div className="text-center text-white px-6 lg:px-8 lg:pt-12 max-w-4xl relative z-10">
             <h1 className="text-4xl lg:text-6xl mb-6 font-bold drop-shadow-lg">
               Our Cybersecurity Partners
             </h1>
@@ -305,11 +305,7 @@ export default function OurVendors() {
 
       {/* CTA Section */}
       <motion.section
-        className="text-center mt-16 mb-0 relative h-[300px] overflow-hidden bg-orange-500 -mb-1"
-        style={{
-          clipPath:
-            'polygon(0 10%, 20% 5%, 50% 0, 80% 5%, 100% 10%, 100% 100%, 0 100%)',
-        }}
+        className="text-center mt-16 p-6 relative overflow-hidden bg-orange-500"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -330,7 +326,7 @@ export default function OurVendors() {
               href="/contact"
               className="bg-white text-orange-900 px-8 py-3 rounded-lg hover:bg-orange-50 transition-colors inline-flex items-center font-bold"
             >
-              Request Security Assessment
+              Contact Us
               <span className="ml-2">→</span>
             </Link>
           </motion.div>

@@ -36,7 +36,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
         <h2 className="text-2xl font-bold md:text-4xl mb-4 text-orange-600 dark:text-white max-w-4xl">
           Our Story
         </h2>
-        <p className="text-neutral-700 dark:text-neutral-300 text-md max-w-lg">
+        <p className="text-neutral-700 dark:text-neutral-300 text-base max-w-lg">
           We&apos;ve been building cybersecurity solutions since 2019.
           Here&apos;s our timeline of growth and innovation across five years.
         </p>
@@ -61,7 +61,9 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
               <h3 className="md:hidden block text-2xl mb-4 text-left font-bold text-neutral-500 dark:text-neutral-500">
                 {item.title}
               </h3>
-              {item.content}{' '}
+              <div className="text-base text-neutral-700 dark:text-neutral-300">
+                {item.content}
+              </div>
             </div>
           </div>
         ))}

@@ -46,7 +46,7 @@ export default function AboutUs() {
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4">
-            <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-lg text-white">
+            <div className="bg-orange-500 p-6 rounded-lg text-white">
               <h4 className="font-semibold mb-2">Key Milestone</h4>
               <p className="text-md opacity-90">
                 Successfully established presence across both Australia and New
@@ -114,7 +114,7 @@ export default function AboutUs() {
           <p className="mb-8 text-md font-normal text-gray-800 dark:text-neutral-200">
             Introduction of Professional Services - In 2024, Netpoleon ANZ
             expanded its role as a value-added distributor with the launch of
-            its comprehensive service suite: N.XONE, N.Able, N.Sure, and
+            its comprehensive service suite: NXONE, N.Able, N.Sure, and
             N.Circle. These services enhanced its capabilities to support
             partners across lead generation, enablement, deployment, and ongoing
             support.
@@ -125,13 +125,13 @@ export default function AboutUs() {
                 <Image
                   unoptimized
                   src="/icons/Marketing & Business Development Support.png"
-                  alt="N.XONE"
+                  alt="NXONE"
                   width={24}
                   height={24}
                   className="mr-3"
                 />
                 <span className="font-semibold text-gray-900">
-                  N.XONE - Lead Generation
+                  NXONE - Lead Generation
                 </span>
               </div>
               <p className="text-md text-gray-700">
@@ -357,7 +357,7 @@ export default function AboutUs() {
                   </h3>
                 </div>
                 <div className="flex-2">
-                  <p className="text-gray-700 leading-relaxed mb-4 text-lg">
+                  <p className="text-gray-700 leading-relaxed mb-4 text-base">
                     To be the leading ANZ distributor of emerging technologies
                     and world-class IT security solutions, delivering in-depth
                     product knowledge, technical expertise, and exceptional
@@ -390,7 +390,7 @@ export default function AboutUs() {
                   </h3>
                 </div>
                 <div className="flex-2">
-                  <p className="text-gray-700 leading-relaxed mb-4 text-lg">
+                  <p className="text-gray-700 leading-relaxed mb-4 text-base">
                     We strive to create winning partnerships with our employees
                     and clients, aligning with their evolving technology needs,
                     while fostering a culture that makes us an employer of
@@ -542,12 +542,12 @@ export default function AboutUs() {
         </div>
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div variants={fadeInUp} className="space-y-8">
+          <div className="space-y-8">
             <h2 className="text-2xl lg:text-4xl font-bold">
               Delivering next-generation cybersecurity solutions and value-added
               services across Australia and New Zealand
             </h2>
-          </motion.div>
+          </div>
         </div>
       </motion.section>
     </div>

@@ -40,7 +40,7 @@ export default function ServicePage({ params }: ServicePageProps) {
         animate="visible"
         variants={staggerContainer}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 lg:pt-12">
           <motion.div
             className="bg-white rounded-lg border border-gray-200 p-6"
             variants={fadeInUp}
@@ -242,11 +242,7 @@ export default function ServicePage({ params }: ServicePageProps) {
       {/* Call to Action */}
       {serviceData.ctaSection && (
         <motion.section
-          className="text-center mt-16 mb-0 relative h-[300px] overflow-hidden bg-gradient-to-r from-orange-600 to-amber-600"
-          style={{
-            clipPath:
-              'polygon(0 10%, 20% 5%, 50% 0, 80% 5%, 100% 10%, 100% 100%, 0 100%)',
-          }}
+          className="text-center mt-16 mb-0 relative h-[300px] overflow-hidden bg-orange-500"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}

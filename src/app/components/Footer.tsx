@@ -6,9 +6,6 @@ import Image from 'next/image';
 export default function Footer() {
   return (
     <footer className="bg-orange-500 text-white relative">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-12">
           {/* Left Side - Company Info */}

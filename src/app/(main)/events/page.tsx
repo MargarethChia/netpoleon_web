@@ -421,7 +421,6 @@ export default function EventsPage() {
                             alt={event.title}
                             fill
                             className="object-cover"
-                            priority
                           />
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
@@ -433,34 +432,6 @@ export default function EventsPage() {
                             </div>
                           </div>
                         )}
-
-                        {/* Event Name and Date Overlay - Desktop Only */}
-                        <div className="hidden md:block absolute bottom-0 left-0 right-0 bg-transparent p-6">
-                          <div className="flex items-center justify-between">
-                            <motion.div
-                              className="text-lg font-bold leading-tight text-black"
-                              whileHover={{ scale: 1.02 }}
-                              transition={{ type: 'spring', stiffness: 300 }}
-                            >
-                              {event.title}
-                            </motion.div>
-                            <motion.span
-                              className="text-lg font-medium text-black"
-                              whileHover={{ scale: 1.05 }}
-                              transition={{ type: 'spring', stiffness: 300 }}
-                            >
-                              {new Date(event.event_date).toLocaleDateString(
-                                'en-US',
-                                {
-                                  weekday: 'long',
-                                  month: 'long',
-                                  day: 'numeric',
-                                  year: 'numeric',
-                                }
-                              )}
-                            </motion.span>
-                          </div>
-                        </div>
                       </div>
 
                       {/* Event Name and Date Below Image - Mobile Only */}
