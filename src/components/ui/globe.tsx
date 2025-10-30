@@ -59,12 +59,13 @@ export type GlobeConfig = {
 
 interface WorldProps {
   globeConfig: GlobeConfig;
-  data: Position[];
+  data?: Position[];
+  onCityHover?: (city: string | null) => void;
 }
 
 // numbersOfRings is used in the genRandomNumbers function
 
-export function Globe({ globeConfig, data }: WorldProps) {
+export function Globe({ globeConfig, onCityHover }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
   const groupRef = useRef<Group | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -117,32 +118,9 @@ export function Globe({ globeConfig, data }: WorldProps) {
     globeConfig.shininess,
   ]);
 
-  // Build data when globe is initialized or when data changes
+  // Build globe visuals when initialized
   useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data) return;
-
-    const arcs = data;
-    const points = [];
-    for (let i = 0; i < arcs.length; i++) {
-      const arc = arcs[i];
-      // rgb variable removed as it's not used
-      points.push({
-        size: defaultProps.pointSize,
-        order: arc.order,
-        color: arc.color,
-        lat: arc.startLat,
-        lng: arc.startLng,
-      });
-      points.push({
-        size: defaultProps.pointSize,
-        order: arc.order,
-        color: arc.color,
-        lat: arc.endLat,
-        lng: arc.endLng,
-      });
-    }
-
-    // No need to filter points - we'll only show branch points
+    if (!globeRef.current || !isInitialized) return;
 
     globeRef.current
       .hexPolygonsData(countries.features)
@@ -155,8 +133,6 @@ export function Globe({ globeConfig, data }: WorldProps) {
         // Use the configured polygon color for all countries including Australia
         return defaultProps.polygonColor;
       });
-
-    // Arcs removed - no arc animations
 
     // Add orange points for Australian cities with labels
     const branchPoints = [
@@ -207,7 +183,6 @@ export function Globe({ globeConfig, data }: WorldProps) {
       );
   }, [
     isInitialized,
-    data,
     defaultProps.pointSize,
     defaultProps.showAtmosphere,
     defaultProps.atmosphereColor,
@@ -252,7 +227,22 @@ export function Globe({ globeConfig, data }: WorldProps) {
     };
   }, [isInitialized]);
 
-  return <group ref={groupRef} />;
+  return (
+    <group ref={groupRef}>
+      {onCityHover && (
+        <MarkersInsideGlobe
+          onCityHover={onCityHover}
+          getRadius={() => {
+            const g = globeRef.current as ThreeGlobe | null;
+            const radiusGetter = (
+              g as unknown as { getGlobeRadius?: () => number }
+            )?.getGlobeRadius;
+            return typeof radiusGetter === 'function' ? radiusGetter() : 100;
+          }}
+        />
+      )}
+    </group>
+  );
 }
 
 export function WebGLRendererConfig() {
@@ -292,22 +282,67 @@ function CameraController({ globeConfig }: { globeConfig: GlobeConfig }) {
   return null;
 }
 
+function MarkersInsideGlobe({
+  onCityHover,
+  getRadius,
+}: {
+  onCityHover?: (city: string | null) => void;
+  getRadius: () => number;
+}) {
+  const cities = [
+    { name: 'Sydney', lat: -33.8688, lng: 151.2093 },
+    { name: 'Melbourne', lat: -37.8136, lng: 144.9631 },
+    { name: 'Brisbane', lat: -27.4698, lng: 153.0251 },
+    { name: 'Auckland', lat: -36.8485, lng: 174.7633 },
+  ];
+
+  const convertLatLngToVector3 = (lat: number, lng: number, radius: number) => {
+    const phi = (90 - lat) * (Math.PI / 180);
+    const theta = (-lng + 180) * (Math.PI / 180);
+    return new Vector3(
+      radius * Math.sin(phi) * Math.cos(theta),
+      radius * Math.cos(phi),
+      -radius * Math.sin(phi) * Math.sin(theta)
+    );
+  };
+
+  const r = getRadius();
+  const markerRadius = r; // push well in front of globe surface
+
+  return (
+    <group>
+      {cities.map(city => {
+        const pos = convertLatLngToVector3(city.lat, city.lng, markerRadius);
+        return (
+          <mesh
+            key={city.name}
+            position={pos}
+            renderOrder={9999}
+            frustumCulled={false}
+            onPointerOver={() => onCityHover?.(city.name)}
+            onPointerOut={() => onCityHover?.(null)}
+            onClick={() => onCityHover?.(city.name)}
+          >
+            <sphereGeometry args={[1, 16, 16]} />
+            <meshBasicMaterial
+              color="#ffffff"
+              transparent
+              opacity={1}
+              depthTest={false}
+              depthWrite={false}
+            />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
 export function World(props: WorldProps) {
-  const { globeConfig } = props;
+  const { globeConfig, onCityHover } = props;
   const scene = new Scene();
   scene.fog = new Fog(0xffffff, 400, 2000);
 
-  // Convert lat/lng to 3D coordinates for camera positioning
-  // const convertLatLngToVector3 = (lat: number, lng: number, radius: number = 200) => {
-  //   const phi = (90 - lat) * (Math.PI / 180);
-  //   const theta = (lng + 180) * (Math.PI / 180);
-  //
-  //   return new Vector3(
-  //     -(radius * Math.sin(phi) * Math.cos(theta)),
-  //     radius * Math.cos(phi),
-  //     radius * Math.sin(phi) * Math.sin(theta)
-  //   );
-  // };
   return (
     <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
       <WebGLRendererConfig />
@@ -348,7 +383,7 @@ export function World(props: WorldProps) {
         position={new Vector3(0, 0, 0)}
         intensity={0.3}
       />
-      <Globe {...props} />
+      <Globe globeConfig={globeConfig} onCityHover={onCityHover} />
       <OrbitControls
         enablePan={false}
         enableZoom={false}
