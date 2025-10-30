@@ -237,7 +237,12 @@ export function Globe({ globeConfig, onCityHover }: WorldProps) {
             const radiusGetter = (
               g as unknown as { getGlobeRadius?: () => number }
             )?.getGlobeRadius;
-            return typeof radiusGetter === 'function' ? radiusGetter() : 100;
+            if (!g || typeof radiusGetter !== 'function') return 100;
+            try {
+              return radiusGetter.call(g);
+            } catch {
+              return 100;
+            }
           }}
         />
       )}
