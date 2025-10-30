@@ -10,9 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Netpoleon Homepage Design Draft',
+  title: 'Netpoleon ANZ | Your Cybersecurity Solution',
   description:
-    'Made for Netpoleon ANZ as part of website design and development project proposal',
+    'Netpoleon ANZ is a value-added distributor delivering next-generation cybersecurity solutions and services across Australia and New Zealand.',
 };
 
 export default function RootLayout({
