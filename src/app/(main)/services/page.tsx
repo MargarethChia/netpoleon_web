@@ -8,35 +8,41 @@ import { getAllServiceIds, getServiceData } from '@/data/services-data';
 const whatWeDo = [
   {
     id: 1,
-    title: 'Professional Installation',
-    shortTitle: 'Installation',
+    title: 'Outreach',
+    shortTitle: 'Outreach',
     description:
-      'From planning to deployment, our certified engineers ensure a smooth, standards-driven installation process',
-    icon: '/icons/Module White.png',
+      'Awareness & Promotions: Channel, Sales, Marketing & Business Development Support',
+    icon: '/icons/Marketing & Business Development Support White.png',
   },
   {
     id: 2,
-    title: 'Training & Certification',
-    shortTitle: 'Training',
-    description:
-      'Empowering your team through expert-led user and admin training, complete with tools and industry best practices.',
+    title: 'Educate',
+    shortTitle: 'Educate',
+    description: 'Training & Certification: Technology & Product Training',
     icon: '/icons/Technology & Product Training White.png',
   },
   {
     id: 3,
-    title: 'Custom Configuration',
-    shortTitle: 'Configuration',
+    title: 'Support',
+    shortTitle: 'Support',
     description:
-      'Tailoring solutions to meet your unique security needs, ensuring optimal protection and operational efficiency.',
-    icon: '/icons/Dashboard White.png',
+      'Technical Assistance: Pre & Post Sales Consultation & Professional Services',
+    icon: '/icons/Pre-Sales POV, Consultation & Professional Services White.png',
   },
   {
     id: 4,
-    title: 'Ongoing Support',
-    shortTitle: 'Support',
+    title: 'Operations',
+    shortTitle: 'Operations',
+    description: 'Business Process: Procurement, Logistics & Finance Services',
+    icon: '/icons/Operations & Logistics Services White.png',
+  },
+  {
+    id: 5,
+    title: 'Specialisation',
+    shortTitle: 'Specialisation',
     description:
-      'Providing 24/7 support to maintain performance and protect your infrastructure for uninterrupted operations.',
-    icon: '/icons/Marketing & Business Development Support White.png',
+      'Custom Configuration: Vendor Promotion & Product Augmentation',
+    icon: '/icons/Vendor Promotion & Augmentation White.png',
   },
 ];
 
