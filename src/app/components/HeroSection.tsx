@@ -113,25 +113,9 @@ export default function HeroSection({ slides }: HeroSectionProps) {
         </div>
       </div>
 
-      {/* City Tooltip */}
-      {hoveredCity && (
-        <div
-          className="fixed z-50 pointer-events-none"
-          style={{
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        >
-          <div className="bg-black/80 text-white px-3 py-2 rounded text-sm font-bold whitespace-nowrap shadow-lg">
-            {hoveredCity}
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-7xl mx-auto w-full relative flex flex-col lg:flex-row items-start justify-start px-4 sm:px-6 lg:px-8 gap-8 lg:gap-16 xl:gap-20 z-10 -mt-16 lg:-mt-30">
+      <div className="max-w-7xl mx-auto w-full relative flex flex-col lg:flex-row items-start justify-start px-4 sm:px-6 lg:px-8 gap-8 lg:gap-16 xl:gap-20 z-10 -mt-16 lg:-mt-30 pointer-events-none">
         {/* Left side - Text content */}
-        <div className="flex-1 max-w-2xl lg:max-w-3xl">
+        <div className="flex-1 max-w-2xl lg:max-w-3xl pointer-events-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide.id}
@@ -168,7 +152,7 @@ export default function HeroSection({ slides }: HeroSectionProps) {
                 >
                   <Link
                     href={currentSlide.button_link}
-                    className="inline-block px-12 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-all duration-300 text-lg text-center"
+                    className="inline-block px-12 py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-all duration-300 text-lg text-center pointer-events-auto"
                   >
                     {currentSlide.button_text || 'Learn More'} →
                   </Link>
@@ -181,7 +165,7 @@ export default function HeroSection({ slides }: HeroSectionProps) {
 
           {slides.length > 1 && (
             <motion.div
-              className="flex gap-5 my-12"
+              className="flex gap-5 my-12 pointer-events-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}

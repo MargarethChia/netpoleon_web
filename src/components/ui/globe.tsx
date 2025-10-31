@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, Scene, Fog, PerspectiveCamera, Vector3, Group } from 'three';
 import ThreeGlobe from 'three-globe';
 import { useThree, Canvas, extend } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Html } from '@react-three/drei';
 import countries from '@/data/globe.json';
 declare module '@react-three/fiber' {
   interface ThreeElements {
@@ -294,49 +294,66 @@ function MarkersInsideGlobe({
   onCityHover?: (city: string | null) => void;
   getRadius: () => number;
 }) {
+  const [hoveredCity, setHoveredCity] = useState<string | null>(null);
+
   const cities = [
-    { name: 'Sydney', lat: -33.8688, lng: 151.2093 },
-    { name: 'Melbourne', lat: -37.8136, lng: 144.9631 },
-    { name: 'Brisbane', lat: -27.4698, lng: 153.0251 },
-    { name: 'Auckland', lat: -36.8485, lng: 174.7633 },
+    { name: 'Sydney', lat: -33.8688 + 12, lng: 151.2093 + 43 },
+    { name: 'Melbourne', lat: -37.8136 + 10.5, lng: 144.9631 + 40.5 },
+    { name: 'Brisbane', lat: -27.4698 + 15, lng: 153.0251 + 45.5 },
+    { name: 'Auckland', lat: -36.8485 + 6, lng: 174.7633 + 45.5 },
   ];
 
   const convertLatLngToVector3 = (lat: number, lng: number, radius: number) => {
     const phi = (90 - lat) * (Math.PI / 180);
-    const theta = (-lng + 180) * (Math.PI / 180);
+    const theta = -(lng + 180) * (Math.PI / 180); // DO NOT negate
     return new Vector3(
-      radius * Math.sin(phi) * Math.cos(theta),
+      -(radius * Math.sin(phi) * Math.cos(theta)), // match ThreeGlobe
       radius * Math.cos(phi),
-      -radius * Math.sin(phi) * Math.sin(theta)
+      radius * Math.sin(phi) * Math.sin(theta)
     );
   };
 
   const r = getRadius();
-  const markerRadius = r; // push well in front of globe surface
+  const markerRadius = r + 0.5; // push well in front of globe surface
 
   return (
     <group>
       {cities.map(city => {
         const pos = convertLatLngToVector3(city.lat, city.lng, markerRadius);
         return (
-          <mesh
-            key={city.name}
-            position={pos}
-            renderOrder={9999}
-            frustumCulled={false}
-            onPointerOver={() => onCityHover?.(city.name)}
-            onPointerOut={() => onCityHover?.(null)}
-            onClick={() => onCityHover?.(city.name)}
-          >
-            <sphereGeometry args={[1, 16, 16]} />
-            <meshBasicMaterial
-              color="#ffffff"
-              transparent
-              opacity={1}
-              depthTest={false}
-              depthWrite={false}
-            />
-          </mesh>
+          <group key={city.name} position={pos}>
+            <mesh
+              renderOrder={9999}
+              frustumCulled={false}
+              onPointerOver={() => {
+                setHoveredCity(city.name);
+                onCityHover?.(city.name);
+              }}
+              onPointerOut={() => {
+                setHoveredCity(null);
+                onCityHover?.(null);
+              }}
+              onClick={() => onCityHover?.(city.name)}
+            >
+              <sphereGeometry args={[3, 16, 16]} />
+              <meshBasicMaterial
+                color="#ffffff"
+                transparent
+                opacity={0}
+                depthTest={false}
+                depthWrite={false}
+              />
+            </mesh>
+
+            {/* Text label above the point */}
+            {hoveredCity === city.name && (
+              <Html position={[0, 8, 0]} center>
+                <div className="bg-black/80 text-white px-3 py-2 rounded text-sm font-bold whitespace-nowrap">
+                  {city.name}
+                </div>
+              </Html>
+            )}
+          </group>
         );
       })}
     </group>
