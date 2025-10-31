@@ -277,12 +277,12 @@ export default function AboutUs() {
             </div>
 
             {/* Main Title */}
-            <h1 className="text-4xl font-bold lg:text-6xl text-gray-900">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-900">
               Netpoleon ANZ
             </h1>
 
             {/* Tagline */}
-            <p className="text-lg lg:text-xl text-gray-700 max-w-4xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-700 max-w-4xl mx-auto">
               ANZ Trusted Partner for Next Generation Cyber Security Solutions
               and Value-Added Services
             </p>
@@ -293,10 +293,10 @@ export default function AboutUs() {
       {/* About Us Section */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Left Column - About Us Text */}
             <div className="order-2 lg:order-1">
-              <h2 className="text-4xl lg:text-5xl text-black font-bold mb-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl text-black font-bold mb-6">
                 About us
               </h2>
               <p className="text-base text-gray-700 leading-relaxed">
@@ -314,7 +314,7 @@ export default function AboutUs() {
 
             {/* Right Column - Team Photo */}
             <div className="flex justify-center order-1 lg:order-2">
-              <div className="w-full h-96 rounded-lg overflow-hidden shadow-xl">
+              <div className="w-full h-56 sm:h-72 md:h-96 rounded-lg overflow-hidden shadow-xl">
                 <Image
                   unoptimized
                   src="/images/netpoleon-about-us.png"
@@ -335,24 +335,25 @@ export default function AboutUs() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-12">
             {/* Vision Card */}
-            <div className="flex items-center gap-8">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8 text-center md:text-left">
               {/* Vision Icon */}
-              <div className="flex-shrink-0 mb-4">
-                <div className="w-28 h-28 bg-orange-400 rounded-full flex items-center justify-center shadow-lg">
+              <div className="flex-shrink-0 mb-4 w-full md:w-auto flex md:block justify-center md:justify-start">
+                <div className="w-20 h-20 md:w-28 md:h-28 bg-orange-400 rounded-full flex items-center justify-center shadow-lg">
                   <Image
                     unoptimized
                     src="/icons/Vision White.png"
                     alt="Vision"
-                    width={80}
-                    height={80}
+                    width={64}
+                    height={64}
+                    className="w-14 h-14 md:w-20 md:h-20"
                   />
                 </div>
               </div>
 
               {/* Vision Content */}
-              <div className="flex-1 flex items-center">
-                <div className="flex-1">
-                  <h3 className="text-5xl font-bold text-black mb-4">
+              <div className="flex-1 flex flex-col md:flex-row items-start md:items-center">
+                <div className="flex-1 w-full">
+                  <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-4">
                     Our Vision
                   </h3>
                 </div>
@@ -368,24 +369,25 @@ export default function AboutUs() {
             </div>
 
             {/* Mission Card */}
-            <div className="flex items-center gap-8">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8 text-center md:text-left">
               {/* Mission Icon */}
-              <div className="flex-shrink-0 mb-4">
-                <div className="w-28 h-28 bg-orange-400 rounded-full flex items-center justify-center shadow-lg">
+              <div className="flex-shrink-0 mb-4 w-full md:w-auto flex md:block justify-center md:justify-start">
+                <div className="w-20 h-20 md:w-28 md:h-28 bg-orange-400 rounded-full flex items-center justify-center shadow-lg">
                   <Image
                     unoptimized
                     src="/icons/Mission White.png"
                     alt="Mission"
-                    width={80}
-                    height={80}
+                    width={64}
+                    height={64}
+                    className="ml-1 mb-1 w-14 h-14 md:w-20 md:h-20"
                   />
                 </div>
               </div>
 
               {/* Vision Content */}
-              <div className="flex-1 flex items-center">
-                <div className="flex-1">
-                  <h3 className="text-5xl font-bold text-black mb-4">
+              <div className="flex-1 flex flex-col md:flex-row items-start md:items-center">
+                <div className="flex-1 w-full">
+                  <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-4">
                     Our Mission
                   </h3>
                 </div>
@@ -427,7 +429,7 @@ export default function AboutUs() {
               >
                 Our Team
               </Badge>
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
                 Meet Our Experts
               </h2>
             </motion.div>
@@ -466,7 +468,7 @@ export default function AboutUs() {
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
                   <div className="text-center space-y-6">
-                    <div className="w-60 h-60 mx-auto overflow-hidden bg-white relative group">
+                    <div className="w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 mx-auto overflow-hidden bg-white relative group">
                       {member.photo ? (
                         <Image
                           unoptimized
@@ -513,10 +515,12 @@ export default function AboutUs() {
                       )}
                     </div>
                     <div className="space-y-2">
-                      <h3 className="text-s font-bold text-gray-900">
+                      <h3 className="text-sm md:text-base font-bold text-gray-900">
                         {member.name}
                       </h3>
-                      <p className="text-gray-600 text-base">{member.role}</p>
+                      <p className="text-gray-600 text-sm md:text-base">
+                        {member.role}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -543,7 +547,7 @@ export default function AboutUs() {
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="space-y-8">
-            <h2 className="text-2xl lg:text-4xl font-bold">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
               Delivering next-generation cybersecurity solutions and value-added
               services across Australia and New Zealand
             </h2>
