@@ -143,14 +143,11 @@ export async function PUT(
       );
     }
 
-    // Remove any non-column fields from update
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {
-      resource_types: _resource_types,
-      resource_type: _resource_type,
-      type: _type,
-      ...updateFields
-    } = updatedData;
+    // Remove any non-column fields from update (these are joined fields, not database columns)
+    const updateFields = { ...updatedData };
+    delete updateFields.resource_types;
+    delete updateFields.resource_type;
+    delete updateFields.type;
 
     const { data, error } = await supabase
       .from('resources')
