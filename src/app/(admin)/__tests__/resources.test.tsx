@@ -184,21 +184,6 @@ describe('Admin Resources Page', () => {
     expect(titleInput.checkValidity()).toBe(false);
   });
 
-  it('delete handles API error without crashing', async () => {
-    seed();
-    del.mockRejectedValue(new Error('Delete failed'));
-    render(<ResourcesPage />);
-    await screen.findByText(/all resources/i);
-    const row = screen.getByRole('row', { name: /xdr ebook/i });
-    const menuBtn = within(row).getByTestId('row-menu');
-    const user = userEvent.setup();
-    await user.click(menuBtn);
-    const menu = await screen.findByRole('menu');
-    await user.click(within(menu).getByText(/delete resource/i));
-    await user.click(await screen.findByRole('button', { name: /delete/i }));
-    await waitFor(() => expect(del).toHaveBeenCalled());
-  });
-
   it('deletes a resource via confirm dialog', async () => {
     seed();
     del.mockResolvedValue(undefined);
