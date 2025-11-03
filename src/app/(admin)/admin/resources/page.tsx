@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   MoreHorizontal,
   Edit,
@@ -41,13 +42,20 @@ import { ConfirmDialog } from '../../../../components/ui/confirm-dialog';
 import { showToast } from '../../../../components/ui/toast';
 import { useRouter } from 'next/navigation';
 
+interface ResourceType {
+  id: number;
+  name: string;
+}
+
 export default function ResourcesPage() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [featuredResources, setFeaturedResources] = useState<
     FeaturedResource[]
   >([]);
+  const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTypeId, setSelectedTypeId] = useState<number | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [resourceToDelete, setResourceToDelete] = useState<Resource | null>(
     null
@@ -57,12 +65,18 @@ export default function ResourcesPage() {
   const fetchResources = async () => {
     try {
       setIsLoading(true);
-      const [resourcesData, featuredData] = await Promise.all([
+      const [resourcesData, featuredData, typesResponse] = await Promise.all([
         resourcesApi.getAll(),
         resourcesApi.getFeatured(),
+        fetch('/api/resource-type'),
       ]);
+
+      const typesData = await typesResponse.json();
+      console.log('Fetched resource types:', typesData);
+
       setResources(resourcesData);
       setFeaturedResources(featuredData);
+      setResourceTypes(typesData || []);
     } catch (error) {
       console.error('Error fetching resources:', error);
     } finally {
@@ -151,13 +165,20 @@ export default function ResourcesPage() {
     return featuredResources.some(fr => fr.resource_id === resourceId);
   };
 
-  // Filter resources based on search term
-  const filteredResources = resources.filter(
-    resource =>
+  // Filter resources based on search term and type
+  const filteredResources = resources.filter(resource => {
+    const matchesSearch =
       !searchTerm ||
       resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      resource.content.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      resource.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (resource.description &&
+        resource.description.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const matchesType =
+      selectedTypeId === null || resource.type_id === selectedTypeId;
+
+    return matchesSearch && matchesType;
+  });
 
   if (isLoading) {
     return (
@@ -227,15 +248,15 @@ export default function ResourcesPage() {
       onAddClick={handleAddResource}
     >
       <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
-        {/* Search */}
+        {/* Search and Filters */}
         <Card>
           <CardHeader>
-            <CardTitle>Search Resources</CardTitle>
+            <CardTitle>Search & Filter Resources</CardTitle>
             <CardDescription>
-              Find specific resources by title or content
+              Find specific resources by title, content, or type
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
@@ -244,6 +265,44 @@ export default function ResourcesPage() {
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
               />
+            </div>
+
+            {/* Resource Type Filter */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Filter by Type</Label>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  variant={selectedTypeId === null ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedTypeId(null)}
+                >
+                  All Types
+                </Button>
+                {resourceTypes.length === 0 ? (
+                  <span className="text-sm text-muted-foreground">
+                    No types available
+                  </span>
+                ) : (
+                  resourceTypes.map(type => (
+                    <Button
+                      key={type.id}
+                      variant={
+                        selectedTypeId === type.id ? 'default' : 'outline'
+                      }
+                      size="sm"
+                      onClick={() => setSelectedTypeId(type.id)}
+                    >
+                      {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
+                    </Button>
+                  ))
+                )}
+              </div>
+              {resourceTypes.length > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  Showing {resourceTypes.length} type
+                  {resourceTypes.length !== 1 ? 's' : ''}
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -303,7 +362,8 @@ export default function ResourcesPage() {
                             <div className="text-sm text-muted-foreground max-w-[300px] truncate">
                               {resource.description || 'No description'}
                             </div>
-                            {resource.type === 'article' &&
+                            {(resource.type === 'article' ||
+                              resource.resource_type?.name === 'article') &&
                               resource.article_link && (
                                 <div className="text-xs text-blue-600 mt-1">
                                   <a
@@ -322,12 +382,15 @@ export default function ResourcesPage() {
                       <TableCell>
                         <Badge
                           variant={
-                            resource.type === 'article'
+                            resource.type === 'article' ||
+                            resource.resource_type?.name === 'article'
                               ? 'default'
                               : 'secondary'
                           }
                         >
-                          {resource.type}
+                          {resource.type ||
+                            resource.resource_type?.name ||
+                            'Unknown'}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -465,7 +528,7 @@ export default function ResourcesPage() {
           if (resourceToDelete) {
             try {
               await resourcesApi.delete(resourceToDelete.id);
-              fetchResources(); // Refresh the data
+              fetchResources();
               setShowDeleteDialog(false);
               setResourceToDelete(null);
             } catch (error) {
