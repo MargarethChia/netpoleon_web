@@ -52,6 +52,9 @@ vi.mock('next/navigation', () => ({
   useParams: () => ({ id: '1' }),
 }));
 
+// Mock fetch for resource types
+global.fetch = vi.fn();
+
 describe('Admin Resources Page', () => {
   beforeAll(async () => {
     const m1 = await import('../admin/resources/page');
@@ -72,6 +75,15 @@ describe('Admin Resources Page', () => {
     if (nav) {
       vi.spyOn(nav, 'useRouter').mockReturnValue({ push: vi.fn() } as any);
     }
+    // Mock fetch for resource types
+    (global.fetch as any).mockResolvedValue({
+      json: async () => [
+        { id: 1, name: 'article' },
+        { id: 2, name: 'blog' },
+        { id: 3, name: 'news' },
+        { id: 4, name: 'ebook' },
+      ],
+    });
   });
 
   function seed() {
@@ -79,20 +91,26 @@ describe('Admin Resources Page', () => {
       {
         id: 1,
         title: 'Zero Trust Guide',
-        type: 'article',
+        type_id: 1,
+        type: 'article', // API returns this for backwards compatibility
         is_published: true,
         published_at: '2099-01-01',
         content: 'ZTNA',
+        description: null,
         cover_image_url: '',
+        article_link: null,
       },
       {
         id: 2,
         title: 'XDR Ebook',
-        type: 'ebook',
+        type_id: 4,
+        type: 'ebook', // API returns this for backwards compatibility
         is_published: false,
         published_at: null,
         content: 'XDR',
+        description: null,
         cover_image_url: '',
+        article_link: null,
       },
     ]);
     getFeatured.mockResolvedValue([{ resource_id: 1 }]);
@@ -149,7 +167,14 @@ describe('Admin Resources Page', () => {
   it('create shows validation error when title/content missing', async () => {
     const push = vi.fn();
     vi.spyOn(nav, 'useRouter').mockReturnValue({ push } as any);
+    // Mock resource types fetch
+    (global.fetch as any).mockResolvedValue({
+      json: async () => [{ id: 1, name: 'article' }],
+    });
     render(<CreateResourcePage />);
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('/api/resource-type');
+    });
     const user = userEvent.setup();
     // leave fields empty
     await user.click(screen.getByRole('button', { name: /publish resource/i }));
@@ -201,17 +226,28 @@ describe('Admin Resources Page', () => {
     EditResourcePage = (await import('../admin/resources/[id]/edit/page'))
       .default;
 
+    // Mock resource types fetch
+    (global.fetch as any).mockResolvedValue({
+      json: async () => [{ id: 1, name: 'article' }],
+    });
+
     getById.mockResolvedValue({
       id: 1,
       title: 'Existing',
       content: 'Body',
-      type: 'article',
+      type_id: 1,
+      type: 'article', // API returns this for backwards compatibility
       is_published: false,
       published_at: '',
+      description: null,
       cover_image_url: 'https://cdn.test/img.jpg',
+      article_link: null,
     });
 
     render(<EditResourcePage />);
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('/api/resource-type');
+    });
     expect(await screen.findByAltText(/cover preview/i)).toBeInTheDocument();
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /remove/i }));
