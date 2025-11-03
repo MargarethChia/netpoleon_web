@@ -54,7 +54,7 @@ export default function GraphSection() {
           </h1>
           <div className="w-full">
             <Image
-              src={`https://wdhsptkchoptjguliwyq.supabase.co/storage/v1/object/public/images/public/full_diagram2.png`}
+              src={`https://wdhsptkchoptjguliwyq.supabase.co/storage/v1/object/public/images/public/full_diagram_new.png`}
               alt="Full Security Diagram"
               width={1200}
               height={900}

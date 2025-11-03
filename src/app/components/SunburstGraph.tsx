@@ -813,7 +813,7 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20"
             style={{ transform: 'translate(-2%, 4%)' }}
           >
-            <div className="w-50 h-50 rounded-full flex items-center justify-center">
+            <div className="w-50 h-50 rounded-full flex items-center justify-center -mt-2">
               <Image
                 src="/logos/Netpoleon ANZ Orange Black .png"
                 alt="Netpoleon ANZ Logo"

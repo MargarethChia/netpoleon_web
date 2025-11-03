@@ -317,7 +317,7 @@ export default function AboutUs() {
               <div className="w-full h-56 sm:h-72 md:h-96 rounded-lg overflow-hidden shadow-xl">
                 <Image
                   unoptimized
-                  src="/images/netpoleon-about-us.png"
+                  src="/images/about-us.jpeg"
                   alt="Netpoleon ANZ Team at Sydney Motor Sport Park"
                   width={600}
                   height={400}

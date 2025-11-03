@@ -236,7 +236,7 @@ export default function Header() {
                 },
                 {
                   href: '/vendors',
-                  text: 'Cybersecurity Vendors',
+                  text: 'Vendors',
                   icon: (
                     <svg
                       className="w-6 h-6"
