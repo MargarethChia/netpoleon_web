@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
@@ -36,16 +36,44 @@ export default function CreateResourcePage() {
     title: '',
     description: '',
     content: '',
-    type: 'article' as 'article' | 'blog' | 'news',
+    type_id: 1,
     is_published: false,
     published_at: new Date().toISOString().split('T')[0], // Default to today's date
     cover_image_url: '',
     article_link: '',
   });
+  const [resourceTypes, setResourceTypes] = useState<
+    Array<{
+      id: number;
+      name: string;
+    }>
+  >([]);
   const [isUploading, setIsUploading] = useState(false);
   const [contentMode, setContentMode] = useState<'content' | 'link'>('content'); // Track whether user wants to create content or use a link
 
-  const handleInputChange = (field: string, value: string | boolean) => {
+  // Fetch resource types on mount
+  useEffect(() => {
+    fetch('/api/resource-type')
+      .then(res => res.json())
+      .then(data => {
+        setResourceTypes(data);
+        // Set default type_id to first type if available
+        if (data.length > 0) {
+          setFormData(prev => {
+            if (!prev.type_id) {
+              return { ...prev, type_id: data[0].id };
+            }
+            return prev;
+          });
+        }
+      })
+      .catch(err => console.error('Failed to fetch types:', err));
+  }, []);
+
+  const handleInputChange = (
+    field: string,
+    value: string | boolean | number
+  ) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -104,7 +132,7 @@ export default function CreateResourcePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.type) {
+    if (!formData.title || !formData.type_id) {
       showToast({
         title: 'Validation Error',
         message: 'Please fill in all required fields',
@@ -167,7 +195,7 @@ export default function CreateResourcePage() {
   };
 
   const handleSaveDraft = async () => {
-    if (!formData.title || !formData.type) {
+    if (!formData.title || !formData.type_id) {
       showToast({
         title: 'Validation Error',
         message: 'Please fill in all required fields',
@@ -297,18 +325,23 @@ export default function CreateResourcePage() {
                 {/* Type and Content Mode */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="type">Type *</Label>
+                    <Label htmlFor="type_id">Type *</Label>
                     <Select
-                      value={formData.type}
-                      onValueChange={value => handleInputChange('type', value)}
+                      value={formData.type_id.toString()}
+                      onValueChange={value =>
+                        handleInputChange('type_id', parseInt(value))
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="article">Article</SelectItem>
-                        <SelectItem value="blog">Blog Post</SelectItem>
-                        <SelectItem value="news">News</SelectItem>
+                        {resourceTypes.map(type => (
+                          <SelectItem key={type.id} value={type.id.toString()}>
+                            {type.name.charAt(0).toUpperCase() +
+                              type.name.slice(1)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>

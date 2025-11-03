@@ -8,17 +8,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { generateSlug } from '@/lib/utils';
 
+interface ResourceType {
+  id: number;
+  name: string;
+}
+
 export default function ResourcesPage() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [featuredResources, setFeaturedResources] = useState<
     FeaturedResource[]
   >([]);
+  const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState<
-    'all' | 'article' | 'blog' | 'news'
-  >('all');
+  const [selectedType, setSelectedType] = useState<string>('all');
   const [loadingLinks, setLoadingLinks] = useState<Set<number>>(new Set());
 
   const handleLinkClick = (resourceId: number) => {
@@ -36,9 +40,10 @@ export default function ResourcesPage() {
   useEffect(() => {
     const fetchResources = async () => {
       try {
-        const [resourcesData, featuredData] = await Promise.all([
+        const [resourcesData, featuredData, typesResponse] = await Promise.all([
           resourcesApi.getAll(),
           resourcesApi.getFeatured(),
+          fetch('/api/resource-type').then(res => res.json()),
         ]);
 
         // Filter out resources that are not published
@@ -58,6 +63,7 @@ export default function ResourcesPage() {
 
         setResources(sortedResources);
         setFeaturedResources(featuredData);
+        setResourceTypes(typesResponse || []);
       } catch (err) {
         setError('Failed to load resources');
         console.error('Error fetching resources:', err);
@@ -402,22 +408,28 @@ export default function ResourcesPage() {
               </div>
 
               {/* Type Filter */}
-              <div className="flex gap-2">
-                {['all', 'article', 'blog', 'news'].map(type => (
+              <div className="flex gap-2 flex-wrap">
+                <button
+                  onClick={() => setSelectedType('all')}
+                  className={`px-6 py-3 rounded-xl font-medium transition-all ${
+                    selectedType === 'all'
+                      ? 'bg-orange-500 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  All
+                </button>
+                {resourceTypes.map(type => (
                   <button
-                    key={type}
-                    onClick={() =>
-                      setSelectedType(
-                        type as 'all' | 'article' | 'blog' | 'news'
-                      )
-                    }
+                    key={type.id}
+                    onClick={() => setSelectedType(type.name)}
                     className={`px-6 py-3 rounded-xl font-medium transition-all ${
-                      selectedType === type
+                      selectedType === type.name
                         ? 'bg-orange-500 text-white shadow-lg'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                    {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
                   </button>
                 ))}
               </div>
@@ -430,7 +442,7 @@ export default function ResourcesPage() {
                 {filteredResources.length === 1 ? 'resource' : 'resources'}{' '}
                 found
                 {searchTerm && ` for "${searchTerm}"`}
-                {selectedType !== 'all' && ` in ${selectedType}s`}
+                {selectedType !== 'all' && ` in ${selectedType}`}
               </p>
 
               {/* Active Filters Display */}

@@ -4,20 +4,44 @@ import { supabase } from '@/lib/supabase';
 // GET /api/resources - Fetch all resources
 export async function GET() {
   try {
-    const { data, error } = await supabase
+    // Fetch resources
+    const { data: resources, error: resourcesError } = await supabase
       .from('resources')
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('Database error:', error);
+    if (resourcesError) {
+      console.error('Database error:', resourcesError);
       return NextResponse.json(
         { error: 'Failed to fetch resources' },
         { status: 500 }
       );
     }
 
-    return NextResponse.json(data || []);
+    // Fetch all resource types
+    const { data: resourceTypes, error: typesError } = await supabase
+      .from('resource_type')
+      .select('id, name');
+
+    if (typesError) {
+      console.error('Database error fetching types:', typesError);
+      // Continue without types rather than failing
+    }
+
+    // Create a map of type_id -> type name
+    const typeMap = new Map((resourceTypes || []).map(type => [type.id, type]));
+
+    // Transform data to include type name for backwards compatibility
+    const transformedData = (resources || []).map(resource => {
+      const resourceType = typeMap.get(resource.type_id);
+      return {
+        ...resource,
+        type: resourceType?.name || null, // Add type name for display
+        resource_type: resourceType || null,
+      };
+    });
+
+    return NextResponse.json(transformedData);
   } catch (error) {
     console.error('Unexpected error:', error);
     return NextResponse.json(
@@ -33,17 +57,23 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Basic validation
-    if (!body.title || !body.type) {
+    if (!body.title || !body.type_id) {
       return NextResponse.json(
-        { error: 'Title and type are required' },
+        { error: 'Title and type_id are required' },
         { status: 400 }
       );
     }
 
-    // Validate type
-    if (!['article', 'blog', 'news'].includes(body.type)) {
+    // Validate type_id exists
+    const { data: typeExists } = await supabase
+      .from('resource_type')
+      .select('id')
+      .eq('id', body.type_id)
+      .single();
+
+    if (!typeExists) {
       return NextResponse.json(
-        { error: 'Type must be either "article", "blog", or "news"' },
+        { error: 'Invalid resource type' },
         { status: 400 }
       );
     }
@@ -74,7 +104,7 @@ export async function POST(request: NextRequest) {
           title: body.title,
           description: body.description || null,
           content: body.content || '',
-          type: body.type,
+          type_id: body.type_id,
           published_at: body.published_at || null,
           is_published: body.is_published || false,
           cover_image_url: body.cover_image_url || null,
@@ -83,7 +113,7 @@ export async function POST(request: NextRequest) {
           updated_at: new Date().toISOString(),
         },
       ])
-      .select()
+      .select('*')
       .single();
 
     if (error) {
@@ -94,7 +124,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(data);
+    // Fetch the resource type for the response
+    const { data: resourceType } = await supabase
+      .from('resource_type')
+      .select('id, name')
+      .eq('id', data.type_id)
+      .single();
+
+    // Transform response
+    return NextResponse.json({
+      ...data,
+      type: resourceType?.name || null,
+      resource_type: resourceType || null,
+    });
   } catch (error) {
     console.error('Unexpected error:', error);
     return NextResponse.json(
