@@ -184,17 +184,56 @@ describe('Admin Resources Page', () => {
     expect(titleInput.checkValidity()).toBe(false);
   });
 
+  it('delete handles API error without crashing', async () => {
+    seed();
+    del.mockRejectedValue(new Error('Delete failed'));
+    render(<ResourcesPage />);
+    await screen.findByText(/all resources/i);
+    // Wait for resources to render
+    await waitFor(() => {
+      expect(screen.getByText(/zero trust guide/i)).toBeInTheDocument();
+    });
+    // Find all table rows and get the one containing "XDR Ebook"
+    const rows = screen.getAllByRole('row');
+    const targetRow = rows.find(row => {
+      const text = row.textContent?.toLowerCase() || '';
+      return text.includes('xdr ebook') && !text.includes('resource'); // Exclude header row
+    });
+    if (!targetRow) throw new Error('Could not find table row for XDR Ebook');
+    const menuBtn = within(targetRow).getByTestId('row-menu');
+    const user = userEvent.setup();
+    await user.click(menuBtn);
+    const menu = await screen.findByRole('menu');
+    await user.click(within(menu).getByText(/delete resource/i));
+    // Wait for the confirm dialog to appear
+    await screen.findByText(/are you sure/i);
+    await user.click(await screen.findByRole('button', { name: /delete/i }));
+    await waitFor(() => expect(del).toHaveBeenCalled());
+  });
+
   it('deletes a resource via confirm dialog', async () => {
     seed();
     del.mockResolvedValue(undefined);
     render(<ResourcesPage />);
     await screen.findByText(/all resources/i);
-    const row = screen.getByRole('row', { name: /xdr ebook/i });
-    const menuBtn = within(row).getByTestId('row-menu');
+    // Wait for resources to render
+    await waitFor(() => {
+      expect(screen.getByText(/zero trust guide/i)).toBeInTheDocument();
+    });
+    // Find all table rows and get the one containing "XDR Ebook"
+    const rows = screen.getAllByRole('row');
+    const targetRow = rows.find(row => {
+      const text = row.textContent?.toLowerCase() || '';
+      return text.includes('xdr ebook') && !text.includes('resource'); // Exclude header row
+    });
+    if (!targetRow) throw new Error('Could not find table row for XDR Ebook');
+    const menuBtn = within(targetRow).getByTestId('row-menu');
     const user = userEvent.setup();
     await user.click(menuBtn);
     const menu = await screen.findByRole('menu');
     await user.click(within(menu).getByText(/delete resource/i));
+    // Wait for the confirm dialog to appear
+    await screen.findByText(/are you sure/i);
     await user.click(await screen.findByRole('button', { name: /delete/i }));
     await waitFor(() => expect(del).toHaveBeenCalled());
   });
