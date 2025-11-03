@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Plus,
@@ -14,6 +14,7 @@ import {
   Home,
   ChevronDown,
   ChevronRight,
+  Tags,
 } from 'lucide-react';
 import { supabaseClient } from '@/lib/supabase-client';
 
@@ -44,6 +45,7 @@ export default function AdminLayout({
 }: AdminLayoutProps) {
   const router = useRouter();
   const [isContentExpanded, setIsContentExpanded] = useState(false);
+  const [isResourcesExpanded, setIsResourcesExpanded] = useState(false);
   const [loadingItem, setLoadingItem] = useState<string | null>(null);
 
   const handleNavigation = (href: string) => {
@@ -86,12 +88,6 @@ export default function AdminLayout({
       disabled: false,
     },
     {
-      href: '/admin/resources',
-      label: 'Resources',
-      icon: <FileText className="w-4 h-4" />,
-      disabled: false,
-    },
-    {
       href: '/admin/vendors',
       label: 'Vendors',
       icon: <Building2 className="w-4 h-4" />,
@@ -112,8 +108,24 @@ export default function AdminLayout({
     },
   ];
 
-  // Check if current page is under content section
+  const resourceSubItems = [
+    {
+      href: '/admin/resources/types',
+      label: 'Types',
+      icon: <Tags className="w-4 h-4" />,
+    },
+  ];
+
+  // Check if current page is under content or resources section
   const isContentPage = currentPage.startsWith('/admin/content');
+  const isResourcesPage = currentPage.startsWith('/admin/resources');
+
+  // Auto-expand Resources section when on a resources page
+  useEffect(() => {
+    if (isResourcesPage) {
+      setIsResourcesExpanded(true);
+    }
+  }, [isResourcesPage]);
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -165,6 +177,101 @@ export default function AdminLayout({
                 )}
               </li>
             ))}
+
+            {/* Resources Section */}
+            <li>
+              <button
+                onClick={() => setIsResourcesExpanded(!isResourcesExpanded)}
+                className={`flex items-center w-full px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-all duration-200 text-sm ${
+                  isResourcesPage ? 'bg-sidebar-accent' : ''
+                }`}
+              >
+                <FileText className="mr-2 h-4 w-4 transition-transform duration-200" />
+                Resources
+                <div className="ml-auto transition-transform duration-200">
+                  {isResourcesExpanded ? (
+                    <ChevronDown className="h-4 w-4 rotate-0" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4 rotate-0" />
+                  )}
+                </div>
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                  isResourcesExpanded
+                    ? 'max-h-32 opacity-100'
+                    : 'max-h-0 opacity-0'
+                }`}
+              >
+                <ul className="ml-4 mt-1 space-y-1">
+                  {/* Main Resources link */}
+                  <li
+                    className={`transform transition-all duration-200 ${
+                      isResourcesExpanded
+                        ? 'translate-x-0 opacity-100'
+                        : 'translate-x-2 opacity-0'
+                    }`}
+                  >
+                    <button
+                      onClick={() => handleNavigation('/admin/resources')}
+                      disabled={loadingItem === '/admin/resources'}
+                      className={`flex items-center w-full px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-all duration-200 text-sm ${
+                        currentPage === '/admin/resources'
+                          ? 'border-sidebar-primary bg-sidebar-accent'
+                          : 'border-transparent hover:border-sidebar-primary'
+                      } ${loadingItem === '/admin/resources' ? 'opacity-70 cursor-wait' : ''}`}
+                    >
+                      <span className="mr-2">
+                        <FileText className="w-4 h-4" />
+                      </span>
+                      <span>All Resources</span>
+                    </button>
+                  </li>
+                  {/* Resources subitems */}
+                  {resourceSubItems.map((item, index) => (
+                    <li
+                      key={item.href}
+                      className={`transform transition-all duration-200 ${
+                        isResourcesExpanded
+                          ? 'translate-x-0 opacity-100'
+                          : 'translate-x-2 opacity-0'
+                      }`}
+                      style={{
+                        transitionDelay: isResourcesExpanded
+                          ? `${(index + 1) * 50}ms`
+                          : '0ms',
+                      }}
+                    >
+                      <button
+                        onClick={() => handleNavigation(item.href)}
+                        disabled={loadingItem === item.href}
+                        className={`flex items-center w-full px-3 py-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-all duration-200 text-sm ${
+                          currentPage === item.href
+                            ? 'border-sidebar-primary bg-sidebar-accent'
+                            : 'border-transparent hover:border-sidebar-primary'
+                        } ${loadingItem === item.href ? 'opacity-70 cursor-wait' : ''}`}
+                      >
+                        <span
+                          className={`mr-2 transition-transform duration-200 ${loadingItem === item.href ? 'animate-pulse' : ''}`}
+                        >
+                          {item.icon}
+                        </span>
+                        <span
+                          className={`transition-all duration-200 ${loadingItem === item.href ? 'animate-pulse' : ''}`}
+                        >
+                          {item.label}
+                        </span>
+                        {loadingItem === item.href && (
+                          <div className="ml-auto">
+                            <div className="w-3 h-3 border-2 border-sidebar-foreground/30 border-t-sidebar-foreground rounded-full animate-spin"></div>
+                          </div>
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
 
             {/* Content Section */}
             <li>

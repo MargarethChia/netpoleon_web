@@ -37,7 +37,19 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(data);
+    // Fetch the resource type
+    const { data: resourceType } = await supabase
+      .from('resource_type')
+      .select('id, name')
+      .eq('id', data.type_id)
+      .single();
+
+    // Transform response
+    return NextResponse.json({
+      ...data,
+      type: resourceType?.name || null,
+      resource_type: resourceType || null,
+    });
   } catch (error) {
     console.error('Unexpected error:', error);
     return NextResponse.json(
@@ -88,19 +100,27 @@ export async function PUT(
     };
 
     // Basic validation for the merged data
-    if (!updatedData.title || !updatedData.type) {
+    if (!updatedData.title || !updatedData.type_id) {
       return NextResponse.json(
-        { error: 'Title and type are required' },
+        { error: 'Title and type_id are required' },
         { status: 400 }
       );
     }
 
-    // Validate type
-    if (!['article', 'blog', 'news'].includes(updatedData.type)) {
-      return NextResponse.json(
-        { error: 'Type must be either "article", "blog", or "news"' },
-        { status: 400 }
-      );
+    // Validate type_id exists if it was changed
+    if (body.type_id && body.type_id !== existingResource.type_id) {
+      const { data: typeExists } = await supabase
+        .from('resource_type')
+        .select('id')
+        .eq('id', body.type_id)
+        .single();
+
+      if (!typeExists) {
+        return NextResponse.json(
+          { error: 'Invalid resource type' },
+          { status: 400 }
+        );
+      }
     }
 
     // Validate that either content or article_link is provided, but not both
@@ -123,11 +143,20 @@ export async function PUT(
       );
     }
 
+    // Remove any non-column fields from update
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {
+      resource_types: _resource_types,
+      resource_type: _resource_type,
+      type: _type,
+      ...updateFields
+    } = updatedData;
+
     const { data, error } = await supabase
       .from('resources')
-      .update(updatedData)
+      .update(updateFields)
       .eq('id', resourceId)
-      .select()
+      .select('*')
       .single();
 
     if (error) {
@@ -144,7 +173,19 @@ export async function PUT(
       );
     }
 
-    return NextResponse.json(data);
+    // Fetch the resource type
+    const { data: resourceType } = await supabase
+      .from('resource_type')
+      .select('id, name')
+      .eq('id', data.type_id)
+      .single();
+
+    // Transform response
+    return NextResponse.json({
+      ...data,
+      type: resourceType?.name || null,
+      resource_type: resourceType || null,
+    });
   } catch (error) {
     console.error('Unexpected error:', error);
     return NextResponse.json(

@@ -43,13 +43,29 @@ export default function EditResourcePage() {
     title: '',
     description: '',
     content: '',
-    type: 'article' as 'article' | 'blog' | 'news',
+    type_id: 1,
     is_published: false,
     published_at: new Date().toISOString().split('T')[0], // Default to today's date
     cover_image_url: '',
     article_link: '',
   });
+  const [resourceTypes, setResourceTypes] = useState<
+    Array<{
+      id: number;
+      name: string;
+    }>
+  >([]);
   const [contentMode, setContentMode] = useState<'content' | 'link'>('content'); // Track whether user wants to create content or use a link
+
+  // Fetch resource types on mount
+  useEffect(() => {
+    fetch('/api/resource-type')
+      .then(res => res.json())
+      .then(data => {
+        setResourceTypes(data);
+      })
+      .catch(err => console.error('Failed to fetch types:', err));
+  }, []);
 
   // Fetch resource data on component mount
   useEffect(() => {
@@ -74,7 +90,7 @@ export default function EditResourcePage() {
           title: data.title,
           description: data.description || '',
           content: data.content,
-          type: data.type as 'article' | 'blog' | 'news',
+          type_id: data.type_id,
           is_published: data.is_published,
           published_at:
             data.published_at || new Date().toISOString().split('T')[0],
@@ -99,7 +115,10 @@ export default function EditResourcePage() {
     }
   }, [resourceId, router]);
 
-  const handleInputChange = (field: string, value: string | boolean) => {
+  const handleInputChange = (
+    field: string,
+    value: string | boolean | number
+  ) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -158,7 +177,7 @@ export default function EditResourcePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.type) {
+    if (!formData.title || !formData.type_id) {
       showToast({
         title: 'Validation Error',
         message: 'Please fill in all required fields',
@@ -330,18 +349,23 @@ export default function EditResourcePage() {
                 {/* Type and Content Mode */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="type">Type *</Label>
+                    <Label htmlFor="type_id">Type *</Label>
                     <Select
-                      value={formData.type}
-                      onValueChange={value => handleInputChange('type', value)}
+                      value={formData.type_id.toString()}
+                      onValueChange={value =>
+                        handleInputChange('type_id', parseInt(value))
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="article">Article</SelectItem>
-                        <SelectItem value="blog">Blog Post</SelectItem>
-                        <SelectItem value="news">News</SelectItem>
+                        {resourceTypes.map(type => (
+                          <SelectItem key={type.id} value={type.id.toString()}>
+                            {type.name.charAt(0).toUpperCase() +
+                              type.name.slice(1)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>

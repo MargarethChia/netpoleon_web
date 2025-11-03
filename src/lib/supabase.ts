@@ -37,13 +37,20 @@ export interface Resource {
   title: string;
   description: string | null;
   content: string;
-  type: 'article' | 'blog' | 'news';
+  type_id: number;
   published_at: string | null;
   is_published: boolean;
   cover_image_url: string | null;
   article_link: string | null;
   created_at: string;
   updated_at: string;
+  type?: string | null; // Added for backwards compatibility from API transformation
+  resource_type?: ResourceType;
+}
+
+export interface ResourceType {
+  id: number;
+  name: string;
 }
 
 export interface Vendor {
