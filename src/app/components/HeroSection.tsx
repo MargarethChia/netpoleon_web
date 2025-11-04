@@ -37,7 +37,7 @@ const StaticGlobe = React.memo(
         arcLength: 0.9,
         rings: 1,
         maxRings: 3,
-        initialPosition: { lat: -34, lng: 40.0 },
+        initialPosition: { lat: -20, lng: 30.0 },
         autoRotate: false,
         autoRotateSpeed: 0,
       }),
