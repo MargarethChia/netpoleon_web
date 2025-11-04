@@ -17,7 +17,7 @@ extend({ ThreeGlobe: ThreeGlobe });
 
 const RING_PROPAGATION_SPEED = 3;
 const aspect = 1.2;
-const cameraZ = 280;
+const cameraZ = 350;
 
 type Position = {
   order: number;
