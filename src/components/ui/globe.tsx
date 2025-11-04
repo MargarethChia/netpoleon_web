@@ -297,10 +297,10 @@ function MarkersInsideGlobe({
   const [hoveredCity, setHoveredCity] = useState<string | null>(null);
 
   const cities = [
-    { name: 'Sydney', lat: -33.8688 + 12, lng: 151.2093 + 43 },
-    { name: 'Melbourne', lat: -37.8136 + 10.5, lng: 144.9631 + 40.5 },
-    { name: 'Brisbane', lat: -27.4698 + 15, lng: 153.0251 + 45.5 },
-    { name: 'Auckland', lat: -36.8485 + 6, lng: 174.7633 + 45.5 },
+    { name: 'Sydney', lat: -33.8688 + 22, lng: 151.2093 + 42 },
+    { name: 'Melbourne', lat: -37.8136 + 22, lng: 144.9631 + 38.5 },
+    { name: 'Brisbane', lat: -27.4698 + 24.5, lng: 153.0251 + 45.5 },
+    { name: 'Auckland', lat: -36.8485 + 11, lng: 174.7633 + 44.5 },
   ];
 
   const convertLatLngToVector3 = (lat: number, lng: number, radius: number) => {
