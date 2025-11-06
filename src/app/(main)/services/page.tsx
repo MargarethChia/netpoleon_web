@@ -336,10 +336,10 @@ export default function ServicesPage() {
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row mx-20">
         {/* Left Side - Fixed Icon (Hidden on mobile, shown on desktop) */}
-        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-16 h-screen sticky">
+        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-16 h-[90vh] sticky">
           <div className="text-center">
             {/* Icon Container with Fade Effect */}
-            <div className="relative w-full h-full mb-20">
+            <div className="relative w-full h-full mb-0">
               {whatWeDo.map((service, index) => renderIcon(service, index))}
             </div>
           </div>
@@ -397,10 +397,7 @@ export default function ServicesPage() {
       </div>
 
       {/* Services Cards Section */}
-      <div
-        ref={servicesRef}
-        className="bg-gray-50 py-12 sm:py-20 overflow-hidden"
-      >
+      <div ref={servicesRef} className="pb-12 sm:pb-20 overflow-hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
           {/* Section Header */}
           <div
