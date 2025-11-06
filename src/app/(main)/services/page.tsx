@@ -94,7 +94,6 @@ export default function ServicesPage() {
 
       const scrollTop = window.scrollY;
       const windowHeight = window.innerHeight;
-      const isMobile = window.innerWidth < 1024; // lg breakpoint
 
       // Check if header is visible by checking its position, opacity, and transform
       const header = document.querySelector('header');
@@ -119,35 +118,85 @@ export default function ServicesPage() {
         setIsHeaderVisible(false);
       }
 
-      // Calculate section height based on screen size
-      const sectionHeight = isMobile ? windowHeight * 0.45 : windowHeight; // 45vh on mobile, full height on desktop
+      // Get actual section positions from DOM elements
+      const sectionElements = whatWeDo
+        .map((_, index) => {
+          const element = document.getElementById(`service-${index}`);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            return {
+              top: rect.top + scrollTop,
+              bottom: rect.bottom + scrollTop,
+              height: rect.height,
+              center: rect.top + scrollTop + rect.height / 2,
+            };
+          }
+          return null;
+        })
+        .filter(Boolean) as Array<{
+        top: number;
+        bottom: number;
+        height: number;
+        center: number;
+      }>;
 
-      // Calculate which service should be active based on scroll position relative to container
-      const relativeScrollTop = scrollTop;
-      const mainSectionHeight = whatWeDo.length * sectionHeight;
-      const scrollProgress = Math.min(
-        Math.max(relativeScrollTop, 0) / mainSectionHeight,
-        1
-      );
-      const serviceIndex = scrollProgress * whatWeDo.length;
-      const clampedIndex = Math.max(
-        0,
-        Math.min(Math.floor(serviceIndex), whatWeDo.length - 1)
-      );
+      // Calculate which service should be active based on actual section positions
+      // Use viewport center to determine active section
+      const viewportCenter = scrollTop + windowHeight / 2;
+      let activeIndex = 0;
+      let foundMatch = false;
 
-      setActiveService(clampedIndex);
+      // Use a threshold-based approach: section is active if viewport center is within its bounds
+      // with a small buffer zone to prevent rapid switching
+      for (let i = 0; i < sectionElements.length; i++) {
+        const section = sectionElements[i];
+        const sectionTop = section.top;
+        const sectionBottom = section.bottom;
+        const bufferZone = section.height * 0.15; // 15% buffer at top and bottom for smoother transitions
 
-      // Calculate opacity for each section based on scroll position
+        // Check if viewport center is within this section (with buffer zones)
+        if (
+          viewportCenter >= sectionTop - bufferZone &&
+          viewportCenter <= sectionBottom + bufferZone
+        ) {
+          activeIndex = i;
+          foundMatch = true;
+          break;
+        }
+      }
+
+      // Fallback: if no section matched, find the closest one by distance to center
+      if (!foundMatch && sectionElements.length > 0) {
+        let minDistance = Infinity;
+        for (let i = 0; i < sectionElements.length; i++) {
+          const section = sectionElements[i];
+          const distance = Math.abs(viewportCenter - section.center);
+          if (distance < minDistance) {
+            minDistance = distance;
+            activeIndex = i;
+          }
+        }
+      }
+
+      setActiveService(activeIndex);
+
+      // Calculate opacity for each section based on actual positions
       const newOpacities = whatWeDo.map((_, index) => {
-        const sectionStart = index * sectionHeight;
-        const sectionEnd = (index + 1) * sectionHeight;
+        if (index >= sectionElements.length) return 0.1;
+
+        const section = sectionElements[index];
+        const sectionCenter = section.center;
 
         // Check if current scroll position is within this section
-        const isInSection =
-          relativeScrollTop >= sectionStart && relativeScrollTop < sectionEnd;
+        // Use a smoother transition with distance from center
+        const distanceFromCenter = Math.abs(viewportCenter - sectionCenter);
+        const maxDistance = section.height;
+        const opacity = Math.max(
+          0.1,
+          1 - (distanceFromCenter / maxDistance) * 0.9
+        );
 
-        // Binary focus: either 100% (in focus) or 10% (not in focus)
-        return isInSection ? 1 : 0.1;
+        return opacity;
       });
 
       setSectionOpacities(newOpacities);
@@ -197,17 +246,20 @@ export default function ServicesPage() {
         }`}
       >
         {/* Large icon container with consistent positioning */}
-        <div className="w-5/6 h-5/6 flex flex-col items-center justify-center">
-          {/* Icon display area with fixed sizing */}
-          <div className="w-64 h-64 flex items-center justify-center">
-            <Image
-              src={service.icon}
-              alt={service.title}
-              width={256}
-              height={256}
-              unoptimized
-              className="object-contain drop-shadow-lg mb-16"
-            />
+        <div className="w-full h-5/6 flex flex-col items-center justify-center">
+          {/* Orange card container */}
+          <div className="bg-orange-500 px-40 py-16 shadow-xl flex items-center justify-center">
+            {/* Icon display area with fixed sizing */}
+            <div className="w-64 h-64 flex items-center justify-center">
+              <Image
+                src={service.icon}
+                alt={service.title}
+                width={256}
+                height={256}
+                unoptimized
+                className="object-contain drop-shadow-lg"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -218,7 +270,7 @@ export default function ServicesPage() {
     <div className="min-h-screen bg-white">
       {/* Progress Navigation Bar - Becomes sticky when it reaches the top */}
       <nav
-        className={`sticky ${isHeaderVisible ? 'top-16' : 'top-0'} z-40 bg-white border-b border-gray-200 shadow-sm transition-all duration-300`}
+        className={`sticky ${isHeaderVisible ? 'top-16' : 'top-0'} z-40 bg-white transition-all duration-300`}
       >
         <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 pb-3">
           <div className="flex justify-between w-full relative">
@@ -236,21 +288,36 @@ export default function ServicesPage() {
             {whatWeDo.map((service, index) => (
               <button
                 key={service.id}
-                className={`text-xs sm:text-sm font-semibold transition-all duration-300 px-1 sm:px-4 py-2 sm:py-3 border-none cursor-pointer bg-transparent relative uppercase tracking-wide flex-1 ${
+                className={`text-xs sm:text-sm font-semibold transition-all duration-300 px-1 sm:px-4 sm:py-5 border-none cursor-pointer bg-transparent relative uppercase tracking-wide flex-1 ${
                   index === activeService
-                    ? 'text-amber-700 bg-amber-50 border-b-2 border-amber-600 pb-1 sm:pb-2'
-                    : 'text-gray-400 hover:text-amber-600 hover:bg-orange-50 hover:border-b-2 hover:border-orange-300 hover:pb-1 sm:hover:pb-2'
+                    ? 'text-amber-700 bg-amber-50 border-b-2 border-amber-600'
+                    : 'text-gray-400 hover:text-amber-600 hover:bg-orange-50 hover:border-b-2 hover:border-orange-300'
                 }`}
                 onClick={() => {
                   const element = document.getElementById(`service-${index}`);
                   if (element) {
-                    // Calculate offset to account for sticky navbar and header
-                    const headerHeight = isHeaderVisible ? 64 : 0;
-                    const navbarHeight = 60; // Approximate navbar height
-                    const elementPosition =
-                      element.offsetTop - headerHeight - navbarHeight;
+                    // Get accurate element position relative to document
+                    const rect = element.getBoundingClientRect();
+                    const elementTop = rect.top + window.scrollY;
+
+                    // Get actual heights of sticky elements
+                    const header = document.querySelector('header');
+                    const headerHeight =
+                      header && isHeaderVisible
+                        ? header.getBoundingClientRect().height
+                        : 0;
+
+                    // Find the navigation bar (sticky nav element)
+                    const navbar = document.querySelector('nav.sticky');
+                    const navbarHeight = navbar
+                      ? navbar.getBoundingClientRect().height
+                      : 60;
+
+                    const totalOffset = headerHeight + navbarHeight;
+
+                    // Scroll to position with offset
                     window.scrollTo({
-                      top: elementPosition,
+                      top: elementTop - totalOffset,
                       behavior: 'smooth',
                     });
                   }
@@ -267,25 +334,25 @@ export default function ServicesPage() {
       </nav>
 
       {/* Main Content */}
-      <div className="flex flex-col lg:flex-row min-h-screen">
+      <div className="flex flex-col lg:flex-row mx-20">
         {/* Left Side - Fixed Icon (Hidden on mobile, shown on desktop) */}
-        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-16 h-screen sticky bg-orange-500">
+        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-16 h-screen sticky">
           <div className="text-center">
             {/* Icon Container with Fade Effect */}
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-full mb-20">
               {whatWeDo.map((service, index) => renderIcon(service, index))}
             </div>
           </div>
         </div>
 
         {/* Right Side - Scrolling Content */}
-        <div className="w-full lg:w-[60%] mb-20 md:mb-0">
+        <div className="w-full lg:w-[50%] lg:px-20 mb-20 md:mb-0">
           <div ref={containerRef} className="relative">
             {whatWeDo.map((service, index) => (
               <div
                 key={service.id}
                 id={`service-${index}`}
-                className="min-h-[45vh] lg:min-h-screen flex items-center px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-20 pt-[20vh] lg:pt-6"
+                className="h-[45vh] lg:min-h-screen flex items-center px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-20 pt-[20vh] lg:pt-6"
               >
                 <div
                   className="max-w-md mx-auto lg:mx-0"
