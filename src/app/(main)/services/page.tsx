@@ -288,7 +288,7 @@ export default function ServicesPage() {
             {whatWeDo.map((service, index) => (
               <button
                 key={service.id}
-                className={`text-xs sm:text-sm font-semibold transition-all duration-300 px-1 sm:px-4 sm:py-5 border-none cursor-pointer bg-transparent relative uppercase tracking-wide flex-1 ${
+                className={`text-xs sm:text-sm font-semibold transition-all duration-300 px-1 sm:px-4 py-3 sm:py-5 border-none cursor-pointer bg-transparent relative uppercase tracking-wide flex-1 ${
                   index === activeService
                     ? 'text-amber-700 bg-amber-50 border-b-2 border-amber-600'
                     : 'text-gray-400 hover:text-amber-600 hover:bg-orange-50 hover:border-b-2 hover:border-orange-300'
@@ -346,13 +346,13 @@ export default function ServicesPage() {
         </div>
 
         {/* Right Side - Scrolling Content */}
-        <div className="w-full lg:w-[50%] lg:px-20 mb-20 md:mb-0">
+        <div className="w-full lg:w-[50%] lg:px-20 mb-20 md:mb-0 lg:py-[30vh]">
           <div ref={containerRef} className="relative">
             {whatWeDo.map((service, index) => (
               <div
                 key={service.id}
                 id={`service-${index}`}
-                className="h-[45vh] lg:min-h-screen flex items-center px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-20 pt-[20vh] lg:pt-6"
+                className="sm:h-[45vh] lg:h-[35vh] flex items-center px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-20 pt-[20vh] lg:pt-6"
               >
                 <div
                   className="max-w-md mx-auto lg:mx-0"
