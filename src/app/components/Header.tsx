@@ -13,6 +13,8 @@ export default function Header() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hasAnnouncementBar, setHasAnnouncementBar] = useState(false);
+  const [isAnnouncementBarLoading, setIsAnnouncementBarLoading] =
+    useState(true);
 
   // Calculate trigger point for background change
   const [triggerPoint, setTriggerPoint] = useState(0);
@@ -26,6 +28,8 @@ export default function Header() {
       } catch (error) {
         console.error('Error checking announcement bar:', error);
         setHasAnnouncementBar(false);
+      } finally {
+        setIsAnnouncementBarLoading(false);
       }
     };
 
@@ -85,6 +89,18 @@ export default function Header() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+  // Don't show header on home page until announcement bar check is complete
+  const shouldShowHeader = !isHomePage || !isAnnouncementBarLoading;
+
+  // Determine if header should be visible
+  const isHeaderVisible = shouldShowHeader && isVisible;
+
+  // Use slower animation for home page initial fade-in
+  const transitionDuration =
+    isHomePage && shouldShowHeader && lastScrollY < triggerPoint
+      ? 'duration-1000'
+      : 'duration-300';
+
   return (
     <header
       className={`${
@@ -93,15 +109,17 @@ export default function Header() {
             ? `bg-transparent ${hasAnnouncementBar ? 'top-16' : ''}`
             : 'bg-white'
           : 'bg-white'
-      } fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
+      } fixed top-0 left-0 right-0 z-50 transition-all ${transitionDuration} ease-in-out ${
+        isHeaderVisible
+          ? 'translate-y-0 opacity-100'
+          : 'translate-y-full opacity-0'
       }`}
       onMouseEnter={handleMouseEnter}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-1 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 mt-1">
             <Link href="/">
               <Image
                 unoptimized

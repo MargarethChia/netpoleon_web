@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Left Side - Company Info */}
           <div className="space-y-6 lg:max-w-md">
             <Image
-              src="/logos/Netpoleon ANZ White.png"
+              src="/logos/Netpoleon ANZ White Compact.png"
               alt="Netpoleon Logo"
               width={150}
               height={80}
