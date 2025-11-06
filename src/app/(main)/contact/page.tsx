@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Badge } from '@/components/ui/badge';
 import { getVendorRegistrationFormUrl } from '@/lib/storage';
 
 export default function ContactUs() {
@@ -115,13 +114,7 @@ export default function ContactUs() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <Badge
-              variant="outline"
-              className="text-orange-600 border-orange-600 px-4 py-2 text-sm font-medium mb-6"
-            >
-              Get in Touch
-            </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 my-6">
               Contact us
             </h1>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto">
