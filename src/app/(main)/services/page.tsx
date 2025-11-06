@@ -86,6 +86,7 @@ export default function ServicesPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
   const [isServicesVisible, setIsServicesVisible] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,6 +95,29 @@ export default function ServicesPage() {
       const scrollTop = window.scrollY;
       const windowHeight = window.innerHeight;
       const isMobile = window.innerWidth < 1024; // lg breakpoint
+
+      // Check if header is visible by checking its position, opacity, and transform
+      const header = document.querySelector('header');
+      if (header) {
+        const headerRect = header.getBoundingClientRect();
+        const headerComputed = window.getComputedStyle(header);
+        const opacity = parseFloat(headerComputed.opacity);
+        const transform = headerComputed.transform;
+
+        // Header is visible if:
+        // 1. It has opacity > 0 (not transparent)
+        // 2. It's positioned at or near the top of the viewport (within reasonable bounds)
+        // 3. It's not translated up (transform doesn't contain negative translateY or matrix with negative Y)
+        const isTranslatedUp =
+          transform.includes('translateY(-') ||
+          (transform.includes('matrix') && transform.includes(', -'));
+        const isAtTop = headerRect.top >= -10 && headerRect.top <= 10; // Allow small margin for rounding
+        const isVisible = opacity > 0 && isAtTop && !isTranslatedUp;
+        setIsHeaderVisible(isVisible);
+      } else {
+        // If header doesn't exist, assume it's not visible
+        setIsHeaderVisible(false);
+      }
 
       // Calculate section height based on screen size
       const sectionHeight = isMobile ? windowHeight * 0.45 : windowHeight; // 45vh on mobile, full height on desktop
@@ -136,12 +160,31 @@ export default function ServicesPage() {
       }
     };
 
+    // Initial check after a short delay to ensure DOM is ready
+    const initialCheck = () => {
+      setTimeout(handleScroll, 100);
+    };
+
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleScroll); // Recalculate on resize
-    handleScroll(); // Initial call
+    initialCheck(); // Initial call with delay
+
+    // Also check on scroll using MutationObserver to catch header visibility changes
+    const headerObserver = new MutationObserver(handleScroll);
+    const header = document.querySelector('header');
+    if (header) {
+      headerObserver.observe(header, {
+        attributes: true,
+        attributeFilter: ['class', 'style'],
+      });
+      // Also check on initial load
+      initialCheck();
+    }
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      headerObserver.disconnect();
     };
   }, []);
 
@@ -174,7 +217,9 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Progress Navigation Bar - Becomes sticky when it reaches the top */}
-      <nav className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+      <nav
+        className={`sticky ${isHeaderVisible ? 'top-16' : 'top-0'} z-40 bg-white border-b border-gray-200 shadow-sm transition-all duration-300`}
+      >
         <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 pb-3">
           <div className="flex justify-between w-full relative">
             {/* Progress Bar Background */}
@@ -199,9 +244,11 @@ export default function ServicesPage() {
                 onClick={() => {
                   const element = document.getElementById(`service-${index}`);
                   if (element) {
-                    // Calculate offset to account for sticky navbar
+                    // Calculate offset to account for sticky navbar and header
+                    const headerHeight = isHeaderVisible ? 64 : 0;
                     const navbarHeight = 60; // Approximate navbar height
-                    const elementPosition = element.offsetTop - navbarHeight;
+                    const elementPosition =
+                      element.offsetTop - headerHeight - navbarHeight;
                     window.scrollTo({
                       top: elementPosition,
                       behavior: 'smooth',
