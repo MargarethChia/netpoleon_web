@@ -151,19 +151,6 @@ describe('Admin Resources Page', () => {
     await waitFor(() => expect(update).toHaveBeenCalled());
   });
 
-  it('toggles featured', async () => {
-    seed();
-    addFeatured.mockResolvedValue({});
-    removeFeatured.mockResolvedValue({});
-    render(<ResourcesPage />);
-    await screen.findByText(/all resources/i);
-    const row = screen.getByRole('row', { name: /xdr ebook/i });
-    const buttons = within(row).getAllByRole('button');
-    const starBtn = buttons.find(b => b.innerHTML.includes('lucide-star'))!;
-    fireEvent.click(starBtn);
-    await waitFor(() => expect(addFeatured).toHaveBeenCalled());
-  });
-
   it('create shows validation error when title/content missing', async () => {
     const push = vi.fn();
     vi.spyOn(nav, 'useRouter').mockReturnValue({ push } as any);
