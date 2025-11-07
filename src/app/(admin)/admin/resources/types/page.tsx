@@ -50,9 +50,8 @@ export default function ResourceTypesPage() {
   const fetchTypes = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/resource-type');
-      if (!response.ok) throw new Error('Failed to fetch types');
-      const data = await response.json();
+      const { resourceTypeApi } = await import('@/lib/api');
+      const data = await resourceTypeApi.getAll();
       setTypes(data);
     } catch (error) {
       console.error('Error fetching types:', error);
@@ -77,18 +76,10 @@ export default function ResourceTypesPage() {
     }
 
     try {
-      const response = await fetch('/api/resource-type', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: newTypeName.trim(),
-        }),
+      const { resourceTypeApi } = await import('@/lib/api');
+      await resourceTypeApi.create({
+        name: newTypeName.trim(),
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to create type');
-      }
 
       showToast({
         title: 'Success',
@@ -122,14 +113,8 @@ export default function ResourceTypesPage() {
     }
 
     try {
-      const response = await fetch(`/api/resource-type/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to delete type');
-      }
+      const { resourceTypeApi } = await import('@/lib/api');
+      await resourceTypeApi.delete(id);
 
       showToast({
         title: 'Success',
