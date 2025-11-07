@@ -49,6 +49,41 @@ const StaticGlobe = React.memo(
 );
 StaticGlobe.displayName = 'StaticGlobe';
 
+const StaticGlobeMobile = React.memo(
+  ({ onCityHover }: { onCityHover?: (city: string | null) => void }) => {
+    const staticGlobeConfig = useMemo(
+      () => ({
+        pointSize: 6,
+        globeColor: '#000000',
+        showAtmosphere: true,
+        atmosphereColor: '#ffffff',
+        atmosphereAltitude: 0.2,
+        emissive: '#000000',
+        emissiveIntensity: 0.1,
+        shininess: 0.9,
+        polygonColor: '#ff6600',
+        ambientLight: '#ffffff',
+        directionalLeftLight: '#ffffff',
+        directionalTopLight: '#ffffff',
+        directionalRightLight: '#ffffff',
+        directionalBottomLight: '#ffffff',
+        pointLight: '#ffffff',
+        arcTime: 1000,
+        arcLength: 0.9,
+        rings: 1,
+        maxRings: 3,
+        initialPosition: { lat: -40, lng: 75.0 },
+        autoRotate: false,
+        autoRotateSpeed: 0,
+      }),
+      []
+    );
+
+    return <World globeConfig={staticGlobeConfig} onCityHover={onCityHover} />;
+  }
+);
+StaticGlobeMobile.displayName = 'StaticGlobeMobile';
+
 interface HeroSectionProps {
   slides: Slide[];
 }
@@ -103,17 +138,20 @@ export default function HeroSection({ slides }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative min-h-[60vh] lg:min-h-screen flex items-center justify-start bg-black pt-[64px] overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-start bg-black pt-[64px] overflow-hidden">
       {/* Globe Background - Static, loads only once */}
-      <div className="fixed inset-0 w-full h-full z-0 overflow-visible">
-        <div className="fixed w-[200%] h-[200%] bottom-0 right-0 lg:bottom-[-50%] lg:right-[-50%] pointer-events-auto">
-          <div className="w-full h-full">
+      <div className="fixed inset-0 w-[200%] h-full z-0 overflow-visible">
+        <div className="fixed lg:w-[200%] lg:h-[200%] w-[150%] h-[150%] bottom-[-30%] lg:bottom-[-50%] lg:right-[-50%] pointer-events-auto">
+          <div className="hidden lg:block w-full h-full">
             <StaticGlobe onCityHover={setHoveredCity} />
+          </div>
+          <div className="lg:hidden w-[100%] h-[100%] mt-[20%] overflow-hidden">
+            <StaticGlobeMobile onCityHover={setHoveredCity} />
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto w-full relative flex flex-col lg:flex-row items-start justify-start px-4 sm:px-6 lg:px-8 gap-8 lg:gap-16 xl:gap-20 z-10 -mt-16 lg:-mt-30 pointer-events-none">
+      <div className="max-w-7xl mx-auto w-full relative flex flex-col lg:flex-row items-start justify-start px-4 sm:px-6 lg:px-8 gap-8 lg:gap-16 xl:gap-20 z-10 -mt-60 pointer-events-none">
         {/* Left side - Text content */}
         <div className="flex-1 max-w-2xl lg:max-w-3xl pointer-events-auto">
           <AnimatePresence mode="wait">
