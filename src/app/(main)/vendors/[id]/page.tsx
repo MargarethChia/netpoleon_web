@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
-import { Award } from 'lucide-react';
+import { Award, Globe } from 'lucide-react';
 import { vendorsApi, type Vendor } from '@/lib/api';
 import { createSlug } from '@/lib/slug-utils';
 
@@ -164,6 +164,21 @@ export default function VendorDetailPage() {
                 </div>
               )}
 
+              {vendor.link && (
+                <div className="mt-4">
+                  <Link
+                    href={vendor.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
+                  >
+                    <Globe className="w-4 h-4" aria-hidden="true" />
+                    Visit Website
+                    <span aria-hidden="true">↗</span>
+                  </Link>
+                </div>
+              )}
+
               {/* Bookmark Icon */}
               <div className="absolute top-8 right-8">
                 <svg
@@ -208,7 +223,7 @@ export default function VendorDetailPage() {
           {/* Diagram Section */}
           {vendor.diagram_url && (
             <div className="px-8 pb-8">
-              <div className="bg-stone-200 rounded-lg p-8 w-full h-80 flex items-center justify-center">
+              <div className="rounded-lg w-full h-80 flex items-center justify-center">
                 <Image
                   unoptimized
                   src={vendor.diagram_url}
