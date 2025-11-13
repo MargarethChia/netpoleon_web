@@ -20,15 +20,18 @@ export default function VendorCarousel({ title }: VendorCarouselProps) {
         setLoading(true);
         const data = await vendorsApi.getAll();
         console.log('Fetched vendors:', data.length, data);
+        const sortedData = [...data].sort((a, b) =>
+          a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+        );
         // Filter vendors that have logo_url or show all if none have logos
-        const vendorsWithLogos = data.filter(v => v.logo_url).reverse();
+        const vendorsWithLogos = sortedData.filter(v => v.logo_url);
         console.log('Vendors with logos:', vendorsWithLogos.length);
 
         // If no vendors with logos, use all vendors or fallback data
         if (vendorsWithLogos.length > 0) {
           setVendors(vendorsWithLogos);
-        } else if (data.length > 0) {
-          setVendors(data.reverse());
+        } else if (sortedData.length > 0) {
+          setVendors(sortedData);
         } else {
           // Fallback data if no vendors in database
           const fallbackVendors = [
