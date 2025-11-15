@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { getServiceData } from '@/data/services-data';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { use } from 'react';
 
@@ -20,6 +21,15 @@ export default function ServicePage({ params }: ServicePageProps) {
   if (!serviceData) {
     notFound();
   }
+
+  const logoMap: Record<string, string | null> = {
+    nxone: null,
+    nable: '/icons/ANZ Services/N.Able.png',
+    nsure: '/icons/ANZ Services/N.Sure.png',
+    ncircle: '/icons/ANZ Services/N.Circle.png',
+  };
+
+  const logoPath = logoMap[id] || null;
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -45,6 +55,20 @@ export default function ServicePage({ params }: ServicePageProps) {
             className="bg-white rounded-lg border border-gray-200 p-6"
             variants={fadeInUp}
           >
+            {logoPath && (
+              <motion.div
+                className="mb-6 flex justify-center"
+                variants={fadeInUp}
+              >
+                <Image
+                  src={logoPath}
+                  alt={`${serviceData.title} logo`}
+                  width={200}
+                  height={100}
+                  className="object-contain"
+                />
+              </motion.div>
+            )}
             <motion.h1
               className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4"
               variants={fadeInUp}
