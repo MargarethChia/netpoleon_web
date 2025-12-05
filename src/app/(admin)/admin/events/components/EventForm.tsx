@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog,
   DialogContent,
@@ -37,7 +36,6 @@ export default function EventForm({
     title: '',
     event_date: '',
     location: '',
-    description: '',
     link: '',
     image_url: '',
   });
@@ -49,7 +47,6 @@ export default function EventForm({
         title: event.title,
         event_date: event.event_date,
         location: event.location || '',
-        description: event.description || '',
         link: event.link || '',
         image_url: event.image_url || '',
       });
@@ -57,7 +54,6 @@ export default function EventForm({
       setFormData({
         title: '',
         event_date: '',
-        description: '',
         location: '',
         link: '',
         image_url: '',
@@ -74,6 +70,7 @@ export default function EventForm({
         // Update existing event
         await eventsApi.update(event.id, {
           ...formData,
+          description: null, // Always keep description blank
           updated_at: new Date().toISOString(),
         });
         showToast({
@@ -85,6 +82,7 @@ export default function EventForm({
         // Create new event
         await eventsApi.create({
           ...formData,
+          description: null, // Always keep description blank
         });
         showToast({
           title: 'Event Created',
@@ -218,17 +216,6 @@ export default function EventForm({
               value={formData.location}
               onChange={e => handleInputChange('location', e.target.value)}
               placeholder="Enter event location"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={e => handleInputChange('description', e.target.value)}
-              placeholder="Enter event description"
-              rows={4}
             />
           </div>
 

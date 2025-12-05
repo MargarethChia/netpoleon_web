@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Timeline } from '@/components/ui/timeline';
 import Image from 'next/image';
@@ -406,57 +405,36 @@ export default function AboutUs() {
       </section>
 
       {/* Our Story Section with Timeline */}
-      <section className="bg-gray-50">
+      <section className="bg-gray-50 mb-24">
         <div className="relative w-full overflow-clip">
           <Timeline data={timelineData} />
         </div>
       </section>
 
       {/* Team Members Section */}
-      <motion.section
-        className="py-24 bg-white"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={staggerContainer}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <motion.div variants={fadeInUp} className="space-y-6">
-              <Badge
-                variant="outline"
-                className="text-orange-600 border-orange-600 px-4 py-2"
-              >
-                Our Team
-              </Badge>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
-                Meet Our Experts
-              </h2>
-            </motion.div>
-          </div>
+      {!loading && !error && team_members.length > 0 && (
+        <motion.section
+          className="py-24 bg-white"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerContainer}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <motion.div variants={fadeInUp} className="space-y-6">
+                <Badge
+                  variant="outline"
+                  className="text-orange-600 border-orange-600 px-4 py-2"
+                >
+                  Our Team
+                </Badge>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
+                  Meet Our Experts
+                </h2>
+              </motion.div>
+            </div>
 
-          {loading ? (
-            <div className="flex justify-center items-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
-            </div>
-          ) : error ? (
-            <div className="text-center py-12">
-              <p className="text-red-600 mb-4">
-                Error loading team members: {error}
-              </p>
-              <Button
-                onClick={() => window.location.reload()}
-                variant="outline"
-                className="border-orange-600 text-orange-600 hover:bg-orange-50"
-              >
-                Try Again
-              </Button>
-            </div>
-          ) : team_members.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-600">No team members found.</p>
-            </div>
-          ) : (
             <motion.div
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12"
               variants={staggerContainer}
@@ -526,9 +504,9 @@ export default function AboutUs() {
                 </motion.div>
               ))}
             </motion.div>
-          )}
-        </div>
-      </motion.section>
+          </div>
+        </motion.section>
+      )}
 
       {/* Call to Action Section */}
       <motion.section
