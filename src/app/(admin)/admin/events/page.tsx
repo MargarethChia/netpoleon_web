@@ -156,9 +156,7 @@ export default function EventsPage() {
       !searchTerm ||
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (event.location &&
-        event.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (event.description &&
-        event.description.toLowerCase().includes(searchTerm.toLowerCase()))
+        event.location.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleToggleFeatured = async (eventId: number) => {
@@ -357,9 +355,6 @@ export default function EventsPage() {
                           <TableCell>
                             <div>
                               <div className="font-medium">{event.title}</div>
-                              <div className="text-sm text-muted-foreground max-w-[300px] truncate">
-                                {event.description}
-                              </div>
                             </div>
                           </TableCell>
                           <TableCell>
