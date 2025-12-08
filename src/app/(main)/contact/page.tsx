@@ -304,7 +304,7 @@ export default function ContactUs() {
                       <h4 className="mb-3">Partnership Application</h4>
                       <p className="text-gray-600 text-sm mb-4">
                         Download our vendor registration form to get started.
-                        Please send an email to au.sales@netpoleons.com to
+                        Please send an email to au.ops@netpoleons.com to
                         complete your partnership application.
                       </p>
                       <button
