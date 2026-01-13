@@ -439,70 +439,72 @@ export default function AboutUs() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12"
               variants={staggerContainer}
             >
-              {team_members.map(member => (
-                <motion.div
-                  key={member.id}
-                  variants={fadeInUp}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                >
-                  <div className="text-center space-y-6">
-                    <div className="w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 mx-auto overflow-hidden bg-white relative group">
-                      {member.photo ? (
-                        <Image
-                          unoptimized
-                          src={member.photo}
-                          alt={member.name}
-                          width={250}
-                          height={250}
-                          className="w-full h-full object-cover group-hover:opacity-0"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center group-hover:opacity-0">
+              {team_members
+                .sort((a, b) => a.id - b.id)
+                .map(member => (
+                  <motion.div
+                    key={member.id}
+                    variants={fadeInUp}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  >
+                    <div className="text-center space-y-6">
+                      <div className="w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 mx-auto overflow-hidden bg-white relative group">
+                        {member.photo ? (
                           <Image
-                            unoptimized
-                            src="/icons/User.png"
-                            alt="Default avatar"
+                            //unoptimized
+                            src={member.photo}
+                            alt={member.name}
                             width={250}
                             height={250}
-                            className="opacity-80"
+                            className="w-full h-full object-cover group-hover:opacity-0"
                           />
-                        </div>
-                      )}
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center group-hover:opacity-0">
+                            <Image
+                              unoptimized
+                              src="/icons/User.png"
+                              alt="Default avatar"
+                              width={250}
+                              height={250}
+                              className="opacity-80"
+                            />
+                          </div>
+                        )}
 
-                      {/* Secondary Photo Overlay */}
-                      {member.secondary_photo ? (
-                        <Image
-                          unoptimized
-                          src={member.secondary_photo}
-                          alt={`${member.name} secondary`}
-                          width={192}
-                          height={192}
-                          className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 w-full h-full flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        {/* Secondary Photo Overlay */}
+                        {member.secondary_photo ? (
                           <Image
-                            unoptimized
-                            src="/icons/User.png"
-                            alt="Default avatar"
-                            width={80}
-                            height={80}
-                            className="opacity-80"
+                            //unoptimized
+                            src={member.secondary_photo}
+                            alt={`${member.name} secondary`}
+                            width={192}
+                            height={192}
+                            className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100"
                           />
-                        </div>
-                      )}
+                        ) : (
+                          <div className="absolute inset-0 w-full h-full flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <Image
+                              unoptimized
+                              src="/icons/User.png"
+                              alt="Default avatar"
+                              width={80}
+                              height={80}
+                              className="opacity-80"
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="text-sm md:text-base font-bold text-gray-900">
+                          {member.name}
+                        </h3>
+                        <p className="text-gray-600 text-sm md:text-base">
+                          {member.role}
+                        </p>
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <h3 className="text-sm md:text-base font-bold text-gray-900">
-                        {member.name}
-                      </h3>
-                      <p className="text-gray-600 text-sm md:text-base">
-                        {member.role}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))}
             </motion.div>
           </div>
         </motion.section>
