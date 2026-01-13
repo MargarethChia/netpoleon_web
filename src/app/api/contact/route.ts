@@ -14,7 +14,6 @@ export async function POST(request: NextRequest) {
       message,
       partnerFile,
       isPartnerApplication,
-      isVendorPartnership,
     } = body;
 
     // Validate required fields
@@ -41,17 +40,6 @@ export async function POST(request: NextRequest) {
         ${partnerFile ? `<p><strong>File Uploaded:</strong> Yes</p>` : ''}
         <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
       `;
-    } else if (isVendorPartnership) {
-      emailSubject = `New Vendor Partnership Inquiry: ${firstName} ${lastName} from ${company}`;
-      emailContent = `
-        <h2>New Vendor Partnership Inquiry</h2>
-        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Company:</strong> ${company}</p>
-        <p><strong>Subject:</strong> ${subject}</p>
-        ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}
-        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
-      `;
     } else {
       emailSubject = `New Contact Form Submission: ${subject}`;
       emailContent = `
@@ -67,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: 'Netpoleon Contact Form <netpoleon_admin@resend.dev>', // Change this to your verified domain
+      from: 'netpoleons.com.au', // Change this to your verified domain
       to: ['owen.nicholas.yap@gmail.com'], // Change this to your email
       subject: emailSubject,
       html: emailContent,
@@ -86,20 +74,25 @@ export async function POST(request: NextRequest) {
     const confirmationContent = `
       <h2>Thank you for contacting Netpoleon!</h2>
       <p>Dear ${firstName},</p>
-      <p>We have received your ${isPartnerApplication ? 'partner application' : isVendorPartnership ? 'vendor partnership inquiry' : 'message'} and will get back to you within 24-48 hours.</p>
+      <p>We have received your ${isPartnerApplication ? 'partner application' : 'message'} and will get back to you within 24-48 hours.</p>
       <p><strong>Your submission details:</strong></p>
       <p><strong>Subject:</strong> ${subject}</p>
       ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}
-      <p>If you have any urgent questions, please call us at +1 (555) 123-4567.</p>
+      <p>If you have any urgent questions, please call us at 1300 193 170.</p>
       <p>Best regards,<br>The Netpoleon Team</p>
     `;
 
-    await resend.emails.send({
-      from: 'Netpoleon <noreply@yourdomain.com>', // Change this to your verified domain
-      to: [email],
-      subject: 'Thank you for contacting Netpoleon',
-      html: confirmationContent,
-    });
+    try {
+      await resend.emails.send({
+        from: 'netpoleons.com.au', // Change this to your verified domain
+        to: [email],
+        subject: 'Thank you for contacting Netpoleon',
+        html: confirmationContent,
+      });
+    } catch (confirmationError) {
+      console.error('Confirmation email failed:', confirmationError);
+      // Don't fail the request if confirmation email fails
+    }
 
     return NextResponse.json(
       {
