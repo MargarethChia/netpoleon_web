@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: 'netpoleons.com.au', // Change this to your verified domain
+      from: 'Netpoleon Contact Form <noreply@netpoleons.com.au>', // Change this to your verified domain
       to: ['owen.nicholas.yap@gmail.com'], // Change this to your email
       subject: emailSubject,
       html: emailContent,
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
 
     try {
       await resend.emails.send({
-        from: 'netpoleons.com.au', // Change this to your verified domain
+        from: 'Netpoleon Contact Form <noreply@netpoleons.com.au>', // Change this to your verified domain
         to: [email],
         subject: 'Thank you for contacting Netpoleon',
         html: confirmationContent,
