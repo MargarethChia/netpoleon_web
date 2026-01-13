@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     // Send email using Resend
     const { data, error } = await resend.emails.send({
       from: 'Netpoleon Contact Form <noreply@netpoleons.com.au>', // Change this to your verified domain
-      to: ['owen.nicholas.yap@gmail.com'], // Change this to your email
+      to: ['maggieachia04@gmail.com'], // Change this to your email
       subject: emailSubject,
       html: emailContent,
       replyTo: email, // Allow replies to go to the sender
