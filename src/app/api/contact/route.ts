@@ -2,6 +2,32 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
 export async function POST(request: NextRequest) {
+  // Check for API key first with better error handling
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    console.error('RESEND_API_KEY is missing in environment variables');
+    return NextResponse.json(
+      {
+        error: 'Email service not configured',
+        details: 'API key not found in environment variables',
+      },
+      { status: 500 }
+    );
+  }
+
+  // Validate API key format (Resend keys start with 're_')
+  if (!apiKey.startsWith('re_')) {
+    console.error('RESEND_API_KEY format appears invalid');
+    return NextResponse.json(
+      {
+        error: 'Invalid API key format',
+        details: 'Resend API keys should start with "re_"',
+      },
+      { status: 500 }
+    );
+  }
+
   const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     const body = await request.json();
