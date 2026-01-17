@@ -10,6 +10,7 @@ const PUBLIC_ROUTES = [
   '/api/vendors',
   '/api/test',
   '/api/featured',
+  '/api/contact',
 ];
 
 export async function middleware(request: NextRequest) {
