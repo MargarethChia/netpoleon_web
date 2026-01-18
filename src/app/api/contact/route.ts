@@ -3,10 +3,12 @@ import { Resend } from 'resend';
 
 export async function POST(request: NextRequest) {
   // Check for API key first with better error handling
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.NEXT_PUBLIC_RESEND_API_KEY;
 
   if (!apiKey) {
-    console.error('RESEND_API_KEY is missing in environment variables');
+    console.error(
+      'NEXT_PUBLIC_RESEND_API_KEY is missing in environment variables'
+    );
     return NextResponse.json(
       {
         error: 'Email service not configured',
@@ -28,7 +30,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
   try {
     const body = await request.json();
     const {
