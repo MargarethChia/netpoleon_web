@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import '@fontsource/rubik-one';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import './main.css';
 import LayoutWrapper from './components/LayoutWrapper';

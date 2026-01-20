@@ -70,13 +70,6 @@ export default function Home() {
       <VendorCarousel title="Trusted by 10,000+ customers, from startup to enterprise " />
       <GraphSection />
       <Statistics />
-
-      {/*
-      {imageTextSections.map((section, idx) => (
-        <ImageTextSection key={idx} {...section} />
-      ))}
-      */}
-
       <LatestResources />
     </div>
   );
