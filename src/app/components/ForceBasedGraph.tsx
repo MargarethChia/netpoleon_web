@@ -681,9 +681,7 @@ export default function ForceBasedGraph({
         const data = await vendorsApi.getAll();
         const vendorsWithLogos = data.filter(v => v.logo_url);
         setVendors(vendorsWithLogos);
-      } catch (error) {
-        console.error('Error fetching vendors:', error);
-      }
+      } catch {}
     };
 
     fetchVendors();

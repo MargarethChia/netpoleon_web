@@ -46,7 +46,6 @@ export default function Statistics() {
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting && !animationStarted) {
-            console.log('Statistics section in view, starting animation...');
             setAnimationStarted(true);
             // Set the target values to trigger animation
             setAnimatedValues(stats.map(stat => stat.value));

@@ -58,9 +58,8 @@ export default function LatestResources({
 
         // Take only the latest resources up to the limit
         setResources(sortedResources.slice(0, limit));
-      } catch (err) {
+      } catch {
         setError('Failed to load resources');
-        console.error('Error fetching resources:', err);
       } finally {
         setLoading(false);
       }

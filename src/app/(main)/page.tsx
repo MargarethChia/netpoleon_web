@@ -32,8 +32,7 @@ export default function Home() {
           .filter(slide => slide.is_active)
           .sort((a, b) => a.display_order - b.display_order);
         setSlides(activeSlides);
-      } catch (error) {
-        console.error('Error fetching slides:', error);
+      } catch {
         // Fallback to default slide if API fails
         setSlides([
           {

@@ -102,8 +102,7 @@ export default function CreateVendorPage() {
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -134,8 +133,7 @@ export default function CreateVendorPage() {
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -166,8 +164,7 @@ export default function CreateVendorPage() {
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -233,8 +230,7 @@ export default function CreateVendorPage() {
       });
 
       router.push('/admin/vendors');
-    } catch (error) {
-      console.error('Error creating vendor:', error);
+    } catch {
       showToast({
         title: 'Error',
         message:

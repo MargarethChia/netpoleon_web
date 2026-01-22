@@ -93,8 +93,7 @@ export default function EventForm({
 
       onSuccess();
       onClose();
-    } catch (error) {
-      console.error('Error saving event:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to save event. Please try again.',
@@ -122,16 +121,12 @@ export default function EventForm({
   };
 
   const handleFileUpload = async (file: File) => {
-    console.log('handleFileUpload called with file:', file);
     setIsUploading(true);
 
     try {
-      console.log('Calling uploadImage...');
       const result = await uploadImage(file);
-      console.log('uploadImage result:', result);
 
       if (result.success && result.url) {
-        console.log('Upload successful, setting URL:', result.url);
         setFormData(prev => ({
           ...prev,
           image_url: result.url!,
@@ -142,15 +137,13 @@ export default function EventForm({
           type: 'success',
         });
       } else {
-        console.log('Upload failed:', result.error);
         showToast({
           title: 'Upload Failed',
           message: result.error || 'Failed to upload image',
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',

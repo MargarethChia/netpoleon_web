@@ -1,23 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-// Define public routes that don't require authentication
-const PUBLIC_ROUTES = [
-  '/',
-  '/login',
-  '/api/events',
-  '/api/resources',
-  '/api/vendors',
-  '/api/test',
-  '/api/featured',
-  '/api/contact',
-];
-
 export async function middleware(request: NextRequest) {
-  console.log(
-    `[Middleware] Processing request for path: ${request.nextUrl.pathname}`
-  );
-
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -51,13 +35,7 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Check if the current path is a public route
-  const isPublicRoute = PUBLIC_ROUTES.some(
-    route =>
-      request.nextUrl.pathname === route ||
-      request.nextUrl.pathname.startsWith(`${route}/`)
-  );
-
-  console.log(`[Middleware] Is public route: ${isPublicRoute}`);
+  // Note: isPublicRoute is checked implicitly in the route matching above
 
   // If accessing admin routes without authentication, redirect to login
   if (!user && request.nextUrl.pathname.startsWith('/admin')) {

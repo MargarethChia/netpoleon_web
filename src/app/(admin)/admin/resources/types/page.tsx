@@ -53,8 +53,7 @@ export default function ResourceTypesPage() {
       const { resourceTypeApi } = await import('@/lib/api');
       const data = await resourceTypeApi.getAll();
       setTypes(data);
-    } catch (error) {
-      console.error('Error fetching types:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to load resource types',
@@ -90,7 +89,7 @@ export default function ResourceTypesPage() {
       setNewTypeName('');
       setIsDialogOpen(false);
       fetchTypes();
-    } catch (error) {
+    } catch {
       const errorMessage =
         error instanceof Error
           ? error.message
@@ -123,7 +122,7 @@ export default function ResourceTypesPage() {
       });
 
       fetchTypes();
-    } catch (error) {
+    } catch {
       const errorMessage =
         error instanceof Error
           ? error.message

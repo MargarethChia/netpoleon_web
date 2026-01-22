@@ -14,8 +14,6 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
-  console.log('LayoutWrapper - pathname:', pathname, 'isHomePage:', isHomePage);
-
   return (
     <>
       {isHomePage && <Banner />}

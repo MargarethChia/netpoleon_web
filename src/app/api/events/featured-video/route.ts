@@ -16,7 +16,6 @@ export async function GET() {
         // No featured video found
         return NextResponse.json({ data: null });
       }
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to fetch featured event video' },
         { status: 500 }
@@ -24,8 +23,7 @@ export async function GET() {
     }
 
     return NextResponse.json({ data });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -53,10 +51,6 @@ export async function POST(request: NextRequest) {
       .neq('id', 0); // Delete all existing featured videos
 
     if (deleteError) {
-      console.error(
-        'Database error deleting existing featured video:',
-        deleteError
-      );
       return NextResponse.json(
         { error: 'Failed to remove existing featured video' },
         { status: 500 }
@@ -76,7 +70,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to set featured event video' },
         { status: 500 }
@@ -84,8 +77,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(data, { status: 201 });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -115,7 +107,6 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (fetchError && fetchError.code !== 'PGRST116') {
-      console.error('Database error fetching current video:', fetchError);
       return NextResponse.json(
         { error: 'Failed to fetch current featured video' },
         { status: 500 }
@@ -137,7 +128,6 @@ export async function PUT(request: NextRequest) {
         .single();
 
       if (error) {
-        console.error('Database error:', error);
         return NextResponse.json(
           { error: 'Failed to create featured event video' },
           { status: 500 }
@@ -158,7 +148,6 @@ export async function PUT(request: NextRequest) {
         .single();
 
       if (error) {
-        console.error('Database error:', error);
         return NextResponse.json(
           { error: 'Failed to update featured event video' },
           { status: 500 }
@@ -167,8 +156,7 @@ export async function PUT(request: NextRequest) {
 
       return NextResponse.json(data);
     }
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -185,7 +173,6 @@ export async function DELETE() {
       .neq('id', 0); // Delete all featured videos
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to remove featured event video' },
         { status: 500 }
@@ -193,8 +180,7 @@ export async function DELETE() {
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

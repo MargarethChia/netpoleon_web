@@ -22,8 +22,7 @@ export default function GraphSection() {
         const sortedVendors = data.sort((a, b) => a.name.localeCompare(b.name));
         setVendors(sortedVendors);
         setFilteredVendors(sortedVendors); // Initially show all vendors
-      } catch (error) {
-        console.error('Error fetching vendors:', error);
+      } catch {
       } finally {
         setLoading(false);
       }

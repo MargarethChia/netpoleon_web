@@ -25,8 +25,7 @@ export default function Header() {
       try {
         const announcement = await publicAnnouncementBarApi.get();
         setHasAnnouncementBar(!!announcement);
-      } catch (error) {
-        console.error('Error checking announcement bar:', error);
+      } catch {
         setHasAnnouncementBar(false);
       } finally {
         setIsAnnouncementBarLoading(false);

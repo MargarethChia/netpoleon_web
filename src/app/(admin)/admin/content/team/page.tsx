@@ -45,8 +45,7 @@ export default function TeamPage() {
       setIsLoading(true);
       const data = await teamMembersApi.getAll();
       setTeamMembers(data);
-    } catch (error) {
-      console.error('Error fetching team members:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to load team members',
@@ -366,8 +365,7 @@ export default function TeamPage() {
                 message: 'Team member deleted successfully',
                 type: 'success',
               });
-            } catch (error) {
-              console.error('Error deleting team member:', error);
+            } catch {
               showToast({
                 title: 'Error',
                 message: 'Failed to delete team member',

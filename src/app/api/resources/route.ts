@@ -11,7 +11,6 @@ export async function GET() {
       .order('created_at', { ascending: false });
 
     if (resourcesError) {
-      console.error('Database error:', resourcesError);
       return NextResponse.json(
         { error: 'Failed to fetch resources' },
         { status: 500 }
@@ -24,7 +23,6 @@ export async function GET() {
       .select('id, name');
 
     if (typesError) {
-      console.error('Database error fetching types:', typesError);
       // Continue without types rather than failing
     }
 
@@ -42,8 +40,7 @@ export async function GET() {
     });
 
     return NextResponse.json(transformedData);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -117,7 +114,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to create resource' },
         { status: 500 }
@@ -137,8 +133,7 @@ export async function POST(request: NextRequest) {
       type: resourceType?.name || null,
       resource_type: resourceType || null,
     });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

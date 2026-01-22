@@ -432,17 +432,13 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     try {
       const data = await vendorsApi.getAll();
       this.setState({ vendors: data });
-    } catch (error) {
-      console.error('Error fetching vendors:', error);
-    }
+    } catch {}
   };
 
   // Update chart colors based on selected segment
   updateChartColors = (selectedId: string | null) => {
     const { chart } = this.state;
     if (!chart) return;
-
-    console.log('Updating chart colors for selectedId:', selectedId);
 
     try {
       const chartInstance = chart as unknown;
@@ -466,14 +462,6 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
         };
       });
 
-      console.log('Modified data for color update:', modifiedData.slice(0, 3));
-      console.log(
-        'Related segments for',
-        selectedId,
-        ':',
-        selectedId ? this.getRelatedSegments(selectedId) : 'all segments'
-      );
-
       // Create new data tree with modified colors
       const dataTree = anychart.data.tree(modifiedData, 'as-table');
 
@@ -482,10 +470,7 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
 
       // Redraw chart
       (chartInstance as { draw: () => void }).draw();
-      console.log('Chart redrawn with updated colors');
-    } catch (error) {
-      console.error('Error updating chart colors:', error);
-    }
+    } catch {}
   };
 
   // Handle segment click to filter vendors and update colors
@@ -493,9 +478,6 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     segmentId: string,
     onVendorsChange?: (vendors: Vendor[]) => void
   ) => {
-    console.log('Handling segment click for:', segmentId);
-    console.log('Currently selected segment:', this.state.selectedSegment);
-
     // If clicking the same segment, reset to show all vendors
     if (this.state.selectedSegment === segmentId) {
       this.setState(
@@ -519,7 +501,6 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
       this.state.selectedSegment &&
       this.areSegmentsRelated(this.state.selectedSegment, segmentId)
     ) {
-      console.log('Clicked on related segment, resetting all colors');
       this.setState(
         {
           selectedSegment: null,
@@ -562,13 +543,11 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     // Find the segment data to get its tag
     const segmentData = cybersecurityData.find(item => item.id === segmentId);
     if (!segmentData || !segmentData.tag) {
-      console.warn('No segment data found for:', segmentId);
       onVendorsChange(vendors);
       return;
     }
 
     const categoryTag = segmentData.tag;
-    console.log('Filtering vendors for category:', categoryTag);
 
     // Filter vendors based on the category tag
     const filteredVendors = vendors.filter(vendor => {
@@ -578,7 +557,6 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
       return vendorTypes.includes(categoryTag);
     });
 
-    console.log('Filtered vendors count:', filteredVendors.length);
     onVendorsChange(filteredVendors);
   };
 
@@ -635,7 +613,6 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
     // Check if container exists
     const container = document.getElementById('sunburst-container');
     if (!container) {
-      console.warn('Sunburst container not found');
       return;
     }
 
@@ -693,8 +670,6 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
 
     // Handle click events for segment selection using pointclick event
     chart.listen('pointclick', (e: unknown) => {
-      console.log('PointClick event received:', e);
-
       // Extract the event data with pointIndex
       const eventData = e as {
         pointIndex?: number;
@@ -704,18 +679,13 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
         originalEvent?: unknown;
       };
 
-      console.log('Event data:', eventData);
-      console.log('PointIndex:', eventData.pointIndex);
-
       // Use pointIndex to get the clicked segment data
       if (typeof eventData.pointIndex === 'number') {
         const pointIndex = eventData.pointIndex;
-        console.log('Clicked pointIndex:', pointIndex);
 
         // Get the clicked point data using chart.ce(pointIndex)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const clickedPoint = (chart as any).ce(pointIndex);
-        console.log('Clicked point data:', clickedPoint);
 
         if (clickedPoint) {
           // Extract segment ID from the clicked point
@@ -724,7 +694,6 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
           // Try to get ID from the point data
           if (clickedPoint.get && typeof clickedPoint.get === 'function') {
             segmentId = clickedPoint.get('id') || '';
-            console.log('Got ID from point.get("id"):', segmentId);
           }
 
           // If no ID found, try other methods
@@ -735,13 +704,11 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
                 typeof clickedPoint.id === 'function'
                   ? clickedPoint.id()
                   : String(clickedPoint.id);
-              console.log('Got ID from direct property:', segmentId);
             } else if (clickedPoint.key) {
               segmentId =
                 typeof clickedPoint.key === 'function'
                   ? clickedPoint.key()
                   : String(clickedPoint.key);
-              console.log('Got ID from key property:', segmentId);
             } else if (clickedPoint.name) {
               // Try to match by name as fallback
               const name =
@@ -755,29 +722,14 @@ class SunburstGraph extends Component<SunburstGraphProps, SunburstGraphState> {
               );
               if (matchingItem) {
                 segmentId = matchingItem.id;
-                console.log('Matched ID by name:', segmentId);
               }
             }
           }
 
-          console.log('Final extracted segment ID:', segmentId);
-
           if (segmentId) {
             this.handleSegmentClick(segmentId, onVendorsChange);
-          } else {
-            console.warn('Could not extract segment ID from point data');
-            console.log('Point data structure:', clickedPoint);
-            console.log(
-              'Available methods:',
-              Object.getOwnPropertyNames(clickedPoint)
-            );
           }
-        } else {
-          console.warn('Could not get point data for index:', pointIndex);
         }
-      } else {
-        console.warn('No pointIndex found in event data');
-        console.log('Full event object:', e);
       }
     });
 

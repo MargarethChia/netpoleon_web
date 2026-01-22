@@ -75,8 +75,7 @@ export default function EventsPage() {
       setEvents(eventsData);
       setFeaturedEvents(featuredData);
       setFeaturedVideo(videoData);
-    } catch (error) {
-      console.error('Error fetching events:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to fetch events. Please refresh the page.',
@@ -118,8 +117,7 @@ export default function EventsPage() {
           type: 'success',
         });
         fetchEvents(); // Refresh the list
-      } catch (error) {
-        console.error('Error deleting event:', error);
+      } catch {
         showToast({
           title: 'Error',
           message: 'Failed to delete event. Please try again.',
@@ -205,8 +203,7 @@ export default function EventsPage() {
       }
 
       fetchEvents(); // Refresh the data
-    } catch (error) {
-      console.error('Error toggling featured status:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to update featured status',

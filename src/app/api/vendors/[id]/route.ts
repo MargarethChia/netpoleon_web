@@ -27,7 +27,6 @@ export async function GET(
           { status: 404 }
         );
       }
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to fetch vendor' },
         { status: 500 }
@@ -35,8 +34,7 @@ export async function GET(
     }
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -88,7 +86,6 @@ export async function PUT(
           { status: 404 }
         );
       }
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to update vendor' },
         { status: 500 }
@@ -96,8 +93,7 @@ export async function PUT(
     }
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -124,7 +120,6 @@ export async function DELETE(
       .eq('id', vendorId);
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to delete vendor' },
         { status: 500 }
@@ -132,8 +127,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

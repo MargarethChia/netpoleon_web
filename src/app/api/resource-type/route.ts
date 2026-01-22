@@ -4,16 +4,12 @@ import { supabase } from '@/lib/supabase';
 // GET /api/resource-type - Fetch all resource types
 export async function GET() {
   try {
-    console.log('Fetching resource types from database...');
     const { data, error } = await supabase
       .from('resource_type')
       .select('*')
       .order('name', { ascending: true });
 
     if (error) {
-      console.error('Database error:', error);
-      console.error('Error code:', error.code);
-      console.error('Error message:', error.message);
       return NextResponse.json(
         {
           error: 'Failed to fetch resource types',
@@ -24,11 +20,8 @@ export async function GET() {
       );
     }
 
-    console.log('Fetched resource types count:', data?.length || 0);
-    console.log('Fetched resource types:', data);
     return NextResponse.json(data || []);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -56,7 +49,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         {
           error:
@@ -69,8 +61,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

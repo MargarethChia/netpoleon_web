@@ -6,9 +6,6 @@ export async function POST(request: NextRequest) {
   const apiKey = process.env.NEXT_PUBLIC_RESEND_API_KEY;
 
   if (!apiKey) {
-    console.error(
-      'NEXT_PUBLIC_RESEND_API_KEY is missing in environment variables'
-    );
     return NextResponse.json(
       {
         error: 'Email service not configured',
@@ -20,7 +17,6 @@ export async function POST(request: NextRequest) {
 
   // Validate API key format (Resend keys start with 're_')
   if (!apiKey.startsWith('re_')) {
-    console.error('RESEND_API_KEY format appears invalid');
     return NextResponse.json(
       {
         error: 'Invalid API key format',
@@ -91,7 +87,6 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
-      console.error('Resend error:', error);
       return NextResponse.json(
         { error: 'Failed to send email' },
         { status: 500 }
@@ -117,8 +112,7 @@ export async function POST(request: NextRequest) {
         subject: 'Thank you for contacting Netpoleon',
         html: confirmationContent,
       });
-    } catch (confirmationError) {
-      console.error('Confirmation email failed:', confirmationError);
+    } catch {
       // Don't fail the request if confirmation email fails
     }
 
@@ -130,8 +124,7 @@ export async function POST(request: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error) {
-    console.error('Contact form error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

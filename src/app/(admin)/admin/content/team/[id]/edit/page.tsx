@@ -47,8 +47,7 @@ export default function EditTeamMemberPage() {
           photo: data.photo || '',
           secondary_photo: data.secondary_photo || '',
         });
-      } catch (error) {
-        console.error('Error fetching team member:', error);
+      } catch {
         showToast({
           title: 'Error',
           message: 'Failed to load team member',
@@ -75,16 +74,12 @@ export default function EditTeamMemberPage() {
     file: File,
     field: 'photo' | 'secondary_photo'
   ) => {
-    console.log('handleFileUpload called with file:', file);
     setIsUploading(true);
 
     try {
-      console.log('Calling uploadImage...');
       const result = await uploadImage(file);
-      console.log('uploadImage result:', result);
 
       if (result.success && result.url) {
-        console.log('Upload successful, setting URL:', result.url);
         setFormData(prev => ({ ...prev, [field]: result.url! }));
         showToast({
           title: 'Success',
@@ -92,15 +87,13 @@ export default function EditTeamMemberPage() {
           type: 'success',
         });
       } else {
-        console.log('Upload failed:', result.error);
         showToast({
           title: 'Upload Failed',
           message: result.error || 'Failed to upload image',
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -155,8 +148,7 @@ export default function EditTeamMemberPage() {
       });
 
       router.push('/admin/content/team');
-    } catch (error) {
-      console.error('Error updating team member:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to update team member',

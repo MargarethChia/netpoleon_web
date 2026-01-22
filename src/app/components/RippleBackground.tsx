@@ -35,8 +35,6 @@ export default function RippleBackground() {
   const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
-    console.log('RippleBackground mounting...');
-
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -210,7 +208,6 @@ export default function RippleBackground() {
     window.addEventListener('resize', handleResize);
 
     return () => {
-      console.log('RippleBackground unmounting...');
       window.removeEventListener('resize', handleResize);
       if (animationRef.current) {
         window.cancelAnimationFrame(animationRef.current);

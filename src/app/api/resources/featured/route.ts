@@ -15,7 +15,6 @@ export async function GET() {
       .order('featured_at', { ascending: false });
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to fetch featured resources' },
         { status: 500 }
@@ -23,8 +22,7 @@ export async function GET() {
     }
 
     return NextResponse.json(data || []);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -74,7 +72,6 @@ export async function POST(request: NextRequest) {
       .neq('id', 0); // Delete all existing featured resources
 
     if (deleteError) {
-      console.error('Database error deleting existing featured:', deleteError);
       return NextResponse.json(
         { error: 'Failed to remove existing featured resource' },
         { status: 500 }
@@ -93,7 +90,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to add featured resource' },
         { status: 500 }
@@ -101,8 +97,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(data, { status: 201 });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -137,7 +132,6 @@ export async function DELETE(request: NextRequest) {
       .eq('resource_id', resourceId);
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to remove featured resource' },
         { status: 500 }
@@ -145,8 +139,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

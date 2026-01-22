@@ -73,8 +73,7 @@ export default function VendorsPage() {
       setIsLoading(true);
       const data = await vendorsApi.getAll();
       setVendors(data);
-    } catch (error) {
-      console.error('Error fetching vendors:', error);
+    } catch {
     } finally {
       setIsLoading(false);
     }
@@ -84,22 +83,16 @@ export default function VendorsPage() {
   const fetchPortfolioUrl = () => {
     try {
       const url = getVendorPortfolioUrl();
-      console.log('Portfolio URL:', url);
       setPortfolioUrl(url);
-    } catch (error) {
-      console.error('Error getting portfolio URL:', error);
-    }
+    } catch {}
   };
 
   // Get current registration form URL
   const fetchRegistrationFormUrl = () => {
     try {
       const url = getVendorRegistrationFormUrl();
-      console.log('Registration Form URL:', url);
       setRegistrationFormUrl(url);
-    } catch (error) {
-      console.error('Error getting registration form URL:', error);
-    }
+    } catch {}
   };
 
   useEffect(() => {
@@ -155,8 +148,7 @@ export default function VendorsPage() {
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Portfolio upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -200,8 +192,7 @@ export default function VendorsPage() {
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Registration form upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -672,8 +663,7 @@ export default function VendorsPage() {
                 message: 'Vendor deleted successfully',
                 type: 'success',
               });
-            } catch (error) {
-              console.error('Error deleting vendor:', error);
+            } catch {
               showToast({
                 title: 'Error',
                 message: 'Failed to delete vendor',

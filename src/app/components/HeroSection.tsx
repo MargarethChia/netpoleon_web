@@ -103,12 +103,8 @@ export default function HeroSection({ slides }: HeroSectionProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const currentSlide = slides[currentSlideIndex] || slides[0];
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
-  const [hoveredCity, setHoveredCity] = useState<string | null>(null);
-
-  // Debug logging
-  useEffect(() => {
-    console.log('Hovered city changed:', hoveredCity);
-  }, [hoveredCity]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_hoveredCity, setHoveredCity] = useState<string | null>(null);
 
   useEffect(() => {
     if (slides.length <= 1) return;

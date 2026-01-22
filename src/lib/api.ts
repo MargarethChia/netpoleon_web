@@ -37,7 +37,6 @@ export const eventsApi = {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching events:', error);
       throw error;
     }
   },
@@ -61,7 +60,6 @@ export const eventsApi = {
 
       return data;
     } catch (error) {
-      console.error('Error fetching event:', error);
       throw error;
     }
   },
@@ -93,7 +91,6 @@ export const eventsApi = {
 
       return data;
     } catch (error) {
-      console.error('Error creating event:', error);
       throw error;
     }
   },
@@ -121,7 +118,6 @@ export const eventsApi = {
 
       return data;
     } catch (error) {
-      console.error('Error updating event:', error);
       throw error;
     }
   },
@@ -138,7 +134,6 @@ export const eventsApi = {
         throw new Error(error.message || 'Failed to delete event');
       }
     } catch (error) {
-      console.error('Error deleting event:', error);
       throw error;
     }
   },
@@ -173,7 +168,6 @@ export const eventsApi = {
         })
       );
     } catch (error) {
-      console.error('Error fetching featured events:', error);
       throw error;
     }
   },
@@ -220,7 +214,6 @@ export const eventsApi = {
         events: data.events,
       };
     } catch (error) {
-      console.error('Error adding featured event:', error);
       throw error;
     }
   },
@@ -237,7 +230,6 @@ export const eventsApi = {
         throw new Error(error.message || 'Failed to remove featured event');
       }
     } catch (error) {
-      console.error('Error removing featured event:', error);
       throw error;
     }
   },
@@ -263,7 +255,6 @@ export const featuredVideoApi = {
 
       return data || null;
     } catch (error) {
-      console.error('Error fetching featured event video:', error);
       throw error;
     }
   },
@@ -297,7 +288,6 @@ export const featuredVideoApi = {
 
       return data;
     } catch (error) {
-      console.error('Error setting featured event video:', error);
       throw error;
     }
   },
@@ -341,7 +331,6 @@ export const featuredVideoApi = {
 
       return data;
     } catch (error) {
-      console.error('Error updating featured event video:', error);
       throw error;
     }
   },
@@ -360,7 +349,6 @@ export const featuredVideoApi = {
         );
       }
     } catch (error) {
-      console.error('Error removing featured event video:', error);
       throw error;
     }
   },
@@ -387,7 +375,6 @@ export const resourcesApi = {
         .select('id, name');
 
       if (typesError) {
-        console.error('Error fetching resource types:', typesError);
         // Continue without types rather than failing
       }
 
@@ -420,7 +407,6 @@ export const resourcesApi = {
         }
       );
     } catch (error) {
-      console.error('Error fetching resources:', error);
       throw error;
     }
   },
@@ -461,7 +447,6 @@ export const resourcesApi = {
         resource_type: resourceType || undefined,
       };
     } catch (error) {
-      console.error('Error fetching resource:', error);
       throw error;
     }
   },
@@ -509,7 +494,6 @@ export const resourcesApi = {
         resource_type: resourceType || undefined,
       };
     } catch (error) {
-      console.error('Error creating resource:', error);
       throw error;
     }
   },
@@ -556,7 +540,6 @@ export const resourcesApi = {
         resource_type: resourceType || undefined,
       };
     } catch (error) {
-      console.error('Error updating resource:', error);
       throw error;
     }
   },
@@ -573,7 +556,6 @@ export const resourcesApi = {
         throw new Error(error.message || 'Failed to delete resource');
       }
     } catch (error) {
-      console.error('Error deleting resource:', error);
       throw error;
     }
   },
@@ -592,7 +574,6 @@ export const resourcesApi = {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching featured resources:', error);
       throw error;
     }
   },
@@ -621,7 +602,6 @@ export const resourcesApi = {
 
       return data;
     } catch (error) {
-      console.error('Error adding featured resource:', error);
       throw error;
     }
   },
@@ -638,7 +618,6 @@ export const resourcesApi = {
         throw new Error(error.message || 'Failed to remove featured resource');
       }
     } catch (error) {
-      console.error('Error removing featured resource:', error);
       throw error;
     }
   },
@@ -662,7 +641,6 @@ export const vendorsApi = {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching vendors:', error);
       throw error;
     }
   },
@@ -688,7 +666,6 @@ export const vendorsApi = {
 
       return data;
     } catch (error) {
-      console.error('Error fetching vendor:', error);
       throw error;
     }
   },
@@ -742,7 +719,6 @@ export const vendorsApi = {
 
       return data;
     } catch (error) {
-      console.error('Error creating vendor:', error);
       throw error;
     }
   },
@@ -798,7 +774,6 @@ export const vendorsApi = {
 
       return data;
     } catch (error) {
-      console.error('Error updating vendor:', error);
       throw error;
     }
   },
@@ -815,7 +790,6 @@ export const vendorsApi = {
         throw new Error(error.message || 'Failed to delete vendor');
       }
     } catch (error) {
-      console.error('Error deleting vendor:', error);
       throw error;
     }
   },
@@ -837,7 +811,6 @@ export const teamMembersApi = {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching team members:', error);
       throw error;
     }
   },
@@ -861,7 +834,6 @@ export const teamMembersApi = {
 
       return data;
     } catch (error) {
-      console.error('Error fetching team member:', error);
       throw error;
     }
   },
@@ -893,7 +865,6 @@ export const teamMembersApi = {
 
       return data;
     } catch (error) {
-      console.error('Error creating team member:', error);
       throw error;
     }
   },
@@ -924,7 +895,6 @@ export const teamMembersApi = {
 
       return data;
     } catch (error) {
-      console.error('Error updating team member:', error);
       throw error;
     }
   },
@@ -941,7 +911,6 @@ export const teamMembersApi = {
         throw new Error(error.message || 'Failed to delete team member');
       }
     } catch (error) {
-      console.error('Error deleting team member:', error);
       throw error;
     }
   },
@@ -969,7 +938,6 @@ export const announcementBarApi = {
 
       return data;
     } catch (error) {
-      console.error('Error fetching announcement bar:', error);
       throw error;
     }
   },
@@ -1028,7 +996,6 @@ export const announcementBarApi = {
 
       return data;
     } catch (error) {
-      console.error('Error saving announcement bar:', error);
       throw error;
     }
   },
@@ -1065,7 +1032,6 @@ export const publicAnnouncementBarApi = {
         link_text: data.link_text,
       };
     } catch (error) {
-      console.error('Error fetching announcement bar:', error);
       throw error;
     }
   },
@@ -1088,7 +1054,6 @@ export const slideGalleryApi = {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching slides:', error);
       throw error;
     }
   },
@@ -1112,7 +1077,6 @@ export const slideGalleryApi = {
 
       return data;
     } catch (error) {
-      console.error('Error fetching slide:', error);
       throw error;
     }
   },
@@ -1144,7 +1108,6 @@ export const slideGalleryApi = {
 
       return data;
     } catch (error) {
-      console.error('Error creating slide:', error);
       throw error;
     }
   },
@@ -1175,7 +1138,6 @@ export const slideGalleryApi = {
 
       return data;
     } catch (error) {
-      console.error('Error updating slide:', error);
       throw error;
     }
   },
@@ -1192,7 +1154,6 @@ export const slideGalleryApi = {
         throw new Error(error.message || 'Failed to delete slide');
       }
     } catch (error) {
-      console.error('Error deleting slide:', error);
       throw error;
     }
   },
@@ -1214,7 +1175,6 @@ export const resourceTypeApi = {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching resource types:', error);
       throw error;
     }
   },
@@ -1238,7 +1198,6 @@ export const resourceTypeApi = {
 
       return data;
     } catch (error) {
-      console.error('Error fetching resource type:', error);
       throw error;
     }
   },
@@ -1271,7 +1230,6 @@ export const resourceTypeApi = {
 
       return data;
     } catch (error) {
-      console.error('Error creating resource type:', error);
       throw error;
     }
   },
@@ -1287,7 +1245,6 @@ export const resourceTypeApi = {
         .limit(1);
 
       if (checkError) {
-        console.error('Error checking resource usage:', checkError);
         throw new Error('Failed to check if resource type is in use');
       }
 
@@ -1310,7 +1267,6 @@ export const resourceTypeApi = {
         throw new Error(error.message || 'Failed to delete resource type');
       }
     } catch (error) {
-      console.error('Error deleting resource type:', error);
       throw error;
     }
   },

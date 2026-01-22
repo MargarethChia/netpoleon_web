@@ -44,9 +44,8 @@ export default function EventsPage() {
         setEvents(sortedEvents);
         setFeaturedEvents(featuredData);
         setFeaturedVideo(videoData);
-      } catch (err) {
+      } catch {
         setError('Failed to load events');
-        console.error('Error fetching events:', err);
       } finally {
         setLoading(false);
       }

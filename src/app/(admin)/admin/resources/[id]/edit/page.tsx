@@ -64,7 +64,7 @@ export default function EditResourcePage() {
       .then(data => {
         setResourceTypes(data);
       })
-      .catch(err => console.error('Failed to fetch types:', err));
+      .catch(() => {});
   }, []);
 
   // Fetch resource data on component mount
@@ -97,8 +97,7 @@ export default function EditResourcePage() {
           cover_image_url: data.cover_image_url || '',
           article_link: data.article_link || '',
         });
-      } catch (error) {
-        console.error('Error fetching resource:', error);
+      } catch {
         showToast({
           title: 'Error',
           message: 'Failed to load resource',
@@ -127,16 +126,12 @@ export default function EditResourcePage() {
   };
 
   const handleFileUpload = async (file: File) => {
-    console.log('handleFileUpload called with file:', file);
     setIsUploading(true);
 
     try {
-      console.log('Calling uploadImage...');
       const result = await uploadImage(file);
-      console.log('uploadImage result:', result);
 
       if (result.success && result.url) {
-        console.log('Upload successful, setting URL:', result.url);
         setFormData(prev => ({ ...prev, cover_image_url: result.url! }));
         showToast({
           title: 'Success',
@@ -144,15 +139,13 @@ export default function EditResourcePage() {
           type: 'success',
         });
       } else {
-        console.log('Upload failed:', result.error);
         showToast({
           title: 'Upload Failed',
           message: result.error || 'Failed to upload image',
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -226,8 +219,7 @@ export default function EditResourcePage() {
       });
 
       router.push('/admin/resources');
-    } catch (error) {
-      console.error('Error updating resource:', error);
+    } catch {
       showToast({
         title: 'Error',
         message:

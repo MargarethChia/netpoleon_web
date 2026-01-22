@@ -30,7 +30,6 @@ export async function GET(
           { status: 404 }
         );
       }
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to fetch resource' },
         { status: 500 }
@@ -50,8 +49,7 @@ export async function GET(
       type: resourceType?.name || null,
       resource_type: resourceType || null,
     });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -85,7 +83,6 @@ export async function PUT(
       .single();
 
     if (fetchError) {
-      console.error('Error fetching existing resource:', fetchError);
       return NextResponse.json(
         { error: 'Failed to fetch existing resource' },
         { status: 500 }
@@ -163,7 +160,6 @@ export async function PUT(
           { status: 404 }
         );
       }
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to update resource' },
         { status: 500 }
@@ -183,8 +179,7 @@ export async function PUT(
       type: resourceType?.name || null,
       resource_type: resourceType || null,
     });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -214,7 +209,6 @@ export async function DELETE(
       .eq('id', resourceId);
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to delete resource' },
         { status: 500 }
@@ -222,8 +216,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

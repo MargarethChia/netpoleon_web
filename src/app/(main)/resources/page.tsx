@@ -64,9 +64,8 @@ export default function ResourcesPage() {
         setResources(sortedResources);
         setFeaturedResources(featuredData);
         setResourceTypes(typesResponse || []);
-      } catch (err) {
+      } catch {
         setError('Failed to load resources');
-        console.error('Error fetching resources:', err);
       } finally {
         setLoading(false);
       }
@@ -77,13 +76,7 @@ export default function ResourcesPage() {
 
   // Monitor filter changes
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Filter changed:', {
-        selectedType,
-        searchTerm,
-        totalResources: resources.length,
-      });
-    }
+    // Filter monitoring
   }, [selectedType, searchTerm, resources.length]);
 
   // Get featured resource objects
@@ -104,13 +97,6 @@ export default function ResourcesPage() {
         resource.description.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesType =
       selectedType === 'all' || resource.type === selectedType;
-
-    // Debug logging
-    if (process.env.NODE_ENV === 'development') {
-      console.log(
-        `Resource: ${resource.title}, Type: ${resource.type}, Selected: ${selectedType}, Matches: ${matchesType}`
-      );
-    }
 
     return matchesSearch && matchesType;
   });

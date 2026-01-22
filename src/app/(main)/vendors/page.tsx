@@ -22,9 +22,8 @@ export default function OurVendors() {
         // Sort vendors alphabetically by name
         const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
         setVendors(sortedData);
-      } catch (err) {
+      } catch {
         setError('Failed to load vendors');
-        console.error('Error fetching vendors:', err);
       } finally {
         setLoading(false);
       }
@@ -35,8 +34,7 @@ export default function OurVendors() {
         setPortfolioLoading(true);
         const url = getVendorPortfolioUrl();
         setPortfolioUrl(url);
-      } catch (err) {
-        console.error('Error fetching portfolio URL:', err);
+      } catch {
       } finally {
         setPortfolioLoading(false);
       }

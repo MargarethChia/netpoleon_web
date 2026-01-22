@@ -60,13 +60,10 @@ export default function AdminLayout({
     try {
       setLoadingItem('logout');
       const { error } = await supabaseClient.auth.signOut();
-      console.log('Signing out', error);
       if (error) {
-        console.error('Error signing out:', error);
       }
       router.push('/login');
-    } catch (error) {
-      console.error('Error signing out:', error);
+    } catch {
       // Still redirect even if there's an error
       router.push('/login');
     } finally {

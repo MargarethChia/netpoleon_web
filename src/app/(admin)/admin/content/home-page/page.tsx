@@ -44,8 +44,7 @@ export default function HomePageManagement() {
 
         setAnnouncementBar(announcementData);
         setSlideGallery(slidesData);
-      } catch (error) {
-        console.error('Error loading data:', error);
+      } catch {
         showToast({
           title: 'Error',
           message: 'Failed to load home page data',
@@ -77,8 +76,7 @@ export default function HomePageManagement() {
         message: 'Announcement bar updated successfully',
         type: 'success',
       });
-    } catch (error) {
-      console.error('Error updating announcement bar:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to update announcement bar',
@@ -118,8 +116,7 @@ export default function HomePageManagement() {
 
       setEditingSlide(null);
       setShowSlideForm(false);
-    } catch (error) {
-      console.error('Error saving slide:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to save slide',
@@ -139,8 +136,7 @@ export default function HomePageManagement() {
         message: 'Slide deleted successfully',
         type: 'success',
       });
-    } catch (error) {
-      console.error('Error deleting slide:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to delete slide',
@@ -236,8 +232,7 @@ export default function HomePageManagement() {
                         message: 'Announcement bar disabled successfully',
                         type: 'success',
                       });
-                    } catch (error) {
-                      console.error('Error disabling announcement bar:', error);
+                    } catch {
                       showToast({
                         title: 'Error',
                         message: 'Failed to disable announcement bar',

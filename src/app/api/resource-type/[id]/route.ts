@@ -25,7 +25,7 @@ export async function DELETE(
       .limit(1);
 
     if (checkError) {
-      console.error('Error checking resource usage:', checkError);
+      // Error checking resource usage
     } else if (resources && resources.length > 0) {
       return NextResponse.json(
         { error: 'Cannot delete resource type that is in use' },
@@ -39,7 +39,6 @@ export async function DELETE(
       .eq('id', typeId);
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to delete resource type' },
         { status: 500 }
@@ -47,8 +46,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
