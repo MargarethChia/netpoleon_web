@@ -89,7 +89,7 @@ export default function ResourceTypesPage() {
       setNewTypeName('');
       setIsDialogOpen(false);
       fetchTypes();
-    } catch {
+    } catch (error) {
       const errorMessage =
         error instanceof Error
           ? error.message
@@ -122,7 +122,7 @@ export default function ResourceTypesPage() {
       });
 
       fetchTypes();
-    } catch {
+    } catch (error) {
       const errorMessage =
         error instanceof Error
           ? error.message

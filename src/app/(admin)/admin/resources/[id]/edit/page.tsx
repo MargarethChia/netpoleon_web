@@ -219,7 +219,7 @@ export default function EditResourcePage() {
       });
 
       router.push('/admin/resources');
-    } catch {
+    } catch (error) {
       showToast({
         title: 'Error',
         message:
