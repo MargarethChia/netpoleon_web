@@ -230,7 +230,7 @@ export default function CreateVendorPage() {
       });
 
       router.push('/admin/vendors');
-    } catch {
+    } catch (error) {
       showToast({
         title: 'Error',
         message:
