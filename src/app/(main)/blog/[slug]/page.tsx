@@ -27,7 +27,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       .not('content', 'eq', ''); // Only resources with content (not empty)
 
     if (error) {
-      console.error('Error fetching resources:', error);
       notFound();
     }
 
@@ -205,8 +204,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       </div>
     );
-  } catch (error) {
-    console.error('Error fetching blog post:', error);
+  } catch {
     notFound();
   }
 }

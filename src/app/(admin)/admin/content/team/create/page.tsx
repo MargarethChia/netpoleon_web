@@ -42,16 +42,12 @@ export default function CreateTeamMemberPage() {
     file: File,
     field: 'photo' | 'secondary_photo'
   ) => {
-    console.log('handleFileUpload called with file:', file);
     setIsUploading(true);
 
     try {
-      console.log('Calling uploadImage...');
       const result = await uploadImage(file);
-      console.log('uploadImage result:', result);
 
       if (result.success && result.url) {
-        console.log('Upload successful, setting URL:', result.url);
         setFormData(prev => ({ ...prev, [field]: result.url! }));
         showToast({
           title: 'Success',
@@ -59,15 +55,13 @@ export default function CreateTeamMemberPage() {
           type: 'success',
         });
       } else {
-        console.log('Upload failed:', result.error);
         showToast({
           title: 'Upload Failed',
           message: result.error || 'Failed to upload image',
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -120,8 +114,7 @@ export default function CreateTeamMemberPage() {
       });
 
       router.push('/admin/content/team');
-    } catch (error) {
-      console.error('Error creating team member:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to create team member',

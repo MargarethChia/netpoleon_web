@@ -24,7 +24,6 @@ export async function GET(
       if (error.code === 'PGRST116') {
         return NextResponse.json({ error: 'Event not found' }, { status: 404 });
       }
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to fetch event' },
         { status: 500 }
@@ -32,8 +31,7 @@ export async function GET(
     }
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -83,7 +81,6 @@ export async function PUT(
       if (error.code === 'PGRST116') {
         return NextResponse.json({ error: 'Event not found' }, { status: 404 });
       }
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to update event' },
         { status: 500 }
@@ -91,8 +88,7 @@ export async function PUT(
     }
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -116,7 +112,6 @@ export async function DELETE(
     const { error } = await supabase.from('events').delete().eq('id', eventId);
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to delete event' },
         { status: 500 }
@@ -124,8 +119,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

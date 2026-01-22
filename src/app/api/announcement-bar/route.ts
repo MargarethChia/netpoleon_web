@@ -12,7 +12,6 @@ export async function GET() {
       .single();
 
     if (error && error.code !== 'PGRST116') {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to fetch announcement bar' },
         { status: 500 }
@@ -33,8 +32,7 @@ export async function GET() {
     }
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -100,7 +98,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to save announcement bar' },
         { status: 500 }
@@ -108,8 +105,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

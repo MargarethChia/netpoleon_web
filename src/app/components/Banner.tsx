@@ -21,8 +21,7 @@ export default function Banner() {
       try {
         const data = await publicAnnouncementBarApi.get();
         setAnnouncement(data);
-      } catch (error) {
-        console.error('Error fetching announcement:', error);
+      } catch {
       } finally {
         setIsLoading(false);
       }

@@ -65,8 +65,7 @@ export default function FeaturedVideoForm({
 
       onSuccess();
       onClose();
-    } catch (error) {
-      console.error('Error saving featured video:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to save featured video. Please try again.',
@@ -90,8 +89,7 @@ export default function FeaturedVideoForm({
       });
       onSuccess();
       onClose();
-    } catch (error) {
-      console.error('Error removing featured video:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to remove featured video. Please try again.',

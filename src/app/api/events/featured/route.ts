@@ -15,7 +15,6 @@ export async function GET() {
       .order('display_order', { ascending: true });
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to fetch featured events' },
         { status: 500 }
@@ -23,8 +22,7 @@ export async function GET() {
     }
 
     return NextResponse.json(data || []);
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -69,7 +67,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (checkError && checkError.code !== 'PGRST116') {
-      console.error('Database error checking existing featured:', checkError);
       return NextResponse.json(
         { error: 'Failed to check existing featured event' },
         { status: 500 }
@@ -106,7 +103,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to add featured event' },
         { status: 500 }
@@ -114,8 +110,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(data, { status: 201 });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -147,7 +142,6 @@ export async function DELETE(request: NextRequest) {
       .eq('event_id', eventId);
 
     if (error) {
-      console.error('Database error:', error);
       return NextResponse.json(
         { error: 'Failed to remove featured event' },
         { status: 500 }
@@ -155,8 +149,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

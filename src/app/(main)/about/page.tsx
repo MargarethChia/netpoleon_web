@@ -250,7 +250,6 @@ export default function AboutUs() {
         const data = await response.json();
         set_team_members(data);
       } catch (err) {
-        console.error('Error fetching team members:', err);
         setError(
           err instanceof Error ? err.message : 'Failed to fetch team members'
         );

@@ -82,8 +82,7 @@ export default function EditVendorPage() {
           types: vendor.type ? vendor.type.split(', ').filter(Boolean) : [],
           diagram_url: vendor.diagram_url || '',
         });
-      } catch (error) {
-        console.error('Error loading vendor:', error);
+      } catch {
         showToast({
           title: 'Error',
           message: 'Failed to load vendor data',
@@ -135,8 +134,7 @@ export default function EditVendorPage() {
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -167,8 +165,7 @@ export default function EditVendorPage() {
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -199,8 +196,7 @@ export default function EditVendorPage() {
           type: 'error',
         });
       }
-    } catch (error) {
-      console.error('Upload error:', error);
+    } catch {
       showToast({
         title: 'Upload Failed',
         message: 'An unexpected error occurred',
@@ -275,8 +271,7 @@ export default function EditVendorPage() {
       });
 
       router.push('/admin/vendors');
-    } catch (error) {
-      console.error('Error updating vendor:', error);
+    } catch {
       showToast({
         title: 'Error',
         message:

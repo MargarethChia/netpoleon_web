@@ -8,6 +8,7 @@ import LayoutWrapper from './components/LayoutWrapper';
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {

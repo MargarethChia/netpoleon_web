@@ -38,8 +38,7 @@ export default function VendorDetailPage() {
         }
 
         setVendor(foundVendor);
-      } catch (err) {
-        console.error('Error fetching vendor:', err);
+      } catch {
         setError('Failed to load vendor details');
       } finally {
         setLoading(false);

@@ -72,13 +72,11 @@ export default function ResourcesPage() {
       ]);
 
       const typesData = await typesResponse.json();
-      console.log('Fetched resource types:', typesData);
 
       setResources(resourcesData);
       setFeaturedResources(featuredData);
       setResourceTypes(typesData || []);
-    } catch (error) {
-      console.error('Error fetching resources:', error);
+    } catch {
     } finally {
       setIsLoading(false);
     }
@@ -118,8 +116,7 @@ export default function ResourcesPage() {
         });
         fetchResources(); // Refresh the data
       }
-    } catch (error) {
-      console.error('Error toggling publish status:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to update publish status',
@@ -151,8 +148,7 @@ export default function ResourcesPage() {
       }
 
       fetchResources(); // Refresh the data
-    } catch (error) {
-      console.error('Error toggling featured status:', error);
+    } catch {
       showToast({
         title: 'Error',
         message: 'Failed to update featured status',
@@ -531,8 +527,7 @@ export default function ResourcesPage() {
               fetchResources();
               setShowDeleteDialog(false);
               setResourceToDelete(null);
-            } catch (error) {
-              console.error('Error deleting resource:', error);
+            } catch {
               showToast({
                 title: 'Error',
                 message: 'Failed to delete resource',

@@ -11,15 +11,6 @@ export interface UploadResult {
 
 export const uploadImage = async (file: File): Promise<UploadResult> => {
   try {
-    console.log(
-      'Starting upload for file:',
-      file.name,
-      'Size:',
-      file.size,
-      'Type:',
-      file.type
-    );
-
     // Check if user is authenticated
     const {
       data: { session },
@@ -31,11 +22,8 @@ export const uploadImage = async (file: File): Promise<UploadResult> => {
       };
     }
 
-    console.log('User authenticated:', session.user.email);
-
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      console.log('File type validation failed:', file.type);
       return {
         success: false,
         error: 'File must be an image',
@@ -44,7 +32,6 @@ export const uploadImage = async (file: File): Promise<UploadResult> => {
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      console.log('File size validation failed:', file.size);
       return {
         success: false,
         error: 'File size must be less than 5MB',
@@ -56,12 +43,8 @@ export const uploadImage = async (file: File): Promise<UploadResult> => {
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
     const fullPath = `${FOLDER_NAME}/${fileName}`;
 
-    console.log('Uploading to path:', fullPath);
-    console.log('Bucket:', BUCKET_NAME);
-    console.log('Using authenticated client');
-
     // Upload using authenticated client
-    const { data, error } = await supabaseClient.storage
+    const { error } = await supabaseClient.storage
       .from(BUCKET_NAME)
       .upload(fullPath, file, {
         cacheControl: '3600',
@@ -69,32 +52,22 @@ export const uploadImage = async (file: File): Promise<UploadResult> => {
       });
 
     if (error) {
-      console.error('Upload error:', error);
-      console.error('Error details:', {
-        message: error.message,
-        name: error.name,
-      });
       return {
         success: false,
         error: error.message,
       };
     }
 
-    console.log('Upload successful, data:', data);
-
     // Get public URL
     const { data: urlData } = supabaseClient.storage
       .from(BUCKET_NAME)
       .getPublicUrl(fullPath);
 
-    console.log('Public URL data:', urlData);
-
     return {
       success: true,
       url: urlData.publicUrl,
     };
-  } catch (error) {
-    console.error('Unexpected error during upload:', error);
+  } catch {
     return {
       success: false,
       error: 'Failed to upload image',
@@ -109,7 +82,6 @@ export const deleteImage = async (fileName: string): Promise<boolean> => {
       data: { session },
     } = await supabaseClient.auth.getSession();
     if (!session) {
-      console.error('Authentication required for deletion');
       return false;
     }
 
@@ -118,13 +90,11 @@ export const deleteImage = async (fileName: string): Promise<boolean> => {
       .remove([fileName]);
 
     if (error) {
-      console.error('Delete error:', error);
       return false;
     }
 
     return true;
-  } catch (error) {
-    console.error('Unexpected error during delete:', error);
+  } catch {
     return false;
   }
 };
@@ -143,30 +113,24 @@ export const getFileNameFromUrl = (url: string) => {
 // Test bucket access
 export const testBucketAccess = async () => {
   try {
-    console.log('Testing bucket access for:', BUCKET_NAME);
-
     // Check if user is authenticated
     const {
       data: { session },
     } = await supabaseClient.auth.getSession();
     if (!session) {
-      console.error('Authentication required for bucket access test');
       return false;
     }
 
-    const { data, error } = await supabaseClient.storage
+    const { error } = await supabaseClient.storage
       .from(BUCKET_NAME)
       .list(FOLDER_NAME, { limit: 1 });
 
     if (error) {
-      console.error('Bucket access test failed:', error);
       return false;
     }
 
-    console.log('Bucket access test successful:', data);
     return true;
-  } catch (error) {
-    console.error('Bucket access test error:', error);
+  } catch {
     return false;
   }
 };
@@ -176,15 +140,6 @@ export const uploadVendorPortfolio = async (
   file: File
 ): Promise<UploadResult> => {
   try {
-    console.log(
-      'Starting PDF upload for file:',
-      file.name,
-      'Size:',
-      file.size,
-      'Type:',
-      file.type
-    );
-
     // Check if user is authenticated
     const {
       data: { session },
@@ -196,11 +151,8 @@ export const uploadVendorPortfolio = async (
       };
     }
 
-    console.log('User authenticated:', session.user.email);
-
     // Validate file type
     if (file.type !== 'application/pdf') {
-      console.log('File type validation failed:', file.type);
       return {
         success: false,
         error: 'File must be a PDF',
@@ -209,7 +161,6 @@ export const uploadVendorPortfolio = async (
 
     // Validate file size (max 10MB for PDFs)
     if (file.size > 10 * 1024 * 1024) {
-      console.log('File size validation failed:', file.size);
       return {
         success: false,
         error: 'File size must be less than 10MB',
@@ -220,12 +171,8 @@ export const uploadVendorPortfolio = async (
     const fileName = 'Netpoleon ANZ Vendor Portfolio.pdf';
     const fullPath = `public/${fileName}`;
 
-    console.log('Uploading PDF to path:', fullPath);
-    console.log('Files bucket: files');
-    console.log('Using authenticated client');
-
     // Upload to Supabase storage in the files bucket
-    const { data, error } = await supabaseClient.storage
+    const { error } = await supabaseClient.storage
       .from('files')
       .upload(fullPath, file, {
         cacheControl: '3600',
@@ -233,32 +180,22 @@ export const uploadVendorPortfolio = async (
       });
 
     if (error) {
-      console.error('PDF upload error:', error);
-      console.error('Error details:', {
-        message: error.message,
-        name: error.name,
-      });
       return {
         success: false,
         error: error.message,
       };
     }
 
-    console.log('PDF upload successful, data:', data);
-
     // Get public URL
     const { data: urlData } = supabaseClient.storage
       .from('files')
       .getPublicUrl(fullPath);
 
-    console.log('Public URL data:', urlData);
-
     return {
       success: true,
       url: urlData.publicUrl,
     };
-  } catch (error) {
-    console.error('Unexpected error during PDF upload:', error);
+  } catch {
     return {
       success: false,
       error: 'Failed to upload PDF',
@@ -280,15 +217,6 @@ export const uploadVendorRegistrationForm = async (
   file: File
 ): Promise<UploadResult> => {
   try {
-    console.log(
-      'Starting Registration Form upload for file:',
-      file.name,
-      'Size:',
-      file.size,
-      'Type:',
-      file.type
-    );
-
     // Check if user is authenticated
     const {
       data: { session },
@@ -300,11 +228,8 @@ export const uploadVendorRegistrationForm = async (
       };
     }
 
-    console.log('User authenticated:', session.user.email);
-
     // Validate file type
     if (file.type !== 'application/pdf') {
-      console.log('File type validation failed:', file.type);
       return {
         success: false,
         error: 'File must be a PDF',
@@ -313,7 +238,6 @@ export const uploadVendorRegistrationForm = async (
 
     // Validate file size (max 10MB for PDFs)
     if (file.size > 10 * 1024 * 1024) {
-      console.log('File size validation failed:', file.size);
       return {
         success: false,
         error: 'File size must be less than 10MB',
@@ -324,12 +248,8 @@ export const uploadVendorRegistrationForm = async (
     const fileName = 'Netpoleon ANZ Vendor Registration Form.pdf';
     const fullPath = `public/${fileName}`;
 
-    console.log('Uploading Registration Form to path:', fullPath);
-    console.log('Files bucket: files');
-    console.log('Using authenticated client');
-
     // Upload to Supabase storage in the files bucket
-    const { data, error } = await supabaseClient.storage
+    const { error } = await supabaseClient.storage
       .from('files')
       .upload(fullPath, file, {
         cacheControl: '3600',
@@ -337,32 +257,22 @@ export const uploadVendorRegistrationForm = async (
       });
 
     if (error) {
-      console.error('Registration Form upload error:', error);
-      console.error('Error details:', {
-        message: error.message,
-        name: error.name,
-      });
       return {
         success: false,
         error: error.message,
       };
     }
 
-    console.log('Registration Form upload successful, data:', data);
-
     // Get public URL
     const { data: urlData } = supabaseClient.storage
       .from('files')
       .getPublicUrl(fullPath);
 
-    console.log('Public URL data:', urlData);
-
     return {
       success: true,
       url: urlData.publicUrl,
     };
-  } catch (error) {
-    console.error('Unexpected error during Registration Form upload:', error);
+  } catch {
     return {
       success: false,
       error: 'Failed to upload Registration Form',

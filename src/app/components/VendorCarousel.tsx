@@ -19,13 +19,11 @@ export default function VendorCarousel({ title }: VendorCarouselProps) {
       try {
         setLoading(true);
         const data = await vendorsApi.getAll();
-        console.log('Fetched vendors:', data.length, data);
         const sortedData = [...data].sort((a, b) =>
           a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
         );
         // Filter vendors that have logo_url or show all if none have logos
         const vendorsWithLogos = sortedData.filter(v => v.logo_url);
-        console.log('Vendors with logos:', vendorsWithLogos.length);
 
         // If no vendors with logos, use all vendors or fallback data
         if (vendorsWithLogos.length > 0) {
@@ -42,14 +40,12 @@ export default function VendorCarousel({ title }: VendorCarouselProps) {
             { id: 5, name: 'Meta', logo_url: '/images/logos/logo-5.png' },
             { id: 6, name: 'Netflix', logo_url: '/images/logos/logo-6.png' },
           ];
-          console.log('Using fallback vendors');
           setVendors(fallbackVendors as Vendor[]);
         }
       } catch (err) {
         setError(
           err instanceof Error ? err.message : 'Failed to fetch vendors'
         );
-        console.error('Error fetching vendors:', err);
       } finally {
         setLoading(false);
       }

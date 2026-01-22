@@ -1,12 +1,14 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-module.exports = {
   images: {
-    remotePatterns: [new URL('https://wdhsptkchoptjguliwyq.supabase.co/**')],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'wdhsptkchoptjguliwyq.supabase.co',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
