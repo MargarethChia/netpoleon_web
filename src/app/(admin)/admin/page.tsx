@@ -61,7 +61,7 @@ export default function AdminPage() {
       setEvents(eventsData);
       setResources(resourcesData);
       setVendors(vendorsData);
-    } catch {
+    } catch (err) {
       setError(
         err instanceof Error ? err.message : 'Failed to load dashboard data'
       );
