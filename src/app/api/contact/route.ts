@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
+// Force dynamic rendering - prevent static analysis during build
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   // Check for API key first with better error handling
   const apiKey = process.env.NEXT_PUBLIC_RESEND_API_KEY;

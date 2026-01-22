@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+// Force dynamic rendering - prevent static analysis during build
+export const dynamic = 'force-dynamic';
+
 // GET /api/team-members - Fetch all team members
 export async function GET() {
   try {
