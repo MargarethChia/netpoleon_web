@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Email service not configured',
-        details: 'API key not found in environment variables',
       },
       { status: 500 }
     );
@@ -20,13 +19,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Invalid API key format',
-        details: 'Resend API keys should start with "re_"',
       },
       { status: 500 }
     );
   }
 
-  const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
+  const resend = new Resend(apiKey);
   try {
     const body = await request.json();
     const {
