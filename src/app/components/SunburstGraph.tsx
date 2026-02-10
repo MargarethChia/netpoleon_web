@@ -55,7 +55,7 @@ const cybersecurityData = [
     name: 'Emerging \n Security',
     fill: '#00AFFF',
     value: 75,
-    tag: 'Emerging Security',
+    tag: 'AI & Emerging Security', 
   },
   {
     id: 'network-perimeter',
