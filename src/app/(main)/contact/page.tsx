@@ -338,20 +338,6 @@ export default function ContactUs() {
                       </button>
                     </div>
 
-                    <div>
-                      <label htmlFor="message" className="block mb-2">
-                        Additional Message
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        rows={6}
-                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        placeholder="Tell us about your partnership goals..."
-                      ></textarea>
-                    </div>
                   </>
                 ) : (
                   <div>
