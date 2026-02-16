@@ -69,7 +69,7 @@ and more secure digital era.`}
 
             {/* Copyright */}
             <p className="text-[12px] text-white/80">
-              &copy; 2025 Netpoleon Australia Pty Ltd. All rights reserved.
+              &copy; 2026 Netpoleon Australia Pty Ltd. All rights reserved.
             </p>
           </div>
 

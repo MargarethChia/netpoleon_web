@@ -313,7 +313,20 @@ export default function ServicesPage() {
                       ? navbar.getBoundingClientRect().height
                       : 60;
 
-                    const totalOffset = headerHeight + navbarHeight;
+                    // Calculate center alignment
+                    const windowHeight = window.innerHeight;
+                    const elementHeight = rect.height;
+
+                    // Center the section in viewport, accounting for sticky elements
+                    const centerOffset =
+                      (windowHeight -
+                        headerHeight -
+                        navbarHeight -
+                        elementHeight) /
+                      2;
+
+                    const totalOffset =
+                      headerHeight + navbarHeight - centerOffset;
 
                     // Scroll to position with offset
                     window.scrollTo({
