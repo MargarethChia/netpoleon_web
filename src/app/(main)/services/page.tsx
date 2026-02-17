@@ -87,6 +87,7 @@ export default function ServicesPage() {
   const servicesRef = useRef<HTMLDivElement>(null);
   const [isServicesVisible, setIsServicesVisible] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+  const isManualScrolling = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -178,7 +179,10 @@ export default function ServicesPage() {
         }
       }
 
-      setActiveService(activeIndex);
+      // Only update if not manually scrolling
+      if (!isManualScrolling.current) {
+        setActiveService(activeIndex);
+      }
 
       // Calculate opacity for each section based on actual positions
       const newOpacities = whatWeDo.map((_, index) => {
@@ -296,7 +300,10 @@ export default function ServicesPage() {
                 onClick={() => {
                   const element = document.getElementById(`service-${index}`);
                   if (element) {
-                    // Get the actual content div, not the padded section
+                    // Set flag to prevent scroll handler interference
+                    isManualScrolling.current = true;
+                    setActiveService(index);
+
                     const contentDiv = element.querySelector('.max-w-md');
                     const contentRect = contentDiv
                       ? contentDiv.getBoundingClientRect()
@@ -331,6 +338,11 @@ export default function ServicesPage() {
                       top: targetPosition - navbarHeight,
                       behavior: 'smooth',
                     });
+
+                    // Reset flag after scroll completes
+                    setTimeout(() => {
+                      isManualScrolling.current = false;
+                    }, 1000);
                   }
                 }}
               >
