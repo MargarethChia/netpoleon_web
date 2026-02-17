@@ -313,28 +313,20 @@ export default function ServicesPage() {
                       ? navbar.getBoundingClientRect().height
                       : 60;
 
-                    // Get the left side logo/icon container
-                    const logoContainer = document.querySelector(
-                      '.lg\\:w-\\[40\\%\\].sticky'
-                    );
-                    const logoHeight = logoContainer
-                      ? logoContainer.getBoundingClientRect().height
-                      : window.innerHeight * 0.9; // fallback to 90vh
+                    // Calculate center alignment
+                    const windowHeight = window.innerHeight;
+                    const elementHeight = rect.height;
 
-                    // Get the content div height
-                    const contentDiv = element.querySelector('.max-w-md');
-                    const contentHeight = contentDiv
-                      ? contentDiv.getBoundingClientRect().height
-                      : rect.height;
+                    // Center the section in viewport, accounting for sticky elements
+                    const centerOffset =
+                      (windowHeight -
+                        headerHeight -
+                        navbarHeight -
+                        elementHeight) /
+                      2;
 
-                    // Calculate offset to align content center with logo center
-                    const logoCenter = logoHeight / 2;
-                    const contentCenter = contentHeight / 2;
-                    const alignmentOffset = logoCenter - contentCenter;
-
-                    // Total offset: sticky elements + alignment to logo center
                     const totalOffset =
-                      headerHeight + navbarHeight - alignmentOffset;
+                      headerHeight + navbarHeight - centerOffset;
 
                     // Scroll to position with offset
                     window.scrollTo({
