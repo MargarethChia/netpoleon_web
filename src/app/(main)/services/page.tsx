@@ -313,24 +313,25 @@ export default function ServicesPage() {
                       ? navbar.getBoundingClientRect().height
                       : 60;
 
-                    // Calculate center alignment
-                    const windowHeight = window.innerHeight;
+                    // Align with the logo container which is at top-16 (4rem = 64px)
+                    // Logo is centered in h-[90vh], so its center is at 64px + 45vh
+                    const logoContainerTop = headerHeight > 0 ? 64 : 0;
+                    const logoCenter =
+                      logoContainerTop + (window.innerHeight * 0.9) / 2;
+
+                    // Position text section so its center aligns with logo center
                     const elementHeight = rect.height;
+                    const elementCenter = elementHeight / 2;
 
-                    // Center the section in viewport, accounting for sticky elements
-                    const centerOffset =
-                      (windowHeight -
-                        headerHeight -
-                        navbarHeight -
-                        elementHeight) /
-                      2;
+                    // Adjust this number to fine-tune alignment
+                    const paddingOffset = 60; // Change this: try 60, 80, 100, 120
 
-                    const totalOffset =
-                      headerHeight + navbarHeight - centerOffset;
+                    const targetPosition =
+                      elementTop - (logoCenter - elementCenter) - paddingOffset;
 
                     // Scroll to position with offset
                     window.scrollTo({
-                      top: elementTop - totalOffset,
+                      top: targetPosition - navbarHeight,
                       behavior: 'smooth',
                     });
                   }
