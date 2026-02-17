@@ -296,9 +296,15 @@ export default function ServicesPage() {
                 onClick={() => {
                   const element = document.getElementById(`service-${index}`);
                   if (element) {
-                    // Get accurate element position relative to document
-                    const rect = element.getBoundingClientRect();
-                    const elementTop = rect.top + window.scrollY;
+                    // Get the actual content div, not the padded section
+                    const contentDiv = element.querySelector('.max-w-md');
+                    const contentRect = contentDiv
+                      ? contentDiv.getBoundingClientRect()
+                      : element.getBoundingClientRect();
+
+                    const contentTop = contentRect.top + window.scrollY;
+                    const contentHeight = contentRect.height;
+                    const contentCenter = contentHeight / 2;
 
                     // Get actual heights of sticky elements
                     const header = document.querySelector('header');
@@ -307,29 +313,20 @@ export default function ServicesPage() {
                         ? header.getBoundingClientRect().height
                         : 0;
 
-                    // Find the navigation bar (sticky nav element)
                     const navbar = document.querySelector('nav.sticky');
                     const navbarHeight = navbar
                       ? navbar.getBoundingClientRect().height
                       : 60;
 
-                    // Align with the logo container which is at top-16 (4rem = 64px)
-                    // Logo is centered in h-[90vh], so its center is at 64px + 45vh
+                    // Align with the logo center
                     const logoContainerTop = headerHeight > 0 ? 64 : 0;
                     const logoCenter =
                       logoContainerTop + (window.innerHeight * 0.9) / 2;
 
-                    // Position text section so its center aligns with logo center
-                    const elementHeight = rect.height;
-                    const elementCenter = elementHeight / 2;
-
-                    // Adjust this number to fine-tune alignment
-                    const paddingOffset = 60; // Change this: try 60, 80, 100, 120
-
+                    // Calculate scroll position to align content center with logo center
                     const targetPosition =
-                      elementTop - (logoCenter - elementCenter) - paddingOffset;
+                      contentTop - (logoCenter - contentCenter);
 
-                    // Scroll to position with offset
                     window.scrollTo({
                       top: targetPosition - navbarHeight,
                       behavior: 'smooth',
