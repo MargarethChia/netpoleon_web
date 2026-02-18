@@ -88,6 +88,21 @@ export default function ServicesPage() {
   const [isServicesVisible, setIsServicesVisible] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
   const isManualScrolling = useRef(false);
+  const sectionTops = useRef<number[]>([]);
+
+  useEffect(() => {
+    const calculatePositions = () => {
+      sectionTops.current = whatWeDo.map((_, index) => {
+        const element = document.getElementById(`service-${index}`);
+        if (!element) return 0;
+        return element.getBoundingClientRect().top + window.scrollY;
+      });
+    };
+
+    calculatePositions();
+    window.addEventListener('resize', calculatePositions);
+    return () => window.removeEventListener('resize', calculatePositions);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -313,8 +328,7 @@ export default function ServicesPage() {
                       : 60;
                     const stickyOffset = headerHeight + navbarHeight;
 
-                    const elementTop =
-                      element.getBoundingClientRect().top + window.scrollY;
+                    const elementTop = sectionTops.current[index];
                     const elementCenter = elementTop + element.offsetHeight / 2;
                     const viewportCenter = window.innerHeight / 2;
 
