@@ -88,6 +88,21 @@ export default function ServicesPage() {
   const [isServicesVisible, setIsServicesVisible] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
   const isManualScrolling = useRef(false);
+  const sectionTops = useRef<number[]>([]);
+
+  useEffect(() => {
+    const calculatePositions = () => {
+      sectionTops.current = whatWeDo.map((_, index) => {
+        const element = document.getElementById(`service-${index}`);
+        if (!element) return 0;
+        return element.getBoundingClientRect().top + window.scrollY;
+      });
+    };
+
+    calculatePositions();
+    window.addEventListener('resize', calculatePositions);
+    return () => window.removeEventListener('resize', calculatePositions);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -300,46 +315,28 @@ export default function ServicesPage() {
                 onClick={() => {
                   const element = document.getElementById(`service-${index}`);
                   if (element) {
-                    // Set flag to prevent scroll handler interference
                     isManualScrolling.current = true;
                     setActiveService(index);
 
-                    const contentDiv = element.querySelector('.max-w-md');
-                    const contentRect = contentDiv
-                      ? contentDiv.getBoundingClientRect()
-                      : element.getBoundingClientRect();
-
-                    const contentTop = contentRect.top + window.scrollY;
-                    const contentHeight = contentRect.height;
-                    const contentCenter = contentHeight / 2;
-
-                    // Get actual heights of sticky elements
                     const header = document.querySelector('header');
-                    const headerHeight =
-                      header && isHeaderVisible
-                        ? header.getBoundingClientRect().height
-                        : 0;
-
+                    const headerHeight = isHeaderVisible
+                      ? (header?.getBoundingClientRect().height ?? 0)
+                      : 0;
                     const navbar = document.querySelector('nav.sticky');
                     const navbarHeight = navbar
                       ? navbar.getBoundingClientRect().height
                       : 60;
+                    const stickyOffset = headerHeight + navbarHeight;
 
-                    // Align with the logo center
-                    const logoContainerTop = headerHeight > 0 ? 64 : 0;
-                    const logoCenter =
-                      logoContainerTop + (window.innerHeight * 0.9) / 2;
-
-                    // Calculate scroll position to align content center with logo center
-                    const targetPosition =
-                      contentTop - (logoCenter - contentCenter);
+                    const elementTop = sectionTops.current[index];
+                    const elementCenter = elementTop + element.offsetHeight / 2;
+                    const viewportCenter = window.innerHeight / 2;
 
                     window.scrollTo({
-                      top: targetPosition - navbarHeight,
+                      top: elementCenter - viewportCenter + stickyOffset / 2,
                       behavior: 'smooth',
                     });
 
-                    // Reset flag after scroll completes
                     setTimeout(() => {
                       isManualScrolling.current = false;
                     }, 1000);
