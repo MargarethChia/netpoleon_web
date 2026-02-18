@@ -272,149 +272,157 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Progress Navigation Bar - Becomes sticky when it reaches the top */}
-      <nav
-        className={`sticky ${isHeaderVisible ? 'top-16' : 'top-0'} z-40 bg-white transition-all duration-300`}
-      >
-        <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 pb-3">
-          <div className="flex justify-between w-full relative">
-            {/* Progress Bar Background */}
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-100 rounded-sm"></div>
+      {/* Services Section Container - navbar only sticks within this */}
+      <div className="relative">
+        {/* Progress Navigation Bar - Becomes sticky when it reaches the top */}
+        <nav
+          className={`sticky ${isHeaderVisible ? 'top-16' : 'top-0'} z-40 bg-white transition-all duration-300`}
+        >
+          <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 pb-3">
+            <div className="flex justify-between w-full relative">
+              {/* Progress Bar Background */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-100 rounded-sm"></div>
 
-            {/* Active Progress Bar */}
-            <div
-              className="absolute bottom-0 left-0 h-1 bg-amber-600 rounded-sm transition-all duration-300"
-              style={{
-                width: `${((activeService + 1) / whatWeDo.length) * 100}%`,
-              }}
-            ></div>
-
-            {whatWeDo.map((service, index) => (
-              <button
-                key={service.id}
-                className={`text-xs sm:text-sm font-semibold transition-all duration-300 px-1 sm:px-4 py-3 sm:py-5 border-none cursor-pointer bg-transparent relative uppercase tracking-wide flex-1 ${
-                  index === activeService
-                    ? 'text-amber-700 bg-amber-50 border-b-2 border-amber-600'
-                    : 'text-gray-400 hover:text-amber-600 hover:bg-orange-50 hover:border-b-2 hover:border-orange-300'
-                }`}
-                onClick={() => {
-                  const element = document.getElementById(`service-${index}`);
-                  if (element) {
-                    // Set flag to prevent scroll handler interference
-                    isManualScrolling.current = true;
-                    setActiveService(index);
-
-                    const contentDiv = element.querySelector('.max-w-md');
-                    const contentRect = contentDiv
-                      ? contentDiv.getBoundingClientRect()
-                      : element.getBoundingClientRect();
-
-                    const contentTop = contentRect.top + window.scrollY;
-                    const contentHeight = contentRect.height;
-                    const contentCenter = contentHeight / 2;
-
-                    // Get actual heights of sticky elements
-                    const header = document.querySelector('header');
-                    const headerHeight =
-                      header && isHeaderVisible
-                        ? header.getBoundingClientRect().height
-                        : 0;
-
-                    const navbar = document.querySelector('nav.sticky');
-                    const navbarHeight = navbar
-                      ? navbar.getBoundingClientRect().height
-                      : 60;
-
-                    // Align with the logo center
-                    const logoContainerTop = headerHeight > 0 ? 64 : 0;
-                    const logoCenter =
-                      logoContainerTop + (window.innerHeight * 0.9) / 2;
-
-                    // Calculate scroll position to align content center with logo center
-                    const targetPosition =
-                      contentTop - (logoCenter - contentCenter);
-
-                    window.scrollTo({
-                      top: targetPosition - navbarHeight,
-                      behavior: 'smooth',
-                    });
-
-                    // Reset flag after scroll completes
-                    setTimeout(() => {
-                      isManualScrolling.current = false;
-                    }, 1000);
-                  }
-                }}
-              >
-                <span className="hidden sm:inline">{service.shortTitle}</span>
-                <span className="sm:hidden">
-                  {service.shortTitle.charAt(0)}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <div className="flex flex-col lg:flex-row mx-20">
-        {/* Left Side - Fixed Icon (Hidden on mobile, shown on desktop) */}
-        <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-16 h-[90vh] sticky">
-          <div className="text-center">
-            {/* Icon Container with Fade Effect */}
-            <div className="relative w-full h-full mb-0">
-              {whatWeDo.map((service, index) => renderIcon(service, index))}
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side - Scrolling Content */}
-        <div className="w-full lg:w-[50%] lg:px-20 mb-20 md:mb-0 lg:py-[30vh]">
-          <div ref={containerRef} className="relative">
-            {whatWeDo.map((service, index) => (
+              {/* Active Progress Bar */}
               <div
-                key={service.id}
-                id={`service-${index}`}
-                className="sm:h-[45vh] lg:h-[35vh] flex items-center px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-20 pt-[20vh] lg:pt-6"
-              >
-                <div
-                  className="max-w-md mx-auto lg:mx-0"
-                  style={{
-                    opacity: sectionOpacities[index],
-                    transition: 'opacity 0.3s ease',
+                className="absolute bottom-0 left-0 h-1 bg-amber-600 rounded-sm transition-all duration-300"
+                style={{
+                  width: `${((activeService + 1) / whatWeDo.length) * 100}%`,
+                }}
+              ></div>
+
+              {whatWeDo.map((service, index) => (
+                <button
+                  key={service.id}
+                  className={`text-xs sm:text-sm font-semibold transition-all duration-300 px-1 sm:px-4 py-3 sm:py-5 border-none cursor-pointer bg-transparent relative uppercase tracking-wide flex-1 ${
+                    index === activeService
+                      ? 'text-amber-700 bg-amber-50 border-b-2 border-amber-600'
+                      : 'text-gray-400 hover:text-amber-600 hover:bg-orange-50 hover:border-b-2 hover:border-orange-300'
+                  }`}
+                  onClick={() => {
+                    const element = document.getElementById(`service-${index}`);
+                    if (element) {
+                      // Set flag to prevent scroll handler interference
+                      isManualScrolling.current = true;
+                      setActiveService(index);
+
+                      const contentDiv = element.querySelector(
+                        '.max-w-md'
+                      ) as HTMLElement | null;
+                      const targetElement = (contentDiv ||
+                        element) as HTMLElement;
+
+                      // Get the container element
+                      const container = element.closest('.relative');
+
+                      if (!container) return;
+
+                      // Calculate positions relative to what's visible on screen
+                      const containerRect = container.getBoundingClientRect();
+                      const elementRect = targetElement.getBoundingClientRect();
+
+                      // Distance from top of container to element (on screen)
+                      const elementTopInContainer =
+                        elementRect.top - containerRect.top;
+
+                      const contentHeight = targetElement.offsetHeight;
+                      const contentCenter = contentHeight / 2;
+
+                      const navbar = document.querySelector('nav.sticky');
+                      const navbarHeight = navbar
+                        ? navbar.getBoundingClientRect().height
+                        : 60;
+
+                      // Logo center (header-independent, always same)
+                      const logoCenter = (window.innerHeight * 0.9) / 2;
+
+                      // Calculate scroll position
+                      const targetPosition =
+                        window.scrollY +
+                        elementTopInContainer -
+                        (logoCenter - contentCenter);
+
+                      window.scrollTo({
+                        top: targetPosition - navbarHeight,
+                        behavior: 'smooth',
+                      });
+
+                      setTimeout(() => {
+                        isManualScrolling.current = false;
+                      }, 1000);
+                    }
                   }}
                 >
-                  {/* Mobile Icon - Only shown on mobile */}
-                  <div className="lg:hidden flex justify-center mb-6">
-                    <div className="w-24 h-24 bg-orange-500 rounded-full flex items-center justify-center">
-                      <Image
-                        src={service.icon}
-                        alt={service.title}
-                        width={64}
-                        height={64}
-                        unoptimized
-                        className="object-contain"
-                      />
-                    </div>
-                  </div>
+                  <span className="hidden sm:inline">{service.shortTitle}</span>
+                  <span className="sm:hidden">
+                    {service.shortTitle.charAt(0)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </nav>
 
-                  {/* Section Indicator */}
-                  <div className="text-amber-600 text-sm font-semibold mb-4 uppercase tracking-wide">
-                    {index + 1}/{whatWeDo.length}
-                  </div>
-
-                  {/* Service Title */}
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-700 mb-6 leading-tight">
-                    {service.title}
-                  </h2>
-
-                  {/* Description */}
-                  <p className="text-gray-700 text-base sm:text-lg leading-relaxed mb-6 text-left">
-                    {service.description}
-                  </p>
-                </div>
+        {/* Main Content */}
+        <div className="flex flex-col lg:flex-row mx-20">
+          {/* Left Side - Fixed Icon (Hidden on mobile, shown on desktop) */}
+          <div className="hidden lg:flex lg:w-[40%] items-center justify-center top-16 h-[90vh] sticky">
+            <div className="text-center">
+              {/* Icon Container with Fade Effect */}
+              <div className="relative w-full h-full mb-0">
+                {whatWeDo.map((service, index) => renderIcon(service, index))}
               </div>
-            ))}
+            </div>
+          </div>
+
+          {/* Right Side - Scrolling Content */}
+          <div className="w-full lg:w-[50%] lg:px-20 mb-20 md:mb-0 lg:py-[30vh]">
+            <div ref={containerRef} className="relative">
+              {whatWeDo.map((service, index) => (
+                <div
+                  key={service.id}
+                  id={`service-${index}`}
+                  className="sm:h-[45vh] lg:h-[35vh] flex items-center px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-20 pt-[20vh] lg:pt-6"
+                >
+                  <div
+                    className="max-w-md mx-auto lg:mx-0"
+                    style={{
+                      opacity: sectionOpacities[index],
+                      transition: 'opacity 0.3s ease',
+                    }}
+                  >
+                    {/* Mobile Icon - Only shown on mobile */}
+                    <div className="lg:hidden flex justify-center mb-6">
+                      <div className="w-24 h-24 bg-orange-500 rounded-full flex items-center justify-center">
+                        <Image
+                          src={service.icon}
+                          alt={service.title}
+                          width={64}
+                          height={64}
+                          unoptimized
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Section Indicator */}
+                    <div className="text-amber-600 text-sm font-semibold mb-4 uppercase tracking-wide">
+                      {index + 1}/{whatWeDo.length}
+                    </div>
+
+                    {/* Service Title */}
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-700 mb-6 leading-tight">
+                      {service.title}
+                    </h2>
+
+                    {/* Description */}
+                    <p className="text-gray-700 text-base sm:text-lg leading-relaxed mb-6 text-left">
+                      {service.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
