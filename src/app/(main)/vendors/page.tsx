@@ -5,15 +5,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { vendorsApi, type Vendor } from '@/lib/api';
-import { getVendorPortfolioUrl } from '@/lib/storage';
+// import { getVendorPortfolioUrl } from '@/lib/storage';
 import { createSlug } from '@/lib/slug-utils';
 
 export default function OurVendors() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [portfolioUrl, setPortfolioUrl] = useState<string>('');
-  const [portfolioLoading, setPortfolioLoading] = useState(false);
+  // const [portfolioUrl, setPortfolioUrl] = useState<string>('');
+  // const [portfolioLoading, setPortfolioLoading] = useState(false);
 
   useEffect(() => {
     const fetchVendors = async () => {
@@ -29,6 +29,7 @@ export default function OurVendors() {
       }
     };
 
+    /*
     const fetchPortfolioUrl = async () => {
       try {
         setPortfolioLoading(true);
@@ -39,17 +40,20 @@ export default function OurVendors() {
         setPortfolioLoading(false);
       }
     };
+    */
 
     fetchVendors();
-    fetchPortfolioUrl();
+    // fetchPortfolioUrl();
   }, []);
 
-  // Handle portfolio download
+  /* HIDDEN FOR NOW
+  // Handle portfolio download 
   const handlePortfolioDownload = () => {
     if (portfolioUrl) {
       window.open(portfolioUrl, '_blank', 'noopener,noreferrer');
     }
-  };
+  }; 
+  */
 
   // Animation variants
   const fadeInDown = {
@@ -149,7 +153,7 @@ export default function OurVendors() {
       </motion.section>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Vendor Portfolio Download */}
+        {/* Vendor Portfolio Download HIDDEN FOR NOW
         <motion.section
           className="mb-12"
           initial="hidden"
@@ -206,6 +210,7 @@ export default function OurVendors() {
             </div>
           </div>
         </motion.section>
+        */}
 
         {/* Vendors Grid */}
         {vendorsToShow.length > 0 ? (
