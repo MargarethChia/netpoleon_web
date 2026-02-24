@@ -45,8 +45,8 @@ import { ConfirmDialog } from '../../../../components/ui/confirm-dialog';
 import { showToast } from '../../../../components/ui/toast';
 import { useRouter } from 'next/navigation';
 import {
-  uploadVendorPortfolio,
-  getVendorPortfolioUrl,
+  //uploadVendorPortfolio,
+  //getVendorPortfolioUrl,
   uploadVendorRegistrationForm,
   getVendorRegistrationFormUrl,
 } from '@/lib/storage';
@@ -57,8 +57,8 @@ export default function VendorsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [vendorToDelete, setVendorToDelete] = useState<Vendor | null>(null);
-  const [isUploadingPortfolio, setIsUploadingPortfolio] = useState(false);
-  const [portfolioUrl, setPortfolioUrl] = useState<string | null>(null);
+  //const [isUploadingPortfolio, setIsUploadingPortfolio] = useState(false);
+  //const [portfolioUrl, setPortfolioUrl] = useState<string | null>(null);
   const [isUploadingRegistrationForm, setIsUploadingRegistrationForm] =
     useState(false);
   const [registrationFormUrl, setRegistrationFormUrl] = useState<string | null>(
@@ -79,6 +79,7 @@ export default function VendorsPage() {
     }
   };
 
+  /*
   // Get current portfolio URL
   const fetchPortfolioUrl = () => {
     try {
@@ -86,6 +87,7 @@ export default function VendorsPage() {
       setPortfolioUrl(url);
     } catch {}
   };
+  */
 
   // Get current registration form URL
   const fetchRegistrationFormUrl = () => {
@@ -97,7 +99,7 @@ export default function VendorsPage() {
 
   useEffect(() => {
     fetchVendors();
-    fetchPortfolioUrl();
+    //fetchPortfolioUrl();
     fetchRegistrationFormUrl();
   }, []);
 
@@ -121,7 +123,7 @@ export default function VendorsPage() {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  const handlePortfolioUpload = async (
+  /*const handlePortfolioUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
@@ -164,6 +166,7 @@ export default function VendorsPage() {
       window.open(portfolioUrl, '_blank', 'noopener,noreferrer');
     }
   };
+  */
 
   const handleRegistrationFormUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -307,7 +310,7 @@ export default function VendorsPage() {
       onAddClick={handleAddVendor}
     >
       <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
-        {/* Portfolio Upload */}
+        {/* Portfolio Upload - HIDDEN FOR NOW
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -366,6 +369,7 @@ export default function VendorsPage() {
             </p>
           </CardContent>
         </Card>
+        */}
 
         {/* Registration Form Upload */}
         <Card>
