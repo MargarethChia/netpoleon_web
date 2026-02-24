@@ -21,7 +21,7 @@ const STATS_DATA = [
     id: 3,
     value: 11,
     suffix: 'B',
-    label: 'Sales Revenue (¥11 \n Billion ~ USD 7B+)',
+    label: 'Sales Revenue (¥11 \n Billion ~ USD 73M)',
   },
   {
     id: 4,
