@@ -85,7 +85,9 @@ export default function Statistics() {
                 <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
                   <AnimatedNumber
                     value={animatedValues[index]}
-                    format={num => num.toLocaleString()}
+                    format={num =>
+                      num % 1 !== 0 ? String(num) : num.toLocaleString()
+                    }
                     mass={0.8}
                     stiffness={75}
                     damping={15}
