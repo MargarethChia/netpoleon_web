@@ -19,9 +19,10 @@ const STATS_DATA = [
   },
   {
     id: 3,
-    value: 11,
-    suffix: 'B',
-    label: 'Sales Revenue (¥11 \n Billion ~ USD 73M)',
+    value: 1.1,
+    suffix: 'T',
+    label: 'Sales Revenue (¥1.1 \n Trillion ~ USD 7B)',
+    precision: 1,
   },
   {
     id: 4,
@@ -85,7 +86,10 @@ export default function Statistics() {
                 <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
                   <AnimatedNumber
                     value={animatedValues[index]}
-                    format={num => num.toLocaleString()}
+                    format={num =>
+                      num % 1 !== 0 ? String(num) : num.toLocaleString()
+                    }
+                    precision={stat.precision ?? 0}
                     mass={0.8}
                     stiffness={75}
                     damping={15}

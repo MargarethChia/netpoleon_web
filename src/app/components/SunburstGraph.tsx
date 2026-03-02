@@ -55,7 +55,7 @@ const cybersecurityData = [
     name: 'AI & \nEmerging \n Security',
     fill: '#FF3D00',
     value: 75,
-    tag: 'AI & Emerging Security', 
+    tag: 'AI & Emerging Security',
   },
   {
     id: 'network-perimeter',
@@ -205,7 +205,7 @@ const cybersecurityData = [
   {
     id: 'secops-backup-dr',
     parent: 'secops-gov-group',
-    name: 'Back up & \n Disaster \n Recovery',
+    name: 'ServiceOps, \n Back up & \n Disaster \n Recovery',
     value: 16.5,
     fill: '#FF7B26',
     tag: 'Security Operations',
