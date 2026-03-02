@@ -22,6 +22,7 @@ const STATS_DATA = [
     value: 1.1,
     suffix: 'T',
     label: 'Sales Revenue (¥1.1 \n Trillion ~ USD 7B)',
+    precision: 1,
   },
   {
     id: 4,
@@ -88,6 +89,7 @@ export default function Statistics() {
                     format={num =>
                       num % 1 !== 0 ? String(num) : num.toLocaleString()
                     }
+                    precision={stat.precision ?? 0}
                     mass={0.8}
                     stiffness={75}
                     damping={15}
